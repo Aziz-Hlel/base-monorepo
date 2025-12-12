@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER:-user}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-password}"
+      POSTGRES_DB: "${POSTGRES_DB:-mydb}"
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - jj-db-data-local:/var/lib/postgresql/data
+
+volumes:
+  jj-db-data-local:

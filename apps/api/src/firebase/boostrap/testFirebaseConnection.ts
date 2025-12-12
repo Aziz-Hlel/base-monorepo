@@ -1,0 +1,14 @@
+import { firebaseSession } from './init.firebase';
+
+async function testFirebaseConnection() {
+  try {
+    // Attempt to list collections (lightweight read)
+    await firebaseSession.listUsers(1);
+    console.log('✅ SUCCESS : Firebase credentials are valid and connected!');
+  } catch (error) {
+    console.error('❌ ERROR : Firebase credentials rejected or network issue.');
+    throw error;
+  }
+}
+
+export default testFirebaseConnection;

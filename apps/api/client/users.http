@@ -1,0 +1,23 @@
+@apiKey = AIzaSyDWKplAl5Vp43pG0j5j3vnThRJIPwv1E44
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+@baseUrl = http://localhost:8080
+
+###
+# @name login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "tigana137@gmail.com",
+  "password": "12345678",
+  "returnSecureToken": true
+}
+
+
+
+### 
+# @name get-users
+GET {{baseUrl}}/users
+Authorization: Bearer {{login.response.body.idToken}}
+Content-Type: application/json
