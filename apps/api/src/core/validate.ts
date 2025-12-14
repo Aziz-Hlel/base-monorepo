@@ -1,5 +1,6 @@
-import { treeifyError, ZodSchema } from 'zod';
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
+import { treeifyError, } from 'zod';
+import { ZodSchema } from 'zod/v4';
 
 export function validateBody<T extends ZodSchema>(schema: T) {
   return (req: Request, res: Response, next: NextFunction) => {

@@ -1,12 +1,13 @@
-import { UserCreateInput } from '../../generated/prisma/models';
+import type { UserCreateInput } from '../../generated/prisma/models';
 import { Role } from '../../generated/prisma/browser';
-import { GenericEntityCreateInput } from '../../types/prisma/GenericEntityUtilityTypes';
-import { UserResponseDto } from '../schema/UserResponseDto';
-import { User } from '../../generated/prisma/client';
-import { StrictDecodedIdToken } from '../../types/auth/StrictDecodedIdToken';
-import { UserRowResponse } from '../schema/UserRowResponse';
-import { Page } from '../../types/page/Page';
-import { DefaultSearchParams } from '../../types/api/DefaultSeachParams';
+import type { GenericEntityCreateInput } from '../../types/prisma/GenericEntityUtilityTypes';
+import type { UserResponseDto } from '../schema/UserResponseDto';
+import type { User } from '../../generated/prisma/client';
+import type { StrictDecodedIdToken } from '../../types/auth/StrictDecodedIdToken';
+import type { UserRowResponse } from '../schema/UserRowResponse';
+import type { Page } from '../../types/page/Page';
+import type { DefaultSearchParams } from '../../types/api/DefaultSeachParams';
+import type { UserPageQuery } from '../schema';
 
 type UserCreateInputCustom = GenericEntityCreateInput<UserCreateInput>;
 
@@ -33,9 +34,9 @@ const UserMapper = {
       status: user.status,
       role: user.role,
       isEmailVerified: user.isEmailVerified,
-      avatar: firebaseToken.picture || null,
       createdAt: user.createdAt,
     };
+    firebaseToken.picture && (userResponse.avatar = firebaseToken.picture);
     return userResponse;
   },
 
@@ -58,7 +59,7 @@ const UserMapper = {
     return users.map((user) => this.toUserRowResponse(user));
   },
 
-  toUserPageResponse(users: User[], totalElements: number, queryParams: DefaultSearchParams): Page<UserRowResponse> {
+  toUserPageResponse(users: User[], totalElements: number, queryParams: UserPageQuery): Page<UserRowResponse> {
     const usersRows = this.toUsersRowsResponse(users);
     return {
       content: usersRows,

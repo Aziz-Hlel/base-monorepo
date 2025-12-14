@@ -1,4 +1,5 @@
-import { Role, Status } from "..";
+import { Role, Status } from "../../generated/prisma/enums";
+
 
 export type UserRowResponse = {
   id: string;

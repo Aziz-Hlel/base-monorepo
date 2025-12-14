@@ -1,7 +1,7 @@
-import { NextFunction, Response, Request } from 'express';
-import { DecodedIdTokenWithClaims } from '../types/auth/DecodedIdTokenWithClaims';
+import type { NextFunction, Response, Request } from 'express';
+import type { DecodedIdTokenWithClaims } from '../types/auth/DecodedIdTokenWithClaims';
 import { firebaseService } from '../firebase/service/firebase.service';
-import { AuthenticatedRequest } from '../types/auth/AuthenticatedRequest';
+import type { AuthenticatedRequest } from '../types/auth/AuthenticatedRequest';
 
 export const authHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {

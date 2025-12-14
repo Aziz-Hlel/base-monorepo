@@ -1,7 +1,8 @@
 {
-  "name": "jjBar",
+  "name": "repo",
   "version": "1.0.0",
-  "description": "",
+  "type": "module",
+  "private": true,
   "scripts": {
     "prepare": "husky",
     "format:fix": "prettier --write .",
@@ -14,14 +15,18 @@
       "prettier --write --ignore-unknown"
     ]
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "packageManager": "pnpm@10.17.0",
   "devDependencies": {
+    "@types/node": "catalog:",
     "cross-env": "^10.1.0",
+    "typescript": "catalog:",
     "husky": "^9.1.7",
-    "prettier": "^3.7.4"
+    "prettier": "^3.7.4",
+    "tsx": "^4.21.0"
   },
   "dependencies": {
     "lint-staged": "^16.2.7"

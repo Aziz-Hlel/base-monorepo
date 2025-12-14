@@ -1,9 +1,9 @@
 import { handleFirebaseError, isFirebaseError } from '../err/fireabase.errors';
-import { CustomClaims } from '../../types/auth/CustomClaims';
-import { User } from '../../generated/prisma/client';
-import { StrictDecodedIdToken } from '../../types/auth/StrictDecodedIdToken';
 import { Auth } from 'firebase-admin/auth';
 import { firebaseSession } from '../boostrap/init.firebase';
+import { StrictDecodedIdToken } from '../../types/auth/StrictDecodedIdToken';
+import { User } from '../../generated/prisma/client';
+import { CustomClaims } from '../../types/auth/CustomClaims';
 
 class FirebaseService {
   private firebaseSession: Auth = firebaseSession;

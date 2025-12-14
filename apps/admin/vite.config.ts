@@ -36,6 +36,7 @@ export default ({ mode }: { mode: string }) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
+        '@schemas': path.resolve(__dirname, '../../packages/schemas/dist'),
       },
     },
 

@@ -1,4 +1,4 @@
-import { FirebaseError } from 'firebase-admin/lib/utils/error';
+import type { FirebaseError } from 'firebase-admin';
 import { ConflictError, UnauthorizedError } from '../../err/customErrors';
 
 export const isFirebaseError = (err: unknown): err is FirebaseError => {

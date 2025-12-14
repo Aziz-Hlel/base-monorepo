@@ -1,14 +1,13 @@
-import { Request, Response } from 'express';
-import { HealthzResponseDto } from '../schemas/healthzResponse.dto';
-import { SimpleApiResponse } from '../../types/api/SimpleApiResponse.dto';
-import { prisma } from '../../lib/prisma';
+import type { Request, Response } from 'express';
+import type { HealthzResponseDto } from '../schemas/healthzResponse.dto';
+import type { SimpleApiResponse } from '../../types/api/SimpleApiResponse.dto';
 
 class RootController {
-  async getHealth(req: Request, res: Response<SimpleApiResponse>) {
+  async getHealth(_: Request, res: Response<SimpleApiResponse>) {
     res.json({ message: 'i feel good !' });
   }
 
-  async getHealthz(req: Request, res: Response<HealthzResponseDto>) {
+  async getHealthz(_: Request, res: Response<HealthzResponseDto>) {
     res.json({
       success: true,
       message: 'i feel good !',

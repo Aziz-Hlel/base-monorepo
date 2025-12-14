@@ -1,7 +1,7 @@
 import ENV from '../config/ENV';
-import { ApiError } from './apiError.type';
-import ErrorNames, { ErrorNameKeys } from './errors.names';
-import { Request } from 'express';
+import type { ApiError } from './apiError.type';
+import ErrorNames, { type ErrorNameKeys } from './errors.names';
+import type { Request } from 'express';
 
 export class AppError extends Error {
   status: number;

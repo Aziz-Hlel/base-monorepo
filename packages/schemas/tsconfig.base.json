@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig", // VSCode / tools use this to validate TS config
+  "display": "Strictest", // Just a label for tools; no effect on compilation
+  "compilerOptions": {
+    "strict": true, // Enables all strict type-checking options at once
+    "strictNullChecks": true, // Ensures `null` and `undefined` are treated explicitly
+    "allowUnusedLabels": false, // Disallow labels that are never referenced
+    "allowUnreachableCode": false, // Disallow code after return/throw
+    "exactOptionalPropertyTypes": true, // Optional properties behave exactly as typed (no implicit `| undefined`)
+    "noFallthroughCasesInSwitch": true, // Prevent fall-through in switch statements without `break`
+    "noImplicitOverride": true, // Require `override` keyword when overriding a method
+    "noImplicitReturns": true, // Warn if function may not return a value on some paths
+    "noPropertyAccessFromIndexSignature": true, // Prevents accessing arbitrary keys without type assertion
+    "noUncheckedIndexedAccess": true, // Forces `array[index]` and `obj[key]` to account for `undefined`
+    "noUnusedLocals": true, // Warn for variables declared but never used
+    "noUnusedParameters": true, // Warn for function parameters that are never used
+    "allowSyntheticDefaultImports": true, // Allows default import syntax from modules that don’t have a default export
+
+    "isolatedModules": true, // Required for per-file transpilation (used by Babel/ts-loader), disables some TS features
+    "allowJs": true, // Allow compiling `.js` files
+    "checkJs": true, // Check types in `.js` files (works with `allowJs`)
+
+    "esModuleInterop": true, // Enables `import x from 'module'` for CommonJS modules
+    "skipLibCheck": true, // Skip type checking for `.d.ts` libraries (speeds up build)
+    "forceConsistentCasingInFileNames": true, // Ensures imports match file casing exactly (cross-platform safety)
+
+    "lib": ["es2023"], // Standard library features available during compilation
+    "module": "esnext", // Output module system (ESNext modules for now)
+    "target": "esnext", // Output JavaScript target version (latest ECMAScript)
+    "moduleResolution": "bundler", // Resolution strategy optimized for bundlers like Vite/webpack; not ideal for Node
+    "moduleDetection": "force", // Forces TS to treat files with imports/exports as modules
+    "resolveJsonModule": true, // Allows `import data from './data.json'` with types
+    "noEmit": true, // Don’t generate JS output (base config should usually have this)
+    "incremental": true, // Enables incremental builds using tsbuildinfo file
+
+    "declaration": true, // Generate `.d.ts` files
+    "declarationMap": true, // Generate maps from `.d.ts` to `.ts` for IDE navigation
+    "sourceMap": true, // Generate `.map` files for debugging
+    "pretty": true, // Human-readable compiler output
+    "preserveWatchOutput": true, // Keep previous output in watch mode
+
+    "tsBuildInfoFile": "./tsconfig.tsbuildinfo", // Location of incremental build info
+    "baseUrl": ".", // Base path for module resolution (used by `paths`)
+    "paths": {
+      "@/*": ["./src/*"] // Path alias for imports
+    },
+    "composite": true, // Required for project references and incremental builds
+    "noEmitOnError": true // Prevent emitting JS if there are type errors
+  }
+}

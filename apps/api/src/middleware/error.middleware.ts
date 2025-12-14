@@ -1,9 +1,9 @@
 // src/middleware/error.middleware.ts
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response } from 'express';
 import { ZodError } from 'zod';
 import ENV from '../config/ENV';
 import { AppError } from '../err/customErrors';
-import { ApiError } from '../err/apiError.type';
+import type { ApiError } from '../err/apiError.type';
 
 const handleZodError = (error: ZodError<unknown>, req: Request): ApiError => {
   const formatted: Record<string, string> = {};
@@ -24,7 +24,7 @@ const handleZodError = (error: ZodError<unknown>, req: Request): ApiError => {
   return apiResponse;
 };
 
-export const globalErrorHandler = (error: Error, req: Request, res: Response<ApiError>, next: NextFunction) => {
+export const globalErrorHandler = (error: Error, req: Request, res: Response<ApiError>) => {
   console.error('Error:', error);
   const path = req.originalUrl;
   // Zod validation errors

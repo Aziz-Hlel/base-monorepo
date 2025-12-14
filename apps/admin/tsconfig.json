@@ -6,12 +6,17 @@
     },
     {
       "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "../../packages/schemas/tsconfig.json"
     }
   ],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@schemas": ["../../packages/schemas/dist"],
+      "@schemas/*": ["../../packages/schemas/dist/*"]
     }
   }
 }

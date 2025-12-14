@@ -42,7 +42,6 @@ const validatedEnv = envSchema.safeParse(process.env);
 if (!validatedEnv.success) {
   console.error('❌ ERROR : Zod validation failed');
   throw new Error(validatedEnv.error.message);
-
 }
 
 const ENV = validatedEnv.data;

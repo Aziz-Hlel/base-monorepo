@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { User } from '../../generated/prisma/client';
+import type { User } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 
 const createFakeUser = (index: number) => {

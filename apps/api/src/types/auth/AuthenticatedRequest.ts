@@ -1,5 +1,5 @@
-import { Request } from 'express';
-import { DecodedIdTokenWithClaims } from './DecodedIdTokenWithClaims';
+import type { Request } from 'express';
+import type { DecodedIdTokenWithClaims } from './DecodedIdTokenWithClaims';
 
 // export interface AuthenticatedRequest<
 //   ReqBody = never,

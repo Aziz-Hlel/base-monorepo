@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authController } from '../Controller/auth.controller';
 
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { asyncHandler } from '../../core/async-handler';
 import { authHandler } from '../../middleware/authHandler.middleware';
 
@@ -25,7 +25,7 @@ router.post(
 router.get(
   '/me',
   authHandler,
-  asyncHandler((req: any, res: Response, next) => authController.me(req, res)),
+  asyncHandler((req: any, res: Response) => authController.me(req, res)),
 );
 
-export const AuthRouter = router;
+export const AuthRouter: Router = router;

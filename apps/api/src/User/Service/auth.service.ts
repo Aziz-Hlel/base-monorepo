@@ -2,9 +2,9 @@ import { prisma } from '../../lib/prisma';
 import { firebaseService } from '../../firebase/service/firebase.service';
 import UserMapper from '../mapper/user.mapper';
 import { InternalServerError } from '../../err/customErrors';
-import { DecodedIdTokenWithClaims } from '../../types/auth/DecodedIdTokenWithClaims';
 import { userRespo } from '../repo/user.repo';
-import { UserResponseDto } from '@jjBar/shared-schemas';
+import type { UserResponseDto } from '../schema';
+import { DecodedIdTokenWithClaims } from '../../types/auth/DecodedIdTokenWithClaims';
 
 class AuthService {
   private firebaseService = firebaseService;

@@ -1,14 +1,21 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "strict": true,
-    "moduleResolution": "Node",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-    "paths": {},
-    "incremental": true
-  },
-  "exclude": ["node_modules", "dist"]
+    "skipLibCheck": true,
+
+    "target": "ES2022",
+    "lib": ["ES2022"],
+
+    "noEmit": true
+  }
 }

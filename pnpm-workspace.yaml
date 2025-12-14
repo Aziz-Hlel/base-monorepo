@@ -2,6 +2,11 @@ packages:
   - apps/*
   - packages/*
 
+catalog:
+  '@types/node': ^24.10.4
+  typescript: ~5.8.3
+  zod: ^4.1.13
+
 onlyBuiltDependencies:
   - '@firebase/util'
   - '@prisma/engines'

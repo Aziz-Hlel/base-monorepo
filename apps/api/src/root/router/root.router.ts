@@ -15,4 +15,4 @@ router.get(
   asyncHandler((req, res) => rootController.getHealthz(req, res)),
 );
 
-export const RootRouter = router;
+export const RootRouter: Router = router;

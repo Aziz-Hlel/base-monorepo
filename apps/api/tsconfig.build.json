@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+
+    "outDir": "dist",
+    "rootDir": "src",
+
+    "declaration": false,           // don't emit .d.ts files
+    "emitDeclarationOnly": false, // emit JS instead of just types
+
+    "declarationMap": false,
+    "sourceMap": true,
+    "composite": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": false
+  },
+  "exclude": ["**/*.test.ts", "dist"]
+}
