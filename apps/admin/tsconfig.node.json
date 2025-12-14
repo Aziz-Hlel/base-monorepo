@@ -23,7 +23,8 @@
 
     "paths": {
       "@/*": ["./src/*"],
-      "@schemas/*": ["../../packages/schemas/src/*"]
+      "@schemas": ["../../packages/schemas/dist"],
+      "@schemas/*": ["../../packages/schemas/dist/*"]
     }
   },
   "include": ["vite.config.ts"]

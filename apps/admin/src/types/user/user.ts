@@ -1,5 +1,7 @@
 import RoleEnums from '@/Api/enums/RoleEnums';
 import z from 'zod';
+import { CreateUserSchema } from '@schemas/user';
+
 
 export const userSchema = z.object({
   id: z.string(),
@@ -12,3 +14,4 @@ export const userSchema = z.object({
 
 export type User = z.infer<typeof userSchema>;
 
+CreateUserSchema

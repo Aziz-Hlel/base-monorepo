@@ -1,6 +1,5 @@
-import React from 'react';
 
-const StatusComponent = ({ key }: { key: string }) => {
+const StatusComponent = ({  }: { key: string }) => {
   return <div>StatusComponent</div>;
 };
 
