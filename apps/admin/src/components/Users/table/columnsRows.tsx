@@ -1,8 +1,9 @@
-import StatusEnums, { type StatusEnum } from '@/Api/enums/StatusEnums';
+import { type StatusEnum } from '@/Api/enums/StatusEnums';
 import dayjs from '@/utils/dayjsConfig';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ArrowUp, ArrowUpDown } from 'lucide-react';
 import type { TableRowType } from '../Users';
+import StatusComponent from './EnumComponents/Status/StatusComponent';
 
 type TableColumnDefinition<T> = ColumnDef<T, unknown> & { accessorKey: keyof T };
 
@@ -64,7 +65,11 @@ const columnsRows: TableColumnDefinition<TableRowType>[] = [
         </TableHeaderComp>
       );
     },
-    cell: ({ row }) => <div className="">{StatusEnums[row.getValue('status') as StatusEnum]}</div>,
+    cell: ({ row }) => (
+      <div className="">
+        <StatusComponent value={row.getValue('status') as StatusEnum} />
+      </div>
+    ),
 
     enableSorting: true,
     enableHiding: true,

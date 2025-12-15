@@ -1,5 +1,5 @@
 import z from 'zod';
-import { createSeachParamsSchemaWithSortFields } from '../queryParams';
+import { createSeachParamsSchemaWithSortFields } from '../api/DefaultSeachParamsWithSortFields';
 
 export const UserPageQuerySortFields = ['createdAt', 'id', 'email', 'role', 'username'];
 

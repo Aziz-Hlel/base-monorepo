@@ -1,7 +1,15 @@
 import { apiService } from '@/Api/apiService';
 import BreadcrumbHeader from './Header';
 import UsersTable from '@/components/Users/Users';
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 const UserPage = () => {
@@ -27,13 +35,11 @@ const UserPage = () => {
             <CardTitle>Users</CardTitle>
             <CardDescription></CardDescription>
             <CardAction>
-              <Button>
-                Add New User
-              </Button>
+              <Button>Add New User</Button>
             </CardAction>
           </CardHeader>
           <CardContent>
-        <UsersTable />
+            <UsersTable />
           </CardContent>
           <CardFooter>
             <p>Card Footer</p>

@@ -1,4 +1,4 @@
-import { Role, Status } from "..";
+import { Role, Status } from "../enums";
 
 export type UserRowResponse = {
   id: string;

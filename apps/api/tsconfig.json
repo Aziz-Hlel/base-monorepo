@@ -16,11 +16,9 @@
     "noUncheckedIndexedAccess": true,
 
     "paths": {
-      "@/*": ["./src/*"],
-      "@jjBar/shared-schemas": ["../../packages/shared-schemas/src"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*", "src/app.ts"],
-  "exclude": ["node_modules", "dist"],
-  "references": [{ "path": "../../packages/shared-schemas" },]
+  "exclude": ["node_modules", "dist"]
 }

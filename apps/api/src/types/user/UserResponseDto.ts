@@ -1,6 +1,4 @@
-import { Role, Status } from '../enums/all';
-
-type Exact<T, Shape extends T = T> = Shape & Record<Exclude<keyof Shape, keyof T>, never>;
+import { Role, Status } from '../enums';
 
 export type UserResponseDto = {
   id: string;

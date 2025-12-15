@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { authService as authService } from '../Service/auth.service';
-import { UserResponseDto } from '../schema/UserResponseDto';
 import { AuthenticatedRequest } from '../../types/auth/AuthenticatedRequest';
-import { CreateUserSchema } from '@jjBar/shared-schemas';
+import { CreateUserSchema, UserResponseDto } from '@/types/user';
 
 class AuthController {
   async register(req: Request, res: Response<UserResponseDto>) {

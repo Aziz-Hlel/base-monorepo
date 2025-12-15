@@ -1,10 +1,9 @@
+import { UserPageQuery, UserRowResponse } from '@/types/user';
 import { UnauthorizedError } from '../../err/customErrors';
 import { UserWhereInput } from '../../generated/prisma/models';
 import { prisma } from '../../lib/prisma';
 import { Page } from '../../types/page/Page';
 import UserMapper from '../mapper/user.mapper';
-import { UserPageQuery, UserPageQuerySortFields } from '../schema/UserPageQuery';
-import { UserRowResponse } from '../schema/UserRowResponse';
 
 class UserService {
   GeneralQuery() {}
