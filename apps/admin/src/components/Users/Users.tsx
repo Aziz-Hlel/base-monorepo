@@ -4,8 +4,6 @@ import { Table, TableBody } from '../ui/table';
 import columnsRows from './table/columnsRows';
 import useGetTableData from './table/use-get-table-data';
 import useTableProps from './table/use-table-props';
-import SearchInput from './table/SearchInput';
-import ToggleColumnVisibility from './table/ToggleColumnVisibility';
 import type { UserRowResponse } from '@/types/user/UserRow';
 import { useMemo } from 'react';
 import NoResultComp from './table/NoResultComp';
@@ -14,13 +12,22 @@ import SelectRowSize from './table/SelectRowSize';
 import LoadingInRowsComp from './table/LoadingInRowsComp';
 import TableHeaders from './table/TableHeaders';
 import TableDataRows from './table/TableDataRows';
+import { DataTableToolbar } from './table/DataTableToolbar';
+import type { ColumnFilter } from './table/Filters/ColumnFilters';
+import tableFilters from './table/Filters/ColumnFilters';
 
 export type TableRowType = UserRowResponse;
+
+export const searchKey: keyof TableRowType = 'email';
+export const columnFiltersKeys: (keyof TableRowType)[] = ['status', 'role'] as const;
+export const allowedFilterIds: Set<string> = new Set([...columnFiltersKeys, searchKey]);
 
 const UsersTable = () => {
   const { tableData, pagination, isLoading } = useGetTableData();
 
   const tableColumns = useMemo(() => columnsRows, []);
+
+  const userTableFilters: ColumnFilter<any>[] = tableFilters;
 
   const {
     sorting,
@@ -63,11 +70,8 @@ const UsersTable = () => {
 
   return (
     <>
-      <div className="w-full max-w-full  ">
-        <div className="flex py-4 px-2 gap-4 justify-between">
-          <SearchInput table={table} />
-          <ToggleColumnVisibility table={table} />
-        </div>
+      <div className="w-full max-w-full flex flex-col gap-4  ">
+        <DataTableToolbar table={table} searchKey={searchKey} filters={userTableFilters} />
         <div className="overflow-hidden rounded-md border w-fit mx-auto">
           <Table
             className=" max-w-full "

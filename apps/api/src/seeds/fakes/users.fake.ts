@@ -27,7 +27,7 @@ const seedUsers = async (nbr: number) => {
     await prisma.user.upsert({
       where: { email: user.email },
       create: user,
-      update: {},
+      update: user,
     });
   }
 };

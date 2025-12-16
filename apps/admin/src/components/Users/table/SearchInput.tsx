@@ -5,9 +5,8 @@ import type { Table } from '@tanstack/react-table';
 import type { TableRowType } from '../Users';
 import { useDebounce } from '@uidotdev/usehooks';
 
-
-const SearchInput = ({ table }: { table: Table<TableRowType> }) => {
-  const queryValue = (table.getColumn('email')?.getFilterValue() as string) ?? '';
+const SearchInput = ({ table, searchKey }: { table: Table<TableRowType>; searchKey: keyof TableRowType }) => {
+  const queryValue = (table.getColumn(searchKey)?.getFilterValue() as string) ?? '';
   const [value, setValue] = useState<string>(queryValue);
   const debouncedSearchTerm = useDebounce(value, 300);
 
