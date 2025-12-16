@@ -2,36 +2,29 @@ import { type StatusEnum } from '@/Api/enums/StatusEnums';
 import dayjs from '@/utils/dayjsConfig';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ArrowUp, ArrowUpDown } from 'lucide-react';
-import type { TableRowType } from '../Users';
-import StatusComponent from './EnumComponents/Status/StatusComponent';
+import type { TableRowType } from '../../Users';
+import StatusComponent from '../EnumComponents/Status/StatusComponent';
+import HeaderContainer from '../ContainerComp/HeaderContainer';
+import RowContainer from '../ContainerComp/RowContainer';
 
 type TableColumnDefinition<T> = ColumnDef<T, unknown> & { accessorKey: keyof T };
 
-const TableHeaderComp: React.FC<React.ComponentProps<'div'>> = ({ children, ...props }) => {
-  return (
-    <div
-      className="truncate cursor-pointer flex items-center justify-start gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all [&_svg:not([class*='size-'])]:size-4  "
-      {...props}
-    >
-      {children}
-    </div>
-  );
-};
 
-const columnsRows: TableColumnDefinition<TableRowType>[] = [
+
+const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
   {
     accessorKey: 'email',
     header: ({ column }) => {
       return (
-        <TableHeaderComp onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           Email
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
           {column.getIsSorted() === false && <ArrowUpDown />}
-        </TableHeaderComp>
+        </HeaderContainer>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue('email')}</div>,
+    cell: ({ row }) => <RowContainer className="lowercase ">{row.getValue('email')}</RowContainer>,
 
     enableSorting: true,
     enableHiding: true,
@@ -40,15 +33,15 @@ const columnsRows: TableColumnDefinition<TableRowType>[] = [
     accessorKey: 'username',
     header: ({ column }) => {
       return (
-        <TableHeaderComp onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           Username
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
           {column.getIsSorted() === false && <ArrowUpDown />}
-        </TableHeaderComp>
+        </HeaderContainer>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue('username')}</div>,
+    cell: ({ row }) => <RowContainer className="">{row.getValue('username')}</RowContainer>,
 
     enableSorting: true,
     enableHiding: true,
@@ -57,18 +50,18 @@ const columnsRows: TableColumnDefinition<TableRowType>[] = [
     accessorKey: 'status',
     header: ({ column }) => {
       return (
-        <TableHeaderComp onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           Status
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
           {column.getIsSorted() === false && <ArrowUpDown />}
-        </TableHeaderComp>
+        </HeaderContainer>
       );
     },
     cell: ({ row }) => (
-      <div className="">
+      <RowContainer className="">
         <StatusComponent value={row.getValue('status') as StatusEnum} />
-      </div>
+      </RowContainer>
     ),
 
     enableSorting: true,
@@ -78,15 +71,15 @@ const columnsRows: TableColumnDefinition<TableRowType>[] = [
     accessorKey: 'provider',
     header: ({ column }) => {
       return (
-        <TableHeaderComp onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           Auth Provider
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
           {column.getIsSorted() === false && <ArrowUpDown />}
-        </TableHeaderComp>
+        </HeaderContainer>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue('provider')}</div>,
+    cell: ({ row }) => <RowContainer className="">{row.getValue('provider')}</RowContainer>,
 
     enableSorting: true,
     enableHiding: true,
@@ -95,15 +88,15 @@ const columnsRows: TableColumnDefinition<TableRowType>[] = [
     accessorKey: 'role',
     header: ({ column }) => {
       return (
-        <TableHeaderComp onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           Role
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
           {column.getIsSorted() === false && <ArrowUpDown />}
-        </TableHeaderComp>
+        </HeaderContainer>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue('role')}</div>,
+    cell: ({ row }) => <RowContainer className="">{row.getValue('role')}</RowContainer>,
 
     enableSorting: true,
     enableHiding: true,
@@ -112,22 +105,22 @@ const columnsRows: TableColumnDefinition<TableRowType>[] = [
     accessorKey: 'createdAt',
     header: ({ column }) => {
       return (
-        <TableHeaderComp onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           Created At
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
           {column.getIsSorted() === false && <ArrowUpDown />}
-        </TableHeaderComp>
+        </HeaderContainer>
       );
     },
     cell: ({ row }) => {
       const dateString = row.getValue('createdAt') as string;
       const formattedDate = dayjs(dateString).format('LL');
-      return <div className="  w-full">{formattedDate}</div>;
+      return <RowContainer className="  w-full">{formattedDate}</RowContainer>;
     },
     enableSorting: true,
     enableHiding: true,
   },
 ];
 
-export default columnsRows;
+export default columnsRowsDefinition;

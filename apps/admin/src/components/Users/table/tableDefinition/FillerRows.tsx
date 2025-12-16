@@ -1,0 +1,61 @@
+import { Spinner } from '@/components/ui/spinner';
+import { TableCell, TableRow } from '@/components/ui/table';
+import type { Table } from '@tanstack/react-table';
+import RowContainer from '../ContainerComp/RowContainer';
+
+interface LoadingInRowsCompProps<T> {
+    table: Table<T>;
+    emptyRows: number;
+}
+export const LoadingInRowsComp = <T,>({ table, emptyRows }: LoadingInRowsCompProps<T>) => {
+    return (
+        <>
+            <TableRow className="pointer-events-none ">
+                <TableCell className=" " colSpan={table.getAllLeafColumns().length}>
+                    <RowContainer className=" w-full flex justify-center items-center space-x-2 text-black opacity-100 ">
+                        <Spinner /> <span>Loading...</span>
+                    </RowContainer>
+                </TableCell>
+            </TableRow>
+            {emptyRows > 1 && <EmptyRows emptyRows={emptyRows - 1} table={table} />}
+        </>
+    );
+};
+
+interface NoResultCompProps<T> {
+    table: Table<T>;
+    emptyRows: number;
+}
+export const NoResultComp = <T,>({ table, emptyRows }: NoResultCompProps<T>) => {
+    return (
+        <>
+            <TableRow className="pointer-events-none opacity-50">
+                <TableCell className=" text-center text-black" colSpan={table.getAllLeafColumns().length}>
+                    <RowContainer>
+                        No Results
+                    </RowContainer>
+                </TableCell>
+            </TableRow>
+            {emptyRows > 1 && <EmptyRows emptyRows={emptyRows - 1} table={table} />}
+        </>
+    );
+};
+
+export const EmptyRows = <T,>({ emptyRows, table }: { emptyRows: number; table: Table<T> }) => {
+    return (
+        <>
+            {emptyRows > 0 &&
+                [...Array(emptyRows)].map((_, i) => (
+                    <TableRow key={`empty-${i}`} className="pointer-events-none opacity-50">
+                        {table.getAllLeafColumns().map((col) => (
+                            <TableCell key={col.id} colSpan={table.getAllLeafColumns().length} className=" h-full">
+                                <RowContainer>
+                                    &nbsp;
+                                </RowContainer>
+                            </TableCell>
+                        ))}
+                    </TableRow>
+                ))}
+        </>
+    );
+};

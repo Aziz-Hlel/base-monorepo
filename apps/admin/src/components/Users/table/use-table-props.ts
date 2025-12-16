@@ -1,4 +1,10 @@
-import type { ColumnFiltersState, SortingState, Updater, VisibilityState } from '@tanstack/react-table';
+import type {
+  ColumnFiltersState,
+  PaginationState,
+  SortingState,
+  Updater,
+  VisibilityState,
+} from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { allowedFilterIds, columnFiltersKeys, searchKey } from '../Users';
@@ -62,10 +68,17 @@ const useTableProps = () => {
 
   const onColumnFiltersChange = (updater: Updater<ColumnFiltersState>) => {
     const newColumnFiltersState = typeof updater === 'function' ? updater(columnFilters) : updater;
-
+    console.log('newColumnFiltersState : ', newColumnFiltersState);
     setSearchParams((prev) => {
       const params = new URLSearchParams(prev);
-
+      if (newColumnFiltersState.length === 0) {
+        // clear all filters
+        for (const key of allowedFilterIds) {
+          params.delete(key);
+        }
+        params.set('page', '1');
+        return params;
+      }
       for (const { id, value } of newColumnFiltersState) {
         if (!allowedFilterIds.has(id)) continue;
 
@@ -108,6 +121,23 @@ const useTableProps = () => {
     return pageNumber;
   }, [searchParams.toString()]);
 
+  const pagination = useMemo<PaginationState>(() => {
+    let pageSize = Number(searchParams.get('size'));
+    let pageIndex = Number(searchParams.get('page'));
+
+    if (pageSize < 5 || isNaN(pageSize)) {
+      pageSize = 5;
+    }
+    if (pageIndex < 1 || isNaN(pageIndex)) {
+      pageIndex = 1;
+    }
+    searchParams.set('size', pageSize.toString());
+    searchParams.set('page', pageIndex.toString());
+    return {
+      pageSize,
+      pageIndex: pageIndex - 1,
+    };
+  }, [pageSize, pageNumber]);
   const changePage = (direc: 'next' | 'prev' | number) => {
     if (pageNumber === 1 && direc === 'prev') return;
     let newPage: number = pageNumber;
@@ -130,6 +160,17 @@ const useTableProps = () => {
     });
   };
 
+  const onPaginationChange = (updater: Updater<PaginationState>) => {
+    const newPaginationState = typeof updater === 'function' ? updater({ pageSize, pageIndex: pageNumber }) : updater;
+    console.log('l page index jet :',newPaginationState.pageIndex)
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      params.set('size', String(newPaginationState.pageSize));
+      params.set('page', String(newPaginationState.pageIndex + 1)); // react-table uses zero-based index
+      return params;
+    });
+  };
+
   return {
     sorting,
     onSortingChange,
@@ -139,6 +180,8 @@ const useTableProps = () => {
     pageIndex: pageNumber,
     changePage,
     onPageSizeChange,
+    pagination,
+    onPaginationChange,
     columnVisibility,
     setColumnVisibility,
     rowSelection,

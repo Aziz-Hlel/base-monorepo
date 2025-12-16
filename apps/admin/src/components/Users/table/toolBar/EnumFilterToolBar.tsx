@@ -1,5 +1,5 @@
 import React from 'react';
-import type { TableRowType } from '../Users';
+import type { TableRowType } from '../../Users';
 import type { Table } from '@tanstack/react-table';
 import { DataTableFacetedFilter } from './faceted-filter';
 import { X } from 'lucide-react';

@@ -1,6 +1,6 @@
 import type { Table } from '@tanstack/react-table';
 import { DataTableViewOptions } from './view-options';
-import type { TableRowType } from '../Users';
+import type { TableRowType } from '../../Users';
 import SearchInput from './SearchInput';
 import EnumFilterToolBar from './EnumFilterToolBar';
 

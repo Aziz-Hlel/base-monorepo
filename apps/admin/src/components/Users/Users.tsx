@@ -1,20 +1,17 @@
 import { useReactTable, getCoreRowModel } from '@tanstack/react-table';
-import { Button } from '../ui/button';
 import { Table, TableBody } from '../ui/table';
-import columnsRows from './table/columnsRows';
+import columnsRowsDefinition from './table/tableDefinition/columnsRowsDefinition';
 import useGetTableData from './table/use-get-table-data';
 import useTableProps from './table/use-table-props';
 import type { UserRowResponse } from '@/types/user/UserRow';
 import { useMemo } from 'react';
-import NoResultComp from './table/NoResultComp';
-import EmptyRows from './table/EmptyRows';
-import SelectRowSize from './table/SelectRowSize';
-import LoadingInRowsComp from './table/LoadingInRowsComp';
 import TableHeaders from './table/TableHeaders';
 import TableDataRows from './table/TableDataRows';
-import { DataTableToolbar } from './table/DataTableToolbar';
+import { DataTableToolbar } from './table/toolBar/DataTableToolbar';
 import type { ColumnFilter } from './table/Filters/ColumnFilters';
 import tableFilters from './table/Filters/ColumnFilters';
+import { DataTablePagination } from './table/pagination/Pagination';
+import { EmptyRows, LoadingInRowsComp, NoResultComp } from './table/tableDefinition/FillerRows';
 
 export type TableRowType = UserRowResponse;
 
@@ -25,7 +22,7 @@ export const allowedFilterIds: Set<string> = new Set([...columnFiltersKeys, sear
 const UsersTable = () => {
   const { tableData, pagination, isLoading } = useGetTableData();
 
-  const tableColumns = useMemo(() => columnsRows, []);
+  const tableColumns = useMemo(() => columnsRowsDefinition, []);
 
   const userTableFilters: ColumnFilter<any>[] = tableFilters;
 
@@ -36,7 +33,9 @@ const UsersTable = () => {
     onColumnFiltersChange,
     pageSize,
     pageIndex,
+    pagination: tanStackpagination,
     changePage,
+    onPaginationChange,
     onPageSizeChange,
     columnVisibility,
     setColumnVisibility,
@@ -52,11 +51,16 @@ const UsersTable = () => {
     onColumnFiltersChange: onColumnFiltersChange,
     getCoreRowModel: getCoreRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onPaginationChange: onPaginationChange,
+    manualPagination: true,
+    pageCount: pagination.totalPages,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination: tanStackpagination,
+
     },
   });
 
@@ -92,24 +96,7 @@ const UsersTable = () => {
           </Table>
         </div>
         <div className="flex items-center justify-end space-x-2 py-4">
-          <div className="text-muted-foreground flex-1 text-sm">
-            Showing {firstElementIndex} to {lastElementIndex} of {pagination.totalElements} results
-          </div>
-          <SelectRowSize pageSize={pageSize} onPageSizeChange={onPageSizeChange} />
-          <div className="space-x-2">
-            <Button variant="outline" size="sm" onClick={() => changePage('prev')} disabled={pageIndex === 1}>
-              {'<'}
-            </Button>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => changePage('next')}
-              disabled={pageIndex === pagination.totalPages}
-            >
-              {'>'}
-            </Button>
-          </div>
+          <DataTablePagination table={table} />
         </div>
       </div>
     </>

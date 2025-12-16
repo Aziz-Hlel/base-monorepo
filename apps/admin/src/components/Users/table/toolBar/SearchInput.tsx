@@ -2,7 +2,7 @@ import { useEffect, useId, useState } from 'react';
 import { LoaderCircleIcon, SearchIcon } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import type { Table } from '@tanstack/react-table';
-import type { TableRowType } from '../Users';
+import type { TableRowType } from '../../Users';
 import { useDebounce } from '@uidotdev/usehooks';
 
 const SearchInput = ({ table, searchKey }: { table: Table<TableRowType>; searchKey: keyof TableRowType }) => {
