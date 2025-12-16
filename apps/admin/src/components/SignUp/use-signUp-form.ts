@@ -1,6 +1,6 @@
 import firebaseService from '@/Api/service/firebaseService';
 import { useAuth } from '@/context/AuthContext';
-import { singUpSchema, type SignUpRequestSchema } from '@/types/auth/SignUpRequestDto';
+import { singUpSchema, type SignUpRequestSchema } from '@/types22/auth/SignUpRequestDto';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';

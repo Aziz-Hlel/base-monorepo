@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import { authService as authService } from '../Service/auth.service';
 import { AuthenticatedRequest } from '../../types/auth/AuthenticatedRequest';
-import { CreateUserSchema, UserResponseDto } from '@/types/user';
+import { UserProfileResponse } from '@/types/user/UserProfileResponse';
+import { CreateUserSchema } from '@/types/user/CreateUserDto';
 
 class AuthController {
-  async register(req: Request, res: Response<UserResponseDto>) {
+  async register(req: Request, res: Response<UserProfileResponse>) {
     const { idToken } = CreateUserSchema.parse(req.body);
 
     const user = await authService.registerUser(idToken);
@@ -12,21 +13,21 @@ class AuthController {
     res.status(201).json(user);
   }
 
-  async loginWithPassword(req: Request, res: Response<UserResponseDto>) {
+  async loginWithPassword(req: Request, res: Response<UserProfileResponse>) {
     const { idToken } = CreateUserSchema.parse(req.body);
 
     const user = await authService.loginUser(idToken);
     res.status(200).json(user);
   }
 
-  async authenticateWithProvider(req: Request, res: Response<UserResponseDto>) {
+  async authenticateWithProvider(req: Request, res: Response<UserProfileResponse>) {
     const { idToken } = CreateUserSchema.parse(req.body);
     const user = await authService.authenticateWithProvider(idToken);
 
     res.status(200).json(user);
   }
 
-  async me(req: AuthenticatedRequest, res: Response<UserResponseDto>) {
+  async me(req: AuthenticatedRequest, res: Response<UserProfileResponse>) {
     const idToken = req.user;
 
     const user = await authService.me(idToken);

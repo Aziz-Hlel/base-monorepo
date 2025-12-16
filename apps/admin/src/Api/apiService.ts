@@ -2,7 +2,7 @@ import type { AxiosInstance, AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 import ENV from '../config/env.variables';
 import { jwtTokenManager } from './token/JwtTokenManager.class';
-import { apiErrorResponseSchema, type ApiErrorResponse, type ApiResponse } from '../types/api/ApiResponse';
+import { apiErrorResponseSchema, type ApiErrorResponse, type ApiResponse } from '../types22/api/ApiResponse';
 import toastWrapper from '@/utils/toastWrapper';
 
 const creatAxiosInstance = (): AxiosInstance => {
@@ -145,7 +145,6 @@ class ApiService {
     if (typeof error !== 'object' && error === null) {
       toastWrapper.dev.Critical('Unknown error, error is not an object or is null');
       return {
-        status: 0,
         success: false,
         message: 'Unknown error occurred',
         timestamp: new Date(),
@@ -162,7 +161,6 @@ class ApiService {
       // ⚠️ No response received — network error or timeout
       this.displayDevAlert(NaN, 'No response received from server — network error or timeout');
       return {
-        status: 0,
         success: false,
         message: 'No response received from server',
         timestamp: new Date(),
@@ -171,7 +169,7 @@ class ApiService {
     } else {
       // ⚠️ Something else went wrong setting up the request
       toastWrapper.dev.Critical('Something else went wrong setting up the request');
-      return { status: 0, success: false, message: 'Request setup error', timestamp: new Date(), path: '' };
+      return { success: false, message: 'Request setup error', timestamp: new Date(), path: '' };
     }
   }
 

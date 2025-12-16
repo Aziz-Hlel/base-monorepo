@@ -3,7 +3,6 @@ import { Table, TableBody } from '../ui/table';
 import columnsRowsDefinition from './table/tableDefinition/columnsRowsDefinition';
 import useGetTableData from './table/use-get-table-data';
 import useTableProps from './table/use-table-props';
-import type { UserRowResponse } from '@/types/user/UserRow';
 import { useMemo } from 'react';
 import TableHeaders from './table/TableHeaders';
 import TableDataRows from './table/TableDataRows';
@@ -12,6 +11,7 @@ import type { ColumnFilter } from './table/Filters/ColumnFilters';
 import tableFilters from './table/Filters/ColumnFilters';
 import { DataTablePagination } from './table/pagination/Pagination';
 import { EmptyRows, LoadingInRowsComp, NoResultComp } from './table/tableDefinition/FillerRows';
+import type { UserRowResponse } from '@/types/user/UserRowResponse';
 
 export type TableRowType = UserRowResponse;
 
@@ -32,11 +32,8 @@ const UsersTable = () => {
     columnFilters,
     onColumnFiltersChange,
     pageSize,
-    pageIndex,
     pagination: tanStackpagination,
-    changePage,
     onPaginationChange,
-    onPageSizeChange,
     columnVisibility,
     setColumnVisibility,
     rowSelection,
@@ -67,23 +64,15 @@ const UsersTable = () => {
   const isTableNotEmpty = table.getRowModel().rows?.length !== 0;
   const isTableEmpty = !isTableNotEmpty;
   const isTableHalfwayPopulated = isTableNotEmpty && table.getRowModel().rows?.length !== pageSize;
-  const firstElementIndex = pagination.offset + 1;
-  const lastElementIndex = firstElementIndex + table.getRowModel().rows.length - 1;
-
   const nbrEmptyRows = pageSize - table.getRowModel().rows.length;
+
 
   return (
     <>
       <div className="w-full max-w-full flex flex-col gap-4  ">
         <DataTableToolbar table={table} searchKey={searchKey} filters={userTableFilters} />
-        <div className="overflow-hidden rounded-md border w-fit mx-auto">
-          <Table
-            className=" max-w-full "
-            style={{
-              // this is needed for column resizing
-              width: table.getCenterTotalSize(),
-            }}
-          >
+        <div className=" rounded-md border ">
+          <Table className=" max-w-full w-full ">
             <TableHeaders<TableRowType> table={table} />
             <TableBody>
               {isTableNotEmpty && <TableDataRows<TableRowType> table={table} />}
@@ -95,8 +84,8 @@ const UsersTable = () => {
             </TableBody>
           </Table>
         </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <DataTablePagination table={table} />
+        <div className=" ">
+          <DataTablePagination table={table} className='mt-auto'  />
         </div>
       </div>
     </>

@@ -138,31 +138,10 @@ const useTableProps = () => {
       pageIndex: pageIndex - 1,
     };
   }, [pageSize, pageNumber]);
-  const changePage = (direc: 'next' | 'prev' | number) => {
-    if (pageNumber === 1 && direc === 'prev') return;
-    let newPage: number = pageNumber;
-    if (typeof direc === 'number') newPage = direc;
-    if (direc === 'next') newPage = pageNumber + 1;
-    if (direc === 'prev') newPage = pageNumber - 1;
-    setSearchParams((prev) => {
-      const params = new URLSearchParams(prev);
-      params.set('page', String(newPage));
-      return params;
-    });
-  };
-
-  const onPageSizeChange = (size: string) => {
-    setSearchParams((prev) => {
-      const params = new URLSearchParams(prev);
-      params.set('size', String(size));
-      params.set('page', '1');
-      return params;
-    });
-  };
 
   const onPaginationChange = (updater: Updater<PaginationState>) => {
     const newPaginationState = typeof updater === 'function' ? updater({ pageSize, pageIndex: pageNumber }) : updater;
-    console.log('l page index jet :',newPaginationState.pageIndex)
+    console.log('l page index jet :', newPaginationState.pageIndex);
     setSearchParams((prev) => {
       const params = new URLSearchParams(prev);
       params.set('size', String(newPaginationState.pageSize));
@@ -177,9 +156,6 @@ const useTableProps = () => {
     columnFilters,
     onColumnFiltersChange,
     pageSize,
-    pageIndex: pageNumber,
-    changePage,
-    onPageSizeChange,
     pagination,
     onPaginationChange,
     columnVisibility,

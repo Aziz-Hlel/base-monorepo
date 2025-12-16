@@ -1,7 +1,7 @@
+import type { Page } from '@/types/page/Page';
 import { apiService } from '../apiService';
 import apiRoutes from '../routes/routes';
-import type { Page } from '@/types/page/Page';
-import type { UserRowResponse } from '@/types/user/UserRow';
+import type { UserRowResponse } from '@/types/user/UserRowResponse';
 
 const userService = {
   getUsers: async (searchParams: { [k: string]: string | number }) =>

@@ -1,6 +1,6 @@
 import { Role, Status } from '../enums';
 
-export type UserResponseDto = {
+export type UserProfileResponse = {
   id: string;
   createdAt: Date;
   updatedAt: Date;

@@ -1,12 +1,11 @@
 import { apiService } from '@/Api/apiService';
 import apiRoutes from '../routes/routes';
-import type { SignInResponseDto } from '@/types/auth/SignInResponseDto';
-import type { SignUpResponseDto } from '@/types/auth/SignUpResponseDto';
-import type { FirebaseSignInRequestDto } from '@/types/auth/SignInRequestDto';
-import type { ApiResponse } from '../../types/api/ApiResponse';
-import type { FirebaseSignUpRequestSchema } from '@/types/auth/SignUpRequestDto';
-import type { User } from '@/types/user/user';
-
+import type { SignInResponseDto } from '@/types22/auth/SignInResponseDto';
+import type { SignUpResponseDto } from '@/types22/auth/SignUpResponseDto';
+import type { FirebaseSignInRequestDto } from '@/types22/auth/SignInRequestDto';
+import type { ApiResponse } from '../../types22/api/ApiResponse';
+import type { FirebaseSignUpRequestSchema } from '@/types22/auth/SignUpRequestDto';
+import type { UserProfileResponse } from '@/types/user/UserProfileResponse';
 export interface IauthService {
   signIn: (payload: FirebaseSignInRequestDto) => Promise<ApiResponse<SignInResponseDto>>;
 
@@ -14,7 +13,7 @@ export interface IauthService {
 
   oAuthSignIn: (payload: FirebaseSignInRequestDto) => Promise<ApiResponse<SignInResponseDto>>;
 
-  me: () => Promise<ApiResponse<User>>;
+  me: () => Promise<ApiResponse<UserProfileResponse>>;
 }
 
 export const authService: IauthService = {

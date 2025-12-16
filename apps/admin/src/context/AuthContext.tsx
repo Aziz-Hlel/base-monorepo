@@ -1,20 +1,20 @@
-import type { ApiErrorResponse, ApiResponse } from '@/types/api/ApiResponse';
+import type { ApiErrorResponse, ApiResponse } from '@/types22/api/ApiResponse';
 import { authService, type IauthService } from '@/Api/service/authService';
 import { jwtTokenManager } from '@/Api/token/JwtTokenManager.class';
-import type { SignInResponseDto } from '@/types/auth/SignInResponseDto';
-import type { User } from '@/types/user/user';
+import type { SignInResponseDto } from '@/types22/auth/SignInResponseDto';
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
 import { createContext, useMemo, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import type { UserProfileResponse } from '@/types/user/UserProfileResponse';
 
 type AuthState =
   | { status: 'loading'; user: null }
-  | { status: 'authenticated'; user: User }
+  | { status: 'authenticated'; user: UserProfileResponse }
   | { status: 'unauthenticated'; user: null };
 
 type IAuthContext = {
   authState: AuthState;
-  user: User | null;
+  user: UserProfileResponse | null;
   signIn: IauthService['signIn'];
   signUp: IauthService['signUp'];
   oAuthSignIn: IauthService['oAuthSignIn'];
@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { data: currentUser, isLoading } = useQuery<User>({
+  const { data: currentUser, isLoading } = useQuery<UserProfileResponse>({
     queryKey: AUTH_QUERY_KEY,
     queryFn: async () => {
       const accessToken = await jwtTokenManager.getInitialAccessToken();

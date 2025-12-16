@@ -1,10 +1,9 @@
-import { Request, Response } from 'express';
-import { DefaultSearchParams, defaultSearchParamsSchema } from '../../types/api/DefaultSeachParams';
+import { Response } from 'express';
 import { AuthenticatedRequest } from '../../types/auth/AuthenticatedRequest';
 import { userService } from '../Service/user.service';
 import { Page } from '../../types/page/Page';
-import { BadRequestError } from '../../err/customErrors';
-import { userPageQuerySchema, UserRowResponse } from '@/types/user';
+import { userPageQuerySchema } from '@/types/user/UserPageQuery';
+import { UserRowResponse } from '@/types/user/UserRowResponse';
 
 class UserController {
   async getUserPage(req: AuthenticatedRequest, res: Response<Page<UserRowResponse>>) {

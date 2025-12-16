@@ -29,7 +29,7 @@ const UserPage = () => {
           { title: 'Profile', href: '/users/profile' },
         ]}
       />
-      <div className=" max-w-full w-fit mx-auto">
+      <div className=" w-8/12 mx-auto">
         <Card>
           <CardHeader>
             <CardTitle>Users</CardTitle>

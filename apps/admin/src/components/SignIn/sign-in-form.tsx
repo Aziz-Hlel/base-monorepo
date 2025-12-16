@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Controller, type UseFormReturn } from 'react-hook-form';
-import type { SignInRequestDto } from '@/types/auth/SignInRequestDto';
+import type { SignInRequestDto } from '@/types22/auth/SignInRequestDto';
 import { Link } from 'react-router-dom';
 import useLoginWithGoogle from '@/hooks/use-login-with-google';
 import { Spinner } from '../ui/spinner';

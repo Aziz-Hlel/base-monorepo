@@ -1,5 +1,5 @@
 import userService from '@/Api/service/userService';
-import type { Pageable } from '@/types/page/Pageable';
+import type { Pageable } from '@/types22/page/Pageable';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import type { TableRowType } from '../Users';

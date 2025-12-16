@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { type SignInRequestDto, singInSchema } from '@/types/auth/SignInRequestDto';
+import { type SignInRequestDto, singInSchema } from '@/types22/auth/SignInRequestDto';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import firebaseService from '@/Api/service/firebaseService';
