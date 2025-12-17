@@ -1,11 +1,13 @@
 import { type StatusEnum } from '@/Api/enums/StatusEnums';
 import dayjs from '@/utils/dayjsConfig';
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUp, ArrowUpDown } from 'lucide-react';
-import type { TableRowType } from '../../Users';
+import { ArrowUp, ChevronsUpDown } from 'lucide-react';
 import StatusComponent from '../EnumComponents/Status/StatusComponent';
 import HeaderContainer from '../ContainerComp/HeaderContainer';
 import RowContainer from '../ContainerComp/RowContainer';
+import type { RoleType } from '../EnumComponents/Role/RolesComponent';
+import RolesComponent from '../EnumComponents/Role/RolesComponent';
+import type { TableRowType } from './typeNfieldsDeclaration';
 
 type TableColumnDefinition<T> = ColumnDef<T, unknown> & { accessorKey: keyof T };
 
@@ -20,7 +22,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
           Email
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
-          {column.getIsSorted() === false && <ArrowUpDown />}
+          {column.getIsSorted() === false && <ChevronsUpDown />}
         </HeaderContainer>
       );
     },
@@ -28,6 +30,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
 
     enableSorting: true,
     enableHiding: true,
+    enableGlobalFilter: true,
   },
   {
     accessorKey: 'username',
@@ -37,7 +40,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
           Username
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
-          {column.getIsSorted() === false && <ArrowUpDown />}
+          {column.getIsSorted() === false && <ChevronsUpDown />}
         </HeaderContainer>
       );
     },
@@ -54,7 +57,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
           Status
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
-          {column.getIsSorted() === false && <ArrowUpDown />}
+          {column.getIsSorted() === false && <ChevronsUpDown />}
         </HeaderContainer>
       );
     },
@@ -75,7 +78,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
           Auth Provider
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
-          {column.getIsSorted() === false && <ArrowUpDown />}
+          {column.getIsSorted() === false && <ChevronsUpDown />}
         </HeaderContainer>
       );
     },
@@ -92,11 +95,11 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
           Role
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
-          {column.getIsSorted() === false && <ArrowUpDown />}
+          {column.getIsSorted() === false && <ChevronsUpDown />}
         </HeaderContainer>
       );
     },
-    cell: ({ row }) => <RowContainer className="">{row.getValue('role')}</RowContainer>,
+    cell: ({ row }) => <RowContainer className=""><RolesComponent value={row.getValue('role') as RoleType} /></RowContainer>,
 
     enableSorting: true,
     enableHiding: true,
@@ -109,7 +112,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
           Created At
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
-          {column.getIsSorted() === false && <ArrowUpDown />}
+          {column.getIsSorted() === false && <ChevronsUpDown />}
         </HeaderContainer>
       );
     },
@@ -121,6 +124,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
     enableSorting: true,
     enableHiding: true,
   },
+
 ];
 
 export default columnsRowsDefinition;

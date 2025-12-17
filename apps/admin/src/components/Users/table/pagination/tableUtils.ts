@@ -1,4 +1,3 @@
-
 /**
  * Generates page numbers for pagination with ellipsis
  * @param currentPage - Current page number (1-based)
@@ -37,12 +36,12 @@ export function getPageNumbers(currentPage: number, totalPages: number) {
         rangeWithDots.push(i)
       }
     } else {
-      // In the middle: [1] ... [4] [5] [6] ... [10]
+      // In the middle: [1] ... [4] [5] [6] ...
       rangeWithDots.push('...')
       for (let i = currentPage - 1; i <= currentPage + 1; i++) {
         rangeWithDots.push(i)
       }
-      rangeWithDots.push('...', totalPages)
+      rangeWithDots.push('...')
     }
   }
 

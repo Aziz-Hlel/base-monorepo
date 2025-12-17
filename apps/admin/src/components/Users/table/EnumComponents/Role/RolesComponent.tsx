@@ -1,7 +1,6 @@
-import { Badge } from '@/components/ui/badge';
-import type { TableRowType } from '../../../Users';
+import type { TableRowType } from '../../tableDeclarations/typeNfieldsDeclaration';
 import { STATUS_VARIANTS } from './roles-variants';
-import StatusTextMapping from '@/EnumTextMapping/StatusTextMapping';
+import RolesTextMapping from '@/EnumTextMapping/RolesTextMapping';
 
 export type RoleType = TableRowType['role'];
 
@@ -13,12 +12,14 @@ const RolesComponent = ({ value }: { value: RoleType }) => {
   }
 
   const Icon = variant.Icon;
-  const textMapping = StatusTextMapping[value];
+  const textMapping = RolesTextMapping[value];
   return (
-    <Badge variant="outline" className={`rounded-sm cursor-default ${variant.className}`}>
-      <Icon className="mr-1 h-4 w-4" />
-      {textMapping}
-    </Badge>
+    <div className="flex items-center gap-2">
+      <Icon className="h-4 w-4" />
+      <span>
+        {textMapping}
+      </span>
+    </div>
   );
 };
 

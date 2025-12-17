@@ -46,7 +46,7 @@ export function DataTablePagination<TData>({
       style={{ overflowClipMargin: 1 }}
     >
       <div className='flex w-full items-center justify-between'>
-        <div className='flex w-[100px] items-center justify-center text-sm font-medium @2xl/content:hidden'>
+        <div className='flex w-[100px] items-center justify-center text-sm font-medium @2xl/content:hidden  2xl:hidden'>
           Page {currentPage} of {totalPages}
         </div>
         <div className='flex items-center gap-2 @max-2xl/content:flex-row-reverse'>
@@ -60,7 +60,7 @@ export function DataTablePagination<TData>({
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side='top'>
-              {[10, 20, 30, 40, 50].map((pageSize) => (
+              {[5, 10, 20, 30, 40, 50].map((pageSize) => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>
@@ -72,7 +72,7 @@ export function DataTablePagination<TData>({
       </div>
 
       <div className='flex items-center sm:space-x-6 lg:space-x-8'>
-        <div className='flex w-[100px] items-center justify-center text-sm font-medium @max-3xl/content:hidden'>
+        <div className='flex w-[100px] items-center justify-center text-sm font-medium @max-3xl/content:hidden '>
           Page {currentPage} of {totalPages}
         </div>
         <div className='flex items-center space-x-2'>

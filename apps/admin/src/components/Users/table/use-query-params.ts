@@ -1,27 +1,8 @@
 import z from 'zod';
-import { createSeachParamsSchemaWithSortFields } from '../api/DefaultSeachParamsWithSortFields';
-import { UserRowResponse } from './UserRowResponse';
-import { Role, Status } from '../enums/enums';
-
-
-
-export type TableRowType = UserRowResponse;
-export type TableRowKeys = keyof TableRowType;
-
-export const columnFiltersKeys: Set<TableRowKeys> = new Set(['status', 'role'] as const);
-
-export const sortableColumnKeys: TableRowKeys[] = [
-  'email',
-  'username',
-  'status',
-  'authId',
-  'role',
-  'createdAt',
-] as const;
-
-
-export const UserPageQuerySortFields = ['createdAt', 'id', 'email', 'role', 'username'];
-
+import { Role, Status } from '@/types/enums/enums';
+import { sortableColumnKeys } from './tableDeclarations/typeNfieldsDeclaration';
+import { useSearchParams } from 'react-router-dom';
+import { useMemo } from 'react';
 
 const csvEnumArray = <T extends string[]>(values: T) =>
   z
@@ -57,8 +38,15 @@ export const defaultQuery: RequiredTableQueryParams = {
   status: [],
 };
 
+const useQueryParams = () => {
+  const [searchParams] = useSearchParams();
+  const params = Object.fromEntries(searchParams.entries());
+  console.log('rab om l param ml use query params:', params);
+  const parsedQueryParams = useMemo(() => queryParamsSchema.parse(params), [searchParams]);
 
-const userPageQuerySchema = createSeachParamsSchemaWithSortFields(UserPageQuerySortFields);
+  return {
+    queryParams: parsedQueryParams,
+  };
+};
 
-export type UserPageQuery = z.infer<typeof userPageQuerySchema>;
-export { userPageQuerySchema };
+export default useQueryParams;

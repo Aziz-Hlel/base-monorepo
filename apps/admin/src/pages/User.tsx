@@ -1,4 +1,3 @@
-import { apiService } from '@/Api/apiService';
 import BreadcrumbHeader from './Header';
 import UsersTable from '@/components/Users/Users';
 import {
@@ -13,14 +12,8 @@ import {
 import { Button } from '@/components/ui/button';
 
 const UserPage = () => {
-  apiService
-    .get('/users')
-    .then((response) => {
-      console.log('Users fetched:', response);
-    })
-    .catch((error) => {
-      console.error('Error fetching users:', error);
-    });
+
+
   return (
     <div>
       <BreadcrumbHeader
@@ -29,11 +22,11 @@ const UserPage = () => {
           { title: 'Profile', href: '/users/profile' },
         ]}
       />
-      <div className=" w-8/12 mx-auto">
+      <div className=" w-full mx-auto">
         <Card>
           <CardHeader>
-            <CardTitle>Users</CardTitle>
-            <CardDescription></CardDescription>
+            <CardTitle>User List</CardTitle>
+            <CardDescription>Manage your users and their roles here.</CardDescription>
             <CardAction>
               <Button>Add New User</Button>
             </CardAction>

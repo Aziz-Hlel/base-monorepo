@@ -7,14 +7,37 @@ import type {
 } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { allowedFilterIds, columnFiltersKeys, searchKey } from '../Users';
+import { columnFiltersKeys, type TableRowKeys } from './tableDeclarations/typeNfieldsDeclaration';
+import useQueryParams, { type RequiredTableQueryParams, defaultQuery } from './use-query-params';
+
+const setParamIfNotDefault = (params: URLSearchParams, key: keyof RequiredTableQueryParams, value: string) => {
+  const defaultValue = defaultQuery[key];
+  if (String(defaultValue) !== value) {
+    params.set(key, value);
+  } else {
+    params.delete(key);
+  }
+};
 
 const useTableProps = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { queryParams } = useQueryParams();
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection] = useState({});
 
+  const globalSearch = useMemo(() => {
+    return queryParams.search;
+  }, [queryParams.search]);
+
+  const setGlobalSearch = (value: string) => {
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      setParamIfNotDefault(params, 'search', value);
+      setParamIfNotDefault(params, 'page', '1');
+      return params;
+    });
+  };
   const onSortingChange = (updater: Updater<SortingState>) => {
     const newSortingState = typeof updater === 'function' ? updater(sorting) : updater;
 
@@ -23,125 +46,95 @@ const useTableProps = () => {
 
     setSearchParams((prev) => {
       const params = new URLSearchParams(prev);
-      params.set('sort', sortField);
-      params.set('order', sortOrder);
+      setParamIfNotDefault(params, 'sort', sortField);
+      setParamIfNotDefault(params, 'order', sortOrder);
       return params;
     });
   };
 
-  const sorting = useMemo(() => {
-    if (searchParams.get('sort') && searchParams.get('order')) {
-      return [
-        {
-          id: searchParams.get('sort') as string,
-          desc: searchParams.get('order') === 'desc',
-        },
-      ];
-    }
-    return [];
-  }, [searchParams.toString()]);
+  const sorting: SortingState = useMemo(() => {
+    const sortings = [
+      {
+        id: queryParams.sort,
+        desc: queryParams.order === 'desc',
+      },
+    ];
+    return sortings;
+  }, [queryParams.sort, queryParams.order]);
 
   const columnFilters = useMemo(() => {
     const columnFilters = [];
-    for (const columnFilter of allowedFilterIds) {
-      const filterValue = searchParams.get(columnFilter);
-      if (filterValue !== null && filterValue !== '') {
-        if (columnFilter === searchKey) {
-          columnFilters.push({
-            id: columnFilter,
-            value: filterValue,
-          });
-        }
+    for (const columnFilter of columnFiltersKeys) {
+      const filterValue = queryParams[columnFilter as keyof RequiredTableQueryParams];
 
-        if (columnFiltersKeys.includes(columnFilter as any)) {
-          columnFilters.push({
-            id: columnFilter,
-            value: filterValue.split(',') || [],
-          });
-        }
-      }
+      const isEmptyString = typeof filterValue === 'string' && filterValue.trim() === '';
+      const isEmptyArray = Array.isArray(filterValue) && filterValue.length === 0;
+      const isUndefined = filterValue === undefined;
+      if (isEmptyString || isEmptyArray || isUndefined) continue;
+      columnFilters.push({
+        id: columnFilter,
+        value: filterValue,
+      });
     }
-
-    console.log('derived colum filter : ', columnFilters);
     return columnFilters;
   }, [searchParams.toString()]);
 
   const onColumnFiltersChange = (updater: Updater<ColumnFiltersState>) => {
     const newColumnFiltersState = typeof updater === 'function' ? updater(columnFilters) : updater;
-    console.log('newColumnFiltersState : ', newColumnFiltersState);
-    setSearchParams((prev) => {
-      const params = new URLSearchParams(prev);
-      if (newColumnFiltersState.length === 0) {
-        // clear all filters
-        for (const key of allowedFilterIds) {
-          params.delete(key);
+    setSearchParams(
+      (prev) => {
+        const params = new URLSearchParams(prev);
+        const resetFilters = newColumnFiltersState.length === 0;
+        if (resetFilters) {
+          for (const key of columnFiltersKeys) {
+            params.delete(key);
+          }
+          setParamIfNotDefault(params, 'page', '1');
+
+          return params;
         }
-        params.set('page', '1');
+
+        for (const key of columnFiltersKeys) {
+          const existsInNewFilters = newColumnFiltersState.find((filter) => filter.id === key);
+          if (!existsInNewFilters) {
+            params.delete(key);
+            continue;
+          }
+          const filterhasNoValue =
+            existsInNewFilters.value == null ||
+            (Array.isArray(existsInNewFilters.value) && existsInNewFilters.value.length === 0) ||
+            existsInNewFilters.value === '';
+          if (filterhasNoValue) {
+            params.delete(key);
+            continue;
+          }
+          params.set(key, (existsInNewFilters.value as any).toString());
+        }
+
+        setParamIfNotDefault(params, 'page', '1');
         return params;
-      }
-      for (const { id, value } of newColumnFiltersState) {
-        if (!allowedFilterIds.has(id)) continue;
-
-        if (value == null || (Array.isArray(value) && value.length === 0) || value === '') {
-          params.delete(id);
-          continue;
-        }
-
-        if (Array.isArray(value)) {
-          params.set(id, value.toString());
-          continue;
-        }
-
-        if (typeof value === 'string') {
-          params.set(id, value);
-        }
-      }
-
-      params.set('page', '1');
-      return params;
-    });
+      },
+      { replace: true },
+    );
   };
 
-  const pageSize = useMemo(() => {
-    const size = Number(searchParams.get('size'));
-
-    if (size < 5) {
-      searchParams.set('size', '5');
-      return 5;
-    }
-    return size;
-  }, [searchParams.toString()]);
+  const pageSize: number = useMemo(() => {
+    return queryParams.size;
+  }, [queryParams.size]);
 
   const pageNumber = useMemo(() => {
-    const pageNumber = Number(searchParams.get('page'));
-    if (pageNumber < 1) {
-      searchParams.set('page', '1');
-      return 1;
-    }
-    return pageNumber;
-  }, [searchParams.toString()]);
+    return queryParams.page;
+  }, [queryParams.page]);
 
   const pagination = useMemo<PaginationState>(() => {
-    let pageSize = Number(searchParams.get('size'));
-    let pageIndex = Number(searchParams.get('page'));
-
-    if (pageSize < 5 || isNaN(pageSize)) {
-      pageSize = 5;
-    }
-    if (pageIndex < 1 || isNaN(pageIndex)) {
-      pageIndex = 1;
-    }
-    searchParams.set('size', pageSize.toString());
-    searchParams.set('page', pageIndex.toString());
     return {
-      pageSize,
-      pageIndex: pageIndex - 1,
+      pageSize: queryParams.size,
+      pageIndex: queryParams.page - 1,
     };
-  }, [pageSize, pageNumber]);
+  }, [queryParams.size, queryParams.page]);
 
   const onPaginationChange = (updater: Updater<PaginationState>) => {
     const newPaginationState = typeof updater === 'function' ? updater({ pageSize, pageIndex: pageNumber }) : updater;
-    console.log('l page index jet :', newPaginationState.pageIndex);
     setSearchParams((prev) => {
       const params = new URLSearchParams(prev);
       params.set('size', String(newPaginationState.pageSize));
@@ -161,6 +154,8 @@ const useTableProps = () => {
     columnVisibility,
     setColumnVisibility,
     rowSelection,
+    globalSearch,
+    setGlobalSearch,
   };
 };
 

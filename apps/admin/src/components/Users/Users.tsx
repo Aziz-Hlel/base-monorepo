@@ -1,23 +1,18 @@
 import { useReactTable, getCoreRowModel } from '@tanstack/react-table';
 import { Table, TableBody } from '../ui/table';
-import columnsRowsDefinition from './table/tableDefinition/columnsRowsDefinition';
+import columnsRowsDefinition from './table/tableDeclarations/columnsRowsDefinition';
 import useGetTableData from './table/use-get-table-data';
 import useTableProps from './table/use-table-props';
 import { useMemo } from 'react';
-import TableHeaders from './table/TableHeaders';
-import TableDataRows from './table/TableDataRows';
+import TableHeaders from './table/tableComposites/TableHeaders';
+import TableDataRows from './table/tableComposites/TableDataRows';
 import { DataTableToolbar } from './table/toolBar/DataTableToolbar';
 import type { ColumnFilter } from './table/Filters/ColumnFilters';
 import tableFilters from './table/Filters/ColumnFilters';
 import { DataTablePagination } from './table/pagination/Pagination';
-import { EmptyRows, LoadingInRowsComp, NoResultComp } from './table/tableDefinition/FillerRows';
-import type { UserRowResponse } from '@/types/user/UserRowResponse';
+import { EmptyRows, LoadingInRowsComp, NoResultComp } from './table/tableDeclarations/FillerRows';
+import { type TableRowType, } from './table/tableDeclarations/typeNfieldsDeclaration';
 
-export type TableRowType = UserRowResponse;
-
-export const searchKey: keyof TableRowType = 'email';
-export const columnFiltersKeys: (keyof TableRowType)[] = ['status', 'role'] as const;
-export const allowedFilterIds: Set<string> = new Set([...columnFiltersKeys, searchKey]);
 
 const UsersTable = () => {
   const { tableData, pagination, isLoading } = useGetTableData();
@@ -25,6 +20,7 @@ const UsersTable = () => {
   const tableColumns = useMemo(() => columnsRowsDefinition, []);
 
   const userTableFilters: ColumnFilter<any>[] = tableFilters;
+
 
   const {
     sorting,
@@ -37,6 +33,8 @@ const UsersTable = () => {
     columnVisibility,
     setColumnVisibility,
     rowSelection,
+    globalSearch,
+    setGlobalSearch
   } = useTableProps();
 
   const table = useReactTable({
@@ -49,13 +47,17 @@ const UsersTable = () => {
     getCoreRowModel: getCoreRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: onPaginationChange,
+    onGlobalFilterChange: setGlobalSearch,
+
     manualPagination: true,
     pageCount: pagination.totalPages,
+
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      globalFilter: globalSearch,
       pagination: tanStackpagination,
 
     },
@@ -66,26 +68,25 @@ const UsersTable = () => {
   const isTableHalfwayPopulated = isTableNotEmpty && table.getRowModel().rows?.length !== pageSize;
   const nbrEmptyRows = pageSize - table.getRowModel().rows.length;
 
-
   return (
     <>
       <div className="w-full max-w-full flex flex-col gap-4  ">
-        <DataTableToolbar table={table} searchKey={searchKey} filters={userTableFilters} />
+        <DataTableToolbar table={table} filters={userTableFilters} />
         <div className=" rounded-md border ">
           <Table className=" max-w-full w-full ">
             <TableHeaders<TableRowType> table={table} />
             <TableBody>
-              {isTableNotEmpty && <TableDataRows<TableRowType> table={table} />}
-              {isLoading && <LoadingInRowsComp<TableRowType> emptyRows={nbrEmptyRows} table={table} />}
-              {!isLoading && isTableHalfwayPopulated && (
-                <EmptyRows<TableRowType> emptyRows={nbrEmptyRows} table={table} />
-              )}
+              {!isLoading && isTableNotEmpty && <TableDataRows<TableRowType> table={table} />}
+              {!isLoading &&
+                isTableHalfwayPopulated
+                && (<EmptyRows<TableRowType> emptyRows={nbrEmptyRows} table={table} />)}
+              {isLoading && <LoadingInRowsComp<TableRowType> pageSize={tanStackpagination.pageSize} table={table} />}
               {!isLoading && isTableEmpty && <NoResultComp<TableRowType> table={table} emptyRows={pageSize} />}
             </TableBody>
           </Table>
         </div>
         <div className=" ">
-          <DataTablePagination table={table} className='mt-auto'  />
+          <DataTablePagination table={table} className='mt-auto' />
         </div>
       </div>
     </>

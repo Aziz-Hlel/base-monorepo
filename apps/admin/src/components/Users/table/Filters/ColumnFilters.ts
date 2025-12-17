@@ -1,7 +1,7 @@
 import StatusEnums, { type StatusEnum } from '@/Api/enums/StatusEnums';
 import StatusTextMapping from '@/EnumTextMapping/StatusTextMapping';
-import type { TableRowType } from '../../Users';
-import { ShieldUser, User } from 'lucide-react';
+import { UserRound, CircleUser, ShieldUser, UserStar } from 'lucide-react';
+import type { TableRowType } from '../tableDeclarations/typeNfieldsDeclaration';
 
 export type ColumnFilter<T extends keyof TableRowType> = {
   columnId: T;
@@ -26,8 +26,10 @@ const roleFilterData: ColumnFilter<'role'> = {
   columnId: 'role',
   title: 'Role',
   options: [
-    { label: 'Admin', value: 'ADMIN', icon: ShieldUser },
-    { label: 'User', value: 'USER', icon: User },
+    { label: 'Admin', value: 'ADMIN', icon: UserStar },
+    { label: 'User', value: 'USER', icon: UserRound },
+    { label: 'Staff', value: 'STAFF', icon: CircleUser },
+    { label: 'Super Admin', value: 'SUPER_ADMIN', icon: ShieldUser },
     // { label: 'Moderator', value: 'MODERATOR' },
   ],
 };

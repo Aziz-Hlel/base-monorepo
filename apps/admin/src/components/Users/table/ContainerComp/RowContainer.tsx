@@ -5,7 +5,7 @@ const RowContainer: React.FC<React.ComponentProps<'div'>> = ({ children, ...prop
     return (
         <div
             {...props}
-            className={cn(" capitalize h-8 flex items-center w-fit ps-2", props.className)}
+            className={cn(" capitalize h-8 flex items-center w-fit ps-2 cursor-default", props.className)}
         >
             {children}
         </div>

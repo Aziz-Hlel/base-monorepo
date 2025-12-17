@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { User } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
+import { Role, Status } from '@/types/enums/enums';
 
 const createFakeUser = (index: number) => {
   const fakeEmail = `user${index}@example.com`;
@@ -12,8 +13,8 @@ const createFakeUser = (index: number) => {
     updatedAt: faker.date.recent(),
     authId: faker.string.uuid(),
     provider: faker.helpers.arrayElement(['fake']),
-    role: faker.helpers.arrayElement(['USER', 'ADMIN']),
-    status: faker.helpers.arrayElement(['ACTIVE', 'INACTIVE', 'PENDING', 'DELETED']),
+    role: faker.helpers.arrayElement(Object.values(Role)),
+    status: faker.helpers.arrayElement(Object.values(Status)),
     isEmailVerified: faker.datatype.boolean(),
   };
   return fakeUser;

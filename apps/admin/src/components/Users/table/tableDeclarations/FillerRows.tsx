@@ -5,9 +5,10 @@ import RowContainer from '../ContainerComp/RowContainer';
 
 interface LoadingInRowsCompProps<T> {
     table: Table<T>;
-    emptyRows: number;
+    pageSize: number;
 }
-export const LoadingInRowsComp = <T,>({ table, emptyRows }: LoadingInRowsCompProps<T>) => {
+export const LoadingInRowsComp = <T,>({ table, pageSize }: LoadingInRowsCompProps<T>) => {
+    console.log('page sie form the comitslef', pageSize)
     return (
         <>
             <TableRow className="pointer-events-none ">
@@ -17,7 +18,7 @@ export const LoadingInRowsComp = <T,>({ table, emptyRows }: LoadingInRowsCompPro
                     </RowContainer>
                 </TableCell>
             </TableRow>
-            {emptyRows > 1 && <EmptyRows emptyRows={emptyRows - 1} table={table} />}
+            {pageSize > 1 && <EmptyRows emptyRows={pageSize - 1} table={table} />}
         </>
     );
 };
@@ -48,7 +49,7 @@ export const EmptyRows = <T,>({ emptyRows, table }: { emptyRows: number; table: 
                 [...Array(emptyRows)].map((_, i) => (
                     <TableRow key={`empty-${i}`} className="pointer-events-none opacity-50">
                         {table.getAllLeafColumns().map((col) => (
-                            <TableCell key={col.id} colSpan={table.getAllLeafColumns().length} className=" h-full">
+                            <TableCell key={col.id} colSpan={table.getAllLeafColumns().length}>
                                 <RowContainer>
                                     &nbsp;
                                 </RowContainer>

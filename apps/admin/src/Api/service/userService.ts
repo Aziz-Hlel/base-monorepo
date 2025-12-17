@@ -4,7 +4,7 @@ import apiRoutes from '../routes/routes';
 import type { UserRowResponse } from '@/types/user/UserRowResponse';
 
 const userService = {
-  getUsers: async (searchParams: { [k: string]: string | number }) =>
+  getUsers: async (searchParams: { [k: string]: string | number | Array<string> }) =>
     apiService.getThrowable<Page<UserRowResponse>>(apiRoutes.users.getUsers(), {
       params: searchParams,
     }),
