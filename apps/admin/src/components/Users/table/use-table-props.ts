@@ -7,7 +7,7 @@ import type {
 } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { columnFiltersKeys, type TableRowKeys } from './tableDeclarations/typeNfieldsDeclaration';
+import { columnFiltersKeys } from './tableDeclarations/typeNfieldsDeclaration';
 import useQueryParams, { type RequiredTableQueryParams, defaultQuery } from './use-query-params';
 
 const setParamIfNotDefault = (params: URLSearchParams, key: keyof RequiredTableQueryParams, value: string) => {
@@ -108,9 +108,8 @@ const useTableProps = () => {
             params.delete(key);
             continue;
           }
-          params.set(key, (existsInNewFilters.value as any).toString());
+          params.set(key, (existsInNewFilters.value as any).join(','));
         }
-
         setParamIfNotDefault(params, 'page', '1');
         return params;
       },

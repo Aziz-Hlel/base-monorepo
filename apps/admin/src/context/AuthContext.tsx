@@ -5,7 +5,7 @@ import type { SignInResponseDto } from '@/types22/auth/SignInResponseDto';
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
 import { createContext, useMemo, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { UserProfileResponse } from '@/types/user/UserProfileResponse';
+import type { UserProfileResponse } from '@contracts/types/user/UserProfileResponse';
 
 type AuthState =
   | { status: 'loading'; user: null }

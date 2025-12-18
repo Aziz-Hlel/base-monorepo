@@ -1,4 +1,4 @@
-import type { UserRowResponse } from '@/types/user/UserRowResponse';
+import type { UserRowResponse } from "@contracts/types/user/UserRowResponse";
 
 export type TableRowType = UserRowResponse;
 export type TableRowKeys = keyof TableRowType;

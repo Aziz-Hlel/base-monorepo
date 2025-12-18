@@ -1,4 +1,4 @@
-import type { UserProfileResponse } from '@/types/user/UserProfileResponse';
+import type { UserProfileResponse } from '@contracts/types/user/UserProfileResponse';
 import { createContext, useContext } from 'react';
 import { useAuth } from './AuthContext';
 import { Outlet } from 'react-router-dom';

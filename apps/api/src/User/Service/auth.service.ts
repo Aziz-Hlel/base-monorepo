@@ -4,12 +4,12 @@ import UserMapper from '../mapper/user.mapper';
 import { InternalServerError } from '../../err/customErrors';
 import { DecodedIdTokenWithClaims } from '../../types/auth/DecodedIdTokenWithClaims';
 import { userRespo } from '../repo/user.repo';
-import { UserResponseDto } from '@jjBar/shared-schemas';
+import { UserProfileResponse } from '@contracts/types/user/UserProfileResponse';
 
 class AuthService {
   private firebaseService = firebaseService;
 
-  async registerUser(tokenId: string): Promise<UserResponseDto> {
+  async registerUser(tokenId: string): Promise<UserProfileResponse> {
     const decodedToken = await this.firebaseService.verifyToken(tokenId);
 
     let email = decodedToken.email as string;
@@ -31,7 +31,7 @@ class AuthService {
     return UserMapper.toUserResponseDto(newUser, decodedToken);
   }
 
-  async loginUser(tokenId: string): Promise<UserResponseDto> {
+  async loginUser(tokenId: string): Promise<UserProfileResponse> {
     const decodedToken = await this.firebaseService.verifyToken(tokenId);
 
     const userAuthId = decodedToken.uid;
@@ -45,7 +45,7 @@ class AuthService {
     return UserMapper.toUserResponseDto(user, decodedToken);
   }
 
-  async authenticateWithProvider(tokenId: string): Promise<UserResponseDto> {
+  async authenticateWithProvider(tokenId: string): Promise<UserProfileResponse> {
     const decodedToken = await this.firebaseService.verifyToken(tokenId);
 
     const userAuthId = decodedToken.uid;
@@ -61,7 +61,7 @@ class AuthService {
     return UserMapper.toUserResponseDto(user, decodedToken);
   }
 
-  async me(decodedToken: DecodedIdTokenWithClaims): Promise<UserResponseDto> {
+  async me(decodedToken: DecodedIdTokenWithClaims): Promise<UserProfileResponse> {
     const userAuthId = decodedToken.uid;
 
     const user = await userRespo.getUserByAuthId(userAuthId);

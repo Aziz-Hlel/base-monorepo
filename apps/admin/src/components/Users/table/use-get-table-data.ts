@@ -1,8 +1,8 @@
 import userService from '@/Api/service/userService';
 import { useQuery } from '@tanstack/react-query';
-import type { Pageable } from '@/types/page/Pageable';
 import type { TableRowType } from './tableDeclarations/typeNfieldsDeclaration';
 import useQueryParams from './use-query-params';
+import type { Pageable } from '@contracts/types/page/Pageable';
 
 const blankPagination: Pageable = {
   size: 0,
@@ -18,6 +18,8 @@ const useGetTableData = () => {
   const adjustedQueryParams = {
     ...queryParams,
     page: queryParams.page ? Number(queryParams.page) - 1 : 0,
+    role: queryParams.role.join(','),
+    status: queryParams.status.join(','),
   };
 
   const { data, isFetching } = useQuery({

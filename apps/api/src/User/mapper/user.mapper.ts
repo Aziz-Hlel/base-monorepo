@@ -1,12 +1,12 @@
 import { UserCreateInput } from '../../generated/prisma/models';
 import { Role } from '../../generated/prisma/browser';
 import { GenericEntityCreateInput } from '../../types/prisma/GenericEntityUtilityTypes';
-import { UserResponseDto } from '../schema/UserResponseDto';
 import { User } from '../../generated/prisma/client';
 import { StrictDecodedIdToken } from '../../types/auth/StrictDecodedIdToken';
-import { UserRowResponse } from '../schema/UserRowResponse';
 import { Page } from '../../types/page/Page';
 import { DefaultSearchParams } from '../../types/api/DefaultSeachParams';
+import { UserProfileResponse } from '@contracts/types/user/UserProfileResponse';
+import { UserRowResponse } from '@contracts/types/user/UserRowResponse';
 
 type UserCreateInputCustom = GenericEntityCreateInput<UserCreateInput>;
 
@@ -23,8 +23,8 @@ const UserMapper = {
     return user;
   },
 
-  toUserResponseDto(user: User, firebaseToken: StrictDecodedIdToken): UserResponseDto {
-    const userResponse: UserResponseDto = {
+  toUserResponseDto(user: User, firebaseToken: StrictDecodedIdToken): UserProfileResponse {
+    const userResponse: UserProfileResponse = {
       id: user.id,
       email: user.email,
       authId: user.authId,

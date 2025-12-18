@@ -1,8 +1,9 @@
-import { Role, Status } from "../enums";
+import { Role, Status } from '../enums/enums';
 
-export type UserRowResponse = {
+export type UserProfileResponse = {
   id: string;
   createdAt: Date;
+  updatedAt: Date;
   authId: string;
   email: string;
   provider: string;
@@ -10,4 +11,5 @@ export type UserRowResponse = {
   role: Role;
   isEmailVerified: boolean;
   status: Status;
+  avatar?: string;
 };

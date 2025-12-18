@@ -1,9 +1,8 @@
 import { Role, Status } from "../enums/enums";
 
-export type UserProfileResponse = {
+export type UserRowResponse = {
   id: string;
   createdAt: Date;
-  updatedAt: Date;
   authId: string;
   email: string;
   provider: string;
@@ -11,5 +10,4 @@ export type UserProfileResponse = {
   role: Role;
   isEmailVerified: boolean;
   status: Status;
-  avatar?: string;
 };

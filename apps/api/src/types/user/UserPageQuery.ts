@@ -1,9 +1,6 @@
 import z from 'zod';
-import { createSeachParamsSchemaWithSortFields } from '../api/DefaultSeachParamsWithSortFields';
-import { UserRowResponse } from './UserRowResponse';
 import { Role, Status } from '../enums/enums';
-
-
+import { UserRowResponse } from '@contracts/types/user/UserRowResponse';
 
 export type TableRowType = UserRowResponse;
 export type TableRowKeys = keyof TableRowType;
@@ -19,9 +16,7 @@ export const sortableColumnKeys: TableRowKeys[] = [
   'createdAt',
 ] as const;
 
-
 export const UserPageQuerySortFields = ['createdAt', 'id', 'email', 'role', 'username'];
-
 
 const csvEnumArray = <T extends string[]>(values: T) =>
   z
@@ -34,14 +29,14 @@ const csvEnumArray = <T extends string[]>(values: T) =>
     )
     .pipe(z.array(z.enum(values)));
 
-const queryParamsSchema = z.object({
+export const queryParamsSchema = z.object({
   page: z.coerce.number().int().positive().catch(1),
   size: z.coerce.number().int().min(5).max(50).catch(10),
   sort: z.enum(sortableColumnKeys).catch('createdAt'),
   order: z.enum(['asc', 'desc']).catch('desc'),
-  search: z.string().catch(''),
+  search: z.string().trim().catch(''),
   // Filters
-  role: csvEnumArray(Object.values(Role)).catch([]),
+  role: csvEnumArray(Object.values(Role)),
   status: csvEnumArray(Object.values(Status)).catch([]),
 });
 export type TableQueryParams = z.infer<typeof queryParamsSchema>;
@@ -58,7 +53,4 @@ export const defaultQuery: RequiredTableQueryParams = {
 };
 
 
-const userPageQuerySchema = createSeachParamsSchemaWithSortFields(UserPageQuerySortFields);
-
-export type UserPageQuery = z.infer<typeof userPageQuerySchema>;
-export { userPageQuerySchema };
+export type UserPageQuery = z.infer<typeof queryParamsSchema>;

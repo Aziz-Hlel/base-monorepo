@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge';
-import type { TableRowType } from '../../../Users';
 import { STATUS_VARIANTS } from './status-variants';
 import StatusTextMapping from '@/EnumTextMapping/StatusTextMapping';
+import type { TableRowType } from '../../tableDeclarations/typeNfieldsDeclaration';
 
 export type StatusType = TableRowType['status'];
  
