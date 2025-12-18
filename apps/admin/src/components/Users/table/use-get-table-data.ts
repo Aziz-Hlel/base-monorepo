@@ -17,7 +17,7 @@ const useGetTableData = () => {
   const { queryParams } = useQueryParams();
   const adjustedQueryParams = {
     ...queryParams,
-    page: queryParams.page ? Number(queryParams.page) - 1 : 0,
+    page: queryParams.page,
     role: queryParams.role.join(','),
     status: queryParams.status.join(','),
   };

@@ -10,8 +10,6 @@ class UserService {
   GeneralQuery() {}
 
   async getUserPage(queryParams: UserPageQuery): Promise<Page<UserRowResponse>> {
-    // throw new UnauthorizedError('Not implemented yet');
-    console.log('queryparam: ', queryParams);
     const skip = (queryParams.page - 1) * queryParams.size;
     const take = queryParams.size;
     const { search } = queryParams;

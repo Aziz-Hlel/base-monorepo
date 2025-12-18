@@ -7,8 +7,6 @@ import { queryParamsSchema } from '@/types/user/UserPageQuery';
 
 class UserController {
   async getUserPage(req: AuthenticatedRequest, res: Response<Page<UserRowResponse>>) {
-    // throw new BadRequestError('Not implemented yet');
-    console.log('quey raw :', req.query);
     const parsedQuery = queryParamsSchema.parse(req.query);
 
     const response = await userService.getUserPage(parsedQuery);

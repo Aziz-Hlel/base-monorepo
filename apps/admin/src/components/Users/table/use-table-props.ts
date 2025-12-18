@@ -136,8 +136,13 @@ const useTableProps = () => {
     const newPaginationState = typeof updater === 'function' ? updater({ pageSize, pageIndex: pageNumber }) : updater;
     setSearchParams((prev) => {
       const params = new URLSearchParams(prev);
-      params.set('size', String(newPaginationState.pageSize));
-      params.set('page', String(newPaginationState.pageIndex + 1)); // react-table uses zero-based index
+      const pageSizeChanged = newPaginationState.pageSize !== pageSize;
+      if (pageSizeChanged) {
+        setParamIfNotDefault(params, 'size', String(newPaginationState.pageSize));
+        setParamIfNotDefault(params, 'page', '1');
+        return params;
+      }
+      setParamIfNotDefault(params, 'page', String(newPaginationState.pageIndex + 1));
       return params;
     });
   };
