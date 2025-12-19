@@ -16,7 +16,23 @@ const prisma = new PrismaClient({
 });
 
 prisma.$on('query', (e) => {
-  logger.debug({ query: 'e.query', duration: e.duration }, 'Prisma query');
+  const durationInMs = e.duration;
+
+  if (durationInMs < 1000) {
+    const durationFixed = durationInMs.toFixed(2);
+    const durationMsg = `${durationFixed} ms`;
+    return;
+    return logger.debug({ duration: durationMsg }, 'Prisma query');
+  }
+  if (durationInMs >= 1000 && durationInMs < 3000) {
+    const durationFixed = (durationInMs / 1000).toFixed(2);
+    const durationMsg = `${durationFixed} s`;
+    return logger.warn({ query: e.query, duration: durationMsg }, 'Prisma query slow');
+  }
+
+  const durationFixed = (durationInMs / 1000).toFixed(2);
+  const durationMsg = `${durationFixed} s`;
+  return logger.error({ query: e.query, duration: durationMsg }, 'Prisma query very slow');
 });
 
 prisma.$on('error', (e) => {

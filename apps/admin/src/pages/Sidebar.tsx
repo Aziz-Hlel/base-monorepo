@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 const Sidebar = ({ dir }: { dir: 'rtl' | 'ltr' }) => {
   return (
-    <div className="flex h-screen fixed inset-0 overflow-hidden ">
+    <div className="flex h-screen fixed inset-0 overflow-y-hidden ">
       <SidebarProvider dir={dir}>
         <AppSidebar dir={dir} side={dir === 'rtl' ? 'right' : 'left'} />
 

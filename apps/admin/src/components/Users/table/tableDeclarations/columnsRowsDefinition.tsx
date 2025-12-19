@@ -36,7 +36,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
         isEmailVerified: boolean;
       }>();
       return (
-        <RowContainer className="lowercase ">
+        <RowContainer className="lowercase w-full ">
           <IsEmailVerifiedComponent isEmailVerified={isEmailVerified} />
           &nbsp;
           {email}
@@ -148,7 +148,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
     id: 'actions',
     cell: ({ row }) => {
       return (
-        <RowContainer className="justify-end w-full">
+        <RowContainer className="justify-end w-fit">
           <ActionComp row={row} />
         </RowContainer>
       );

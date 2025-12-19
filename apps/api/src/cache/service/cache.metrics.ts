@@ -23,6 +23,7 @@ export class CacheMetrics {
     const hitRate = total === 0 ? 0 : ((this.hits / total) * 100).toFixed(2);
     const missRate = total === 0 ? 0 : ((this.misses / total) * 100).toFixed(2);
     return {
+      total: total,
       hits: this.hits,
       misses: this.misses,
       hitRate: `${hitRate}%`,
