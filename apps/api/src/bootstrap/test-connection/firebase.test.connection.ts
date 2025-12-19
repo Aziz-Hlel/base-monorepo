@@ -1,4 +1,4 @@
-import { firebaseSession } from './init.firebase';
+import { firebaseSession } from '../firebase.init';
 
 async function testFirebaseConnection() {
   try {

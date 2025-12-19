@@ -3,7 +3,7 @@ import { AuthenticatedRequest } from '../../types/auth/AuthenticatedRequest';
 import { userService } from '../Service/user.service';
 import { Page } from '../../types/page/Page';
 import { UserRowResponse } from '@contracts/types/user/UserRowResponse';
-import { queryParamsSchema } from '@/types/user/UserPageQuery';
+import { queryParamsSchema } from '@contracts/types/user/UserPageQuery';
 
 class UserController {
   async getUserPage(req: AuthenticatedRequest, res: Response<Page<UserRowResponse>>) {

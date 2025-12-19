@@ -6,6 +6,7 @@
 **/.env
 **/.env.*
 !config/.env.dev
+!config/.env.local
 **/pnpm-lock.yaml
 
 # ===============================

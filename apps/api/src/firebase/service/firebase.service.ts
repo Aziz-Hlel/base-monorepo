@@ -3,7 +3,7 @@ import { CustomClaims } from '../../types/auth/CustomClaims';
 import { User } from '../../generated/prisma/client';
 import { StrictDecodedIdToken } from '../../types/auth/StrictDecodedIdToken';
 import { Auth } from 'firebase-admin/auth';
-import { firebaseSession } from '../boostrap/init.firebase';
+import { firebaseSession } from '../../bootstrap/firebase.init';
 
 class FirebaseService {
   private firebaseSession: Auth = firebaseSession;

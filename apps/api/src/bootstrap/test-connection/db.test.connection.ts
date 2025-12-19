@@ -1,4 +1,4 @@
-import { prisma } from '../lib/prisma';
+import { prisma } from '../db.init';
 
 export const testDbConnection = async () => {
   try {

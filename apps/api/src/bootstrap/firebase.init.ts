@@ -1,7 +1,7 @@
 // src/firebase/index.ts
+import ENV from '@/config/ENV';
 import { initializeApp, getApps, getApp, cert, App } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
-import ENV from '../../config/ENV';
 
 const initializeFirebaseApp = (): App => {
   try {
@@ -21,4 +21,3 @@ const initializeFirebaseApp = (): App => {
 const app = initializeFirebaseApp();
 
 export const firebaseSession = getAuth(app);
-

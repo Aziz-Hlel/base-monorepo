@@ -1,15 +1,19 @@
 import { UserRowResponse } from '@contracts/types/user/UserRowResponse';
-import { UnauthorizedError } from '../../err/customErrors';
 import { UserOrderByWithRelationInput, UserWhereInput } from '../../generated/prisma/models';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../bootstrap/db.init';
 import { Page } from '../../types/page/Page';
 import UserMapper from '../mapper/user.mapper';
-import { defaultQuery, UserPageQuery } from '@/types/user/UserPageQuery';
+import { UserPageQuery } from '@contracts/types/user/UserPageQuery';
+import { cacheService } from '@/cache/service/cache.service';
 
 class UserService {
   GeneralQuery() {}
 
   async getUserPage(queryParams: UserPageQuery): Promise<Page<UserRowResponse>> {
+    const cachedResult = await cacheService.get<Page<UserRowResponse>>({ object: queryParams });
+    if (cachedResult) {
+      return cachedResult;
+    }
     const skip = (queryParams.page - 1) * queryParams.size;
     const take = queryParams.size;
     const { search } = queryParams;
@@ -36,6 +40,7 @@ class UserService {
     const orderBy: UserOrderByWithRelationInput = {
       [queryParams.sort]: queryParams.order,
     };
+
     const usersContent = prisma.user.findMany({
       skip,
       take,
@@ -48,6 +53,8 @@ class UserService {
     const [content, totalElements] = await Promise.all([usersContent, usersCount]);
 
     const userPage = UserMapper.toUserPageResponse(content, totalElements, queryParams);
+
+    await cacheService.set({ object: queryParams, value: userPage, ttlSeconds: 60 }); // Cache for 60 seconds
 
     return userPage;
   }

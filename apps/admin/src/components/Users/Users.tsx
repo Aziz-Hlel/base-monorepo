@@ -7,6 +7,8 @@ import { DataTablePagination } from './table/pagination/Pagination';
 import { type TableRowType } from './table/tableDeclarations/typeNfieldsDeclaration';
 import useMyTable from './use-my-table';
 import TableBodyContent from './table/TableMainComp/TableBodyContent';
+import { SelectedRowProvider } from './table/context/selected-row-provider';
+import DialogContainer from './dialogs/DialogContainer';
 
 const UsersTable = () => {
   const { table, pageSize, isLoading } = useMyTable();
@@ -15,20 +17,23 @@ const UsersTable = () => {
 
   return (
     <>
-      <div className="w-full max-w-full flex flex-col gap-4  ">
-        <DataTableToolbar table={table} filters={userTableFilters} />
-        <div className=" rounded-md border  w-full mx-auto ">
-          <Table>
-            <TableHeaders<TableRowType> table={table} />
-            <TableBody>
-              <TableBodyContent table={table} isLoading={isLoading} pageSize={pageSize} />
-            </TableBody>
-          </Table>
+      <SelectedRowProvider>
+        <div className="w-full max-w-full flex flex-col gap-4  ">
+          <DataTableToolbar table={table} filters={userTableFilters} />
+          <div className=" rounded-md border  w-full mx-auto ">
+            <Table>
+              <TableHeaders<TableRowType> table={table} />
+              <TableBody>
+                <TableBodyContent table={table} isLoading={isLoading} pageSize={pageSize} />
+              </TableBody>
+            </Table>
+          </div>
+          <div>
+            <DataTablePagination table={table} className="mt-auto" />
+          </div>
+          <DialogContainer />
         </div>
-        <div className=" ">
-          <DataTablePagination table={table} className="mt-auto" />
-        </div>
-      </div>
+      </SelectedRowProvider>
     </>
   );
 };

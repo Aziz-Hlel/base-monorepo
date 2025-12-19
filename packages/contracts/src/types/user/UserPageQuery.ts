@@ -25,7 +25,8 @@ const csvEnumArray = <T extends string[]>(values: T) =>
       value
         .split(',')
         .map((v) => v.trim())
-        .filter(Boolean),
+        .filter(Boolean)
+        .sort(),
     )
     .pipe(z.array(z.enum(values)));
 
@@ -51,6 +52,5 @@ export const defaultQuery: RequiredTableQueryParams = {
   role: [],
   status: [],
 };
-
 
 export type UserPageQuery = z.infer<typeof queryParamsSchema>;

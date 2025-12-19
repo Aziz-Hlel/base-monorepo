@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { HealthzResponseDto } from '../schemas/healthzResponse.dto';
 import { SimpleApiResponse } from '../../types/api/SimpleApiResponse.dto';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../bootstrap/db.init';
 
 class RootController {
   async getHealth(req: Request, res: Response<SimpleApiResponse>) {

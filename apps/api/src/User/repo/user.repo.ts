@@ -1,4 +1,4 @@
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../bootstrap/db.init';
 
 export class UserRepo {
   async isUserExists(id: string): Promise<boolean> {

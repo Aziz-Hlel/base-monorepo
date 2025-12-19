@@ -1,4 +1,4 @@
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../bootstrap/db.init';
 import { firebaseService } from '../../firebase/service/firebase.service';
 import UserMapper from '../mapper/user.mapper';
 import { InternalServerError } from '../../err/customErrors';

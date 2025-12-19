@@ -8,14 +8,18 @@ import RowContainer from '../ContainerComp/RowContainer';
 import type { RoleType } from '../EnumComponents/Role/RolesComponent';
 import RolesComponent from '../EnumComponents/Role/RolesComponent';
 import type { TableRowType } from './typeNfieldsDeclaration';
+import IsEmailVerifiedComponent from '../EnumComponents/IsEmailVerified/IsEmailVerifiedComponent';
+import ActionComp from '../ActionComp';
 
-type TableColumnDefinition<T> = ColumnDef<T, unknown> & { accessorKey: keyof T };
-
-
+type TableColumnDefinition<T> = ColumnDef<T> & { accessorKey?: keyof T };
 
 const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
   {
-    accessorKey: 'email',
+    id: 'email',
+    accessorFn: (row: TableRowType) => ({
+      email: row.email,
+      isEmailVerified: row.isEmailVerified,
+    }),
     header: ({ column }) => {
       return (
         <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
@@ -26,7 +30,19 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
         </HeaderContainer>
       );
     },
-    cell: ({ row }) => <RowContainer className="lowercase ">{row.getValue('email')}</RowContainer>,
+    cell: ({ getValue }) => {
+      const { email, isEmailVerified } = getValue<{
+        email: string;
+        isEmailVerified: boolean;
+      }>();
+      return (
+        <RowContainer className="lowercase ">
+          <IsEmailVerifiedComponent isEmailVerified={isEmailVerified} />
+          &nbsp;
+          {email}
+        </RowContainer>
+      );
+    },
 
     enableSorting: true,
     enableHiding: true,
@@ -99,7 +115,11 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
         </HeaderContainer>
       );
     },
-    cell: ({ row }) => <RowContainer className=""><RolesComponent value={row.getValue('role') as RoleType} /></RowContainer>,
+    cell: ({ row }) => (
+      <RowContainer className="">
+        <RolesComponent value={row.getValue('role') as RoleType} />
+      </RowContainer>
+    ),
 
     enableSorting: true,
     enableHiding: true,
@@ -124,7 +144,18 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
     enableSorting: true,
     enableHiding: true,
   },
-
+  {
+    id: 'actions',
+    cell: ({ row }) => {
+      return (
+        <RowContainer className="justify-end w-full">
+          <ActionComp row={row} />
+        </RowContainer>
+      );
+    },
+    enableSorting: false,
+    enableHiding: false,
+  },
 ];
 
 export default columnsRowsDefinition;

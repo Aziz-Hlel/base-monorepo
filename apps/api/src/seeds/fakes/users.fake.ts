@@ -1,7 +1,9 @@
 import { faker } from '@faker-js/faker';
 import { User } from '../../generated/prisma/client';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../bootstrap/db.init';
 import { Role, Status } from '@/types/enums/enums';
+
+faker.seed(1); // Ensure consistent fake data across runs
 
 const createFakeUser = (index: number) => {
   const fakeEmail = `user${index}@example.com`;

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { authService as authService } from '../Service/auth.service';
 import { AuthenticatedRequest } from '../../types/auth/AuthenticatedRequest';
-import { CreateUserSchema } from '@/types/user/CreateUserDto';
 import { UserProfileResponse } from '@contracts/types/user/UserProfileResponse';
+import { CreateUserSchema } from '@contracts/types/user/CreateUserDto';
 
 class AuthController {
   async register(req: Request, res: Response<UserProfileResponse>) {

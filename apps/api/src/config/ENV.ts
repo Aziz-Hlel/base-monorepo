@@ -9,6 +9,9 @@ const envSchema = z
     PORT: z.coerce.number(),
     NODE_ENV: z.enum(['dev', 'stage', 'production', 'test']).default('dev'),
     FIREBASE_CERT: z.string(),
+    REDIS_PORT: z.coerce.number(),
+    REDIS_PASSWORD: z.string(),
+    REDIS_HOST: z.enum(['localhost', 'redis']),
     ALLOWED_ORIGIN_PATTERNS: z.string().optional(),
   })
   .refine(
@@ -42,7 +45,6 @@ const validatedEnv = envSchema.safeParse(process.env);
 if (!validatedEnv.success) {
   console.error('❌ ERROR : Zod validation failed');
   throw new Error(validatedEnv.error.message);
-
 }
 
 const ENV = validatedEnv.data;
