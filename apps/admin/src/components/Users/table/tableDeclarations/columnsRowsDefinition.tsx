@@ -23,7 +23,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
     header: ({ column }) => {
       return (
         <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Email
+          <span>Email </span>
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
           {column.getIsSorted() === false && <ChevronsUpDown />}
@@ -53,7 +53,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
     header: ({ column }) => {
       return (
         <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Username
+          <span>Username</span>
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
           {column.getIsSorted() === false && <ChevronsUpDown />}
@@ -70,7 +70,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
     header: ({ column }) => {
       return (
         <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Status
+          <span>Status</span>
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
           {column.getIsSorted() === false && <ChevronsUpDown />}
@@ -91,7 +91,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
     header: ({ column }) => {
       return (
         <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Auth Provider
+          <span>Auth Provider</span>
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
           {column.getIsSorted() === false && <ChevronsUpDown />}
@@ -108,7 +108,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
     header: ({ column }) => {
       return (
         <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Role
+          <span>Role</span>
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
           {column.getIsSorted() === false && <ChevronsUpDown />}
@@ -139,7 +139,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
     cell: ({ row }) => {
       const dateString = row.getValue('createdAt') as string;
       const formattedDate = dayjs(dateString).format('LL');
-      return <RowContainer className="  w-full">{formattedDate}</RowContainer>;
+      return <RowContainer className=" w-full">{formattedDate}</RowContainer>;
     },
     enableSorting: true,
     enableHiding: true,
@@ -148,11 +148,14 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
     id: 'actions',
     cell: ({ row }) => {
       return (
-        <RowContainer className="justify-end w-fit">
+        <RowContainer className="justify-end ps-0">
           <ActionComp row={row} />
         </RowContainer>
       );
     },
+    size: 32,
+    minSize: 32,
+    maxSize: 32,
     enableSorting: false,
     enableHiding: false,
   },

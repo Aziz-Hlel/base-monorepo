@@ -20,8 +20,8 @@ const UsersTable = () => {
       <SelectedRowProvider>
         <div className="w-full max-w-full flex flex-col gap-4  ">
           <DataTableToolbar table={table} filters={userTableFilters} />
-          <div className=" rounded-md border  overflow-x-auto max-w-full">
-            <Table className="table-fixed">
+          <div className=" rounded-md border  overflow-hidden">
+            <Table className="table-fixed ">
               <TableHeaders<TableRowType> table={table} />
               <TableBody>
                 <TableBodyContent table={table} isLoading={isLoading} pageSize={pageSize} />
