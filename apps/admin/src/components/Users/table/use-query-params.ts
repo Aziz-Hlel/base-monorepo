@@ -1,5 +1,5 @@
 import z from 'zod';
-import { sortableColumnKeys } from './tableDeclarations/typeNfieldsDeclaration';
+import { sortableColumnKeys } from './tableDeclarations/typesAndFieldsDeclaration';
 import { useSearchParams } from 'react-router-dom';
 import { useMemo } from 'react';
 import { Role, Status } from '@contracts/types/enums/enums';

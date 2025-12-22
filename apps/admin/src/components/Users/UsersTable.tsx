@@ -4,10 +4,10 @@ import { DataTableToolbar } from './table/toolBar/DataTableToolbar';
 import type { ColumnFilter } from './table/toolBar/Filters/ColumnFilters';
 import tableFilters from './table/toolBar/Filters/ColumnFilters';
 import { DataTablePagination } from './table/pagination/Pagination';
-import { type TableRowType } from './table/tableDeclarations/typeNfieldsDeclaration';
+import { type TableRowType } from './table/tableDeclarations/typesAndFieldsDeclaration';
 import useMyTable from './use-my-table';
 import TableBodyContent from './table/TableMainComp/TableBodyContent';
-import { SelectedRowProvider } from './table/context/selected-row-provider';
+import { SelectedRowProvider } from './context/selected-row-provider';
 import DialogContainer from './dialogs/DialogContainer';
 
 const UsersTable = () => {

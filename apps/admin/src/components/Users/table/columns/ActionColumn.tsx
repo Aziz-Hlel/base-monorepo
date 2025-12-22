@@ -1,5 +1,6 @@
-import { EllipsisVertical, Trash2, UserPen } from 'lucide-react';
-import type { TableRowType } from './tableDeclarations/typeNfieldsDeclaration';
+import React from 'react';
+import RowContainer from '../ContainerComp/RowContainer';
+import type { TableRowType } from '../tableDeclarations/typesAndFieldsDeclaration';
 import type { Row } from '@tanstack/react-table';
 import {
   DropdownMenu,
@@ -10,12 +11,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { useSelectedRow } from './context/selected-row-provider';
+import { EllipsisVertical, UserPen, Trash2 } from 'lucide-react';
+import { useSelectedRow } from '../../context/selected-row-provider';
 
-const ActionComp = ({ row }: { row: Row<TableRowType> }) => {
+const ActionColumn = ({ row }: { row: Row<TableRowType> }) => {
   const { setOpenDialog, setCurrentRow } = useSelectedRow();
+
   return (
-    <>
+    <RowContainer className="justify-end ps-0">
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild className=" flex justify-center">
           <Button variant="ghost" className="flex  p-0 data-[state=open]:bg-muted has-[>svg]:px-0  h-fit">
@@ -49,8 +52,8 @@ const ActionComp = ({ row }: { row: Row<TableRowType> }) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
+    </RowContainer>
   );
 };
 
-export default ActionComp;
+export default ActionColumn;

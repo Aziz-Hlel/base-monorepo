@@ -1,8 +1,8 @@
 import z from 'zod';
-import { Role, Status } from '../enums/enums';
-import { UserRowResponse } from './UserRowResponse';
+import { Role, Status } from '../../types/enums/enums';
+import { UserProfileRowResponse } from './UserRowResponse';
 
-export type TableRowType = UserRowResponse;
+export type TableRowType = UserProfileRowResponse;
 export type TableRowKeys = keyof TableRowType;
 
 export const columnFiltersKeys: Set<TableRowKeys> = new Set(['status', 'role'] as const);

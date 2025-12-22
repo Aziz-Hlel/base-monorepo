@@ -1,4 +1,4 @@
-import type { TableRowType } from '../../tableDeclarations/typeNfieldsDeclaration';
+import type { TableRowType } from '../../tableDeclarations/typesAndFieldsDeclaration';
 import { STATUS_VARIANTS } from './roles-variants';
 import RolesTextMapping from '@/EnumTextMapping/RolesTextMapping';
 
@@ -16,9 +16,7 @@ const RolesComponent = ({ value }: { value: RoleType }) => {
   return (
     <div className="flex items-center gap-2">
       <Icon className="h-4 w-4" />
-      <span>
-        {textMapping}
-      </span>
+      <span>{textMapping}</span>
     </div>
   );
 };

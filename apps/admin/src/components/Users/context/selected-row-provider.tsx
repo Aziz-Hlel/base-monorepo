@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import type { TableRowType } from '../tableDeclarations/typeNfieldsDeclaration';
+import type { TableRowType } from '../table/tableDeclarations/typesAndFieldsDeclaration';
 
 type TableDialogType = 'add' | 'edit' | 'delete' | null;
 
@@ -8,6 +8,7 @@ type SelectedRowContextType = {
   setOpenDialog: (str: TableDialogType) => void;
   currentRow: TableRowType | null;
   setCurrentRow: React.Dispatch<React.SetStateAction<TableRowType | null>>;
+  handleCancel: () => void;
 };
 
 const SelectedRowContext = createContext<SelectedRowContextType | null>(null);
@@ -16,8 +17,15 @@ export function SelectedRowProvider({ children }: { children: React.ReactNode })
   const [openDialog, setOpenDialog] = useState<TableDialogType>(null);
   const [currentRow, setCurrentRow] = useState<TableRowType | null>(null);
 
+  const handleCancel = () => {
+    setCurrentRow(null);
+    setOpenDialog(null);
+  };
+
   return (
-    <SelectedRowContext value={{ openDialog, setOpenDialog, currentRow, setCurrentRow }}>{children}</SelectedRowContext>
+    <SelectedRowContext.Provider value={{ openDialog, setOpenDialog, currentRow, setCurrentRow, handleCancel }}>
+      {children}
+    </SelectedRowContext.Provider>
   );
 }
 

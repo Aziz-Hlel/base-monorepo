@@ -4,14 +4,18 @@ import { GenericEntityCreateInput } from '../../types/prisma/GenericEntityUtilit
 import { User } from '../../generated/prisma/client';
 import { StrictDecodedIdToken } from '../../types/auth/StrictDecodedIdToken';
 import { Page } from '../../types/page/Page';
-import { DefaultSearchParams } from '../../types/api/DefaultSeachParams';
-import { UserProfileResponse } from '@contracts/types/user/UserProfileResponse';
-import { UserRowResponse } from '@contracts/types/user/UserRowResponse';
+import { DefaultSearchParams } from '../../types/api/DefaultSearchParams';
+import { UserResponse } from '@contracts/schemas/user/UserResponse';
+import { ProfileRowResponse, UserProfileRowResponse, UserRowResponse } from '@contracts/schemas/user/UserRowResponse';
+import { UserWithProfile } from '../types';
+import { ProfileMapper } from './profile.mapper';
+import { UserProfileResponse } from '@contracts/schemas/profile/UserProfileResponse';
+import { prisma } from '@/bootstrap/db.init';
 
 type UserCreateInputCustom = GenericEntityCreateInput<UserCreateInput>;
 
-const UserMapper = {
-  toUserCreateInput(decodedToken: StrictDecodedIdToken): UserCreateInputCustom {
+class UserMapper {
+  static toUserCreateInput(decodedToken: StrictDecodedIdToken): UserCreateInputCustom {
     const user: UserCreateInputCustom = {
       authId: decodedToken.uid,
       email: decodedToken.email as string,
@@ -21,10 +25,17 @@ const UserMapper = {
       isEmailVerified: decodedToken.email_verified ?? false,
     };
     return user;
-  },
+  }
 
-  toUserResponseDto(user: User, firebaseToken: StrictDecodedIdToken): UserProfileResponse {
-    const userResponse: UserProfileResponse = {
+  static async createUser(decodedToken: StrictDecodedIdToken): Promise<UserWithProfile> {
+    const user = await prisma.user.create({
+      data: this.toUserCreateInput(decodedToken),
+    });
+    return { ...user, profile: null };
+  }
+
+  static toUserResponse(user: User, firebaseToken: StrictDecodedIdToken): UserResponse {
+    return {
       id: user.id,
       email: user.email,
       authId: user.authId,
@@ -33,32 +44,51 @@ const UserMapper = {
       status: user.status,
       role: user.role,
       isEmailVerified: user.isEmailVerified,
-      avatar: firebaseToken.picture || null,
-      createdAt: user.createdAt,
+      avatar: firebaseToken.picture ?? null,
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString(),
     };
-    return userResponse;
-  },
+  }
 
-  toUserRowResponse(user: User): UserRowResponse {
-    const userRow: UserRowResponse = {
+  static toUserProfileResponse(user: UserWithProfile, firebaseToken: StrictDecodedIdToken): UserProfileResponse {
+    const userResponse: UserResponse = this.toUserResponse(user, firebaseToken);
+    const profileResponse = ProfileMapper.toProfile(user.profile);
+    const userProfileResponse: UserProfileResponse = {
+      ...userResponse,
+      profile: profileResponse,
+    };
+    return userProfileResponse;
+  }
+
+  static toUserProfileRowResponse(user: UserWithProfile): UserProfileRowResponse {
+    const UserRowResponse: UserRowResponse = {
       id: user.id,
-      email: user.email,
+      createdAt: user.createdAt,
       authId: user.authId,
+      email: user.email,
       username: user.username,
       provider: user.provider,
       status: user.status,
       role: user.role,
       isEmailVerified: user.isEmailVerified,
-      createdAt: user.createdAt,
     };
-    return userRow;
-  },
 
-  toUsersRowsResponse(users: User[]): UserRowResponse[] {
-    return users.map((user) => this.toUserRowResponse(user));
-  },
+    const ProfileRowResponse: ProfileRowResponse | null = user.profile
+      ? ProfileMapper.toProfileRowResponse(user.profile)
+      : null;
 
-  toUserPageResponse(users: User[], totalElements: number, queryParams: DefaultSearchParams): Page<UserRowResponse> {
+    return { ...UserRowResponse, profile: ProfileRowResponse };
+  }
+
+  static toUsersRowsResponse(users: UserWithProfile[]): UserProfileRowResponse[] {
+    return users.map((user) => this.toUserProfileRowResponse(user));
+  }
+
+  static toUserPageResponse(
+    users: UserWithProfile[],
+    totalElements: number,
+    queryParams: DefaultSearchParams,
+  ): Page<UserProfileRowResponse> {
     const usersRows = this.toUsersRowsResponse(users);
     return {
       content: usersRows,
@@ -71,7 +101,7 @@ const UserMapper = {
         pageSize: users.length,
       },
     };
-  },
-};
+  }
+}
 
 export default UserMapper;

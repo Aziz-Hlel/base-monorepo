@@ -1,11 +1,11 @@
 import { Badge } from '@/components/ui/badge';
 import { STATUS_VARIANTS } from './status-variants';
 import StatusTextMapping from '@/EnumTextMapping/StatusTextMapping';
-import type { TableRowType } from '../../tableDeclarations/typeNfieldsDeclaration';
+import type { TableRowType } from '../../tableDeclarations/typesAndFieldsDeclaration';
 
 export type StatusType = TableRowType['status'];
- 
-const StatusComponent = ({ value }: { value: StatusType}) => {
+
+const StatusComponent = ({ value }: { value: StatusType }) => {
   const variant = STATUS_VARIANTS[value];
 
   if (!variant) {

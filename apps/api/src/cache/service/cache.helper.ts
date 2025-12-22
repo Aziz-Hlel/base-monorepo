@@ -1,4 +1,4 @@
-import { UserPageQuery } from '@contracts/types/user/UserPageQuery';
+import { UserPageQuery } from '@contracts/schemas/user/UserPageQuery';
 
 export class CacheHelper {
   normalizeUserPageParams(params: UserPageQuery): UserPageQuery {

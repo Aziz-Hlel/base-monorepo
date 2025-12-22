@@ -1,9 +1,9 @@
 import z from 'zod';
-import { createSeachParamsSchemaWithSortFields } from '../api/DefaultSeachParamsWithSortFields';
+import { createSearchParamsSchemaWithSortFields } from '../api/DefaultSearchParamsWithSortFields';
 import { Role, Status } from '../enums/enums';
-import { UserRowResponse } from '@contracts/types/user/UserRowResponse';
+import { UserProfileRowResponse } from '@contracts/schemas/user/UserRowResponse';
 
-export type TableRowType = UserRowResponse;
+export type TableRowType = UserProfileRowResponse;
 export type TableRowKeys = keyof TableRowType;
 
 export const columnFiltersKeys: Set<TableRowKeys> = new Set(['status', 'role'] as const);
@@ -53,7 +53,7 @@ export const defaultQuery: RequiredTableQueryParams = {
   status: [],
 };
 
-const userPageQuerySchema = createSeachParamsSchemaWithSortFields(UserPageQuerySortFields);
+const userPageQuerySchema = createSearchParamsSchemaWithSortFields(UserPageQuerySortFields);
 
 export type UserPageQuery = z.infer<typeof userPageQuerySchema>;
 export { userPageQuerySchema };

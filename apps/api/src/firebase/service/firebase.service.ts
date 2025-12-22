@@ -1,12 +1,37 @@
-import { handleFirebaseError, isFirebaseError } from '../err/fireabase.errors';
+import { handleFirebaseError, isFirebaseError } from '../err/firebase.errors';
 import { CustomClaims } from '../../types/auth/CustomClaims';
 import { User } from '../../generated/prisma/client';
 import { StrictDecodedIdToken } from '../../types/auth/StrictDecodedIdToken';
-import { Auth } from 'firebase-admin/auth';
+import { Auth, UserRecord } from 'firebase-admin/auth';
 import { firebaseSession } from '../../bootstrap/firebase.init';
+import { logger } from '@/bootstrap/logger.init';
 
 class FirebaseService {
   private firebaseSession: Auth = firebaseSession;
+
+  async createUser({
+    email,
+    password,
+    displayName,
+  }: {
+    email: string;
+    password: string;
+    displayName: string;
+  }): Promise<UserRecord> {
+    try {
+      const userRecord = await this.firebaseSession.createUser({
+        email,
+        password,
+        displayName,
+      });
+      return userRecord;
+    } catch (error: unknown) {
+      if (isFirebaseError(error)) handleFirebaseError(error);
+
+      logger.error(error, 'Unexpected createUser error:');
+      throw error;
+    }
+  }
 
   async verifyToken(tokenId: string): Promise<StrictDecodedIdToken> {
     try {
@@ -15,7 +40,7 @@ class FirebaseService {
     } catch (error: unknown) {
       if (isFirebaseError(error)) handleFirebaseError(error);
 
-      console.error('Unexpected verifyToken error:', error);
+      logger.error(error, 'Unexpected verifyToken error:');
       throw error; // Not a Firebase error → rethrow untouched
     }
   }
@@ -31,7 +56,7 @@ class FirebaseService {
     } catch (error: unknown) {
       if (isFirebaseError(error)) handleFirebaseError(error);
 
-      console.error('Unexpected setCustomUserClaims error:', error);
+      logger.error(error, 'Unexpected setCustomUserClaims error:');
       throw error; // Not a Firebase error → rethrow untouched
     }
   }

@@ -1,6 +1,6 @@
 import z from 'zod';
 
-const defaultSearchParamsSchema = z.object({
+export const defaultSearchParamsSchema = z.object({
   page: z.preprocess((val) => (isNaN(Number(val)) ? undefined : Number(val)), z.number().default(0)),
   size: z.preprocess((val) => (isNaN(Number(val)) ? undefined : Number(val)), z.number().min(1).max(25).default(10)),
   order: z
@@ -18,4 +18,3 @@ const defaultSearchParamsSchema = z.object({
 });
 
 export type DefaultSearchParams = z.infer<typeof defaultSearchParamsSchema>;
-export { defaultSearchParamsSchema };

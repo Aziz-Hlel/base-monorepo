@@ -10,7 +10,7 @@ import SignIn from './components/SignIn/SignIn';
 import NetworkStatusGuard from './guard/NetworkStatusGuard';
 import { Toaster } from 'sonner';
 import Sidebar from './pages/Sidebar';
-import { UserSessionProvider } from './context/UserConext';
+import { UserSessionProvider } from './context/UserContext';
 import UserPage from './pages/User';
 
 const queryClient = new QueryClient({

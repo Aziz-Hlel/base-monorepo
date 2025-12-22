@@ -1,6 +1,6 @@
-import type { UserRowResponse } from "@contracts/types/user/UserRowResponse";
+import type { UserProfileRowResponse } from '@contracts/schemas/user/UserRowResponse';
 
-export type TableRowType = UserRowResponse;
+export type TableRowType = UserProfileRowResponse;
 export type TableRowKeys = keyof TableRowType;
 
 export const columnFiltersKeys: Set<TableRowKeys> = new Set(['status', 'role'] as const);

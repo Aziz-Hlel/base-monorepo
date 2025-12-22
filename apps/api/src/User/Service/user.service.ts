@@ -1,16 +1,20 @@
-import { UserRowResponse } from '@contracts/types/user/UserRowResponse';
+import { UserProfileRowResponse } from '@contracts/schemas/user/UserRowResponse';
 import { UserOrderByWithRelationInput, UserWhereInput } from '../../generated/prisma/models';
 import { prisma } from '../../bootstrap/db.init';
 import { Page } from '../../types/page/Page';
 import UserMapper from '../mapper/user.mapper';
-import { UserPageQuery } from '@contracts/types/user/UserPageQuery';
+import { UserPageQuery } from '@contracts/schemas/user/UserPageQuery';
 import { cacheService } from '@/cache/service/cache.service';
+import { CreateUserProfileRequest } from '@contracts/schemas/profile/createUserProfileRequest';
+import { firebaseService } from '@/firebase/service/firebase.service';
+import { userRepo } from '../repo/user.repo';
+import { UserProfileResponse } from '@contracts/schemas/profile/UserProfileResponse';
 
 class UserService {
   GeneralQuery() {}
 
-  async getUserPage(queryParams: UserPageQuery): Promise<Page<UserRowResponse>> {
-    const cachedResult = await cacheService.get<Page<UserRowResponse>>({ object: queryParams });
+  async getUserPage(queryParams: UserPageQuery): Promise<Page<UserProfileRowResponse>> {
+    const cachedResult = await cacheService.get<Page<UserProfileRowResponse>>({ object: queryParams });
     if (cachedResult) {
       return cachedResult;
     }
@@ -46,6 +50,7 @@ class UserService {
       take,
       where,
       orderBy,
+      include: { profile: true },
     });
 
     const usersCount = prisma.user.count({ where });
@@ -57,6 +62,17 @@ class UserService {
     await cacheService.set({ object: queryParams, value: userPage, ttlSeconds: 60 }); // Cache for 60 seconds
 
     return userPage;
+  }
+
+  async createUserProfile(schema: CreateUserProfileRequest) {
+    const userRecord = await firebaseService.createUser({
+      email: schema.email,
+      password: schema.password,
+      displayName: schema.username,
+    });
+    // userRecord.
+    const user = await userRepo.createUserProfile(schema, userRecord.uid);
+    //  const   userProfileResponse = UserMapper.toUserProfileResponse(user)
   }
 }
 

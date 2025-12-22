@@ -1,6 +1,6 @@
 import z from 'zod';
 
-const createSeachParamsSchemaWithSortFields = (allowedSortFields: string[]) => {
+export const createSearchParamsSchemaWithSortFields = (allowedSortFields: string[]) => {
   return z.object({
     page: z.preprocess((val) => (isNaN(Number(val)) ? undefined : Number(val)), z.number().default(0)),
     size: z.preprocess((val) => (isNaN(Number(val)) ? undefined : Number(val)), z.number().min(1).max(25).default(10)),
@@ -21,4 +21,3 @@ const createSeachParamsSchemaWithSortFields = (allowedSortFields: string[]) => {
     search: z.string().trim().max(255, { message: 'Search query is too long, max 255 characters' }).optional(),
   });
 };
-export { createSeachParamsSchemaWithSortFields };

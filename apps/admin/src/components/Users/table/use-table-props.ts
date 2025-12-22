@@ -7,7 +7,7 @@ import type {
 } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { columnFiltersKeys } from './tableDeclarations/typeNfieldsDeclaration';
+import { columnFiltersKeys } from './tableDeclarations/typesAndFieldsDeclaration';
 import useQueryParams, { type RequiredTableQueryParams, defaultQuery } from './use-query-params';
 
 const setParamIfNotDefault = (params: URLSearchParams, key: keyof RequiredTableQueryParams, value: string) => {

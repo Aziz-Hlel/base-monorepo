@@ -1,7 +1,7 @@
 import StatusEnums, { type StatusEnum } from '@/Api/enums/StatusEnums';
 import StatusTextMapping from '@/EnumTextMapping/StatusTextMapping';
 import { UserRound, CircleUser, ShieldUser, UserStar } from 'lucide-react';
-import type { TableRowType } from '../../tableDeclarations/typeNfieldsDeclaration';
+import type { TableRowType } from '../../tableDeclarations/typesAndFieldsDeclaration';
 
 export type ColumnFilter<T extends keyof TableRowType> = {
   columnId: T;

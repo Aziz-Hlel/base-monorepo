@@ -1,5 +1,5 @@
 import type { Table } from '@tanstack/react-table';
-import type { TableRowType } from '../tableDeclarations/typeNfieldsDeclaration';
+import type { TableRowType } from '../tableDeclarations/typesAndFieldsDeclaration';
 import TableDataRows from '../tableComposites/TableDataRows';
 import { EmptyRows, LoadingInRowsComp, NoResultComp } from '../tableDeclarations/FillerRows';
 

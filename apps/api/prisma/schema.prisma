@@ -37,9 +37,24 @@ model User {
   username String?
   role Role @default(USER)
   isEmailVerified Boolean @default(false)
+  status Status @default(ACTIVE)
+
+  profile Profile?
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  status Status @default(ACTIVE)
 
+}
+
+model Profile {
+  id String @id @default(uuid())
+  phoneNumber String?
+  address String?
+  avatar String?
+
+  userId String @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

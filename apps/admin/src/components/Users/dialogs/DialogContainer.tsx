@@ -1,4 +1,4 @@
-import { useSelectedRow } from '../table/context/selected-row-provider';
+import { useSelectedRow } from '../context/selected-row-provider';
 
 const DialogContainer = () => {
   const {} = useSelectedRow();

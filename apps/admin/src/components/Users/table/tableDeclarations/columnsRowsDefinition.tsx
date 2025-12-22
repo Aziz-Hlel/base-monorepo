@@ -7,13 +7,13 @@ import HeaderContainer from '../ContainerComp/HeaderContainer';
 import RowContainer from '../ContainerComp/RowContainer';
 import type { RoleType } from '../EnumComponents/Role/RolesComponent';
 import RolesComponent from '../EnumComponents/Role/RolesComponent';
-import type { TableRowType } from './typeNfieldsDeclaration';
+import type { TableRowType } from './typesAndFieldsDeclaration';
 import IsEmailVerifiedComponent from '../EnumComponents/IsEmailVerified/IsEmailVerifiedComponent';
-import ActionComp from '../ActionComp';
+import ActionColumn from '../columns/ActionColumn';
 
 type TableColumnDefinition<T> = ColumnDef<T> & { accessorKey?: keyof T };
 
-const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
+const columnsRowsDefinition: ColumnDef<TableRowType>[] = [
   {
     id: 'email',
     accessorFn: (row: TableRowType) => ({
@@ -98,7 +98,45 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
         </HeaderContainer>
       );
     },
-    cell: ({ row }) => <RowContainer className="">{row.getValue('provider')}</RowContainer>,
+    cell: ({ getValue }) => <RowContainer className="">{getValue<string>()}</RowContainer>,
+
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    id: 'phoneNumber',
+    accessorFn: (row: TableRowType) => row.profile?.phoneNumber ?? null,
+
+    header: ({ column }) => {
+      return (
+        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          <span>Phone Number</span>
+          {column.getIsSorted() === 'asc' && <ArrowUp />}
+          {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
+          {column.getIsSorted() === false && <ChevronsUpDown />}
+        </HeaderContainer>
+      );
+    },
+    cell: ({ getValue }) => <RowContainer className="">{getValue<string | null>()}</RowContainer>,
+
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    id: 'address',
+    accessorFn: (row: TableRowType) => row.profile?.address ?? null,
+
+    header: ({ column }) => {
+      return (
+        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          <span>Address</span>
+          {column.getIsSorted() === 'asc' && <ArrowUp />}
+          {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
+          {column.getIsSorted() === false && <ChevronsUpDown />}
+        </HeaderContainer>
+      );
+    },
+    cell: ({ getValue }) => <RowContainer className="">{getValue<string | null>()}</RowContainer>,
 
     enableSorting: true,
     enableHiding: true,
@@ -146,13 +184,7 @@ const columnsRowsDefinition: TableColumnDefinition<TableRowType>[] = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => {
-      return (
-        <RowContainer className="justify-end ps-0">
-          <ActionComp row={row} />
-        </RowContainer>
-      );
-    },
+    cell: ({ row }) => <ActionColumn row={row} />,
     size: 32,
     minSize: 32,
     maxSize: 32,

@@ -2,7 +2,7 @@ import type { Table } from '@tanstack/react-table';
 import { DataTableViewOptions } from './view-options';
 import SearchInput from './SearchInput';
 import EnumFilterToolBar from './EnumFilterToolBar';
-import type { TableRowType } from '../tableDeclarations/typeNfieldsDeclaration';
+import type { TableRowType } from '../tableDeclarations/typesAndFieldsDeclaration';
 
 type DataTableToolbarProps = {
   table: Table<TableRowType>;
@@ -21,7 +21,7 @@ export function DataTableToolbar({ table, filters = [] }: DataTableToolbarProps)
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 flex-col-reverse items-start gap-y-2 sm:flex-row sm:items-center sm:space-x-2">
-        <SearchInput table={table}  />
+        <SearchInput table={table} />
         <EnumFilterToolBar table={table} filters={filters} />
       </div>
       <DataTableViewOptions table={table} />
