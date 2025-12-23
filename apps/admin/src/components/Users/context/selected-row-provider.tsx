@@ -5,7 +5,7 @@ type TableDialogType = 'add' | 'edit' | 'delete' | null;
 
 type SelectedRowContextType = {
   openDialog: TableDialogType;
-  setOpenDialog: (str: TableDialogType) => void;
+  handleDialogChange: (dialogType: TableDialogType, row?: TableRowType) => void;
   currentRow: TableRowType | null;
   setCurrentRow: React.Dispatch<React.SetStateAction<TableRowType | null>>;
   handleCancel: () => void;
@@ -22,8 +22,15 @@ export function SelectedRowProvider({ children }: { children: React.ReactNode })
     setOpenDialog(null);
   };
 
+  const handleDialogChange = (dialogType: TableDialogType, row?: TableRowType) => {
+    setOpenDialog(dialogType);
+    if (row) {
+      setCurrentRow(row);
+    }
+  };
+
   return (
-    <SelectedRowContext.Provider value={{ openDialog, setOpenDialog, currentRow, setCurrentRow, handleCancel }}>
+    <SelectedRowContext.Provider value={{ openDialog, handleDialogChange, currentRow, setCurrentRow, handleCancel }}>
       {children}
     </SelectedRowContext.Provider>
   );

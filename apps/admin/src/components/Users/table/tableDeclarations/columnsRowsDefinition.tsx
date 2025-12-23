@@ -2,14 +2,16 @@ import { type StatusEnum } from '@/Api/enums/StatusEnums';
 import dayjs from '@/utils/dayjsConfig';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ArrowUp, ChevronsUpDown } from 'lucide-react';
-import StatusComponent from '../EnumComponents/Status/StatusComponent';
+import StatusComponent from '../EnumColumns/Status/StatusComponent';
 import HeaderContainer from '../ContainerComp/HeaderContainer';
 import RowContainer from '../ContainerComp/RowContainer';
-import type { RoleType } from '../EnumComponents/Role/RolesComponent';
-import RolesComponent from '../EnumComponents/Role/RolesComponent';
+import type { RoleType } from '../EnumColumns/Role/RolesComponent';
+import RolesComponent from '../EnumColumns/Role/RolesComponent';
 import type { TableRowType } from './typesAndFieldsDeclaration';
-import IsEmailVerifiedComponent from '../EnumComponents/IsEmailVerified/IsEmailVerifiedComponent';
+import IsEmailVerifiedComponent from '../EnumColumns/IsEmailVerified/IsEmailVerifiedComponent';
 import ActionColumn from '../columns/ActionColumn';
+import AuthProviderCell from '../EnumColumns/AuthProvider/AuthProviderCell';
+import AuthProviderHeader from '../EnumColumns/AuthProvider/AuthProviderHeader';
 
 type TableColumnDefinition<T> = ColumnDef<T> & { accessorKey?: keyof T };
 
@@ -88,17 +90,8 @@ const columnsRowsDefinition: ColumnDef<TableRowType>[] = [
   },
   {
     accessorKey: 'provider',
-    header: ({ column }) => {
-      return (
-        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          <span>Auth Provider</span>
-          {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
-          {column.getIsSorted() === false && <ChevronsUpDown />}
-        </HeaderContainer>
-      );
-    },
-    cell: ({ getValue }) => <RowContainer className="">{getValue<string>()}</RowContainer>,
+    header: ({ column }) => <AuthProviderHeader column={column} />,
+    cell: ({ getValue }) => <AuthProviderCell value={getValue<string>()} />,
 
     enableSorting: true,
     enableHiding: true,

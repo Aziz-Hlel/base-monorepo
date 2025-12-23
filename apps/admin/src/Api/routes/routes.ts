@@ -12,6 +12,7 @@ const apiRoutes = {
   },
   users: {
     getUsers: () => '/users' as const,
+    createUserProfile: () => '/users/' as const,
   },
 
   services: {

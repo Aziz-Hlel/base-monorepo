@@ -21,13 +21,14 @@ class AuthService {
         authId: ${decodedToken.uid}, email: ${email}`,
       );
 
-    const newUser = await UserMapper.createUser(decodedToken);
+    const userToCreate = UserMapper.toUserCreateInput(decodedToken);
+    const newUser = await userRepo.createUser(userToCreate);
 
     await this.firebaseService.setCustomUserClaims(newUser);
 
     const userWithNoProfile = { ...newUser, profile: null };
 
-    return UserMapper.toUserProfileResponse(userWithNoProfile, decodedToken);
+    return UserMapper.toUserProfileResponse(userWithNoProfile, decodedToken.picture || null);
   }
 
   async authenticateWithPassword(tokenId: string): Promise<UserProfileResponse> {
@@ -41,7 +42,7 @@ class AuthService {
       throw new InternalServerError(`User with authId ${userAuthId} does not exist in the system.`);
     }
 
-    return UserMapper.toUserProfileResponse(user, decodedToken);
+    return UserMapper.toUserProfileResponse(user, decodedToken.picture || null);
   }
 
   async authenticateWithProvider(tokenId: string): Promise<UserProfileResponse> {
@@ -51,11 +52,12 @@ class AuthService {
     let user = await userRepo.getUserByAuthId(userAuthId);
 
     if (!user) {
-      user = await UserMapper.createUser(decodedToken);
+      const userToCreate = UserMapper.toUserCreateInput(decodedToken);
+      user = await userRepo.createUser(userToCreate);
       await this.firebaseService.setCustomUserClaims(user);
     }
 
-    return UserMapper.toUserProfileResponse(user, decodedToken);
+    return UserMapper.toUserProfileResponse(user, decodedToken.picture || null);
   }
 
   async me(decodedToken: DecodedIdTokenWithClaims): Promise<UserProfileResponse> {
@@ -72,7 +74,7 @@ class AuthService {
     if (!isValidClaims) {
       await this.firebaseService.setCustomUserClaims(user);
     }
-    return UserMapper.toUserProfileResponse(user, decodedToken);
+    return UserMapper.toUserProfileResponse(user, decodedToken.picture || null);
   }
 }
 

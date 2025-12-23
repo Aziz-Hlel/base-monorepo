@@ -10,9 +10,8 @@ import { ProfileRowResponse, UserProfileRowResponse, UserRowResponse } from '@co
 import { UserWithProfile } from '../types';
 import { ProfileMapper } from './profile.mapper';
 import { UserProfileResponse } from '@contracts/schemas/profile/UserProfileResponse';
-import { prisma } from '@/bootstrap/db.init';
 
-type UserCreateInputCustom = GenericEntityCreateInput<UserCreateInput>;
+export type UserCreateInputCustom = GenericEntityCreateInput<UserCreateInput>;
 
 class UserMapper {
   static toUserCreateInput(decodedToken: StrictDecodedIdToken): UserCreateInputCustom {
@@ -27,14 +26,7 @@ class UserMapper {
     return user;
   }
 
-  static async createUser(decodedToken: StrictDecodedIdToken): Promise<UserWithProfile> {
-    const user = await prisma.user.create({
-      data: this.toUserCreateInput(decodedToken),
-    });
-    return { ...user, profile: null };
-  }
-
-  static toUserResponse(user: User, firebaseToken: StrictDecodedIdToken): UserResponse {
+  static toUserResponse(user: User, userAvatar: string | null): UserResponse {
     return {
       id: user.id,
       email: user.email,
@@ -44,14 +36,14 @@ class UserMapper {
       status: user.status,
       role: user.role,
       isEmailVerified: user.isEmailVerified,
-      avatar: firebaseToken.picture ?? null,
+      avatar: userAvatar,
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt.toISOString(),
     };
   }
 
-  static toUserProfileResponse(user: UserWithProfile, firebaseToken: StrictDecodedIdToken): UserProfileResponse {
-    const userResponse: UserResponse = this.toUserResponse(user, firebaseToken);
+  static toUserProfileResponse(user: UserWithProfile, userAvatar: string | null): UserProfileResponse {
+    const userResponse: UserResponse = this.toUserResponse(user, userAvatar);
     const profileResponse = ProfileMapper.toProfile(user.profile);
     const userProfileResponse: UserProfileResponse = {
       ...userResponse,
@@ -61,7 +53,7 @@ class UserMapper {
   }
 
   static toUserProfileRowResponse(user: UserWithProfile): UserProfileRowResponse {
-    const UserRowResponse: UserRowResponse = {
+    const userRowResponse: UserRowResponse = {
       id: user.id,
       createdAt: user.createdAt,
       authId: user.authId,
@@ -77,28 +69,28 @@ class UserMapper {
       ? ProfileMapper.toProfileRowResponse(user.profile)
       : null;
 
-    return { ...UserRowResponse, profile: ProfileRowResponse };
+    return { ...userRowResponse, profile: ProfileRowResponse };
   }
 
   static toUsersRowsResponse(users: UserWithProfile[]): UserProfileRowResponse[] {
     return users.map((user) => this.toUserProfileRowResponse(user));
   }
 
-  static toUserPageResponse(
-    users: UserWithProfile[],
-    totalElements: number,
-    queryParams: DefaultSearchParams,
-  ): Page<UserProfileRowResponse> {
-    const usersRows = this.toUsersRowsResponse(users);
+  static toUserPageResponse(params: {
+    users: UserWithProfile[];
+    totalElements: number;
+    pagination: DefaultSearchParams;
+  }): Page<UserProfileRowResponse> {
+    const usersRows = this.toUsersRowsResponse(params.users);
     return {
       content: usersRows,
       pagination: {
-        number: queryParams.page,
-        size: queryParams.size,
-        totalElements,
-        totalPages: Math.ceil(totalElements / queryParams.size),
-        offset: queryParams.page * queryParams.size,
-        pageSize: users.length,
+        number: params.pagination.page,
+        size: params.pagination.size,
+        totalElements: params.totalElements,
+        totalPages: Math.ceil(params.totalElements / params.pagination.size),
+        offset: params.pagination.page * params.pagination.size,
+        pageSize: params.users.length,
       },
     };
   }

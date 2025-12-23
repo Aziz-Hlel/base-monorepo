@@ -57,22 +57,28 @@ class UserService {
 
     const [content, totalElements] = await Promise.all([usersContent, usersCount]);
 
-    const userPage = UserMapper.toUserPageResponse(content, totalElements, queryParams);
+    const userPage = UserMapper.toUserPageResponse({
+      users: content,
+      totalElements,
+      pagination: queryParams,
+    });
 
     await cacheService.set({ object: queryParams, value: userPage, ttlSeconds: 60 }); // Cache for 60 seconds
 
     return userPage;
   }
 
-  async createUserProfile(schema: CreateUserProfileRequest) {
+  async createUserProfile(schema: CreateUserProfileRequest): Promise<UserProfileResponse> {
     const userRecord = await firebaseService.createUser({
       email: schema.email,
       password: schema.password,
       displayName: schema.username,
     });
-    // userRecord.
+
     const user = await userRepo.createUserProfile(schema, userRecord.uid);
-    //  const   userProfileResponse = UserMapper.toUserProfileResponse(user)
+
+    const userProfileResponse = UserMapper.toUserProfileResponse(user, null);
+    return userProfileResponse;
   }
 }
 

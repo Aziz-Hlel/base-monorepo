@@ -6,7 +6,7 @@ export const createUserProfileRequestSchema = z.object({
   email: z.email(),
   status: z.any().transform(() => Status.ACTIVE),
   password: z.string().min(6).max(10),
-  role: z.enum(Object.values(Role)).default(Role.USER),
+  role: z.enum(Object.values(Role)).default(Role.USER).nonoptional(),
 
   profile: z.object({
     phoneNumber: z.string().nullable(),
@@ -14,4 +14,5 @@ export const createUserProfileRequestSchema = z.object({
   }),
 });
 
-export type CreateUserProfileRequest = z.infer<typeof createUserProfileRequestSchema>;
+export type CreateUserProfileRequest = z.input<typeof createUserProfileRequestSchema>;
+export type CreateUserProfileSchemaOutput = z.infer<typeof createUserProfileRequestSchema>;

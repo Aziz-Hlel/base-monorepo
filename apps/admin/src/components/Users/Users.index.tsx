@@ -2,8 +2,12 @@ import BreadcrumbHeader from '@/pages/Header';
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import UsersTable from './UsersTable';
+import { useSelectedRow } from './context/selected-row-provider';
+import DialogContainer from './dialogs/DialogContainer';
 
 const UsersIndex = () => {
+  const { handleDialogChange } = useSelectedRow();
+
   return (
     <div>
       <BreadcrumbHeader
@@ -18,11 +22,12 @@ const UsersIndex = () => {
             <CardTitle>User List</CardTitle>
             <CardDescription>Manage your users and their roles here.</CardDescription>
             <CardAction>
-              <Button>Add New User</Button>
+              <Button onClick={() => handleDialogChange('add')}>Add New User</Button>
             </CardAction>
           </CardHeader>
           <CardContent>
             <UsersTable />
+            <DialogContainer />
           </CardContent>
           <CardFooter>
             <p>Card Footer</p>

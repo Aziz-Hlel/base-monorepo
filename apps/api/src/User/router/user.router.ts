@@ -5,6 +5,11 @@ import { AuthenticatedRequest } from '../../types/auth/AuthenticatedRequest';
 
 const router = Router();
 
+router.post(
+  '/',
+  // authHandler,
+  asyncHandler((req: AuthenticatedRequest, res: Response) => userController.createUserProfile(req, res)),
+);
 router.get(
   '/',
   // authHandler,

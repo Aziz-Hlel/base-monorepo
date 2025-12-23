@@ -1,11 +1,11 @@
-import type { AxiosInstance, AxiosRequestConfig } from 'axios';
+import type { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 import ENV from '../config/env.variables';
 import { jwtTokenManager } from './token/JwtTokenManager.class';
 import { apiErrorResponseSchema, type ApiErrorResponse, type ApiResponse } from '../types22/api/ApiResponse';
 import toastWrapper from '@/utils/toastWrapper';
 
-const creatAxiosInstance = (): AxiosInstance => {
+const createAxiosInstance = (): AxiosInstance => {
   return axios.create({
     baseURL: ENV.BASE_URL,
     timeout: 10000,
@@ -27,7 +27,7 @@ class ApiService {
   }> = [];
 
   constructor() {
-    this.api = creatAxiosInstance();
+    this.api = createAxiosInstance();
 
     this.setupInterceptors();
   }
@@ -139,6 +139,10 @@ class ApiService {
     }
     toastWrapper.dev.Critical('Response is not of type ApiErrorResponse');
     return false;
+  }
+
+  isAxiosError(error: unknown): error is AxiosError {
+    return axios.isAxiosError(error);
   }
 
   handleApiErrorResponse(error: unknown): ApiErrorResponse {

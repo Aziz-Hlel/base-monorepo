@@ -13,7 +13,7 @@ const createFakeUser = (index: number) => {
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
     authId: faker.string.uuid(),
-    provider: faker.helpers.arrayElement(['fake']),
+    provider: faker.helpers.arrayElement(['fake', 'google.com', 'apple.com', 'password']),
     role: faker.helpers.arrayElement(Object.values(Role)),
     status: faker.helpers.arrayElement(Object.values(Status)),
     isEmailVerified: faker.datatype.boolean(),
