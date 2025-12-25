@@ -1,4 +1,4 @@
-import { firebaseService } from '../../firebase/service/firebase.service';
+import { firebaseAuthService } from '../../firebase/service/firebase.auth.service';
 import UserMapper from '../mapper/user.mapper';
 import { InternalServerError } from '../../err/customErrors';
 import { DecodedIdTokenWithClaims } from '../../types/auth/DecodedIdTokenWithClaims';
@@ -6,13 +6,13 @@ import { userRepo } from '../repo/user.repo';
 import { UserProfileResponse } from '@contracts/schemas/profile/UserProfileResponse';
 
 class AuthService {
-  private firebaseService = firebaseService;
+  private firebaseService = firebaseAuthService;
 
   async registerUser(tokenId: string): Promise<UserProfileResponse> {
     const decodedToken = await this.firebaseService.verifyToken(tokenId);
 
     let email = decodedToken.email as string;
-    decodedToken.picture;
+
     const isEmailExist = await userRepo.isUserEmailExists(email);
 
     if (isEmailExist)
@@ -24,7 +24,11 @@ class AuthService {
     const userToCreate = UserMapper.toUserCreateInput(decodedToken);
     const newUser = await userRepo.createUser(userToCreate);
 
-    await this.firebaseService.setCustomUserClaims(newUser);
+    await this.firebaseService.setCustomUserClaims({
+      userId: newUser.id,
+      userAuthId: newUser.authId,
+      userRole: newUser.role,
+    });
 
     const userWithNoProfile = { ...newUser, profile: null };
 
@@ -54,7 +58,11 @@ class AuthService {
     if (!user) {
       const userToCreate = UserMapper.toUserCreateInput(decodedToken);
       user = await userRepo.createUser(userToCreate);
-      await this.firebaseService.setCustomUserClaims(user);
+      await this.firebaseService.setCustomUserClaims({
+        userId: user.id,
+        userAuthId: user.authId,
+        userRole: user.role,
+      });
     }
 
     return UserMapper.toUserProfileResponse(user, decodedToken.picture || null);
@@ -72,7 +80,11 @@ class AuthService {
     }
     const isValidClaims = this.firebaseService.validateCustomClaims(user, decodedToken);
     if (!isValidClaims) {
-      await this.firebaseService.setCustomUserClaims(user);
+      await this.firebaseService.setCustomUserClaims({
+        userId: user.id,
+        userAuthId: user.authId,
+        userRole: user.role,
+      });
     }
     return UserMapper.toUserProfileResponse(user, decodedToken.picture || null);
   }

@@ -1,12 +1,15 @@
-import { useSelectedRow } from '../context/selected-row-provider';
 import AddUser from './AddUser';
+import DeleteUser from './DeleteUser';
+import DisableUser from './DisableUser';
 
 const DialogContainer = () => {
-  const { openDialog } = useSelectedRow();
-  if (openDialog === 'add') {
-    return <AddUser />;
-  }
-  return null;
+  return (
+    <>
+      <AddUser />
+      <DeleteUser />
+      <DisableUser />
+    </>
+  );
 };
 
 export default DialogContainer;

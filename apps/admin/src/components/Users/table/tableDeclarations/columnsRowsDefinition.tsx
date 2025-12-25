@@ -1,8 +1,7 @@
-import { type StatusEnum } from '@/Api/enums/StatusEnums';
 import dayjs from '@/utils/dayjsConfig';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ArrowUp, ChevronsUpDown } from 'lucide-react';
-import StatusComponent from '../EnumColumns/Status/StatusComponent';
+import StatusComponent, { type StatusType } from '../EnumColumns/Status/StatusComponent';
 import HeaderContainer from '../ContainerComp/HeaderContainer';
 import RowContainer from '../ContainerComp/RowContainer';
 import type { RoleType } from '../EnumColumns/Role/RolesComponent';
@@ -81,7 +80,7 @@ const columnsRowsDefinition: ColumnDef<TableRowType>[] = [
     },
     cell: ({ row }) => (
       <RowContainer className="">
-        <StatusComponent value={row.getValue('status') as StatusEnum} />
+        <StatusComponent value={row.getValue('status') as StatusType} />
       </RowContainer>
     ),
 

@@ -34,7 +34,7 @@ class UserMapper {
       username: user.username,
       provider: user.provider,
       status: user.status,
-      role: user.role,
+      userRole: user.role,
       isEmailVerified: user.isEmailVerified,
       avatar: userAvatar,
       createdAt: user.createdAt.toISOString(),

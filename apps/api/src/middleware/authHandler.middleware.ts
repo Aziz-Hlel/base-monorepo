@@ -1,6 +1,6 @@
 import { NextFunction, Response, Request } from 'express';
 import { DecodedIdTokenWithClaims } from '../types/auth/DecodedIdTokenWithClaims';
-import { firebaseService } from '../firebase/service/firebase.service';
+import { firebaseAuthService } from '../firebase/service/firebase.auth.service';
 import { AuthenticatedRequest } from '../types/auth/AuthenticatedRequest';
 
 export const authHandler = async (req: Request, res: Response, next: NextFunction) => {
@@ -15,9 +15,9 @@ export const authHandler = async (req: Request, res: Response, next: NextFunctio
     if (!token) {
       throw new Error('Token not found');
     }
-    const decoded = await firebaseService.verifyToken(token);
+    const decoded = await firebaseAuthService.verifyToken(token);
 
-    (req as unknown as AuthenticatedRequest).user = decoded as DecodedIdTokenWithClaims;
+    (req as AuthenticatedRequest).user = decoded as DecodedIdTokenWithClaims;
 
     next();
     return;

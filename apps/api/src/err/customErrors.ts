@@ -20,7 +20,7 @@ export class AppError extends Error {
       success: false,
       message: error.message,
       timestamp: new Date(),
-      path: req.originalUrl
+      path: req.originalUrl,
     };
     ENV.NODE_ENV !== 'production' && error.stack && (apiResponse.stack = error.stack);
     return apiResponse;
@@ -54,6 +54,12 @@ export class NotFoundError extends AppError {
 export class ConflictError extends AppError {
   constructor(message: string) {
     super({ status: 409, message, name: ErrorNames.CONFLICT });
+  }
+}
+
+export class PermissionDeniedError extends AppError {
+  constructor(message: string) {
+    super({ status: 403, message, name: ErrorNames.PERMISSION_DENIED });
   }
 }
 

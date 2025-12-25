@@ -15,7 +15,7 @@ export const STATUS_VARIANTS: Record<StatusType, StatusVariant> = {
     Icon: BanIcon,
     className: 'border-destructive text-destructive bg-red/5 hover:bg-destructive/10',
   },
-  PENDING: {
+  DISABLED: {
     Icon: AlertCircleIcon,
     className: 'border-amber-600 text-amber-600 bg-amber-300/5 hover:bg-amber-600/10',
   },

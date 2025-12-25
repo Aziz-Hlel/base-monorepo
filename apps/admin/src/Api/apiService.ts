@@ -1,9 +1,10 @@
-import type { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import { AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 import ENV from '../config/env.variables';
 import { jwtTokenManager } from './token/JwtTokenManager.class';
 import { apiErrorResponseSchema, type ApiErrorResponse, type ApiResponse } from '../types22/api/ApiResponse';
 import toastWrapper from '@/utils/toastWrapper';
+import { ApiError } from './ApiError';
 
 const createAxiosInstance = (): AxiosInstance => {
   return axios.create({
@@ -132,7 +133,7 @@ class ApiService {
     return newAccessToken;
   }
 
-  validateApiErrorSchema(response: ApiResponse<unknown>): response is ApiErrorResponse {
+  validateApiErrorSchema(response: ApiErrorResponse): response is ApiErrorResponse {
     const parsed = apiErrorResponseSchema.safeParse(response);
     if (parsed.success) {
       return true;
@@ -145,36 +146,55 @@ class ApiService {
     return axios.isAxiosError(error);
   }
 
-  handleApiErrorResponse(error: unknown): ApiErrorResponse {
+  handleApiErrorResponse(error: unknown): ApiError {
     if (typeof error !== 'object' && error === null) {
       toastWrapper.dev.Critical('Unknown error, error is not an object or is null');
-      return {
-        success: false,
+      const apiError: ApiError = new ApiError({
         message: 'Unknown error occurred',
+        status: 0,
         timestamp: new Date(),
         path: '',
-      };
+        isBackendError: false,
+      });
+      return apiError;
     }
 
     const isAxiosError = axios.isAxiosError(error);
 
     if (isAxiosError && error.response) {
       this.validateApiErrorSchema(error.response.data);
-      return error.response?.data as ApiErrorResponse;
+      const apiError: ApiError = new ApiError({
+        message: error.response.data.message || 'API Error',
+        status: error.response.status,
+        details: error.response.data.details,
+        timestamp: new Date(),
+        isBackendError: true,
+        path: error.response.data.path || '',
+      });
+      return apiError;
     } else if (isAxiosError && error.request) {
       // ⚠️ No response received — network error or timeout
       this.displayDevAlert(NaN, 'No response received from server — network error or timeout');
-      return {
-        success: false,
+      const apiError: ApiError = new ApiError({
         message: 'No response received from server',
+        status: 0,
         timestamp: new Date(),
+        isBackendError: false,
+        details: undefined,
         path: '',
-      };
-    } else {
-      // ⚠️ Something else went wrong setting up the request
-      toastWrapper.dev.Critical('Something else went wrong setting up the request');
-      return { success: false, message: 'Request setup error', timestamp: new Date(), path: '' };
+      });
+      return apiError;
     }
+
+    // ⚠️ Something else went wrong setting up the request
+    toastWrapper.dev.Critical('Something else went wrong setting up the request');
+    return new ApiError({
+      message: 'Request setup error',
+      timestamp: new Date(),
+      path: '',
+      status: 0,
+      isBackendError: false,
+    });
   }
 
   private toApiSuccessResponse<T>(data: T): ApiResponse<T> {

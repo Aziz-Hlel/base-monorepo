@@ -19,7 +19,6 @@ type FirebaseSuccess<T> = {
 export type FirebaseResponse<T> = FirebaseSuccess<T> | FirebaseError;
 
 const mapFirebaseAuthError = (code: string): FirebaseError => {
-  console.log('dirrab l code l t5l l error t3 firebase : ', code);
   switch (code) {
     // sign-up errors
     case 'auth/email-already-in-use':

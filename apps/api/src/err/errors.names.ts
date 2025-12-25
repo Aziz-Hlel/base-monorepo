@@ -4,6 +4,7 @@ const ErrorNames = {
   FORBIDDEN: 'ForbiddenError',
   NOT_FOUND: 'NotFoundError',
   CONFLICT: 'ConflictError',
+  PERMISSION_DENIED: 'PermissionDeniedError',
   INTERNAL_SERVER: 'InternalServerError',
 } as const;
 export default ErrorNames;

@@ -5,6 +5,7 @@ import { UserWithProfile } from '../types';
 import { CreateUserProfileRequest } from '@contracts/schemas/profile/createUserProfileRequest';
 import { StrictDecodedIdToken } from '@/types/auth/StrictDecodedIdToken';
 import UserMapper, { UserCreateInputCustom } from '../mapper/user.mapper';
+import { Status } from '@/generated/prisma/enums';
 
 export class UserRepo {
   private includeProfile() {
@@ -61,6 +62,9 @@ export class UserRepo {
         username: schema.username,
         email: schema.email,
         provider: 'manual',
+        role: schema.role,
+        status: Status.ACTIVE,
+
         authId,
         profile: {
           create: {
@@ -71,6 +75,20 @@ export class UserRepo {
       include: this.includeProfile(),
     });
     return user;
+  }
+
+  async deleteUser(id: string): Promise<void> {
+    await prisma.user.update({
+      where: { id },
+      data: { status: Status.DELETED, email: null },
+    });
+  }
+
+  async disableUser(id: string): Promise<void> {
+    await prisma.user.update({
+      where: { id },
+      data: { status: Status.DISABLED },
+    });
   }
 }
 

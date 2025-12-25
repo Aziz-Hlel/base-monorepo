@@ -1,4 +1,3 @@
-import StatusEnums, { type StatusEnum } from '@/Api/enums/StatusEnums';
 import StatusTextMapping from '@/EnumTextMapping/StatusTextMapping';
 import { UserRound, CircleUser, ShieldUser, UserStar } from 'lucide-react';
 import type { TableRowType } from '../../tableDeclarations/typesAndFieldsDeclaration';
@@ -16,9 +15,9 @@ export type ColumnFilter<T extends keyof TableRowType> = {
 const statusFilterData: ColumnFilter<'status'> = {
   columnId: 'status',
   title: 'Status',
-  options: Object.keys(StatusEnums).map((key) => ({
-    label: StatusTextMapping[key as keyof typeof StatusEnums],
-    value: key as StatusEnum,
+  options: Object.keys(StatusTextMapping).map((key) => ({
+    label: StatusTextMapping[key as keyof typeof StatusTextMapping],
+    value: key as keyof typeof StatusTextMapping,
   })),
 };
 

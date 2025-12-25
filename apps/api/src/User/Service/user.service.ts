@@ -6,13 +6,14 @@ import UserMapper from '../mapper/user.mapper';
 import { UserPageQuery } from '@contracts/schemas/user/UserPageQuery';
 import { cacheService } from '@/cache/service/cache.service';
 import { CreateUserProfileRequest } from '@contracts/schemas/profile/createUserProfileRequest';
-import { firebaseService } from '@/firebase/service/firebase.service';
 import { userRepo } from '../repo/user.repo';
 import { UserProfileResponse } from '@contracts/schemas/profile/UserProfileResponse';
+import { firebaseUserService } from '@/firebase/service/firebase.user.service';
+import { NotFoundError, PermissionDeniedError } from '@/err/customErrors';
+import { Role } from '@/generated/prisma/enums';
+import PERMISSION_SCORE from '@contracts/utils/PermissionScore';
 
 class UserService {
-  GeneralQuery() {}
-
   async getUserPage(queryParams: UserPageQuery): Promise<Page<UserProfileRowResponse>> {
     const cachedResult = await cacheService.get<Page<UserProfileRowResponse>>({ object: queryParams });
     if (cachedResult) {
@@ -69,16 +70,30 @@ class UserService {
   }
 
   async createUserProfile(schema: CreateUserProfileRequest): Promise<UserProfileResponse> {
-    const userRecord = await firebaseService.createUser({
+    const userRecord = await firebaseUserService.createUser({
       email: schema.email,
       password: schema.password,
       displayName: schema.username,
+      role: schema.role,
     });
 
     const user = await userRepo.createUserProfile(schema, userRecord.uid);
 
     const userProfileResponse = UserMapper.toUserProfileResponse(user, null);
     return userProfileResponse;
+  }
+
+  async deleteUser(userToDeleteId: string, currentUserRole: Role): Promise<void> {
+    const user = await userRepo.getUserById(userToDeleteId);
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+    if (PERMISSION_SCORE[currentUserRole] < PERMISSION_SCORE[user.role]) {
+      throw new PermissionDeniedError('You do not have permission to delete this user');
+    }
+
+    await firebaseUserService.deleteUser(user.authId);
+    await userRepo.deleteUser(userToDeleteId);
   }
 }
 

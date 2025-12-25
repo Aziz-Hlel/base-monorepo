@@ -24,7 +24,7 @@ enum Role {
 enum Status {
   ACTIVE
   INACTIVE
-  PENDING
+  DISABLED 
   DELETED
 }
 
@@ -32,7 +32,7 @@ enum Status {
 model User {
   id    String     @id @default(uuid())
   authId String @unique
-  email String  @unique
+  email String?  @unique
   provider String
   username String?
   role Role @default(USER)

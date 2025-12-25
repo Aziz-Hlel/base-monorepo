@@ -3,10 +3,10 @@ import { Role, Status } from '../../types/enums/enums';
 export type UserResponse = {
   id: string;
   authId: string;
-  email: string;
+  email: string | null;
   provider: string;
   username: string | null;
-  role: Role;
+  userRole: Role;
   isEmailVerified: boolean;
   status: Status;
   avatar: string | null;

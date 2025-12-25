@@ -30,6 +30,7 @@ const UsersTable = () => {
           </div>
           <div>
             <DataTablePagination table={table} className="mt-auto" />
+            <DialogContainer />
           </div>
         </div>
       </SelectedRowProvider>

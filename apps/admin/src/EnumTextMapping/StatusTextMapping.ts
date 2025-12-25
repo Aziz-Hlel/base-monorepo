@@ -1,9 +1,9 @@
-import type { StatusEnum } from '@/Api/enums/StatusEnums';
+import type { StatusType } from '@/components/Users/table/EnumColumns/Status/StatusComponent';
 
-const StatusTextMapping: Record<StatusEnum, string> = {
+const StatusTextMapping: Record<StatusType, string> = {
   ACTIVE: 'Active',
   INACTIVE: 'Inactive',
-  PENDING: 'Pending',
+  DISABLED: 'Disabled',
   DELETED: 'Deleted',
 };
 
