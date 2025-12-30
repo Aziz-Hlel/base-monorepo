@@ -1,11 +1,11 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '../context/AuthContext';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { useAuthStore } from '@/store/useAuthStore';
 
 const Profile = () => {
-  const { user, logout } = useAuth();
-
+  const user = useAuthStore((state) => state.currentUser);
+  const logout = useAuthStore((state) => state.logout);
   if (!user) return <>User is either null or undefined</>;
 
   return (
@@ -32,7 +32,7 @@ const Profile = () => {
               </div>
               <div className=" flex items-end space-x-2">
                 <Label className=" text-xl">Role : </Label>
-                <p>{user.role}</p>
+                <p>{user.userRole}</p>
               </div>
             </div>
           </CardContent>

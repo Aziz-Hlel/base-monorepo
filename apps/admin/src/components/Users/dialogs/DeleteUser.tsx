@@ -49,7 +49,9 @@ const DeleteUser = () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={deleteUser}>Delete</AlertDialogAction>
+            <AlertDialogAction onClick={deleteUser} className=" bg-red-600 hover:bg-red-500">
+              Delete
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

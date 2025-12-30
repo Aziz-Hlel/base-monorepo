@@ -1,5 +1,9 @@
 import ENV from '@/config/env.variables';
 
+// type ApiRoutes = {
+//   [x: string]: (() => string) | ((id: string) => string) | ApiRoutes;
+// };
+
 const apiRoutes = {
   baseUrl: () => ENV.BASE_URL,
   health: () => '/health' as const, // ! make this api
@@ -22,9 +26,9 @@ const apiRoutes = {
     emailProperty: () => '/services/email/property' as const,
   },
 
-  images: ENV.BASE_URL + '/images/',
+  images: () => ENV.BASE_URL + '/images/',
 
-  getSignedUrl: ENV.BASE_URL + '/images/getSignedUrl',
+  getSignedUrl: () => ENV.BASE_URL + '/images/getSignedUrl',
 };
 
 export default apiRoutes;

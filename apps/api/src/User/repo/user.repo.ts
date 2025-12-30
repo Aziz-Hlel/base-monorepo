@@ -46,7 +46,11 @@ export class UserRepo {
   }
 
   async getUserByAuthId(authId: string): Promise<UserWithProfile | null> {
-    return await prisma.user.findUnique({ where: { authId }, include: this.includeProfile() });
+    return await prisma.$transaction(async (tx) => {
+      const user = await tx.user.findUnique({ where: { authId }, include: this.includeProfile() });
+
+      return await prisma.user.findUnique({ where: { authId }, include: this.includeProfile() });
+    });
   }
   async getUserByEmail(email: string): Promise<UserWithProfile | null> {
     return await prisma.user.findUnique({ where: { email }, include: this.includeProfile() });

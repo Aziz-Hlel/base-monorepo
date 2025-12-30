@@ -2,15 +2,15 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { type SignInRequestDto, singInSchema } from '@/types22/auth/SignInRequestDto';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
 import firebaseService from '@/Api/service/firebaseService';
+import { useAuthStore } from '@/store/useAuthStore';
 
 const useSignInForm = () => {
   const form = useForm<SignInRequestDto>({
     resolver: zodResolver(singInSchema),
   });
 
-  const { signIn } = useAuth();
+  const signIn = useAuthStore((state) => state.login);
 
   const navigate = useNavigate();
 
@@ -29,12 +29,12 @@ const useSignInForm = () => {
         idToken: idToken,
       });
 
-      if (response.success === false) {
-        if (response.status === 500) {
-          form.setError('root', { message: 'Server error. Please try again later.' });
-        }
-        throw new Error('Failed to sign in with backend');
-      }
+      // if (response.success === false) {
+      //   if (response.status === 500) {
+      //     form.setError('root', { message: 'Server error. Please try again later.' });
+      //   }
+      //   throw new Error('Failed to sign in with backend');
+      // }
 
       navigate('/profile');
     } catch (error) {

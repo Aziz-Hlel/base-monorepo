@@ -1,16 +1,16 @@
 import { createContext, useContext } from 'react';
-import { useAuth } from './AuthContext';
 import { Outlet } from 'react-router-dom';
 import type { UserProfileResponse } from '@contracts/schemas/profile/UserProfileResponse';
+import { useAuthStore } from '@/store/useAuthStore';
 
 const UserSessionContext = createContext<UserProfileResponse | undefined>(undefined);
 export function UserSessionProvider() {
-  const { user } = useAuth();
+  const currentUser = useAuthStore((state) => state.currentUser);
 
-  if (!user) return <> User still not defined when passed through UserProvider Context </>;
+  if (!currentUser) return <> User still not defined when passed through UserProvider Context </>;
 
   return (
-    <UserSessionContext.Provider value={user}>
+    <UserSessionContext.Provider value={currentUser}>
       <Outlet />
     </UserSessionContext.Provider>
   );

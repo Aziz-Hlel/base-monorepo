@@ -1,7 +1,25 @@
-import { logger } from '@/bootstrap/logger.init';
+import { httpLogger } from '@/bootstrap/logger.init';
+import { Request, Response } from 'express';
 import pinoHttp from 'pino-http';
 
-pinoHttp({
-  logger,
-  //   autoLogging: true,
+export const pinoHttpMiddleware = pinoHttp({
+  logger: httpLogger,
+  serializers: {
+    req(req: Request) {
+      return {
+        id: req.id,
+        method: req.method,
+        url: req.url,
+        ip: req.ip,
+        userAgent: req.headers['user-agent'],
+        body: req.body,
+        authorization: undefined,
+      };
+    },
+    res(res: Response) {
+      return {
+        status: res.statusCode,
+      };
+    },
+  },
 });

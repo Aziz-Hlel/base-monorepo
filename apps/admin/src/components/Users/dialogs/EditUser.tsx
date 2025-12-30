@@ -1,7 +1,14 @@
 import { useSelectedRow } from '../context/selected-row-provider';
+import { useUser } from '@/context/UserContext';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import userService from '@/Api/service/userService';
+import {
+  updateUserProfileRequestSchema,
+  type UpdateUserProfileRequest,
+} from '@contracts/schemas/profile/updateUserProfileRequest';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogClose,
@@ -11,6 +18,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/phone-input';
+import { Spinner } from '@/components/ui/spinner';
+import RolesTextMapping from '@/EnumTextMapping/RolesTextMapping';
+import PERMISSION_SCORE from '@contracts/utils/PermissionScore';
 import {
   Select,
   SelectContent,
@@ -20,28 +34,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
-import {
-  createUserProfileRequestSchema,
-  type CreateUserProfileRequest,
-  type CreateUserProfileSchemaOutput,
-} from '@contracts/schemas/profile/createUserProfileRequest';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { PhoneInput } from '@/components/ui/phone-input';
-import userService from '@/Api/service/userService';
-import { toast } from 'sonner';
-import { ApiError } from '@/Api/ApiError';
-import RolesTextMapping from '@/EnumTextMapping/RolesTextMapping';
-import PERMISSION_SCORE from '@contracts/utils/PermissionScore';
-import { useUser } from '@/context/UserContext';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Separator } from '@/components/ui/separator';
 
-const AddUser = () => {
-  const { handleCancel, openDialog } = useSelectedRow();
+const EditUser = () => {
+  const { handleCancel, currentRow, openDialog } = useSelectedRow();
   const queryClient = useQueryClient();
+
   const { userRole: role } = useUser();
 
   const { mutateAsync, isPending } = useMutation({
@@ -49,25 +48,25 @@ const AddUser = () => {
     mutationFn: userService.createUserProfile,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'], exact: false });
-      form.reset();
+      //   form.reset();
       handleCancel();
     },
   });
 
-  const defaultValues: CreateUserProfileSchemaOutput = {
-    username: '',
-    email: '',
+  const defaultValues: UpdateUserProfileRequest = {
+    username: currentRow!.username,
+    email: currentRow!.email,
     password: '',
-    role: 'USER',
-    status: 'ACTIVE',
+    role: currentRow!.role,
+    status: currentRow!.status,
     profile: {
-      phoneNumber: null,
-      address: null,
+      phoneNumber: currentRow!.profile?.phoneNumber ?? null,
+      address: currentRow!.profile?.address ?? null,
     },
   };
-
-  const form = useForm<CreateUserProfileRequest>({
-    resolver: zodResolver(createUserProfileRequestSchema),
+  console.log('phone number val : ', defaultValues.role);
+  const form = useForm<UpdateUserProfileRequest>({
+    resolver: zodResolver(updateUserProfileRequestSchema),
     defaultValues: defaultValues,
   });
 
@@ -78,32 +77,27 @@ const AddUser = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<CreateUserProfileRequest> = async (data) => {
+  const onSubmit: SubmitHandler<UpdateUserProfileRequest> = async (data) => {
     try {
       await mutateAsync(data);
-      toast.success('User created successfully');
+      toast.success('User updated successfully');
     } catch (error) {
-      console.log(error);
-      if (error instanceof ApiError && error.status === 409) {
-        console.log('t5l');
-        form.setError('email', { message: 'Email already exists' });
-        return;
-      }
-      toast.error('Failed to create user');
+      toast.error('Failed to update user');
     }
   };
 
-  const dialogIsOpen = openDialog === 'add';
+  const dialogIsOpen = openDialog === 'edit';
 
-  console.log('form :', form.getValues());
   return (
     <Dialog onOpenChange={onOpenChange} open={dialogIsOpen}>
       <DialogContent className="sm:max-w-106.25">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <DialogHeader>
-            <DialogTitle>Create User</DialogTitle>
-            <DialogDescription>Fill the form below to create a new user.</DialogDescription>
+            <DialogTitle className=" text-center">Create User</DialogTitle>
+            <DialogDescription className=" text-center">Fill the form below to create a new user.</DialogDescription>
+            <Separator />
           </DialogHeader>
+
           <FieldGroup>
             <Controller
               name="username"
@@ -112,7 +106,7 @@ const AddUser = () => {
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={`username-input`}>Username</FieldLabel>
                   <Input {...field} id={`username-input`} aria-invalid={fieldState.invalid} placeholder="Username" />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError errors={[fieldState.error]} />
                 </Field>
               )}
             />
@@ -124,26 +118,7 @@ const AddUser = () => {
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={`email-input`}>Email</FieldLabel>
                   <Input {...field} id={`email-input`} aria-invalid={fieldState.invalid} placeholder="Email" />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
-
-            <Controller
-              name="password"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={`password-input`}>Password</FieldLabel>
-                  <Input
-                    {...field}
-                    id={`password-input`}
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Password"
-                    type="password"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  <FieldError errors={[fieldState.error]} />
                 </Field>
               )}
             />
@@ -263,4 +238,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default EditUser;

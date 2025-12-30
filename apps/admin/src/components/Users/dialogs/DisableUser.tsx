@@ -49,7 +49,9 @@ const DisableUser = () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={disableUser}>Disable</AlertDialogAction>
+            <AlertDialogAction onClick={disableUser} className="bg-red-600 hover:bg-red-500">
+              Disable
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

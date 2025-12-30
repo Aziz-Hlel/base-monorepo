@@ -29,14 +29,13 @@ class ApiService {
 
   constructor() {
     this.api = createAxiosInstance();
-
     this.setupInterceptors();
   }
 
   private setupInterceptors(): void {
     this.api.interceptors.request.use(
       async (config) => {
-        const token = await jwtTokenManager.getInitialAccessToken();
+        const token = await jwtTokenManager.getAccessToken();
         if (token) {
           config.headers = config.headers ?? {};
           config.headers.Authorization = `Bearer ${token}`;
@@ -52,7 +51,7 @@ class ApiService {
         const status = error?.response?.status;
         const originalRequest = error?.config;
 
-        // No config = non-retriable error
+        // No config = non-retrievable error
         if (!originalRequest) return Promise.reject(error);
 
         // -------------------------------

@@ -11,7 +11,6 @@ const requireRole = (role: Role) => {
       throw new UnauthorizedError('Unauthenticated');
     }
 
-    console.log('user :', userReq.user);
     const userRole = userReq.user?.claims?.role;
 
     if (!userRole) {

@@ -3,6 +3,7 @@ import { configureCors } from '../config/cors';
 import { configureSecurity } from '../config/security';
 import { globalErrorHandler } from '../middleware/error.middleware';
 import { AppRouter } from './routes/app.route';
+import { pinoHttpMiddleware } from '@/config/pinoHttp';
 
 export function createExpressApp() {
   const app = express();
@@ -13,6 +14,8 @@ export function createExpressApp() {
   app.use(...configureSecurity());
 
   app.use(configureCors());
+
+  app.use(pinoHttpMiddleware);
 
   app.use('/api', AppRouter);
 

@@ -1,5 +1,5 @@
 import firebaseService from '@/Api/service/firebaseService';
-import { useAuth } from '@/context/AuthContext';
+import { useAuthStore } from '@/store/useAuthStore';
 import { singUpSchema, type SignUpRequestSchema } from '@/types22/auth/SignUpRequestDto';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -9,7 +9,7 @@ const useSignUpForm = () => {
   const form = useForm<SignUpRequestSchema>({
     resolver: zodResolver(singUpSchema),
   });
-  const { signUp } = useAuth();
+  const signUp = useAuthStore((state) => state.register);
 
   const navigate = useNavigate();
   const onSubmit = async (data: SignUpRequestSchema) => {
@@ -28,7 +28,8 @@ const useSignUpForm = () => {
         idToken: idToken,
       });
 
-      if (signUpResponse.success === false) throw new Error('Failed to create user with backend');
+      // !
+      // if (signUpResponse.success === false) throw new Error('Failed to create user with backend');
 
       navigate('/profile');
     } catch (error) {
