@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Response } from 'express';
 import { userController } from '../Controller/user.controller';
 import { asyncHandler } from '../../core/async-handler';
 import { AuthenticatedRequest } from '../../types/auth/AuthenticatedRequest';
@@ -11,7 +11,7 @@ const router = Router();
 router.post(
   '/',
   authHandler,
-  requireRole(Role.USER),
+  requireRole(Role.ADMIN),
   asyncHandler((req: AuthenticatedRequest, res: Response) => userController.createUserProfile(req, res)),
 );
 router.get(
@@ -22,8 +22,20 @@ router.get(
 router.delete(
   '/:id',
   authHandler,
-  requireRole(Role.USER),
+  requireRole(Role.ADMIN),
   asyncHandler((req: AuthenticatedRequest, res: Response) => userController.deleteUserProfile(req, res)),
+);
+router.post(
+  '/:id/enable',
+  authHandler,
+  requireRole(Role.ADMIN),
+  asyncHandler((req: AuthenticatedRequest, res: Response) => userController.enableUser(req, res)),
+);
+router.post(
+  '/:id/disable',
+  authHandler,
+  requireRole(Role.ADMIN),
+  asyncHandler((req: AuthenticatedRequest, res: Response) => userController.disableUser(req, res)),
 );
 
 export const UserPage = router;

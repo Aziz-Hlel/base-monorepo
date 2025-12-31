@@ -2,7 +2,7 @@ import { handleFirebaseError, isFirebaseError } from '../err/firebase.errors';
 import { CustomClaims } from '../../types/auth/CustomClaims';
 import { Role, User } from '../../generated/prisma/client';
 import { StrictDecodedIdToken } from '../../types/auth/StrictDecodedIdToken';
-import { Auth, UserRecord } from 'firebase-admin/auth';
+import { Auth } from 'firebase-admin/auth';
 import { firebaseSession } from '../../bootstrap/firebase.init';
 import { logger } from '@/bootstrap/logger.init';
 
@@ -11,7 +11,7 @@ class FirebaseAuthService {
 
   async verifyToken(tokenId: string): Promise<StrictDecodedIdToken> {
     try {
-      const firebaseToken = await this.firebaseSession.verifyIdToken(tokenId);
+      const firebaseToken = await this.firebaseSession.verifyIdToken(tokenId, true);
       return firebaseToken;
     } catch (error: unknown) {
       if (isFirebaseError(error)) handleFirebaseError(error);

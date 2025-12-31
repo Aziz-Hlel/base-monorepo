@@ -24,9 +24,7 @@ const useSignUpForm = () => {
 
       const idToken = firebaseResponse.data;
 
-      const signUpResponse = await signUp({
-        idToken: idToken,
-      });
+      await signUp({ idToken: idToken });
 
       // !
       // if (signUpResponse.success === false) throw new Error('Failed to create user with backend');

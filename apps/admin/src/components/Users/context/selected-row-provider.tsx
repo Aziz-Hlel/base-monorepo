@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import type { TableRowType } from '../table/tableDeclarations/typesAndFieldsDeclaration';
 
-type TableDialogType = 'add' | 'edit' | 'delete' | 'disable' | null;
+type TableDialogType = 'add' | 'edit' | 'delete' | 'disable' | 'enable' | null;
 
 type SelectedRowContextType = {
   openDialog: TableDialogType;

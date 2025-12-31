@@ -12,6 +12,7 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import userService from '@/Api/service/userService';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 
 const DeleteUser = () => {
   const { handleCancel, openDialog, currentRow } = useSelectedRow();
@@ -49,9 +50,9 @@ const DeleteUser = () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={deleteUser} className=" bg-red-600 hover:bg-red-500">
+            <Button onClick={deleteUser} className=" bg-red-600 hover:bg-red-500">
               Delete
-            </AlertDialogAction>
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

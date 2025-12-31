@@ -10,7 +10,7 @@ import useLoginWithGoogle from '@/hooks/use-login-with-google';
 
 export function SignupForm() {
   const { form, onSubmit } = useSignUpForm();
-  const { loginWithGoogle } = useLoginWithGoogle();
+  const { loginWithGoogle } = useLoginWithGoogle(form as any); // *
 
   const formId = 'sign-up-form';
   const isFormSubmitting = form.formState.isSubmitting;

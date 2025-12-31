@@ -9,6 +9,7 @@ import {
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Separator } from '@radix-ui/react-separator';
 import { Link } from 'react-router-dom';
+import { Fragment } from 'react/jsx-runtime';
 
 type IBreadCrumb = {
   title: string;
@@ -24,7 +25,7 @@ const BreadcrumbHeader = ({ breadcrumbs }: { breadcrumbs: IBreadCrumb[] }) => {
         <Breadcrumb>
           <BreadcrumbList>
             {breadcrumbs.map((breadcrumb, index) => (
-              <>
+              <Fragment key={index}>
                 {index < breadcrumbs.length - 1 && (
                   <>
                     <BreadcrumbItem className="hidden md:block" key={index}>
@@ -35,7 +36,7 @@ const BreadcrumbHeader = ({ breadcrumbs }: { breadcrumbs: IBreadCrumb[] }) => {
                     <BreadcrumbSeparator className="hidden md:block" />
                   </>
                 )}
-              </>
+              </Fragment>
             ))}
 
             <>

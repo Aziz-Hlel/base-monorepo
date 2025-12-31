@@ -17,7 +17,7 @@ interface LoginFormProps {
 export function LoginForm({ form, onSubmit }: LoginFormProps) {
   const formId = 'sign-in-form';
 
-  const { loginWithGoogle } = useLoginWithGoogle();
+  const { loginWithGoogle } = useLoginWithGoogle(form);
   const isFormSubmitting = form.formState.isSubmitting;
   const rootError = form.formState.errors.root;
 

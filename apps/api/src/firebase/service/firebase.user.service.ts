@@ -42,10 +42,14 @@ class FirebaseUserService {
 
   async disableUser(authId: string): Promise<void> {
     try {
-      await this.firebaseSession.updateUser(authId, {
-        disabled: true,
-      });
-    } catch (error) {}
+      await this.firebaseSession.updateUser(authId, { disabled: true });
+      await this.firebaseSession.revokeRefreshTokens(authId);
+    } catch (error: unknown) {
+      if (isFirebaseError(error)) handleFirebaseError(error);
+
+      logger.error(error, 'Unexpected disableUser error:');
+      throw error;
+    }
   }
 
   async enableUser(authId: string): Promise<void> {
@@ -64,9 +68,8 @@ class FirebaseUserService {
 
   async deleteUser(authId: string): Promise<void> {
     try {
-      console.log('dirab l authId to delete = ', authId);
       await this.firebaseSession.deleteUser(authId);
-      // await this.firebaseSession.revokeRefreshTokens(authId);
+      await this.firebaseSession.revokeRefreshTokens(authId);
     } catch (error: unknown) {
       if (isFirebaseError(error)) handleFirebaseError(error);
 

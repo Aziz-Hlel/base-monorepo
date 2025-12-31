@@ -17,8 +17,10 @@ const apiRoutes = {
   users: {
     getUsers: () => '/users' as const,
     createUserProfile: () => '/users/' as const,
+    updateUserProfile: (id: string) => `/users/${id}` as const,
     deleteUserProfile: (id: string) => `/users/${id}` as const,
-    disableUser: (id: string) => `/users/disable/${id}` as const,
+    disableUser: (id: string) => `/users/${id}/disable/` as const,
+    enableUser: (id: string) => `/users/${id}/enable/` as const,
   },
 
   services: {

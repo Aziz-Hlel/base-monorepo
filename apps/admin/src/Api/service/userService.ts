@@ -4,6 +4,7 @@ import apiRoutes from '../routes/routes';
 import type { UserRowResponse } from '@contracts/schemas/user/UserRowResponse';
 import type { CreateUserProfileRequest } from '@contracts/schemas/profile/createUserProfileRequest';
 import type { UserProfileResponse } from '@contracts/schemas/profile/UserProfileResponse';
+import type { UpdateUserProfileRequest } from '@contracts/schemas/profile/updateUserProfileRequest';
 
 const userService = {
   getUsers: async (searchParams: { [k: string]: string | number | Array<string> }) =>
@@ -15,12 +16,20 @@ const userService = {
     return apiService.postThrowable<UserProfileResponse>(apiRoutes.users.createUserProfile(), payload);
   },
 
+  updateUserProfile: async ({ id, payload }: { id: string; payload: UpdateUserProfileRequest }) => {
+    return apiService.putThrowable<UserProfileResponse>(apiRoutes.users.updateUserProfile(id), payload);
+  },
+
   deleteUserProfile: async (id: string) => {
     return apiService.deleteThrowable<void>(apiRoutes.users.deleteUserProfile(id));
   },
 
   disableUser: async (id: string) => {
-    return apiService.deleteThrowable<void>(apiRoutes.users.disableUser(id));
+    return apiService.postThrowable<void>(apiRoutes.users.disableUser(id), {});
+  },
+
+  enableUser: async (id: string) => {
+    return apiService.postThrowable<void>(apiRoutes.users.enableUser(id), {});
   },
 };
 

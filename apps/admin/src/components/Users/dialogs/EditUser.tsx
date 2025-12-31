@@ -45,10 +45,9 @@ const EditUser = () => {
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['users', 'create'],
-    mutationFn: userService.createUserProfile,
+    mutationFn: userService.updateUserProfile,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'], exact: false });
-      //   form.reset();
       handleCancel();
     },
   });
@@ -64,7 +63,7 @@ const EditUser = () => {
       address: currentRow!.profile?.address ?? null,
     },
   };
-  console.log('phone number val : ', defaultValues.role);
+
   const form = useForm<UpdateUserProfileRequest>({
     resolver: zodResolver(updateUserProfileRequestSchema),
     defaultValues: defaultValues,
@@ -79,7 +78,7 @@ const EditUser = () => {
 
   const onSubmit: SubmitHandler<UpdateUserProfileRequest> = async (data) => {
     try {
-      await mutateAsync(data);
+      await mutateAsync({ id: currentRow!.id, payload: data });
       toast.success('User updated successfully');
     } catch (error) {
       toast.error('Failed to update user');
@@ -105,7 +104,13 @@ const EditUser = () => {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={`username-input`}>Username</FieldLabel>
-                  <Input {...field} id={`username-input`} aria-invalid={fieldState.invalid} placeholder="Username" />
+                  <Input
+                    {...field}
+                    id={`username-input`}
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Username"
+                    value={field.value ?? undefined}
+                  />
                   <FieldError errors={[fieldState.error]} />
                 </Field>
               )}
@@ -115,9 +120,16 @@ const EditUser = () => {
               name="email"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
+                <Field data-invalid={fieldState.invalid} className="cursor-not-allowed">
                   <FieldLabel htmlFor={`email-input`}>Email</FieldLabel>
-                  <Input {...field} id={`email-input`} aria-invalid={fieldState.invalid} placeholder="Email" />
+                  <Input
+                    {...field}
+                    id={`email-input`}
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Email"
+                    aria-disabled
+                    disabled
+                  />
                   <FieldError errors={[fieldState.error]} />
                 </Field>
               )}

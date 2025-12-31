@@ -1,20 +1,29 @@
-import z from 'zod';
+import z, { keyof } from 'zod';
 import { Role, Status } from '../../types/enums/enums';
 import { UserProfileRowResponse } from './UserRowResponse';
+import { Prettify } from '../../utils/Prettify';
 
 export type TableRowType = UserProfileRowResponse;
-export type TableRowKeys = keyof TableRowType;
+export type NestedObject = Prettify<NonNullable<TableRowType['profile']>>;
+export type RootKeys = keyof TableRowType;
+export type ProfileKeys = keyof NestedObject;
+export type TableRowKeys = RootKeys | ProfileKeys;
 
 export const columnFiltersKeys: Set<TableRowKeys> = new Set(['status', 'role'] as const);
 
-export const sortableColumnKeys: TableRowKeys[] = [
+export const rootLevelSortableFields: RootKeys[] = [
   'email',
   'username',
   'status',
   'authId',
   'role',
+  'provider',
   'createdAt',
 ] as const;
+
+export const profileLevelSortableFields: ProfileKeys[] = ['phoneNumber', 'address'] as const;
+
+export const sortableColumnKeys: TableRowKeys[] = rootLevelSortableFields.concat(profileLevelSortableFields as any);
 
 export const UserPageQuerySortFields = ['createdAt', 'id', 'email', 'role', 'username'];
 

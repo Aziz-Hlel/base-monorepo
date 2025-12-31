@@ -18,7 +18,7 @@ const requireRole = (role: Role) => {
     }
 
     if (PERMISSION_SCORE[userRole] < PERMISSION_SCORE[role]) {
-      throw new PermissionDeniedError('Insufficient permissions');
+      throw new PermissionDeniedError(`Insufficient permissions: required role ${role}, but user has role ${userRole}`);
     }
 
     next();

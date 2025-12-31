@@ -94,6 +94,13 @@ export class UserRepo {
       data: { status: Status.DISABLED },
     });
   }
+
+  async enableUser(id: string): Promise<void> {
+    await prisma.user.update({
+      where: { id },
+      data: { status: Status.ACTIVE },
+    });
+  }
 }
 
 export const userRepo = new UserRepo();

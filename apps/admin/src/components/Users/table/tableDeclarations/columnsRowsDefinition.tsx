@@ -8,9 +8,9 @@ import type { RoleType } from '../EnumColumns/Role/RolesComponent';
 import RolesComponent from '../EnumColumns/Role/RolesComponent';
 import type { TableRowType } from './typesAndFieldsDeclaration';
 import IsEmailVerifiedComponent from '../EnumColumns/IsEmailVerified/IsEmailVerifiedComponent';
-import ActionColumn from '../columns/ActionColumn';
 import AuthProviderCell from '../EnumColumns/AuthProvider/AuthProviderCell';
 import AuthProviderHeader from '../EnumColumns/AuthProvider/AuthProviderHeader';
+import ActionsColumn from '../columns/ActionsColumn';
 
 type TableColumnDefinition<T> = ColumnDef<T> & { accessorKey?: keyof T };
 
@@ -176,7 +176,7 @@ const columnsRowsDefinition: ColumnDef<TableRowType>[] = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => <ActionColumn row={row} />,
+    cell: ({ row }) => <ActionsColumn row={row} />,
     size: 32,
     minSize: 32,
     maxSize: 32,

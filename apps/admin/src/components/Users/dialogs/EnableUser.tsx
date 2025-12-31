@@ -1,5 +1,6 @@
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -14,13 +15,13 @@ import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 
-const DisableUser = () => {
+const EnableUser = () => {
   const { handleCancel, openDialog, currentRow } = useSelectedRow();
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: ['users', 'disable'],
-    mutationFn: userService.disableUser,
+    mutationKey: ['users', 'enable'],
+    mutationFn: userService.enableUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'], exact: false });
       toast.success('User disabled successfully');
@@ -28,15 +29,15 @@ const DisableUser = () => {
     },
   });
 
-  const disableUser = async () => {
+  const enableUser = async () => {
     try {
       await mutateAsync(currentRow?.id!);
     } catch (error) {
-      toast.error('Failed to disable user');
+      toast.error('Failed to enable user');
       handleCancel();
     }
   };
-  const dialogOpen = openDialog === 'disable';
+  const dialogOpen = openDialog === 'enable';
   return (
     <>
       <AlertDialog open={dialogOpen} onOpenChange={handleCancel}>
@@ -44,14 +45,14 @@ const DisableUser = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the user {currentRow?.username} and remove
-              their data from our servers.
+              This action cannot be undone. This will enable the user {currentRow?.username} and restore their data from
+              our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
-            <Button onClick={disableUser} className="bg-red-600 hover:bg-red-500 w-20" disabled={isPending}>
-              {!isPending ? <span>Disable</span> : <Spinner />}
+            <Button onClick={enableUser} className="bg-blue-600 hover:bg-blue-500 w-20" disabled={isPending}>
+              {!isPending ? <span>Enable</span> : <Spinner />}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -60,4 +61,4 @@ const DisableUser = () => {
   );
 };
 
-export default DisableUser;
+export default EnableUser;

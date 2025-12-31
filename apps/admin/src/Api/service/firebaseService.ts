@@ -75,6 +75,11 @@ const mapFirebaseOAuthError = (code: string): FirebaseError => {
         success: false,
         error: ['root', { message: 'Popup request cancelled.' }],
       };
+    case 'auth/user-disabled':
+      return {
+        success: false,
+        error: ['root', { message: 'User account is disabled.' }],
+      };
 
     case 'auth/account-exists-with-different-credential':
       return {
@@ -146,6 +151,7 @@ const firebaseService = {
 
       return { success: true, data: idToken };
     } catch (err: unknown) {
+      console.log(err);
       if (typeof err === 'object' && err !== null && 'code' in err) {
         return mapFirebaseOAuthError(err.code as string);
       }

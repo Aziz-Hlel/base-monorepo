@@ -3,7 +3,13 @@ import { UserOrderByWithRelationInput, UserWhereInput } from '../../generated/pr
 import { prisma } from '../../bootstrap/db.init';
 import { Page } from '../../types/page/Page';
 import UserMapper from '../mapper/user.mapper';
-import { UserPageQuery } from '@contracts/schemas/user/UserPageQuery';
+import {
+  ProfileKeys,
+  profileLevelSortableFields,
+  RootKeys,
+  rootLevelSortableFields,
+  UserPageQuery,
+} from '@contracts/schemas/user/UserPageQuery';
 import { cacheService } from '@/cache/service/cache.service';
 import { CreateUserProfileRequest } from '@contracts/schemas/profile/createUserProfileRequest';
 import { userRepo } from '../repo/user.repo';
@@ -42,9 +48,17 @@ class UserService {
         role: { in: queryParams.role },
       });
     }
-    const orderBy: UserOrderByWithRelationInput = {
-      [queryParams.sort]: queryParams.order,
-    };
+
+    const orderBy: UserOrderByWithRelationInput = {};
+
+    if (rootLevelSortableFields.includes(queryParams.sort as RootKeys)) {
+      orderBy[queryParams.sort as keyof UserOrderByWithRelationInput] = queryParams.order;
+    }
+    if (profileLevelSortableFields.includes(queryParams.sort as ProfileKeys)) {
+      orderBy['profile'] = {
+        [queryParams.sort]: queryParams.order,
+      };
+    }
 
     const usersContent = prisma.user.findMany({
       skip,
@@ -94,6 +108,34 @@ class UserService {
 
     await firebaseUserService.deleteUser(user.authId);
     await userRepo.deleteUser(userToDeleteId);
+  }
+
+  async disableUser(userId: string, currentUserRole: Role): Promise<void> {
+    const user = await userRepo.getUserById(userId);
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    if (PERMISSION_SCORE[currentUserRole] < PERMISSION_SCORE[user.role]) {
+      throw new PermissionDeniedError('You do not have permission to delete this user');
+    }
+
+    await firebaseUserService.disableUser(user.authId);
+    await userRepo.disableUser(userId);
+  }
+
+  async enableUser(userId: string, currentUserRole: Role): Promise<void> {
+    const user = await userRepo.getUserById(userId);
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    if (PERMISSION_SCORE[currentUserRole] < PERMISSION_SCORE[user.role]) {
+      throw new PermissionDeniedError('You do not have permission to enable this user');
+    }
+
+    await firebaseUserService.enableUser(user.authId);
+    await userRepo.enableUser(userId);
   }
 }
 
