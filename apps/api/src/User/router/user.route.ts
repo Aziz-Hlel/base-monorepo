@@ -17,6 +17,7 @@ router.post(
 router.get(
   '/',
   authHandler,
+  requireRole(Role.ADMIN),
   asyncHandler((req: AuthenticatedRequest, res: Response) => userController.getUserPage(req, res)),
 );
 router.delete(
@@ -36,6 +37,12 @@ router.post(
   authHandler,
   requireRole(Role.ADMIN),
   asyncHandler((req: AuthenticatedRequest, res: Response) => userController.disableUser(req, res)),
+);
+router.put(
+  '/:id',
+  authHandler,
+  requireRole(Role.ADMIN),
+  asyncHandler((req: AuthenticatedRequest, res: Response) => userController.updateUserProfile(req, res)),
 );
 
 export const UserPage = router;

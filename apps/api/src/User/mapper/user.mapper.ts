@@ -26,7 +26,7 @@ class UserMapper {
     return user;
   }
 
-  static toUserResponse(user: User, userAvatar: string | null): UserResponse {
+  static toUserResponse(user: User, userAvatar?: string | null): UserResponse {
     return {
       id: user.id,
       email: user.email,
@@ -36,7 +36,7 @@ class UserMapper {
       status: user.status,
       userRole: user.role,
       isEmailVerified: user.isEmailVerified,
-      avatar: userAvatar,
+      avatar: userAvatar || null,
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt.toISOString(),
     };

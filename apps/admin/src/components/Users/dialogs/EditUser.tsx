@@ -55,7 +55,6 @@ const EditUser = () => {
   const defaultValues: UpdateUserProfileRequest = {
     username: currentRow!.username,
     email: currentRow!.email,
-    password: '',
     role: currentRow!.role,
     status: currentRow!.status,
     profile: {
@@ -86,7 +85,7 @@ const EditUser = () => {
   };
 
   const dialogIsOpen = openDialog === 'edit';
-
+  console.log(form.formState.errors);
   return (
     <Dialog onOpenChange={onOpenChange} open={dialogIsOpen}>
       <DialogContent className="sm:max-w-106.25">

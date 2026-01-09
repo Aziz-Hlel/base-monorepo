@@ -37,7 +37,7 @@ const columnsRowsDefinition: ColumnDef<TableRowType>[] = [
         isEmailVerified: boolean;
       }>();
       return (
-        <RowContainer className="lowercase w-full ">
+        <RowContainer className="lowercase w-96 ">
           <IsEmailVerifiedComponent isEmailVerified={isEmailVerified} />
           &nbsp;
           {email}
@@ -61,7 +61,9 @@ const columnsRowsDefinition: ColumnDef<TableRowType>[] = [
         </HeaderContainer>
       );
     },
-    cell: ({ row }) => <RowContainer className="">{row.getValue('username')}</RowContainer>,
+    cell: ({ row }) => (
+      <RowContainer className=" w-96 truncate whitespace-nowrap ">{row.getValue('username')}</RowContainer>
+    ),
 
     enableSorting: true,
     enableHiding: true,

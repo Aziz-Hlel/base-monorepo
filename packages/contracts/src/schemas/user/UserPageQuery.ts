@@ -25,8 +25,6 @@ export const profileLevelSortableFields: ProfileKeys[] = ['phoneNumber', 'addres
 
 export const sortableColumnKeys: TableRowKeys[] = rootLevelSortableFields.concat(profileLevelSortableFields as any);
 
-export const UserPageQuerySortFields = ['createdAt', 'id', 'email', 'role', 'username'];
-
 const csvEnumArray = <T extends string[]>(values: T) =>
   z
     .string()
@@ -46,7 +44,7 @@ export const queryParamsSchema = z.object({
   order: z.enum(['asc', 'desc']).catch('desc'),
   search: z.string().trim().catch(''),
   // Filters
-  role: csvEnumArray(Object.values(Role)),
+  role: csvEnumArray(Object.values(Role)).catch([]),
   status: csvEnumArray(Object.values(Status)).catch([]),
 });
 export type TableQueryParams = z.infer<typeof queryParamsSchema>;

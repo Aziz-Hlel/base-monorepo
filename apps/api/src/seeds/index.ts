@@ -1,22 +1,21 @@
+import { logger } from '@/bootstrap/logger.init';
 import ENV from '../config/ENV';
 import seedUsers from './fakes/users.fake';
 
 const seed = async () => {
-
-    if(ENV.NODE_ENV === 'production') {
-        console.log('ℹ️ NOTE : Skipped seeding in production environment.');
-        return;
-    }
+  if (ENV.NODE_ENV === 'production') {
+    logger.info('ℹ️ NOTE : Skipped seeding in production environment.');
+    return;
+  }
   const userSeed = seedUsers(50);
 
-  try{
+  try {
     await Promise.all([userSeed]);
-
-  }catch (error) {
-    console.error('❌ ERROR : Seeding failed.', error);
+  } catch (error) {
+    logger.error(error, '❌ ERROR : Seeding failed.');
     throw error;
   }
-  console.log('✅ SUCCESS : Seeding completed.');
+  logger.info('✅ SUCCESS : Seeding completed.');
 };
 
 export default seed;

@@ -1,0 +1,12 @@
+import z from 'zod';
+import { ProductStatus } from '../../types/enums/enums';
+
+export const createProductRequestSchema = z.object({
+  name: z.string().trim().min(3).max(255),
+  description: z.string().trim().min(1).max(5000),
+  price: z.number().min(0),
+  thumbnailId: z.uuid(),
+  status: z.enum(ProductStatus).default(ProductStatus.AVAILABLE),
+});
+
+export type CreateProductRequest = z.infer<typeof createProductRequestSchema>;

@@ -5,7 +5,7 @@ export type UserRowResponse = {
   id: string;
   createdAt: Date;
   authId: string;
-  email: string;
+  email: string | null;
   provider: string;
   username: string | null;
   role: Role;

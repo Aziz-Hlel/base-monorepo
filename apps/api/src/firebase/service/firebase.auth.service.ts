@@ -11,7 +11,8 @@ class FirebaseAuthService {
 
   async verifyToken(tokenId: string): Promise<StrictDecodedIdToken> {
     try {
-      const firebaseToken = await this.firebaseSession.verifyIdToken(tokenId, true);
+      const firebaseToken = await this.firebaseSession.verifyIdToken(tokenId);
+
       return firebaseToken;
     } catch (error: unknown) {
       if (isFirebaseError(error)) handleFirebaseError(error);

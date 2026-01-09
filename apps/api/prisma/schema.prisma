@@ -7,7 +7,7 @@
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
-  
+
 }
 
 datasource db {
@@ -58,3 +58,55 @@ model Profile {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+enum MediaStatus {
+  PENDING
+  CONFIRMED
+  DELETED
+  FAILED
+}
+
+
+model Media {
+  id           String      @id @default(uuid())
+  key          String     @unique
+  baseName     String
+  fileType     String
+  mimeType     String
+  fileSize     Int?
+  status       MediaStatus @default(PENDING)
+
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+  confirmedAt  DateTime?
+
+
+  product     Product?   @relation
+}
+
+
+enum ProductStatus {
+  AVAILABLE
+  OUT_OF_STOCK
+  DISCONTINUED
+}
+
+model Product {
+  id          String      @id @default(uuid())
+  name        String      @unique
+  description String
+  price       Decimal     @db.Decimal(10, 2)
+  status      ProductStatus @default(AVAILABLE)
+
+  thumbnailId     String?  @unique
+  thumbnail       Media?   @relation(fields: [thumbnailId], references: [id], onDelete: SetNull)
+
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+

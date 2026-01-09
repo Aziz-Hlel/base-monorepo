@@ -22,6 +22,45 @@ services:
 
     command: ['redis-server', '--requirepass', '${REDIS_PASSWORD:-password}', '--appendonly', 'yes'] # enables persistence
 
+  minio:
+    image: quay.io/minio/minio:latest
+
+    ports:
+      - '${MINIO_PORT:-9000}:9000'
+      - '${MINIO_UI_PORT:-9001}:9001' # Web UI
+
+    env_file:
+      - ${PROJECT_ROOT}/config/.env.dev
+      - ${PROJECT_ROOT}/.env.local
+      - ${PROJECT_ROOT}/.env
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+
+    volumes:
+      - base_repo_minio_local_volume:/data
+
+    command: server /data --console-address ":9001"
+
+  minio-init:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_started
+
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+
+    volumes:
+      - ${PROJECT_ROOT}/scripts/init_minio.sh:/init_minio.sh:ro
+      - ${PROJECT_ROOT}/seed/minio:/seed:ro
+
+    entrypoint: ['/bin/sh', '/init_minio.sh']
+
 volumes:
   base_repo_db_local_volume:
   base_repo_redis_local_volume:
+  base_repo_minio_local_volume:

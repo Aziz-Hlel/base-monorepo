@@ -9,6 +9,7 @@ import { UserProfileResponse } from '@contracts/schemas/profile/UserProfileRespo
 import PERMISSION_SCORE from '@contracts/utils/PermissionScore';
 import { PermissionDeniedError } from '@/err/customErrors';
 import { SimpleApiResponse } from '@contracts/types/api/SimpleApiResponse.dto';
+import { updateUserProfileRequestSchema } from '@contracts/schemas/profile/updateUserProfileRequest';
 
 class UserController {
   async getUserPage(req: AuthenticatedRequest, res: Response<Page<UserProfileRowResponse>>) {
@@ -27,6 +28,16 @@ class UserController {
     }
     const response = await userService.createUserProfile(parsedBody);
     res.status(201).json(response);
+  }
+
+  async updateUserProfile(req: AuthenticatedRequest, res: Response<UserProfileResponse>) {
+    const userId = req.params.id;
+    const parsedBody = updateUserProfileRequestSchema.parse(req.body);
+
+    const userRole = req.user.claims?.role;
+
+    const response = await userService.updateUserProfile(userId, parsedBody, userRole);
+    res.status(200).json(response);
   }
 
   async deleteUserProfile(req: AuthenticatedRequest, res: Response<SimpleApiResponse>) {

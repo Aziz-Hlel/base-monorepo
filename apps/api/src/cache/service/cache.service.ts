@@ -2,7 +2,7 @@ import redis from '@/bootstrap/redis.init';
 import { CacheMetrics } from './cache.metrics';
 import crypto from 'crypto';
 
-type getParams = { key: string } | { object: Object };
+type getParams = { key: string };
 type setParams<T> = { value: T; ttlSeconds: number } & getParams;
 
 export class CacheService {
@@ -13,10 +13,10 @@ export class CacheService {
   }
 
   async get<T>(props: getParams): Promise<T | null> {
-    const value = 'key' in props ? props.key : props.object;
-    const hashedKey = this.stableHash(value);
+    const key = props.key;
+    // const hashedKey = this.stableHash(value);
     try {
-      const value = await redis.get(hashedKey);
+      const value = await redis.get(key);
       if (value) {
         this.cacheMetrics.recordHit();
         return JSON.parse(value);
@@ -29,10 +29,10 @@ export class CacheService {
     }
   }
   async set<T>(props: setParams<T>): Promise<void> {
-    const key = 'key' in props ? props.key : props.object;
-    const hashedKey = this.stableHash(key);
+    const key = props.key;
+    // const hashedKey = this.stableHash(key);
     try {
-      await redis.set(hashedKey, JSON.stringify(props.value), 'EX', props.ttlSeconds);
+      await redis.set(key, JSON.stringify(props.value), 'EX', props.ttlSeconds);
     } catch (error) {
       console.error('Cache set error:', error);
     }

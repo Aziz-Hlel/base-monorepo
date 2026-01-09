@@ -10,4 +10,4 @@ router.use('/', RootRouter);
 router.use('/auth', AuthRouter);
 router.use('/users', UserPage);
 
-export const AppRouter = router;
+export default router;

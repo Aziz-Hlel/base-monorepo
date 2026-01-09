@@ -1,0 +1,123 @@
+import { prisma } from '@/bootstrap/db.init';
+import { logger } from '@/bootstrap/logger.init';
+import { MediaStatus, Status } from '@/generated/prisma/enums';
+import { PresignedUrlRequest } from '@contracts/schemas/media/PresignedUrlRequest';
+
+class MediaRepo {
+  async createPendingMedia(preSignedUrlDto: PresignedUrlRequest, mediaKey: string) {
+    const createdMedia = await prisma.media.create({
+      data: {
+        baseName: preSignedUrlDto.name,
+        key: mediaKey,
+        mimeType: preSignedUrlDto.mimeType,
+        fileSize: preSignedUrlDto.fileSize,
+        fileType: preSignedUrlDto.fileType,
+        status: MediaStatus.PENDING,
+      },
+    });
+
+    return createdMedia;
+  }
+
+  async findMediaById(mediaId: string) {
+    const media = await prisma.media.findUnique({
+      where: {
+        id: mediaId,
+      },
+    });
+
+    return media;
+  }
+
+  async findMediaByKey(mediaKey: string) {
+    const media = await prisma.media.findUnique({
+      where: {
+        key: mediaKey,
+      },
+    });
+
+    return media;
+  }
+
+  async confirmMediaUploadByKey(mediaKey: string) {
+    await prisma.media.update({
+      where: {
+        key: mediaKey,
+      },
+      data: {
+        status: MediaStatus.CONFIRMED,
+      },
+    });
+  }
+
+  async confirmMediaUploadById(mediaId: string) {
+    await prisma.media.update({
+      where: {
+        id: mediaId,
+      },
+      data: {
+        status: MediaStatus.CONFIRMED,
+      },
+    });
+  }
+
+  async deleteMediaByKey(mediaKey: string) {
+    await prisma.media.update({
+      where: {
+        key: mediaKey,
+      },
+      data: {
+        status: MediaStatus.DELETED,
+      },
+    });
+  }
+
+  async switchMediaIds({
+    oldMediaId,
+    newMediaId,
+  }: {
+    oldMediaId: string | null;
+    newMediaId: string;
+  }): Promise<string | null> {
+    const mediaId = await prisma.$transaction(async (tx) => {
+      const newMedia = await tx.media.findUnique({
+        where: {
+          id: newMediaId,
+        },
+      });
+      if (!newMedia) {
+        logger.error(`Updated Media with id ${newMediaId} not found`);
+        return oldMediaId;
+      }
+      if (oldMediaId) {
+        const oldMedia = await tx.media.findUnique({
+          where: {
+            id: oldMediaId,
+          },
+        });
+        if (oldMedia) {
+          await tx.media.update({
+            where: {
+              id: oldMediaId,
+            },
+            data: {
+              status: MediaStatus.DELETED,
+            },
+          });
+        }
+      }
+      const updatedNewMedia = await tx.media.update({
+        where: {
+          id: newMediaId,
+        },
+        data: {
+          status: MediaStatus.CONFIRMED,
+        },
+      });
+      return updatedNewMedia.id;
+    });
+    return mediaId;
+  }
+}
+
+export const mediaRepo = new MediaRepo();

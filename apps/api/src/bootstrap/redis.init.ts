@@ -1,5 +1,6 @@
 import ENV from '@/config/ENV';
 import Redis from 'ioredis';
+import { logger } from './logger.init';
 
 const redis = new Redis({
   host: ENV.REDIS_HOST,
@@ -15,18 +16,18 @@ export async function connectRedis() {
 
   try {
     await redis.connect();
-    console.log('✅ SUCCESS : Redis connected successfully.');
+    logger.info('✅ SUCCESS : Redis connected successfully.');
   } catch (err) {
-    console.error('❌ ERROR : Redis connection failed', err);
+    logger.error(err, '❌ ERROR : Redis connection failed');
     process.exit(1);
   }
 }
 export default redis;
 
 redis.on('error', (err) => {
-  console.error('❌ ERROR : Redis error', err);
+  logger.error(err, '❌ ERROR : Redis error');
 });
 
 redis.on('warning', (warning) => {
-  console.warn('⚠️ WARNING : Redis warning', warning);
+  logger.warn(warning, '⚠️ WARNING : Redis warning');
 });

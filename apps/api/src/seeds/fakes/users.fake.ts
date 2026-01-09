@@ -7,7 +7,6 @@ faker.seed(1); // Ensure consistent fake data across runs
 const createFakeUser = (index: number) => {
   const fakeEmail = `user${index}@example.com`;
   const fakeUser = {
-    id: faker.string.uuid(),
     email: fakeEmail,
     username: faker.internet.username(),
     createdAt: faker.date.past(),
@@ -35,8 +34,8 @@ const seedUsers = async (nbr: number) => {
   for (const user of fakeUsers) {
     await prisma.user.upsert({
       where: { email: user.email },
-      create: { ...user, profile: { create: user.profile! } },
-      update: { ...user, profile: { update: user.profile! } },
+      create: { ...user, profile: { create: user.profile } },
+      update: { ...user, profile: { update: user.profile } },
     });
   }
 };

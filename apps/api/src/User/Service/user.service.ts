@@ -18,13 +18,19 @@ import { firebaseUserService } from '@/firebase/service/firebase.user.service';
 import { NotFoundError, PermissionDeniedError } from '@/err/customErrors';
 import { Role } from '@/generated/prisma/enums';
 import PERMISSION_SCORE from '@contracts/utils/PermissionScore';
+import { UpdateUserProfileRequest } from '@contracts/schemas/profile/updateUserProfileRequest';
+import { logger } from '@/bootstrap/logger.init';
+import { RedisKeys } from '@/cache/keys/cache.keys';
 
 class UserService {
   async getUserPage(queryParams: UserPageQuery): Promise<Page<UserProfileRowResponse>> {
-    const cachedResult = await cacheService.get<Page<UserProfileRowResponse>>({ object: queryParams });
+    const cachedKey = RedisKeys.usersPage.genKey(queryParams);
+    const cachedResult = await cacheService.get<Page<UserProfileRowResponse>>({ key: cachedKey });
     if (cachedResult) {
+      logger.debug('[Cache hit:UserService] Returning cached user page');
       return cachedResult;
     }
+    logger.debug('[Cache miss:UserService] Returning cached user page');
     const skip = (queryParams.page - 1) * queryParams.size;
     const take = queryParams.size;
     const { search } = queryParams;
@@ -78,7 +84,7 @@ class UserService {
       pagination: queryParams,
     });
 
-    await cacheService.set({ object: queryParams, value: userPage, ttlSeconds: 60 }); // Cache for 60 seconds
+    await cacheService.set({ key: cachedKey, value: userPage, ttlSeconds: 60 }); // Cache for 60 seconds
 
     return userPage;
   }
@@ -94,6 +100,26 @@ class UserService {
     const user = await userRepo.createUserProfile(schema, userRecord.uid);
 
     const userProfileResponse = UserMapper.toUserProfileResponse(user, null);
+    return userProfileResponse;
+  }
+
+  async updateUserProfile(
+    id: string,
+    data: UpdateUserProfileRequest,
+    currentUserRole: Role,
+  ): Promise<UserProfileResponse> {
+    const user = await userRepo.getUserById(id);
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    const isPermitted = PERMISSION_SCORE[currentUserRole] >= PERMISSION_SCORE[user.role];
+    if (!isPermitted) {
+      throw new PermissionDeniedError('You do not have permission to update this user');
+    }
+
+    const updatedUser = await userRepo.updateUserProfile(id, data);
+    const userProfileResponse = UserMapper.toUserProfileResponse(updatedUser, null);
     return userProfileResponse;
   }
 

@@ -5,7 +5,7 @@ export const updateUserProfileRequestSchema = z.object({
   username: z.string().min(3).max(30).nullable(),
   email: z.email(),
   status: z.enum(Object.values(Status)).default(Status.ACTIVE).nonoptional(),
-  password: z.string().min(6).max(10),
+  // password: z.string().min(6).max(10),
   role: z.enum(Object.values(Role)).default(Role.USER).nonoptional(),
 
   profile: z.object({
@@ -14,4 +14,11 @@ export const updateUserProfileRequestSchema = z.object({
   }),
 });
 
+const a = updateUserProfileRequestSchema.pick({
+  username: true,
+  email: true,
+  status: true,
+  role: true,
+  profile: true,
+});
 export type UpdateUserProfileRequest = z.infer<typeof updateUserProfileRequestSchema>;

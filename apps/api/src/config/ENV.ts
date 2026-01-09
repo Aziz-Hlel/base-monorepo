@@ -3,34 +3,32 @@ import z from 'zod';
 
 dotenv.config();
 
-const envSchema = z
-  .object({
-    DATABASE_URL: z.url(),
-    PORT: z.coerce.number(),
-    NODE_ENV: z.enum(['dev', 'stage', 'production', 'test']).default('dev'),
-    FIREBASE_CERT: z.string(),
-    REDIS_PORT: z.coerce.number(),
-    REDIS_PASSWORD: z.string(),
-    REDIS_HOST: z.enum(['localhost', 'redis']),
-    ALLOWED_ORIGIN_PATTERNS: z.string().optional(),
-  })
+const baseSchema = z.object({
+  DATABASE_URL: z.url(),
+  PORT: z.coerce.number().positive(),
+  FIREBASE_CERT: z.string().min(1),
+  REDIS_PORT: z.coerce.number().positive(),
+  REDIS_PASSWORD: z.string().min(1),
+  REDIS_HOST: z.enum(['localhost', 'redis']),
+  ALLOWED_ORIGIN_PATTERNS: z.string({ error: 'ALLOWED_ORIGIN_PATTERNS is required in non production environment' }),
+});
+
+const envSchema2 = z
+  .discriminatedUnion('NODE_ENV', [
+    baseSchema.extend({
+      NODE_ENV: z.enum(['production', 'stage']),
+    }),
+    baseSchema.extend({
+      NODE_ENV: z.enum(['dev', 'test']),
+      MINIO_Region: z.string(),
+      MINIO_ROOT_USER: z.string(),
+      MINIO_ROOT_PASSWORD: z.string(),
+      MINIO_BUCKET: z.string(),
+      MINIO_PORT: z.coerce.number(),
+    }),
+  ])
   .refine(
     (data) => {
-      if (data.NODE_ENV === 'dev' && !data.ALLOWED_ORIGIN_PATTERNS) return false;
-      return true;
-    },
-    { error: 'ALLOWED_ORIGIN_PATTERNS is required in dev environment' },
-  )
-  .refine(
-    (data) => {
-      if (['stage', 'production'].includes(data.NODE_ENV) && data.ALLOWED_ORIGIN_PATTERNS) return false;
-      return true;
-    },
-    { error: 'ALLOWED_ORIGIN_PATTERNS is not allowed in stage and production environments' },
-  )
-  .refine(
-    (data) => {
-      if (!data.ALLOWED_ORIGIN_PATTERNS) return true;
       try {
         new RegExp(data.ALLOWED_ORIGIN_PATTERNS);
         return true;
@@ -41,7 +39,7 @@ const envSchema = z
     { error: 'ALLOWED_ORIGIN_PATTERNS is invalid' },
   );
 
-const validatedEnv = envSchema.safeParse(process.env);
+const validatedEnv = envSchema2.safeParse(process.env);
 if (!validatedEnv.success) {
   console.error('❌ ERROR : Zod validation failed');
   throw new Error(validatedEnv.error.message);
