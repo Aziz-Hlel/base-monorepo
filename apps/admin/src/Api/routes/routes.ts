@@ -22,6 +22,12 @@ const apiRoutes = {
     disableUser: (id: string) => `/users/${id}/disable/` as const,
     enableUser: (id: string) => `/users/${id}/enable/` as const,
   },
+  products: {
+    getProducts: () => '/products' as const,
+    createProduct: () => '/products/' as const,
+    updateProduct: (id: string) => `/products/${id}` as const,
+    deleteProduct: (id: string) => `/products/${id}` as const,
+  },
 
   services: {
     emailContactUs: () => '/services/email/contact-us' as const,

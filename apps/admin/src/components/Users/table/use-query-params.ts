@@ -1,42 +1,6 @@
-import z from 'zod';
-import { sortableColumnKeys } from './tableDeclarations/typesAndFieldsDeclaration';
 import { useSearchParams } from 'react-router-dom';
 import { useMemo } from 'react';
-import { Role, Status } from '@contracts/types/enums/enums';
-
-const csvEnumArray = <T extends string[]>(values: T) =>
-  z
-    .string()
-    .transform((value) =>
-      value
-        .split(',')
-        .map((v) => v.trim())
-        .filter(Boolean),
-    )
-    .pipe(z.array(z.enum(values)));
-
-const queryParamsSchema = z.object({
-  page: z.coerce.number().int().positive().catch(1),
-  size: z.coerce.number().int().min(5).max(50).catch(10),
-  sort: z.enum(sortableColumnKeys).catch('createdAt'),
-  order: z.enum(['asc', 'desc']).catch('desc'),
-  search: z.string().catch(''),
-  // Filters
-  role: csvEnumArray(Object.values(Role)).catch([]),
-  status: csvEnumArray(Object.values(Status)).catch([]),
-});
-export type TableQueryParams = z.infer<typeof queryParamsSchema>;
-export type RequiredTableQueryParams = TableQueryParams;
-
-export const defaultQuery: RequiredTableQueryParams = {
-  page: 1,
-  size: 10,
-  sort: 'createdAt',
-  order: 'desc',
-  search: '',
-  role: [],
-  status: [],
-};
+import { queryParamsSchema } from '@contracts/schemas/user/UserPageQuery';
 
 const useQueryParams = () => {
   const [searchParams] = useSearchParams();

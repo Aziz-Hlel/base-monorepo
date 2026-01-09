@@ -32,7 +32,7 @@ const csvEnumArray = <T extends string[]>(values: T) =>
     )
     .pipe(z.array(z.enum(values)));
 
-export const queryParamsSchema = z.object({
+export const productsQueryParamsSchema = z.object({
   page: z.coerce.number().int().positive().catch(1),
   size: z.coerce.number().int().min(5).max(50).catch(10),
   sort: z.enum(sortableColumnKeys).catch('createdAt'),
@@ -41,10 +41,10 @@ export const queryParamsSchema = z.object({
   // Filters
   status: csvEnumArray(Object.values(ProductStatus)).catch([]),
 });
-export type TableQueryParams = z.infer<typeof queryParamsSchema>;
+export type TableQueryParams = z.infer<typeof productsQueryParamsSchema>;
 export type RequiredTableQueryParams = TableQueryParams;
 
-export const defaultQuery: RequiredTableQueryParams = {
+export const productDefaultQuery: RequiredTableQueryParams = {
   page: 1,
   size: 10,
   sort: 'updatedAt',
@@ -53,4 +53,4 @@ export const defaultQuery: RequiredTableQueryParams = {
   status: [],
 };
 
-export type ProductPageQuery = z.infer<typeof queryParamsSchema>;
+export type ProductPageQuery = z.infer<typeof productsQueryParamsSchema>;

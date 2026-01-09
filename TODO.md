@@ -5,3 +5,9 @@
 -- the disable and enable a bit sloppy , just make sure the user will be disabled afterwards and can login as well if he already logged and have a valid access token
 
 -- you removed the true of check revoked token from the verify token of firebase since it delay so much every single request, which means the disabled and deleted user can technically still use their accounts if they are already logged in till the access token expired meaning one hour tops , what you should od is add a notice in the disable and delete and say this action may take up to one hour to take full effect, then you can add a black list hash in redis to store disabled and deleted accounts id for that hour and reject all tokens coming from them within that hour where some tokens might be still valid if the user were logged in when the disabling or deleting operation happened
+
+-- add proper redis invalidation
+
+-- Add email service l8ter on by default
+
+-- Notification system and can sends a message to all users/ based on role/status

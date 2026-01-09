@@ -6,7 +6,7 @@ export const createProductRequestSchema = z.object({
   description: z.string().trim().min(1).max(5000),
   price: z.number().min(0),
   thumbnailId: z.uuid(),
-  status: z.enum(ProductStatus).default(ProductStatus.AVAILABLE),
+  status: z.enum(ProductStatus).default(ProductStatus.AVAILABLE).nonoptional(),
 });
 
 export type CreateProductRequest = z.infer<typeof createProductRequestSchema>;

@@ -12,6 +12,8 @@ import { Toaster } from 'sonner';
 import Sidebar from './pages/Sidebar';
 import { UserSessionProvider } from './context/UserContext';
 import UserPage from './pages/User';
+import ProductPage from './pages/Products';
+import { ThemeProvider } from './utils/theme-provider';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,36 +30,39 @@ function App() {
   const dir: 'rtl' | 'ltr' = 'ltr';
 
   return (
-    <div dir={dir}>
-      <Toaster />
-      <QueryClientProvider client={queryClient}>
-        <NetworkStatusGuard>
-          {/* <SidebarProvider> */}
-          <Router>
-            <AuthProvider>
-              <Routes>
-                <Route path="/signin" element={<SignIn />} />
-                <Route path="/signup" element={<SignUp />} />
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <div dir={dir}>
+        <Toaster />
+        <QueryClientProvider client={queryClient}>
+          <NetworkStatusGuard>
+            {/* <SidebarProvider> */}
+            <Router>
+              <AuthProvider>
+                <Routes>
+                  <Route path="/signin" element={<SignIn />} />
+                  <Route path="/signup" element={<SignUp />} />
 
-                <Route element={<AuthenticatedRoutes />}>
-                  <Route element={<UserSessionProvider />}>
-                    <Route element={<Sidebar dir={dir} />}>
-                      <Route path="/" element={<Home />} />
-                      <Route index path="/profile" element={<Profile />} />
+                  <Route element={<AuthenticatedRoutes />}>
+                    <Route element={<UserSessionProvider />}>
+                      <Route element={<Sidebar dir={dir} />}>
+                        <Route path="/" element={<Home />} />
+                        <Route index path="/profile" element={<Profile />} />
 
-                      <Route path="users/" element={<UserPage />}></Route>
+                        <Route path="users/" element={<UserPage />}></Route>
+                        <Route path="products/" element={<ProductPage />}></Route>
+                      </Route>
                     </Route>
                   </Route>
-                </Route>
 
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </AuthProvider>
-          </Router>
-          {/* </SidebarProvider> */}
-        </NetworkStatusGuard>
-      </QueryClientProvider>
-    </div>
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </AuthProvider>
+            </Router>
+            {/* </SidebarProvider> */}
+          </NetworkStatusGuard>
+        </QueryClientProvider>
+      </div>
+    </ThemeProvider>
   );
 }
 

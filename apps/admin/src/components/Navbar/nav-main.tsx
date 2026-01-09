@@ -1,4 +1,4 @@
-import { ChevronRight, LayoutDashboard, Settings2, UsersRound } from 'lucide-react';
+import { ChevronRight, LayoutDashboard, Settings2, UsersRound, Package } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   SidebarGroup,
@@ -46,6 +46,12 @@ const navRoutes: NavRoute[] = [
     title: 'Users',
     url: '/users',
     icon: UsersRound,
+    isActive: true,
+  },
+  {
+    title: 'Products',
+    url: '/products',
+    icon: Package,
     isActive: true,
   },
   {

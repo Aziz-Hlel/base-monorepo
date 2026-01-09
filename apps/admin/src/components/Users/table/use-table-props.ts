@@ -8,10 +8,11 @@ import type {
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { columnFiltersKeys } from './tableDeclarations/typesAndFieldsDeclaration';
-import useQueryParams, { type RequiredTableQueryParams, defaultQuery } from './use-query-params';
+import useQueryParams from './use-query-params';
+import { usersDefaultQuery, type UsersRequiredTableQueryParams } from '@contracts/schemas/user/UserPageQuery';
 
-const setParamIfNotDefault = (params: URLSearchParams, key: keyof RequiredTableQueryParams, value: string) => {
-  const defaultValue = defaultQuery[key];
+const setParamIfNotDefault = (params: URLSearchParams, key: keyof UsersRequiredTableQueryParams, value: string) => {
+  const defaultValue = usersDefaultQuery[key];
   if (String(defaultValue) !== value) {
     params.set(key, value);
   } else {
@@ -65,7 +66,7 @@ const useTableProps = () => {
   const columnFilters = useMemo(() => {
     const columnFilters = [];
     for (const columnFilter of columnFiltersKeys) {
-      const filterValue = queryParams[columnFilter as keyof RequiredTableQueryParams];
+      const filterValue = queryParams[columnFilter as keyof UsersRequiredTableQueryParams];
 
       const isEmptyString = typeof filterValue === 'string' && filterValue.trim() === '';
       const isEmptyArray = Array.isArray(filterValue) && filterValue.length === 0;

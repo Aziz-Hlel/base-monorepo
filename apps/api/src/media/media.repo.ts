@@ -89,6 +89,16 @@ class MediaRepo {
         logger.error(`Updated Media with id ${newMediaId} not found`);
         return oldMediaId;
       }
+      const isNewMediaPending = newMedia.status === MediaStatus.PENDING;
+      if (!isNewMediaPending) {
+        logger.fatal(`Try to switch Media ids but the new Media with id ${newMediaId} is not in PENDING status`);
+        return oldMediaId;
+      }
+      const hasNewMediaExceedOneHour = newMedia.createdAt.getTime() + 60 * 60 * 1000 < Date.now();
+      if (hasNewMediaExceedOneHour) {
+        logger.fatal(`Try to switch Media ids but the new Media with id ${newMediaId} exceed 1 hour since creation`);
+        return oldMediaId;
+      }
       if (oldMediaId) {
         const oldMedia = await tx.media.findUnique({
           where: {

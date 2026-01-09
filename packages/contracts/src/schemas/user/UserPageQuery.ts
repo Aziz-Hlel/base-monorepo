@@ -48,9 +48,9 @@ export const queryParamsSchema = z.object({
   status: csvEnumArray(Object.values(Status)).catch([]),
 });
 export type TableQueryParams = z.infer<typeof queryParamsSchema>;
-export type RequiredTableQueryParams = TableQueryParams;
+export type UsersRequiredTableQueryParams = TableQueryParams;
 
-export const defaultQuery: RequiredTableQueryParams = {
+export const usersDefaultQuery: UsersRequiredTableQueryParams = {
   page: 1,
   size: 10,
   sort: 'createdAt',

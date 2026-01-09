@@ -1,0 +1,12 @@
+
+@baseUrl = http://localhost:5000/api
+
+
+
+
+
+
+### 
+# @name get-products
+GET {{baseUrl}}/products?status=AVAILABLE,DISCONTINUED&size=50
+Content-Type: application/json
