@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { asyncHandler } from '../../core/async-handler';
 import { rootController } from '../controller/root.controller';
-import { authHandler } from '../../middleware/authHandler.middleware';
+import { requireAuth } from '../../middleware/requireAuth.middleware';
 
 const router = Router();
 
@@ -11,7 +11,7 @@ router.get(
 );
 router.get(
   '/healthz',
-  authHandler,
+  requireAuth,
   asyncHandler((req, res) => rootController.getHealthz(req, res)),
 );
 

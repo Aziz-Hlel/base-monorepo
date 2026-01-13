@@ -8,7 +8,7 @@ export interface INavbarHeader {
 }
 
 const navbarHeader: INavbarHeader = {
-  name: 'CodeNinja',
+  name: 'Acme Corp',
   logo: GalleryVerticalEnd,
   plan: 'Enterprise',
 };

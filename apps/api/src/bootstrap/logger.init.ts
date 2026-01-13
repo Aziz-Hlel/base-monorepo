@@ -1,12 +1,15 @@
-import ENV from '@/config/ENV';
 import pino from 'pino';
 
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
+const isInProductionMode = NODE_ENV === 'production';
+
 export const logger = pino({
-  level: ENV.NODE_ENV === 'production' ? 'info' : 'debug',
+  level: isInProductionMode ? 'info' : 'debug',
   timestamp: pino.stdTimeFunctions.isoTime,
   base: { pid: false }, // optional: remove pid from logs if you like
   transport:
-    ENV.NODE_ENV !== 'production'
+    NODE_ENV !== 'production'
       ? {
           target: 'pino-pretty',
           options: { colorize: true, translateTime: 'SYS:standard', ignore: 'pid,hostname' },
@@ -15,7 +18,7 @@ export const logger = pino({
 });
 
 export const httpLogger = pino({
-  level: ENV.NODE_ENV === 'production' ? 'info' : 'debug',
+  level: isInProductionMode ? 'info' : 'debug',
   timestamp: pino.stdTimeFunctions.isoTime,
   base: { pid: false }, // optional: remove pid from logs if you like
   redact: {
@@ -28,17 +31,16 @@ export const httpLogger = pino({
     },
     paths: ['req.authorization', 'req.headers.cookie', 'req.body.password'],
   },
-  transport:
-    ENV.NODE_ENV !== 'production'
-      ? {
-          target: 'pino-pretty',
-          options: {
-            colorize: true,
-            translateTime: 'SYS:standard',
-            ignore: 'pid,hostname',
-            singleLine: true,
-            messageFormat: '{msg}',
-          },
-        }
-      : undefined,
+  transport: !isInProductionMode
+    ? {
+        target: 'pino-pretty',
+        options: {
+          colorize: true,
+          translateTime: 'SYS:standard',
+          ignore: 'pid,hostname',
+          singleLine: true,
+          messageFormat: '{msg}',
+        },
+      }
+    : undefined,
 });

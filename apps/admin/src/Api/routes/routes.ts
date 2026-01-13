@@ -34,9 +34,11 @@ const apiRoutes = {
     emailProperty: () => '/services/email/property' as const,
   },
 
-  images: () => ENV.BASE_URL + '/images/',
+  media: {
+    presignedUrl: () => '/media/presigned-url' as const,
+  },
 
-  getSignedUrl: () => ENV.BASE_URL + '/images/getSignedUrl',
+  images: () => ENV.BASE_URL + '/images/',
 };
 
 export default apiRoutes;

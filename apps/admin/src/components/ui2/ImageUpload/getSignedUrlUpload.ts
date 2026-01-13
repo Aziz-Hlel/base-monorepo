@@ -1,74 +1,57 @@
-import mediaService from '@/Api/services/media.service';
-import type { EntityType } from '@/types/enums/EntityType';
-import type { MediaPurpose } from '@/types/enums/MediaPurpose';
-import type { IMimeType } from '@/types/media/IMimeType';
+import { mediaService } from '@/Api/service/mediaService';
+import type { IMimeType } from '@contracts/schemas/media/IMimeType';
 
 import axios from 'axios';
+import { toast } from 'sonner';
 
-export const getSignedUrlUpload = async ({
-  fileName,
-  mimeType,
-  fileType,
-  entityType,
-  fileSize,
-  purpose,
-}: {
+type getSignedUrlUploadParams = {
   fileName: string;
   mimeType: string;
   fileType: IMimeType;
-  entityType: EntityType;
   fileSize: number;
-  purpose: MediaPurpose;
-}) => {
+};
+
+export const getSignedUrlUpload = async ({ fileName, mimeType, fileType, fileSize }: getSignedUrlUploadParams) => {
   const response = await mediaService.presignedUrl({
     mimeType: mimeType,
     fileSize,
-    fileType: fileType as IMimeType,
-    originalName: fileName,
-    entityType,
-    mediaPurpose: purpose,
+    fileType: fileType,
+    name: fileName,
   });
 
   if (!response.success) {
     throw new Error();
   }
-
+  console.log('response data : ', response.data);
   return response.data;
 };
 
-export const uploadImageToS3_SIMULATOR = async ({
+export const uploadImage = async ({
   uploadedImg,
   name,
-  purpose,
-  entityType,
   setProgress,
 }: {
   uploadedImg: Blob;
   name: string;
-  entityType: EntityType;
-  purpose: MediaPurpose;
   setProgress: Function;
 }) => {
   const { type: mimeType, size } = uploadedImg;
 
   const [_, subtype] = mimeType.split('/');
 
-  const { url, s3Key } = await getSignedUrlUpload({
+  const { url, key, id } = await getSignedUrlUpload({
     fileName: name,
     mimeType,
     fileType: subtype as IMimeType,
-    entityType,
     fileSize: size,
-    purpose,
   });
+  console.log('response : ', { url, key, id });
 
   // const response = await Http.put(url, uploadedImg);
 
   try {
     await axios.put(url, uploadedImg, {
-      headers: {
-        'Content-Type': uploadedImg.type,
-      },
+      headers: { 'Content-Type': uploadedImg.type },
       onUploadProgress: (event) => {
         const percent = Math.round((event.loaded * 100) / (event.total || 1));
         setProgress(percent);
@@ -78,11 +61,15 @@ export const uploadImageToS3_SIMULATOR = async ({
     setProgress(100);
     setTimeout(() => setProgress(null), 500); // Reset after complete
   } catch (err) {
-    console.error('Upload failed', err);
     setProgress(null);
+    toast.error('Image upload failed. Please try again.');
   } finally {
     // setUploading(false);
   }
 
-  return s3Key;
+  return {
+    id,
+    key,
+    url,
+  };
 };

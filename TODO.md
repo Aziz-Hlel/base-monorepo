@@ -12,4 +12,6 @@
 
 -- Notification system and can sends a message to all users/ based on role/status
 
--- keep the types in typesAndFieldsDeclaration file , but instead of actually defining them there , define them in the shared folder and just import them from typesAndFieldsDeclaration so that you all the table component would use those types without losing the import advantages since if you import directly from the shared folder , you ll need to change the importation in a lost of files when you copy the whole folder for anotehr entity, besides you ll be able to use those types in the backend too
+-- keep the types in typesAndFieldsDeclaration file , but instead of actually defining them there , define them in the shared folder and just import them from typesAndFieldsDeclaration so that you all the table component would use those types without losing the import advantages since if you import directly from the shared folder , you ll need to change the importation in a lost of files when you copy the whole folder for another entity, besides you ll be able to use those types in the backend too
+
+-- you can add a user id a Fk to the media table as an extra security measures

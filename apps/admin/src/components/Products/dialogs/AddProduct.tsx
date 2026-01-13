@@ -23,7 +23,9 @@ import { ProductStatus } from '@contracts/types/enums/enums';
 import productService from '@/Api/service/productService';
 import { Textarea } from '@/components/ui/textarea';
 import ProductTextMapping from '@/EnumTextMapping/ProductTextMapping';
-import SelectForm from '@/components/ui2/SelectForm';
+import SelectForm from '@/components/ui2/SelectForm/SelectForm';
+import ImageUpload from '@/components/ui2/ImageUpload/comp/ImageUpload';
+import InputNumberForm from '@/components/ui2/InputNumberForm';
 
 const AddProduct = () => {
   const { handleCancel, openDialog } = useSelectedRow();
@@ -42,7 +44,7 @@ const AddProduct = () => {
   const defaultValues: CreateProductRequest = {
     name: '',
     description: '',
-    price: 0,
+    price: undefined as any,
     thumbnailId: '',
     status: ProductStatus.AVAILABLE,
   };
@@ -77,72 +79,88 @@ const AddProduct = () => {
   const dialogIsOpen = openDialog === 'add';
 
   console.log('form :', form.getValues());
+
+  const thumbnailErrors = [form.formState.errors.thumbnailId?.message];
+  const clearMediaErrors = () => {
+    form.clearErrors('thumbnailId');
+  };
+
+  const handleThumbnailUpload = (newMediaId: string | null) => {
+    form.setValue(
+      'thumbnailId',
+      newMediaId ?? '',
+      newMediaId ? { shouldDirty: true, shouldValidate: true } : undefined,
+    );
+  };
   return (
     <Dialog onOpenChange={onOpenChange} open={dialogIsOpen}>
-      <DialogContent className="sm:max-w-106.25">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <DialogContent className="sm:max-w-106.25 h-[calc(100vh-4rem)] flex flex-col overflow-hidden ">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex flex-col h-full">
           <DialogHeader>
             <DialogTitle>Create Product</DialogTitle>
             <DialogDescription>Fill the form below to create a new product.</DialogDescription>
           </DialogHeader>
-          <FieldGroup>
-            <Controller
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={`name-input`}>Name</FieldLabel>
-                  <Input {...field} id={`name-input`} aria-invalid={fieldState.invalid} placeholder="Name" />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
+          <div className=" flex-1 min-h-0 overflow-y-auto pr-2">
+            <FieldGroup>
+              <Controller
+                name="name"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={`name-input`}>Name</FieldLabel>
+                    <Input {...field} id={`name-input`} aria-invalid={fieldState.invalid} placeholder="Name" />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
 
-            <Controller
-              name="description"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={`description-input`}>Description</FieldLabel>
-                  <Textarea
-                    {...field}
-                    id={`description-input`}
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Description"
-                  />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
+              <Controller
+                name="description"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={`description-input`}>Description</FieldLabel>
+                    <Textarea
+                      {...field}
+                      id={`description-input`}
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Description"
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="price"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="flex">
+                    <FieldLabel htmlFor={`price-input`}>Price</FieldLabel>
+                    <InputNumberForm field={field} emptyInitially />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
 
-            <Controller
-              name="status"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className="flex">
-                  <FieldLabel htmlFor={`status-input`}>Status</FieldLabel>
-                  <SelectForm field={field} options={ProductTextMapping} placeholder="Select status" label="Status" />
-                </Field>
-              )}
-            />
+              <Controller
+                name="status"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="flex">
+                    <FieldLabel htmlFor={`status-input`}>Status</FieldLabel>
+                    <SelectForm field={field} options={ProductTextMapping} placeholder="Select status" label="Status" />
+                  </Field>
+                )}
+              />
 
-            <Controller
-              name="thumbnailId"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={`description-input`}>Description</FieldLabel>
-                  <Textarea
-                    {...field}
-                    id={`description-input`}
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Description"
-                  />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
-          </FieldGroup>
+              <ImageUpload
+                initMedia={null}
+                mediaErrors={thumbnailErrors}
+                clearMediaErrors={clearMediaErrors}
+                handleMediaUpload={handleThumbnailUpload}
+              />
+            </FieldGroup>
+          </div>
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline" onClick={handleCancel}>

@@ -3,7 +3,7 @@ import { DecodedIdTokenWithClaims } from '../types/auth/DecodedIdTokenWithClaims
 import { firebaseAuthService } from '../firebase/service/firebase.auth.service';
 import { AuthenticatedRequest } from '../types/auth/AuthenticatedRequest';
 
-export const authHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = (req.headers as { authorization?: string }).authorization;
 

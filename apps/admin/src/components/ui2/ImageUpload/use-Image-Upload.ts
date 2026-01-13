@@ -1,43 +1,28 @@
 import { useMemo, useState } from 'react';
 import type { Area, Point } from 'react-easy-crop';
-import { useFormContext, type FieldValues, type UseFormClearErrors } from 'react-hook-form';
 import { toast } from 'sonner';
-import type { EntityType } from '@/types/enums/EntityType';
-import type { MediaPurpose } from '@/types/enums/MediaPurpose';
 import getCroppedImg from './cropImg.func';
 import prepareImageForUpload from './prepareImageForUpload';
-import { uploadImageToS3_SIMULATOR } from './getSignedUrlUpload';
+import { uploadImage as uploadImage } from './getSignedUrlUpload';
 
 type IUseImageUpload = {
-  imgUrlFieldName: string;
-  imgKeyFieldName: string;
-  rootFieldName: string;
-  entityType: EntityType;
-  imgPurpose: MediaPurpose;
-  clearErrors: UseFormClearErrors<FieldValues>;
+  media: { id: string; url: string; key: string } | null;
+  handleMediaUpload: (newMediaId: string | null) => void;
+  clearErrors: () => void;
 };
 
-const useImageUpload = ({
-  imgUrlFieldName,
-  imgKeyFieldName,
-  rootFieldName,
-  entityType,
-  imgPurpose,
-  clearErrors,
-}: IUseImageUpload) => {
-  const { setValue, getValues } = useFormContext();
+const useImageUpload = ({ media, handleMediaUpload, clearErrors }: IUseImageUpload) => {
+  const [mediaObject, setMediaObject] = useState<{ id: string | null; url: string | null; key: string | null }>(
+    media ?? { id: null, url: null, key: null },
+  );
 
-  const currentImgUrl = getValues(imgUrlFieldName) as string | undefined;
-  const currentImgKey = getValues(imgKeyFieldName) as string | undefined;
-
-  const initImg = useMemo(() => currentImgUrl, []);
-  const setImageUrl = (img?: string) => setValue(imgUrlFieldName, img);
-  const setImageKey = (imgKey?: string) => setValue(imgKeyFieldName, imgKey);
+  const initMedia = useMemo(() => media ?? { id: null, url: null, key: null }, [media]);
+  const setImageUrl = (img?: string) => img && setMediaObject((prev) => ({ ...prev, url: img || '' }));
 
   const [file, setFile] = useState<File | null>(null);
   const onFileChange = (value: File | null) => {
     setFile(value);
-    clearErrors([imgKeyFieldName, imgUrlFieldName, rootFieldName]);
+    clearErrors();
   };
 
   const [zoom, setZoom] = useState(1);
@@ -49,9 +34,9 @@ const useImageUpload = ({
   const currentDisplayed: 'fileUpload' | 'copper' | 'loading' | 'imgDisplayed' = useMemo(() => {
     if (progress > 0 && progress < 100) return 'loading';
     if (file) return 'copper';
-    if (currentImgUrl) return 'imgDisplayed';
+    if (mediaObject.url) return 'imgDisplayed';
     return 'fileUpload';
-  }, [file, currentImgUrl, progress]);
+  }, [file, mediaObject, progress]);
 
   const onZoomChange = (zoom: number) => setZoom(zoom);
   const onCropChange = (point: Point) => setCrop(point);
@@ -59,11 +44,12 @@ const useImageUpload = ({
 
   const handleCancel = () => setFile(null);
 
-  const rollBackToInitImage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
+  const rollBackToInitImage = (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e?.preventDefault();
     setFile(null);
-    setImageUrl(initImg);
-    setImageKey(currentImgKey);
+    setMediaObject(initMedia);
+    setProgress(0);
+    handleMediaUpload(initMedia.id);
   };
 
   const Crop_OptimizeImage = async () => {
@@ -83,35 +69,34 @@ const useImageUpload = ({
       setProgress(10);
       setFile(null);
 
-      const s3Key = await uploadImageToS3_SIMULATOR({
+      const { id, key, url } = await uploadImage({
         uploadedImg: optimizedImg.blob,
         name: fileName,
-        entityType: entityType,
-        purpose: imgPurpose,
         setProgress: (progress: any) => {
           setProgress(progress);
         },
       });
 
       setImageUrl(URL.createObjectURL(croppedImage));
-      setImageKey(s3Key);
-      clearErrors([imgKeyFieldName, imgUrlFieldName, rootFieldName]);
+      handleMediaUpload(id);
+      clearErrors();
     } catch (e) {
       console.error(e);
       toast('Something Went Wrong', {
         description: 'Unable to upload image, if the issue persists please contact support',
         action: {
           label: 'Ok',
-          onClick: () => '',
+          onClick: () => {},
         },
       });
+      rollBackToInitImage();
     }
   };
 
   return {
     file,
     progress,
-    img: currentImgUrl,
+    img: mediaObject.url,
     crop,
     zoom,
     currentDisplayed,

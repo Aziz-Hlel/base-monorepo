@@ -4,3 +4,5 @@ export const ENTITY_TYPE = {
 } as const;
 
 export type EntityType = keyof typeof ENTITY_TYPE;
+
+//! to be removed if not used anywhere else

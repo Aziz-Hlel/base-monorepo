@@ -2,7 +2,7 @@ import { Router, Response } from 'express';
 import { userController } from '../Controller/user.controller';
 import { asyncHandler } from '../../core/async-handler';
 import { AuthenticatedRequest } from '../../types/auth/AuthenticatedRequest';
-import { authHandler } from '@/middleware/authHandler.middleware';
+import { requireAuth } from '@/middleware/requireAuth.middleware';
 import { Role } from '@/generated/prisma/enums';
 import requireRole from '@/middleware/requireRole.middleware';
 
@@ -10,37 +10,37 @@ const router = Router();
 
 router.post(
   '/',
-  authHandler,
+  requireAuth,
   requireRole(Role.ADMIN),
   asyncHandler((req: AuthenticatedRequest, res: Response) => userController.createUserProfile(req, res)),
 );
 router.get(
   '/',
-  authHandler,
+  requireAuth,
   requireRole(Role.ADMIN),
   asyncHandler((req: AuthenticatedRequest, res: Response) => userController.getUserPage(req, res)),
 );
 router.delete(
   '/:id',
-  authHandler,
+  requireAuth,
   requireRole(Role.ADMIN),
   asyncHandler((req: AuthenticatedRequest, res: Response) => userController.deleteUserProfile(req, res)),
 );
 router.post(
   '/:id/enable',
-  authHandler,
+  requireAuth,
   requireRole(Role.ADMIN),
   asyncHandler((req: AuthenticatedRequest, res: Response) => userController.enableUser(req, res)),
 );
 router.post(
   '/:id/disable',
-  authHandler,
+  requireAuth,
   requireRole(Role.ADMIN),
   asyncHandler((req: AuthenticatedRequest, res: Response) => userController.disableUser(req, res)),
 );
 router.put(
   '/:id',
-  authHandler,
+  requireAuth,
   requireRole(Role.ADMIN),
   asyncHandler((req: AuthenticatedRequest, res: Response) => userController.updateUserProfile(req, res)),
 );

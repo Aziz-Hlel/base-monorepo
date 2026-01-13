@@ -14,12 +14,12 @@ export class StorageService implements IStorageProvider {
     return this.storageProvider.getObjectUrl(fileKey);
   }
 
-  generateMediaKey(mediaName: string, entityType: EntityType): string {
+  generateMediaKey(mediaName: string): string {
     const ext = path.extname(mediaName);
     const baseName = path.basename(mediaName, ext);
     const safeBase = baseName.replace(/[^a-zA-Z0-9-_]/g, '').slice(0, 50);
     const timestamp = Date.now();
-    return `${entityType}/${safeBase}-${timestamp}${ext}`;
+    return `${safeBase}-${timestamp}${ext}`;
   }
 }
 

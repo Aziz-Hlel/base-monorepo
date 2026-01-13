@@ -1,5 +1,13 @@
 import type { ControllerRenderProps } from 'react-hook-form';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '../../ui/select';
 
 type SelectFormProps = {
   field: ControllerRenderProps<any, any>;

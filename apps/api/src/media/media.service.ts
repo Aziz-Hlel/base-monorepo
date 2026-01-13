@@ -6,11 +6,10 @@ import { MediaStatus } from '@/generated/prisma/enums';
 import { PresignedUrlResponse } from '@contracts/schemas/media/PresignedUrlResponse';
 import { Media } from '@/generated/prisma/client';
 import { MediaResponse } from '@contracts/schemas/media/MediaResponse';
-import { prisma } from '@/bootstrap/db.init';
 
 export class MediaService {
   async getPresignedUrl(schema: PresignedUrlRequest): Promise<PresignedUrlResponse> {
-    const mediaKey = storageService.generateMediaKey(schema.name, schema.entityType);
+    const mediaKey = storageService.generateMediaKey(schema.name);
     const { mimeType } = schema;
     const expiresIn = 3600;
 
@@ -31,7 +30,7 @@ export class MediaService {
 
   async deleteMediaByKey(mediaKey: string) {
     const media = await mediaRepo.findMediaByKey(mediaKey);
-    if (!media) throw new NotFoundError(`Media with s3Key ${mediaKey} not found`);
+    if (!media) throw new NotFoundError(`Media with key ${mediaKey} not found`);
 
     await mediaRepo.deleteMediaByKey(mediaKey);
   }
@@ -39,10 +38,10 @@ export class MediaService {
   async confirmMediaUploadByKey(mediaKey: string) {
     const media = await mediaRepo.findMediaByKey(mediaKey);
 
-    if (!media) throw new NotFoundError(`Media with s3Key ${mediaKey} not found`);
+    if (!media) throw new NotFoundError(`Media with key ${mediaKey} not found`);
 
     if (media.status !== MediaStatus.PENDING)
-      throw new Error(`try to CONFIRM Media with s3Key ${mediaKey} which is not in PENDING status`);
+      throw new Error(`try to CONFIRM Media with key ${mediaKey} which is not in PENDING status`);
 
     await mediaRepo.confirmMediaUploadByKey(mediaKey);
   }

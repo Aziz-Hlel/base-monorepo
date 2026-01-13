@@ -3,7 +3,7 @@ import { authController } from '../Controller/auth.controller';
 
 import { Request, Response } from 'express';
 import { asyncHandler } from '../../core/async-handler';
-import { authHandler } from '../../middleware/authHandler.middleware';
+import { requireAuth } from '../../middleware/requireAuth.middleware';
 
 const router = Router();
 
@@ -24,7 +24,7 @@ router.post(
 
 router.get(
   '/me',
-  authHandler,
+  requireAuth,
   asyncHandler((req: any, res: Response, next) => authController.me(req, res)),
 );
 
