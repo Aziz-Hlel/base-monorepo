@@ -4,9 +4,33 @@ import { logger } from '@/bootstrap/logger.init';
 import { firebaseSession } from '@/bootstrap/firebase.init';
 import { firebaseAuthService } from './firebase.auth.service';
 import { Role } from '@/generated/prisma/enums';
+import { SafeResponse } from '@/types/in/SafeResponse';
+import { BadRequestError } from '@/err/customErrors';
 
 class FirebaseUserService {
   private firebaseSession = firebaseSession;
+
+  async safeGetUserByEmail(email: string): Promise<SafeResponse<UserRecord, 'User not found'>> {
+    try {
+      const userRecord = await this.firebaseSession.getUserByEmail(email);
+      return {
+        success: true,
+        data: userRecord,
+      };
+    } catch (error: unknown) {
+      if (isFirebaseError(error) && error.code === 'auth/user-not-found') {
+        return {
+          success: false,
+          error: 'User not found' as const,
+        };
+      }
+      if (isFirebaseError(error)) {
+        handleFirebaseError(error);
+      }
+      logger.error(error, 'Unexpected safeGetUserByEmail error:');
+      throw error;
+    }
+  }
 
   async createUser({
     email,
@@ -20,6 +44,12 @@ class FirebaseUserService {
     role: Role;
   }): Promise<UserRecord> {
     try {
+      const userExists = await this.safeGetUserByEmail(email);
+      if (userExists.success) {
+        // ! not quite my tempo, this will return the existed user in the auth provider to continue the flow and create the user, better than throwing an erro but the password will still whatever it was set to before
+        return userExists.data;
+      }
+
       const userRecord = await this.firebaseSession.createUser({
         email,
         password,

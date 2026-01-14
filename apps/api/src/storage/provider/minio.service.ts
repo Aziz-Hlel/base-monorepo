@@ -12,7 +12,7 @@ export type IMinioConfig = {
 };
 
 export class MinioService implements IStorageProvider {
-  s3Client: S3Client;
+  client: S3Client;
   private MINIO_Region: string;
   private MINIO_PORT: number;
   private MINIO_BUCKET: string;
@@ -22,7 +22,7 @@ export class MinioService implements IStorageProvider {
     this.MINIO_PORT = MINIO_PORT;
     this.MINIO_BUCKET = MINIO_BUCKET;
 
-    this.s3Client = new S3Client({
+    this.client = new S3Client({
       region: this.MINIO_Region,
       endpoint: `http://localhost:${this.MINIO_PORT}/`,
       credentials: {
@@ -41,7 +41,7 @@ export class MinioService implements IStorageProvider {
       // ContentDisposition: 'attachment', // Security: prevent content-type switching
     });
 
-    const signedUrl = await getSignedUrl(this.s3Client, command, { expiresIn });
+    const signedUrl = await getSignedUrl(this.client, command, { expiresIn });
 
     return signedUrl;
   }

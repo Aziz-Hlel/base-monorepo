@@ -10,8 +10,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@contracts/*": ["../../packages/contracts/src/*"],
+      "@contracts/*": ["../../packages/contracts/src/*"]
     }
   },
-  "include": ["src/**/*","./index.ts", "../../packages/contracts/src/**/*"]
+  "include": ["src/**/*", "./index.ts", "../../packages/contracts/src/**/*"]
 }

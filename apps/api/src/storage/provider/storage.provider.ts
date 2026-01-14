@@ -8,7 +8,7 @@ export function createStorageProvider(): IStorageProvider {
     case 'dev':
     case 'test':
       return new MinioService({
-        MINIO_Region: ENV.MINIO_Region,
+        MINIO_Region: ENV.MINIO_REGION,
         MINIO_PORT: ENV.MINIO_PORT,
         MINIO_ROOT_USER: ENV.MINIO_ROOT_USER,
         MINIO_ROOT_PASSWORD: ENV.MINIO_ROOT_PASSWORD,

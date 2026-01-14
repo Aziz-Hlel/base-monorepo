@@ -1,7 +1,11 @@
 import z from 'zod';
 
 export const singInSchema = z.object({
-  email: z.email({ message: 'Invalid email' }).trim().toLowerCase().max(255, { message: 'Email is too long, max 255 characters' }),
+  email: z
+    .email({ message: 'Invalid email' })
+    .trim()
+    .toLowerCase()
+    .max(255, { message: 'Email is too long, max 255 characters' }),
   password: z
     .string({ error: 'Invalid password' })
     .trim()

@@ -4,6 +4,22 @@ import z from 'zod';
 
 dotenv.config();
 
+const test = {
+  size: 10,
+  page: 1,
+  x: [1, 2, 3],
+};
+
+const test2 = {
+  page: 1,
+  size: 10,
+  x: [3, 2, 1],
+};
+
+console.log(JSON.stringify(test) === JSON.stringify(test2));
+console.log(JSON.stringify(test));
+console.log(JSON.stringify(test2));
+
 const baseSchema = z.object({
   DATABASE_URL: z.url(),
   PORT: z.coerce.number().positive(),
@@ -21,7 +37,7 @@ const envSchema2 = z
     }),
     baseSchema.extend({
       NODE_ENV: z.enum(['dev', 'test']),
-      MINIO_Region: z.string(),
+      MINIO_REGION: z.string(),
       MINIO_ROOT_USER: z.string(),
       MINIO_ROOT_PASSWORD: z.string(),
       MINIO_BUCKET: z.string(),
