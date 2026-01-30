@@ -22,7 +22,6 @@ export const getSignedUrlUpload = async ({ fileName, mimeType, fileType, fileSiz
   if (!response.success) {
     throw new Error();
   }
-  console.log('response data : ', response.data);
   return response.data;
 };
 
@@ -45,7 +44,6 @@ export const uploadImage = async ({
     fileType: subtype as IMimeType,
     fileSize: size,
   });
-  console.log('response : ', { url, key, id });
 
   // const response = await Http.put(url, uploadedImg);
 

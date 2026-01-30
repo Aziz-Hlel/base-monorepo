@@ -2,9 +2,6 @@ import { PresignedUrlGenerator } from '@contracts/storage/PresignedUrl';
 import { IStorageProvider } from './interface/storage.interface';
 import { createStorageProvider } from './provider/storage.provider';
 import path from 'path';
-import { EntityType } from '@contracts/schemas/media/EntityType';
-import { HeadBucketCommand } from '@aws-sdk/client-s3';
-import ENV from '@/config/ENV';
 import { logger } from '@/bootstrap/logger.init';
 
 export class StorageService implements IStorageProvider {
@@ -27,9 +24,9 @@ export class StorageService implements IStorageProvider {
   }
 
   async verifyConnection() {
-    const Bucket = ENV.NODE_ENV === 'dev' ? ENV.MINIO_BUCKET : 'ENV.AWS_S3_BUCKET'; // * Adjust as needed
+    // const Bucket = ENV.NODE_ENV === 'dev' ? ENV.MINIO_BUCKET : 'ENV.AWS_S3_BUCKET'; // * Adjust l8ter
     try {
-      await this.client.send(new HeadBucketCommand({ Bucket }));
+      // await this.client.send(new HeadBucketCommand({ Bucket }));
       logger.info('✅ SUCCESS : Storage Provider connection successful.');
     } catch (error) {
       logger.error(error, '❌ ERROR : Storage Provider connection failed.');

@@ -61,6 +61,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
     }
 
     const user = await fetchCurrentUser();
+    if (!user) {
+      set({ status: 'unauthenticated' });
+      return;
+    }
     set({ status: 'authenticated', currentUser: user });
   },
 

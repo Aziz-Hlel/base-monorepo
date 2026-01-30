@@ -1,4 +1,4 @@
-import { CircleMinus, EllipsisVertical, Trash2, UserPen } from 'lucide-react';
+import { EllipsisVertical, Trash2, SquarePen } from 'lucide-react';
 
 import React, { Fragment } from 'react';
 import type { TableRowType } from '../tableDeclarations/typesAndFieldsDeclaration';
@@ -21,42 +21,27 @@ type RowAction = {
   key: 'edit' | 'delete' | 'disable' | 'enable';
   label: string;
   icon: React.ReactNode;
-  isVisible: boolean;
   isPermitted: boolean;
-  isDisabled: boolean;
   onClick: () => void;
   tooltipMessage?: string;
 };
 
 type RowActionState = {
-  isPermitted: boolean; // based on role
-  isDisabled: boolean; // based on status like DELETED / DISABLED
-  tooltipMessage?: string; // reason for disable
+  isPermitted: boolean;
+  tooltipMessage?: string;
 };
 
 const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
   const userRole = useUser().userRole;
   const { handleDialogChange, setCurrentRow } = useSelectedRow();
 
-  const canActOnUser = PERMISSION_SCORE[userRole] >= PERMISSION_SCORE[row.original.role];
-
-  const isDeleted = row.original.status === 'DELETED';
-  const isDisabled = row.original.status === 'DISABLED';
+  const canActOnUser = PERMISSION_SCORE[userRole] >= PERMISSION_SCORE.ADMIN;
 
   const getActionState = (actionKey: RowAction['key']): RowActionState => {
-    if (isDeleted) {
-      return {
-        isPermitted: false,
-        isDisabled: true,
-        tooltipMessage: `You cannot ${actionKey} a deleted user.`,
-      };
-    }
-
     const isPermitted = canActOnUser;
     return {
       isPermitted,
-      isDisabled: false,
-      tooltipMessage: isPermitted ? undefined : `You do not have permission to ${actionKey} this user.`,
+      tooltipMessage: isPermitted ? undefined : `You do not have permission to ${actionKey} this product.`,
     };
   };
 
@@ -64,7 +49,7 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
     {
       key: 'edit',
       label: 'Edit',
-      icon: <UserPen size={16} className="text-green-500" />,
+      icon: <SquarePen size={16} className="text-green-500" />,
       isVisible: true,
 
       onClick: () => {
@@ -72,26 +57,7 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
         handleDialogChange('edit');
       },
     },
-    {
-      key: 'disable',
-      label: 'Disable',
-      icon: <CircleMinus size={16} className="text-amber-500" />,
-      isVisible: !isDisabled,
-      onClick: () => {
-        setCurrentRow(row.original);
-        handleDialogChange('disable');
-      },
-    },
-    {
-      key: 'enable',
-      label: 'Enable',
-      icon: <CircleMinus size={16} className="text-blue-500" />,
-      isVisible: isDisabled,
-      onClick: () => {
-        setCurrentRow(row.original);
-        handleDialogChange('enable');
-      },
-    },
+
     {
       key: 'delete',
       label: 'Delete',
@@ -118,30 +84,28 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
-            {actions
-              .filter((action) => action.isVisible)
-              .map((action) => (
-                <Fragment key={action.key}>
-                  <DropdownMenuItem
-                    onClick={action.isPermitted ? action.onClick : undefined}
-                    className={!action.isPermitted ? 'cursor-not-allowed' : ''}
-                  >
-                    {action.isPermitted && !action.isDisabled ? (
-                      <span>{action.label}</span>
-                    ) : (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span className="opacity-50">{action.label}</span>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>{action.tooltipMessage}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    )}
-                    <DropdownMenuShortcut>{action.icon}</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                </Fragment>
-              ))}
+            {actions.map((action) => (
+              <Fragment key={action.key}>
+                <DropdownMenuItem
+                  onClick={action.isPermitted ? action.onClick : undefined}
+                  className={!action.isPermitted ? 'cursor-not-allowed' : ''}
+                >
+                  {action.isPermitted ? (
+                    <span>{action.label}</span>
+                  ) : (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="opacity-50">{action.label}</span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{action.tooltipMessage}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                  <DropdownMenuShortcut>{action.icon}</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </Fragment>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </RowContainer>

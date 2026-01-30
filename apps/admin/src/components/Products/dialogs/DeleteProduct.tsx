@@ -1,3 +1,4 @@
+import { useSelectedRow } from '../context/selected-row-provider';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -8,35 +9,33 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useSelectedRow } from '../context/selected-row-provider';
-import userService from '@/Api/service/userService';
 import { toast } from 'sonner';
-import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
+import productService from '@/Api/service/productService';
 
-const DisableUser = () => {
+const DeleteProduct = () => {
   const { handleCancel, openDialog, currentRow } = useSelectedRow();
   const queryClient = useQueryClient();
 
-  const { mutateAsync, isPending } = useMutation({
-    mutationKey: ['users', 'disable'],
-    mutationFn: userService.disableUser,
+  const { mutateAsync } = useMutation({
+    mutationKey: ['products', 'delete'],
+    mutationFn: productService.deleteProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'], exact: false });
-      toast.success('User disabled successfully');
+      queryClient.invalidateQueries({ queryKey: ['products'], exact: false });
+      toast.success('Product deleted successfully');
       handleCancel();
     },
   });
 
-  const disableUser = async () => {
+  const deleteProduct = async () => {
     try {
       await mutateAsync(currentRow?.id!);
     } catch (error) {
-      toast.error('Failed to disable user');
+      toast.error('Failed to delete product');
       handleCancel();
     }
   };
-  const dialogOpen = openDialog === 'disable';
+  const dialogOpen = openDialog === 'delete';
   return (
     <>
       <AlertDialog open={dialogOpen} onOpenChange={handleCancel}>
@@ -44,14 +43,14 @@ const DisableUser = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the user {currentRow?.username} and remove
-              their data from our servers.
+              This action cannot be undone. This will permanently delete the product "{currentRow?.name}" and remove its
+              data from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
-            <Button onClick={disableUser} className="bg-red-600 hover:bg-red-500 w-20" disabled={isPending}>
-              {!isPending ? <span>Disable</span> : <Spinner />}
+            <Button onClick={deleteProduct} className=" bg-red-600 hover:bg-red-500">
+              Delete
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -60,4 +59,4 @@ const DisableUser = () => {
   );
 };
 
-export default DisableUser;
+export default DeleteProduct;

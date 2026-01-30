@@ -44,7 +44,7 @@ const EditUser = () => {
   const { userRole: role } = useUser();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: ['users', 'create'],
+    mutationKey: ['users', 'update'],
     mutationFn: userService.updateUserProfile,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'], exact: false });
@@ -91,8 +91,8 @@ const EditUser = () => {
       <DialogContent className="sm:max-w-106.25">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <DialogHeader>
-            <DialogTitle className=" text-center">Create User</DialogTitle>
-            <DialogDescription className=" text-center">Fill the form below to create a new user.</DialogDescription>
+            <DialogTitle className=" text-center">Edit User</DialogTitle>
+            <DialogDescription className=" text-center">Fill the form below to edit the user.</DialogDescription>
             <Separator />
           </DialogHeader>
 

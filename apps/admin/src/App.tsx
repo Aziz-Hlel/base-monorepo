@@ -19,7 +19,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      retry: 1,
+      retry: 0,
       // staleTime: 0,
       // gcTime: 0,
     },
@@ -35,7 +35,6 @@ function App() {
         <Toaster />
         <QueryClientProvider client={queryClient}>
           <NetworkStatusGuard>
-            {/* <SidebarProvider> */}
             <Router>
               <AuthProvider>
                 <Routes>
@@ -47,7 +46,6 @@ function App() {
                       <Route element={<Sidebar dir={dir} />}>
                         <Route path="/" element={<Home />} />
                         <Route index path="/profile" element={<Profile />} />
-
                         <Route path="users/" element={<UserPage />}></Route>
                         <Route path="products/" element={<ProductPage />}></Route>
                       </Route>
@@ -58,7 +56,6 @@ function App() {
                 </Routes>
               </AuthProvider>
             </Router>
-            {/* </SidebarProvider> */}
           </NetworkStatusGuard>
         </QueryClientProvider>
       </div>

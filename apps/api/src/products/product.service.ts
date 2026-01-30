@@ -10,7 +10,7 @@ import { ProductOrderByWithRelationInput, ProductWhereInput } from '@/generated/
 
 class ProductService {
   async create(schema: CreateProductRequest): Promise<ProductResponse> {
-    await mediaService.confirmMediaUploadByKey(schema.thumbnailId);
+    await mediaService.confirmMediaUploadById(schema.thumbnailId);
 
     const product = await productRepo.create(schema);
 
@@ -95,7 +95,7 @@ class ProductService {
     }
 
     if (existingProduct.thumbnailId) {
-      await mediaService.deleteMediaByKey(existingProduct.thumbnailId);
+      await mediaService.deleteMediaById(existingProduct.thumbnailId);
     }
 
     await productRepo.delete(productId);

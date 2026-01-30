@@ -28,11 +28,11 @@ export class MediaService {
     };
   }
 
-  async deleteMediaByKey(mediaKey: string) {
-    const media = await mediaRepo.findMediaByKey(mediaKey);
-    if (!media) throw new NotFoundError(`Media with key ${mediaKey} not found`);
+  async deleteMediaById(mediaId: string) {
+    const media = await mediaRepo.findMediaById(mediaId);
+    if (!media) throw new NotFoundError(`Media with id ${mediaId} not found`);
 
-    await mediaRepo.deleteMediaByKey(mediaKey);
+    await mediaRepo.deleteMediaById(mediaId);
   }
 
   async confirmMediaUploadByKey(mediaKey: string) {
@@ -54,7 +54,7 @@ export class MediaService {
     if (media.status !== MediaStatus.PENDING)
       throw new Error(`try to CONFIRM Media with id ${mediaId} which is not in PENDING status`);
 
-    await mediaRepo.confirmMediaUploadByKey(mediaId);
+    await mediaRepo.confirmMediaUploadById(mediaId); // ! ouslt houni
   }
 
   async switchMediaIds({ oldMediaKey, newMediaKey }: { oldMediaKey: string | null; newMediaKey: string }) {

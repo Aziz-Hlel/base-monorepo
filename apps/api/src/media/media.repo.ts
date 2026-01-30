@@ -61,10 +61,10 @@ class MediaRepo {
     });
   }
 
-  async deleteMediaByKey(mediaKey: string) {
+  async deleteMediaById(mediaId: string) {
     await prisma.media.update({
       where: {
-        key: mediaKey,
+        id: mediaId,
       },
       data: {
         status: MediaStatus.DELETED,

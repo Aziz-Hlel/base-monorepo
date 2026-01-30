@@ -29,7 +29,6 @@ const useGetTableData = () => {
   });
 
   const tableData: TableRowType[] = data?.content ?? [];
-  console.log('tableDate', tableData);
   const pagination = data?.pagination ?? blankPagination;
 
   return { tableData, pagination, isLoading: isFetching };

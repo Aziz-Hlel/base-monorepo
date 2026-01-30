@@ -2,6 +2,7 @@ import { useSelectedRow } from '../context/selected-row-provider';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogClose,
@@ -11,46 +12,44 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { toast } from 'sonner';
-import { ApiError } from '@/Api/ApiError';
-import { createProductRequestSchema, type CreateProductRequest } from '@contracts/schemas/product/createProductRequest';
-import { ProductStatus } from '@contracts/types/enums/enums';
+import { Spinner } from '@/components/ui/spinner';
+import { Separator } from '@/components/ui/separator';
 import productService from '@/Api/service/productService';
+import { updateProductRequestSchema, type UpdateProductRequest } from '@contracts/schemas/product/updateProductRequest';
 import { Textarea } from '@/components/ui/textarea';
-import ProductTextMapping from '@/EnumTextMapping/ProductTextMapping';
-import SelectForm from '@/components/ui2/SelectForm/SelectForm';
-import ImageUpload from '@/components/ui2/ImageUpload/comp/ImageUpload';
 import InputNumberForm from '@/components/ui2/InputNumberForm';
+import SelectForm from '@/components/ui2/SelectForm/SelectForm';
+import ProductTextMapping from '@/EnumTextMapping/ProductTextMapping';
+import ImageUpload from '@/components/ui2/ImageUpload/comp/ImageUpload';
 
-const AddProduct = () => {
-  const { handleCancel, openDialog } = useSelectedRow();
+const EditProduct = () => {
+  const { handleCancel, currentRow, openDialog } = useSelectedRow();
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: ['products', 'create'],
-    mutationFn: productService.createProduct,
+    mutationKey: ['products', 'update'],
+    mutationFn: productService.updateProduct,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'], exact: false });
-      form.reset();
       handleCancel();
     },
   });
 
-  const defaultValues: CreateProductRequest = {
-    name: '',
-    description: '',
-    price: undefined as any,
-    thumbnailId: '',
-    status: ProductStatus.AVAILABLE,
+  if (!currentRow) return null;
+
+  const defaultValues: UpdateProductRequest = {
+    name: currentRow?.name,
+    description: currentRow?.description,
+    price: currentRow?.price,
+    status: currentRow?.status,
+    thumbnailId: currentRow?.thumbnail?.id ?? '',
   };
 
-  const form = useForm<CreateProductRequest>({
-    resolver: zodResolver(createProductRequestSchema),
+  const form = useForm<UpdateProductRequest>({
+    resolver: zodResolver(updateProductRequestSchema),
     defaultValues: defaultValues,
   });
 
@@ -61,24 +60,17 @@ const AddProduct = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<CreateProductRequest> = async (data) => {
+  const onSubmit: SubmitHandler<UpdateProductRequest> = async (data) => {
     try {
-      await mutateAsync(data);
-      toast.success('User created successfully');
+      await mutateAsync({ id: currentRow!.id, payload: data });
+      toast.success('Product updated successfully');
     } catch (error) {
-      console.log(error);
-      if (error instanceof ApiError && error.status === 409) {
-        console.log('t5l');
-        form.setError('name', { message: 'Name already exists' });
-        return;
-      }
-      toast.error('Failed to create user');
+      toast.error('Failed to update product');
     }
   };
 
-  const dialogIsOpen = openDialog === 'add';
-
-  console.log('form :', form.getValues());
+  const dialogIsOpen = openDialog === 'edit';
+  console.log(form.formState.errors);
 
   const thumbnailErrors = [form.formState.errors.thumbnailId?.message];
 
@@ -93,17 +85,19 @@ const AddProduct = () => {
       newMediaId ? { shouldDirty: true, shouldValidate: true } : undefined,
     );
   };
+
   return (
     <Dialog onOpenChange={onOpenChange} open={dialogIsOpen}>
       <DialogContent className="sm:max-w-106.25 h-[calc(100dvh-4rem)] flex flex-col overflow-hidden  ">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex flex-col h-full">
           <DialogHeader>
-            <DialogTitle className="bg-__tw_debug ">Create Product</DialogTitle>
-            <DialogDescription>Fill the form below to create a new product.</DialogDescription>
+            <DialogTitle className=" text-center">Update Product</DialogTitle>
+            <DialogDescription className=" text-center">Fill the form below to update the product.</DialogDescription>
+            <Separator />
           </DialogHeader>
           <div
             className=" 
-              flex-1 min-h-0 overflow-y-auto pr-2  overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400"
+            flex-1 min-h-0 overflow-y-auto pr-2  overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400"
           >
             <FieldGroup>
               <Controller
@@ -112,8 +106,14 @@ const AddProduct = () => {
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor={`name-input`}>Name</FieldLabel>
-                    <Input {...field} id={`name-input`} aria-invalid={fieldState.invalid} placeholder="Name" />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    <Input
+                      {...field}
+                      id={`name-input`}
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Name"
+                      value={field.value ?? undefined}
+                    />
+                    <FieldError errors={[fieldState.error]} />
                   </Field>
                 )}
               />
@@ -122,18 +122,22 @@ const AddProduct = () => {
                 name="description"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
+                  <Field data-invalid={fieldState.invalid} className="cursor-not-allowed">
                     <FieldLabel htmlFor={`description-input`}>Description</FieldLabel>
                     <Textarea
                       {...field}
                       id={`description-input`}
                       aria-invalid={fieldState.invalid}
+                      aria-rowcount={3}
                       placeholder="Description"
+                      aria-disabled
+                      disabled
                     />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    <FieldError errors={[fieldState.error]} />
                   </Field>
                 )}
               />
+
               <Controller
                 name="price"
                 control={form.control}
@@ -158,13 +162,14 @@ const AddProduct = () => {
               />
 
               <ImageUpload
-                initMedia={null}
+                initMedia={currentRow?.thumbnail ?? null}
                 mediaErrors={thumbnailErrors}
                 clearMediaErrors={clearMediaErrors}
                 handleMediaUpload={handleThumbnailUpload}
               />
             </FieldGroup>
           </div>
+
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline" onClick={handleCancel}>
@@ -181,4 +186,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default EditProduct;

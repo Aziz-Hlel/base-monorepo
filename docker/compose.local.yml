@@ -2,11 +2,11 @@ services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_USER: '${POSTGRES_USER:-user}'
-      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD:-password}'
-      POSTGRES_DB: '${POSTGRES_DB:-mydb}'
+      POSTGRES_USER: '${POSTGRES_USER:?POSTGRES_USER is required}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}'
+      POSTGRES_DB: '${POSTGRES_DB:?POSTGRES_DB is required}'
     ports:
-      - '${POSTGRES_PORT:-5432}:5432'
+      - '${POSTGRES_PORT:?POSTGRES_PORT is required}:5432'
     volumes:
       - base_repo_db_local_volume:/var/lib/postgresql/data
 
@@ -14,7 +14,7 @@ services:
     image: redis:latest
 
     ports:
-      - '${REDIS_PORT:-6379}:6379'
+      - '${REDIS_PORT:?REDIS_PORT is required}:6379'
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD:-password}
     volumes:
@@ -26,8 +26,8 @@ services:
     image: quay.io/minio/minio:latest
 
     ports:
-      - '${MINIO_PORT:-9000}:9000'
-      - '${MINIO_UI_PORT:-9001}:9001' # Web UI
+      - '${MINIO_PORT:?MINIO_PORT is required}:9000'
+      - '${MINIO_UI_PORT:?MINIO_UI_PORT is required}:9001' # Web UI
 
     env_file:
       - ${PROJECT_ROOT}/config/.env.dev

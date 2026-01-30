@@ -81,7 +81,6 @@ const useTableProps = () => {
 
   const onColumnFiltersChange = (updater: Updater<ColumnFiltersState>) => {
     const newColumnFiltersState = typeof updater === 'function' ? updater(columnFilters) : updater;
-    console.log('newColumnFiltersState', newColumnFiltersState);
     setSearchParams(
       (prev) => {
         const params = new URLSearchParams(prev);
