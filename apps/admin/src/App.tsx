@@ -46,8 +46,8 @@ function App() {
                       <Route element={<Sidebar dir={dir} />}>
                         <Route path="/" element={<Home />} />
                         <Route index path="/profile" element={<Profile />} />
-                        <Route path="users/" element={<UserPage />}></Route>
-                        <Route path="products/" element={<ProductPage />}></Route>
+                        <Route path="users/" element={<UserPage />} />
+                        <Route path="products/" element={<ProductPage />} />
                       </Route>
                     </Route>
                   </Route>

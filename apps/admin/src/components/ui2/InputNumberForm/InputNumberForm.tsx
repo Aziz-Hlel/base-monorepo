@@ -11,9 +11,14 @@ const InputNumberForm = <T extends Object>({ field, placeholder, emptyInitially 
   const [value, setValue] = useState<string>(emptyInitially ? '' : (field.value as string));
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (/^[0-9]*$/.test(value)) {
+    if (value === '') {
+      setValue('');
+      field.onChange(undefined);
+      return;
+    }
+    if (/^\d+(\.\d{0,2})?$/.test(value)) {
       setValue(value);
-      field.onChange(value === '' ? undefined : Number(value));
+      field.onChange(Number(value));
     }
   };
 
@@ -22,8 +27,8 @@ const InputNumberForm = <T extends Object>({ field, placeholder, emptyInitially 
       <Input
         placeholder={placeholder}
         type="text"
-        pattern="^[0-9]+$"
-        inputMode="numeric"
+        pattern="^\d+(\.\d{0,2})?$"
+        inputMode="decimal"
         value={value}
         onChange={handleChange}
       />

@@ -8,11 +8,11 @@ async function bootstrap() {
 
   const app = createExpressApp(); // sync function only
   app.on('mount', (error) => {
-    logger.error(error, '❌ ERROR : Server failed to start');
+    console.error('❌ ERROR : Server failed to start', error);
     process.exit(1);
   });
   app.listen(ENV.PORT, () => {
-    logger.info(`✅ SUCCESS : Server running on port ${ENV.PORT}`);
+    console.log(`✅ SUCCESS : Server running on port ${ENV.PORT}`);
   });
 }
 

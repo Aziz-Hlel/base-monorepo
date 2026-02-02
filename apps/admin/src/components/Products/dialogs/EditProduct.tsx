@@ -20,7 +20,7 @@ import { Separator } from '@/components/ui/separator';
 import productService from '@/Api/service/productService';
 import { updateProductRequestSchema, type UpdateProductRequest } from '@contracts/schemas/product/updateProductRequest';
 import { Textarea } from '@/components/ui/textarea';
-import InputNumberForm from '@/components/ui2/InputNumberForm';
+import InputNumberForm from '@/components/ui2/InputNumberForm/InputNumberForm';
 import SelectForm from '@/components/ui2/SelectForm/SelectForm';
 import ProductTextMapping from '@/EnumTextMapping/ProductTextMapping';
 import ImageUpload from '@/components/ui2/ImageUpload/comp/ImageUpload';
@@ -97,7 +97,7 @@ const EditProduct = () => {
           </DialogHeader>
           <div
             className=" 
-            flex-1 min-h-0 overflow-y-auto pr-2  overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400"
+            flex-1 min-h-0 overflow-y-auto pr-2 overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400"
           >
             <FieldGroup>
               <Controller
@@ -122,7 +122,7 @@ const EditProduct = () => {
                 name="description"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="cursor-not-allowed">
+                  <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor={`description-input`}>Description</FieldLabel>
                     <Textarea
                       {...field}
@@ -130,8 +130,7 @@ const EditProduct = () => {
                       aria-invalid={fieldState.invalid}
                       aria-rowcount={3}
                       placeholder="Description"
-                      aria-disabled
-                      disabled
+                      className=" max-h-42 overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400"
                     />
                     <FieldError errors={[fieldState.error]} />
                   </Field>

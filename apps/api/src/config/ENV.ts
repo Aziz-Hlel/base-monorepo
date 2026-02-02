@@ -1,4 +1,3 @@
-import { logger } from '@/bootstrap/logger.init';
 import dotenv from 'dotenv';
 import z from 'zod';
 
@@ -48,6 +47,6 @@ if (!validatedEnv.success) {
 
 const ENV = validatedEnv.data;
 
-logger.info('✅ SUCCESS : ENV is valid');
+console.log('✅ SUCCESS : ENV is valid');
 
 export default ENV;

@@ -6,7 +6,7 @@ import { seedProducts } from './fakes/products.fake';
 
 const seed = async () => {
   if (ENV.NODE_ENV === 'production') {
-    logger.info('ℹ️ NOTE : Skipped seeding in production environment.');
+    console.log('ℹ️ NOTE : Skipped seeding in production environment.');
     return;
   }
   const userSeed = seedUsers(50);
@@ -17,10 +17,10 @@ const seed = async () => {
   try {
     await Promise.all([userSeed, prodUsersSeed, productsSeed]);
   } catch (error) {
-    logger.error(error, '❌ ERROR : Seeding failed.');
+    console.error('❌ ERROR : Seeding failed.', error);
     throw error;
   }
-  logger.info('✅ SUCCESS : Seeding completed.');
+  console.log('✅ SUCCESS : Seeding completed.');
 };
 
 export default seed;
