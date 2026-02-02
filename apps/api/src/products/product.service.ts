@@ -7,6 +7,7 @@ import { NotFoundError } from '@/err/customErrors';
 import { UpdateProductRequest } from '@contracts/schemas/product/updateProductRequest';
 import { ProductPageQuery } from '@contracts/schemas/product/ProductPageQuery';
 import { ProductOrderByWithRelationInput, ProductWhereInput } from '@/generated/prisma/models';
+import { Page } from '@contracts/types/page/Page';
 
 class ProductService {
   async create(schema: CreateProductRequest): Promise<ProductResponse> {
@@ -30,7 +31,7 @@ class ProductService {
     return productResponse;
   }
 
-  async getPage(queryParams: ProductPageQuery) {
+  async getPage(queryParams: ProductPageQuery): Promise<Page<ProductResponse>> {
     const skip = (queryParams.page - 1) * queryParams.size;
     const take = queryParams.size;
     const { search } = queryParams;

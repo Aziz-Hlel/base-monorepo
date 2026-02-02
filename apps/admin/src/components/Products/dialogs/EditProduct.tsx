@@ -95,10 +95,7 @@ const EditProduct = () => {
             <DialogDescription className=" text-center">Fill the form below to update the product.</DialogDescription>
             <Separator />
           </DialogHeader>
-          <div
-            className=" 
-            flex-1 min-h-0 overflow-y-auto pr-2 overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400"
-          >
+          <div className="flex-1 min-h-0 overflow-y-auto pr-2 overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400">
             <FieldGroup>
               <Controller
                 name="name"
@@ -143,7 +140,7 @@ const EditProduct = () => {
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid} className="flex">
                     <FieldLabel htmlFor={`price-input`}>Price</FieldLabel>
-                    <InputNumberForm field={field} emptyInitially />
+                    <InputNumberForm field={field} />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}

@@ -84,6 +84,27 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
     enableHiding: true,
   },
   {
+    id: 'price',
+    accessorKey: 'price',
+    header: ({ column }) => {
+      return (
+        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          <span>Price</span>
+          {column.getIsSorted() === 'asc' && <ArrowUp />}
+          {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
+          {column.getIsSorted() === false && <ChevronsUpDown />}
+        </HeaderContainer>
+      );
+    },
+    cell: ({ getValue }) => {
+      const price = getValue<string>();
+      return <RowContainer className=" w-96 truncate whitespace-nowrap ">{price}</RowContainer>;
+    },
+
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
     accessorKey: 'createdAt',
     header: ({ column }) => {
       return (

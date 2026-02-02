@@ -7,8 +7,10 @@ interface InputNumberFormProps<T extends Object> {
   placeholder?: string;
   emptyInitially?: boolean;
 }
+
 const InputNumberForm = <T extends Object>({ field, placeholder, emptyInitially = false }: InputNumberFormProps<T>) => {
   const [value, setValue] = useState<string>(emptyInitially ? '' : (field.value as string));
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value === '') {
