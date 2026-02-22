@@ -31,6 +31,6 @@ tmp/
 .cache/
 
 # IDE / system files
-.vscode/
+# .vscode/
 .idea/
 .DS_Store
