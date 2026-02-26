@@ -1,6 +1,6 @@
 // src/middleware/error.middleware.ts
 import { Request, Response, NextFunction } from 'express';
-import { ZodError } from 'zod';
+import { prettifyError, ZodError } from 'zod';
 import ENV from '../config/ENV';
 import { AppError } from '../err/customErrors';
 import { ApiError } from '../err/apiError.type';
@@ -13,11 +13,12 @@ const handleZodError = (error: ZodError<unknown>, req: Request): ApiError => {
     const path = issue.path.join('.');
     formatted[path] = issue.message;
   }
+  // prettifyError(error);
 
   const apiResponse: ApiError = {
     success: false,
     message: 'Validation failed',
-    details: formatted,
+    details: { 'World war Z ': prettifyError(error) },
     timestamp: new Date(),
     path: req.originalUrl,
   };
@@ -30,7 +31,10 @@ export const globalErrorHandler = (error: Error, req: Request, res: Response<Api
   // Zod validation errors
   if (error instanceof ZodError) {
     const apiError = handleZodError(error, req);
-    logger.warn({ err: error, path }, 'Validation error');
+    logger.warn(
+      { err: { ...error, message: JSON.parse(error.message), stack: error.stack }, path },
+      'Validation error',
+    );
     return res.status(400).json(apiError);
   }
 

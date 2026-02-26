@@ -3,13 +3,13 @@ import { Role } from '../../generated/prisma/browser';
 import { GenericEntityCreateInput } from '../../types/prisma/GenericEntityUtilityTypes';
 import { User } from '../../generated/prisma/client';
 import { StrictDecodedIdToken } from '../../types/auth/StrictDecodedIdToken';
-import { Page } from '../../types/page/Page';
 import { DefaultSearchParams } from '../../types/api/DefaultSearchParams';
 import { UserResponse } from '@contracts/schemas/user/UserResponse';
 import { ProfileRowResponse, UserProfileRowResponse, UserRowResponse } from '@contracts/schemas/user/UserRowResponse';
 import { UserWithProfile } from '../types';
 import { ProfileMapper } from './profile.mapper';
 import { UserProfileResponse } from '@contracts/schemas/profile/UserProfileResponse';
+import { Page } from '@contracts/types/page/Page';
 
 export type UserCreateInputCustom = GenericEntityCreateInput<UserCreateInput>;
 

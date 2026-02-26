@@ -8,6 +8,8 @@
     "format:fix": "prettier --write .",
     "local": "node scripts/docker-up.js local",
     "dev": "node scripts/docker-up.js dev",
+    "dev-api": "cd apps/api && pnpm dev",
+    "dev-admin": "cd apps/admin && pnpm dev",
     "test": ""
   },
   "lint-staged": {

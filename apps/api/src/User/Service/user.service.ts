@@ -1,7 +1,6 @@
 import { UserProfileRowResponse } from '@contracts/schemas/user/UserRowResponse';
 import { UserOrderByWithRelationInput, UserWhereInput } from '../../generated/prisma/models';
 import { prisma } from '../../bootstrap/db.init';
-import { Page } from '../../types/page/Page';
 import UserMapper from '../mapper/user.mapper';
 import {
   ProfileKeys,
@@ -21,6 +20,7 @@ import PERMISSION_SCORE from '@contracts/utils/PermissionScore';
 import { UpdateUserProfileRequest } from '@contracts/schemas/profile/updateUserProfileRequest';
 import { logger } from '@/bootstrap/logger.init';
 import { RedisKeys } from '@/cache/keys/cache.keys';
+import { Page } from '@contracts/types/page/Page';
 
 class UserService {
   async getUserPage(queryParams: UserPageQuery): Promise<Page<UserProfileRowResponse>> {

@@ -3,7 +3,7 @@ import ENV from '../config/ENV';
 import { PrismaClient } from '../generated/prisma/client';
 import { logger } from './logger.init';
 
-const connectionString = ENV.DATABASE_URL;
+const connectionString = `postgresql://${ENV.DB_USER}:${ENV.DB_PASSWORD}@${ENV.DB_HOST}:${ENV.DB_PORT}/${ENV.DB_NAME}`;
 
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({

@@ -6,6 +6,8 @@ const ErrorNames = {
   CONFLICT: 'ConflictError',
   PERMISSION_DENIED: 'PermissionDeniedError',
   INTERNAL_SERVER: 'InternalServerError',
+  TOO_MANY_REQUESTS: 'TooManyRequestsError',
+  SERVICE_UNAVAILABLE: 'ServiceUnavailableError',
 } as const;
 export default ErrorNames;
 

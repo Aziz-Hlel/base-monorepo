@@ -4,13 +4,28 @@ import z from 'zod';
 dotenv.config();
 
 const baseSchema = z.object({
-  DATABASE_URL: z.url(),
+  // APP
   PORT: z.coerce.number().positive(),
+  // CORS
+  ALLOWED_ORIGIN_PATTERNS: z.string({ error: 'ALLOWED_ORIGIN_PATTERNS is required in non production environment' }),
+  // FIREBASE
   FIREBASE_CERT: z.string().min(1),
+  // DB
+  DB_USER: z.string(),
+  DB_PASSWORD: z.string(),
+  DB_NAME: z.string(),
+  DB_PORT: z.coerce.number(),
+  DB_HOST: z.enum(['localhost', 'db']),
+  // REDIS
   REDIS_PORT: z.coerce.number().positive(),
   REDIS_PASSWORD: z.string().min(1),
   REDIS_HOST: z.enum(['localhost', 'redis']),
-  ALLOWED_ORIGIN_PATTERNS: z.string({ error: 'ALLOWED_ORIGIN_PATTERNS is required in non production environment' }),
+  // SMTP
+  SMTP_HOST: z.string(),
+  SMTP_PORT: z.coerce.number().positive(),
+  SMTP_SECURE: z.string().transform((val) => val === 'true'),
+  SMTP_USER: z.string(),
+  SMTP_PASS: z.string(),
 });
 
 const envSchema2 = z

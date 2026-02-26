@@ -39,11 +39,11 @@ export class UserRepo {
     return !!user;
   }
 
-  async createUser(user: UserCreateInputCustom): Promise<UserWithProfile> {
-    const createdUser = await prisma.user.create({
+  async createUser(user: UserCreateInputCustom) {
+    return await prisma.user.create({
       data: user,
+      include: { profile: true },
     });
-    return { ...createdUser, profile: null };
   }
 
   async getUserByAuthId(authId: string): Promise<UserWithProfile | null> {

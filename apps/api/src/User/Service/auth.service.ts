@@ -53,6 +53,7 @@ class AuthService {
     const decodedToken = await this.firebaseService.verifyToken(tokenId);
 
     const userAuthId = decodedToken.uid;
+    console.log('user auth id', userAuthId);
     let user = await userRepo.getUserByAuthId(userAuthId);
 
     if (!user) {

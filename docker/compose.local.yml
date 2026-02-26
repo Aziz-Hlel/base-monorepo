@@ -26,7 +26,7 @@ services:
     image: quay.io/minio/minio:latest
 
     ports:
-      - '${MINIO_PORT:?MINIO_PORT is required}:9000'
+      - '${MINIO_PORT:?MINIO_PORT is required}:${MINIO_DOCKER_PORT:?MINIO_DOCKER_PORT is required}'
       - '${MINIO_UI_PORT:?MINIO_UI_PORT is required}:9001' # Web UI
 
     env_file:
@@ -51,14 +51,21 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-      MINIO_PORT: ${MINIO_PORT}
-      MINIO_BUCKET: ${MINIO_BUCKET}
+      MINIO_DOCKER_PORT: ${MINIO_DOCKER_PORT}
+      MINIO_BUCKET: ${MINIO_BUCKET:?MINIO_BUCKET is required}
 
     volumes:
       - ${PROJECT_ROOT}/scripts/init_minio.sh:/init_minio.sh:ro
       - ${PROJECT_ROOT}/seed/minio:/seed:ro
 
     entrypoint: ['/bin/sh', '/init_minio.sh']
+
+  mailpit:
+    image: axllent/mailpit
+    restart: unless-stopped
+    ports:
+      - '${SMTP_UI_PORT:?SMTP_UI_PORT is required}:8025' # Web UI
+      - '${SMTP_PORT:?SMTP_PORT is required}:1025'
 
 volumes:
   base_repo_db_local_volume:

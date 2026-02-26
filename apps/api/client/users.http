@@ -1,7 +1,7 @@
 @apiKey = AIzaSyDWKplAl5Vp43pG0j5j3vnThRJIPwv1E44
 @firebaseUrl = https://identitytoolkit.googleapis.com/v1
 
-@baseUrl = http://localhost:5000/api
+@baseUrl = http://localhost:10000/api
 
 ###
 # @name login

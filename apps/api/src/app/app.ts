@@ -16,8 +16,6 @@ export function createExpressApp() {
 
   app.use(configureCors());
 
-  app.use(pinoHttpMiddleware);
-
   app.use(compressionMiddleware);
 
   app.use('/api', AppRouter);

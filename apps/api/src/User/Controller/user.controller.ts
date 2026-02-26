@@ -1,7 +1,6 @@
 import { Response } from 'express';
 import { AuthenticatedRequest } from '../../types/auth/AuthenticatedRequest';
 import { userService } from '../Service/user.service';
-import { Page } from '../../types/page/Page';
 import { UserProfileRowResponse } from '@contracts/schemas/user/UserRowResponse';
 import { queryParamsSchema } from '@contracts/schemas/user/UserPageQuery';
 import { createUserProfileRequestSchema } from '@contracts/schemas/profile/createUserProfileRequest';
@@ -10,6 +9,7 @@ import PERMISSION_SCORE from '@contracts/utils/PermissionScore';
 import { PermissionDeniedError } from '@/err/customErrors';
 import { SimpleApiResponse } from '@contracts/types/api/SimpleApiResponse.dto';
 import { updateUserProfileRequestSchema } from '@contracts/schemas/profile/updateUserProfileRequest';
+import { Page } from '@contracts/types/page/Page';
 
 class UserController {
   async getUserPage(req: AuthenticatedRequest, res: Response<Page<UserProfileRowResponse>>) {

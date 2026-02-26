@@ -1,0 +1,19 @@
+
+
+@baseUrl = http://localhost:10000/api
+
+
+
+
+
+### Send Contact Us
+# @name SendContactUs
+POST {{baseUrl}}/email/contact-us
+Content-Type: application/json
+
+{
+    "email": "testContactUs@gamil.com",
+    "name": "testContactUs name",
+    "subject": "testContactUs subject",
+    "message": "testContactUs message"
+}

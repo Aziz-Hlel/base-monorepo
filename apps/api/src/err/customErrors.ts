@@ -5,7 +5,7 @@ import { Request } from 'express';
 
 export class AppError extends Error {
   status: number;
-  constructor({ status, message, name }: { status: number; message: string; name: string }) {
+  constructor({ status, message, name }: { status: number; message: string; name: ErrorNameKeys }) {
     super(message);
     this.name = name;
     this.status = status;
@@ -66,5 +66,11 @@ export class PermissionDeniedError extends AppError {
 export class InternalServerError extends AppError {
   constructor(message: string) {
     super({ status: 500, message, name: ErrorNames.INTERNAL_SERVER });
+  }
+}
+
+export class CustomError extends AppError {
+  constructor({ status, message, name }: { status: number; message: string; name: ErrorNameKeys }) {
+    super({ status, message, name });
   }
 }
