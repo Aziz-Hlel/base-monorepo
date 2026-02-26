@@ -20,7 +20,7 @@ const handleSES_Error = (error: SES_Error, throwable: boolean = true) => {
   if (!errorExplanation) return;
 
   const errorMessage = `❌ ERROR : Failed to send email\n${errorExplanation.message}\n${errorExplanation.explanation}`;
-  logger.error(error, errorMessage);
+  logger.error({ error, humanError: errorExplanation }, errorMessage);
   if (throwable) throw new TransporterError(errorMessage);
   return {
     success: false,
@@ -32,8 +32,8 @@ const handleSES_Error = (error: SES_Error, throwable: boolean = true) => {
 const handleMailpit_Error = (error: MailpitError, throwable: boolean = true) => {
   const errorExplanation = mailpitErrorExplanations[error.code as Mailpit_ErrorCode];
   if (!errorExplanation) return;
-  const errorMessage = `❌ ERROR : Failed to send email\n${errorExplanation.message}\n${errorExplanation.explanation}`;
-  logger.error(error, errorMessage);
+  const errorMessage = `✖ ERROR : Failed to send email\n${errorExplanation.message}\n${errorExplanation.explanation}`;
+  logger.error({ error, humanError: errorExplanation }, errorMessage);
   if (throwable) throw new TransporterError(errorMessage);
   return {
     success: false,
@@ -52,7 +52,7 @@ const isSESError = (error: Error): error is SES_Error => {
 class EmailProvider {
   async sendEmail(
     payload: { from: string; to: string | string[]; subject: string; text: string },
-    throwable: boolean = true,
+    options: { throwable: boolean } = { throwable: true },
   ) {
     try {
       const info = await Emailtransporter.sendMail({
@@ -67,13 +67,14 @@ class EmailProvider {
       };
     } catch (error) {
       if (ENV.NODE_ENV === 'production' && error instanceof Error && isSESError(error)) {
-        handleSES_Error(error, throwable);
+        handleSES_Error(error, options.throwable);
       }
       if (ENV.NODE_ENV !== 'production' && error instanceof Error && isMailpitError(error)) {
-        handleMailpit_Error(error, throwable);
+        console.log('t5l');
+        handleMailpit_Error(error, options.throwable);
       }
       console.log('xnxx');
-      if (throwable) throw error;
+      if (options.throwable) throw error;
     }
   }
 }

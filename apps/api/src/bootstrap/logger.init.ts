@@ -7,6 +7,9 @@ const isInProductionMode = NODE_ENV === 'production';
 export const logger = pino({
   level: isInProductionMode ? 'info' : 'debug',
   timestamp: pino.stdTimeFunctions.isoTime,
+  serializers: {
+    error: pino.stdSerializers.err,
+  },
   base: { pid: false }, // optional: remove pid from logs if you like
   transport:
     NODE_ENV !== 'production'
@@ -20,6 +23,7 @@ export const logger = pino({
 export const httpLogger = pino({
   level: isInProductionMode ? 'info' : 'debug',
   timestamp: pino.stdTimeFunctions.isoTime,
+
   base: { pid: false }, // optional: remove pid from logs if you like
   redact: {
     censor: (value, path) => {

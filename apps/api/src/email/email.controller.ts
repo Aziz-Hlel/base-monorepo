@@ -1,6 +1,7 @@
 import { SendContactUsRequest, sendContactUsRequestSchema } from '@contracts/email/sendContactUsRequest';
 import { emailService } from './email.service';
 import { Request, Response } from 'express';
+import { BadRequestError, InternalServerError } from '@/err/customErrors';
 
 class EmailController {
   async sendContactEmail(req: Request, res: Response) {

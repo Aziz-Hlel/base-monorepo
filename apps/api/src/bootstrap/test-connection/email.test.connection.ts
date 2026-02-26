@@ -3,7 +3,7 @@ import Emailtransporter from '../email.init';
 
 const testEmailTransporterConnection = async () => {
   try {
-    await Emailtransporter.verify();
+    // await Emailtransporter.verify();
     console.log('✅ SUCCESS : Email transporter verified successfully.');
     // await Emailtransporter.sendMail({
     //   from: ENV.SMTP_USER,

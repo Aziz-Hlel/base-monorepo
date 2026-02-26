@@ -1,6 +1,5 @@
 {
-    "cSpell.words": [
-        "appendonly",
-        "nonoptional"
-    ]
+  "terminal.integrated.env.windows": {
+    "LANG": "en_US.UTF-8"
+  }
 }

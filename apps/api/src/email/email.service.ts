@@ -20,15 +20,12 @@ class EmailService {
   async sendContactEmail(payload: SendContactUsRequest) {
     const html = emailUtils.createContactUsHtml(payload);
     const mailSubject = `New Contact Us Request from ${payload.name}`;
-    const aa = await emailProvider.sendEmail(
-      {
-        from: this.mailer.contactUs.from,
-        to: this.mailer.contactUs.to,
-        subject: mailSubject,
-        text: html,
-      },
-      false,
-    );
+    await emailProvider.sendEmail({
+      from: this.mailer.contactUs.from,
+      to: this.mailer.contactUs.to,
+      subject: mailSubject,
+      text: html,
+    });
   }
 }
 

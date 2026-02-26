@@ -1,4 +1,5 @@
 import ErrorNames, { ErrorNameKeys } from '../errors.names';
+import ERRORS, { Err } from '../Errors.object';
 
 export type SES_ErrorCode =
   | 'MessageRejected'
@@ -6,6 +7,40 @@ export type SES_ErrorCode =
   | 'ThrottlingException'
   | 'ServiceUnavailableException'
   | 'ValidationError';
+
+type CustomErrorObj = {
+  getDisplayMessage: () => string | undefined;
+  getLogMessage: () => string | undefined;
+  err: Err;
+};
+
+export const SES_Errors: Record<SES_ErrorCode, CustomErrorObj> = {
+  MessageRejected: {
+    getDisplayMessage: () => 'Message rejected',
+    getLogMessage: () => 'Message rejected',
+    err: ERRORS.INTERNAL_SERVER,
+  },
+  AccessDeniedException: {
+    getDisplayMessage: () => 'Access denied',
+    getLogMessage: () => 'Access denied',
+    err: ERRORS.UNAUTHORIZED,
+  },
+  ThrottlingException: {
+    getDisplayMessage: () => 'Throttling exception',
+    getLogMessage: () => 'Throttling exception',
+    err: ERRORS.TOO_MANY_REQUESTS,
+  },
+  ServiceUnavailableException: {
+    getDisplayMessage: () => 'Service unavailable',
+    getLogMessage: () => 'Service unavailable',
+    err: ERRORS.SERVICE_UNAVAILABLE,
+  },
+  ValidationError: {
+    getDisplayMessage: () => 'Validation error',
+    getLogMessage: () => 'Validation error',
+    err: ERRORS.INTERNAL_SERVER,
+  },
+};
 
 export const sesErrorExplanations: Record<
   SES_ErrorCode,
