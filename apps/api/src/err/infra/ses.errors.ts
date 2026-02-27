@@ -11,33 +11,41 @@ export type SES_ErrorCode =
 type CustomErrorObj = {
   getDisplayMessage: () => string | undefined;
   getLogMessage: () => string | undefined;
+  explanation?: string;
   err: Err;
+};
+
+const getMessageWithPrefix = (message: string) => {
+  return `❌ ERROR : Failed to send email: ${message}`;
 };
 
 export const SES_Errors: Record<SES_ErrorCode, CustomErrorObj> = {
   MessageRejected: {
     getDisplayMessage: () => 'Message rejected',
-    getLogMessage: () => 'Message rejected',
+    getLogMessage: () => getMessageWithPrefix('Message rejected'),
     err: ERRORS.INTERNAL_SERVER,
   },
   AccessDeniedException: {
     getDisplayMessage: () => 'Access denied',
-    getLogMessage: () => 'Access denied',
+    getLogMessage: () => getMessageWithPrefix('Access denied'),
     err: ERRORS.UNAUTHORIZED,
   },
   ThrottlingException: {
     getDisplayMessage: () => 'Throttling exception',
-    getLogMessage: () => 'Throttling exception',
+    getLogMessage: () => getMessageWithPrefix('Throttling exception'),
     err: ERRORS.TOO_MANY_REQUESTS,
   },
   ServiceUnavailableException: {
-    getDisplayMessage: () => 'Service unavailable',
-    getLogMessage: () => 'Service unavailable',
+    getDisplayMessage: () => 'Service is currently unavailable, please try again later',
+    getLogMessage: () => getMessageWithPrefix('AWS SES Service is unavailable'),
+    explanation: `
+    ° AWS temporary outage
+    ° Regional instability`,
     err: ERRORS.SERVICE_UNAVAILABLE,
   },
   ValidationError: {
     getDisplayMessage: () => 'Validation error',
-    getLogMessage: () => 'Validation error',
+    getLogMessage: () => getMessageWithPrefix('Validation error'),
     err: ERRORS.INTERNAL_SERVER,
   },
 };

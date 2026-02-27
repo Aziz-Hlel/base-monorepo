@@ -67,6 +67,7 @@ const ERRORS = {
 const a = {
   ERRORS,
 };
+
 export type ErrKeys = keyof typeof ERRORS;
 export type ErrNames = (typeof ERRORS)[ErrKeys]['name'];
 export type ErrObject = (typeof ERRORS)[ErrKeys];
