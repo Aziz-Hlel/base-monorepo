@@ -1,4 +1,4 @@
-import { SendContactUsRequest } from '@contracts/email/sendContactUsRequest';
+import { SendContactUsRequest } from '@contracts/schemas/email/sendContactUsRequest';
 
 class EmailUtils {
   createContactUsHtml(payload: SendContactUsRequest) {

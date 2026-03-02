@@ -1,6 +1,6 @@
 import Emailtransporter from '@/bootstrap/email.init';
 import { logger } from '@/bootstrap/logger.init';
-import { sesErrorExplanations, SES_ErrorCode } from '../err/infra/ses.errors';
+import { sesErrorExplanations, SES_ErrorCode } from '@/err/infra/ses.errors';
 import { Mailpit_ErrorCode, mailpitErrorExplanations } from '@/err/infra/mailpit.errors';
 import ENV from '@/config/ENV';
 
@@ -70,10 +70,8 @@ class EmailProvider {
         handleSES_Error(error, options.throwable);
       }
       if (ENV.NODE_ENV !== 'production' && error instanceof Error && isMailpitError(error)) {
-        console.log('t5l');
         handleMailpit_Error(error, options.throwable);
       }
-      console.log('xnxx');
       if (options.throwable) throw error;
     }
   }

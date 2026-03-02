@@ -1,0 +1,38 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // LOCAL
+    {
+      "label": "local:docker",
+      "type": "shell",
+      "command": "node scripts/docker-up.js local",
+      "presentation": { "panel": "new" },
+      "problemMatcher": []
+    },
+    {
+      "label": "local:api",
+      "type": "shell",
+      "command": "pnpm --filter api dev",
+      "presentation": { "panel": "new" },
+      "problemMatcher": []
+    },
+    {
+      "label": "local:admin",
+      "type": "shell",
+      "command": "pnpm --filter ./apps/admin dev",
+      "presentation": { "panel": "new" },
+      "problemMatcher": []
+    },
+    {
+      "label": " LOCAL — All Services",
+      "detail": "Run all services locally",
+      "dependsOn": ["local:docker", "local:api", "local:admin"],
+      "icon": {
+        "color": "terminal.ansiGreen",
+        "id": "debug-alt"
+      },
+      "dependsOrder": "parallel"
+    }
+  ],
+  "problemMatcher": [] // Without this, sometimes VS Code behaves weirdly depending on config.
+}

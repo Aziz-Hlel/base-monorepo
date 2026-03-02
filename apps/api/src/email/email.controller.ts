@@ -1,13 +1,13 @@
-import { SendContactUsRequest, sendContactUsRequestSchema } from '@contracts/email/sendContactUsRequest';
+import { sendContactUsRequestSchema } from '@contracts/schemas/email/sendContactUsRequest';
 import { emailService } from './email.service';
 import { Request, Response } from 'express';
-import { BadRequestError, InternalServerError } from '@/err/customErrors';
+import { SimpleApiResponse } from '@contracts/types/api/SimpleApiResponse.dto';
 
 class EmailController {
-  async sendContactEmail(req: Request, res: Response) {
+  async sendContactEmail(req: Request, res: Response<SimpleApiResponse>) {
     const parsedPayload = sendContactUsRequestSchema.parse(req.body);
     await emailService.sendContactEmail(parsedPayload);
-    res.status(200).json({ success: true });
+    res.status(200).json({ message: 'Email sent successfully' });
   }
 }
 

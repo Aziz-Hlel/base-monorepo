@@ -39,7 +39,6 @@ export const globalErrorHandler = (error: Error, req: Request, res: Response<Api
   }
 
   if (AppError.isAppError(error)) {
-    console.log('t5l application error');
     logger.warn({ err: error, path }, 'Application error');
     return res.status(error.status).json(AppError.toApiErrorResponse(error, req));
   }
