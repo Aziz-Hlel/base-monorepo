@@ -17,3 +17,5 @@
 -- you can add a user id a Fk to the media table as an extra security measures
 
 -- add update my profile as user and delete my account
+
+-- the repo doesnt actualyy work fine at startup, it missed some setups like pnpm prisma generate and pnpm prisma migrate dev
