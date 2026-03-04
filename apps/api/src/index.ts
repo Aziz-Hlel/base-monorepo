@@ -1,6 +1,6 @@
-import ENV from './src/config/ENV';
-import { createExpressApp } from './src/app/app';
-import asyncBootstrapHandlers from './src/bootstrap/bootstraps';
+import ENV from './config/ENV';
+import { createExpressApp } from './app/app';
+import asyncBootstrapHandlers from './bootstrap/bootstraps';
 import { logger } from '@/bootstrap/logger.init';
 
 async function bootstrap() {

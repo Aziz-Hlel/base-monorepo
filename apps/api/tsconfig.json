@@ -6,12 +6,12 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-
+    "outDir": "dist",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
       "@contracts/*": ["../../packages/contracts/src/*"]
     }
   },
-  "include": ["src/**/*", "./index.ts", "../../packages/contracts/src/**/*"]
+  "include": ["src/**/*", "src/index.ts", "../../packages/contracts/src/**/*"]
 }
