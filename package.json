@@ -6,10 +6,16 @@
   "scripts": {
     "prepare": "husky",
     "format:fix": "prettier --write .",
-    "local": "node scripts/docker-up.js local",
-    "dev-api": "cd apps/api && pnpm dev",
-    "dev-admin": "cd apps/admin && pnpm dev",
-    "dev": "pnpm -r --parallel --filter ./apps/api --filter ./apps/admin dev",
+    "prisma:generate": "pnpm --filter api exec prisma generate",
+    "prisma:migrate:dev": "pnpm --filter api exec prisma migrate dev",
+    "docker:local": "node scripts/docker-up.js local",
+    "dev:api": "pnpm --filter api dev",
+    "dev:admin": "pnpm --filter admin dev",
+    "dev": "pnpm -r --parallel --filter api --filter admin dev",
+    "docker:dev": "node scripts/docker-up.js dev",
+    "docker:stage": "node scripts/docker-up.js stage",
+    "docker:prod": "node scripts/docker-up.js prod ",
+    "build": "tsc -b",
     "test": ""
   },
   "lint-staged": {
