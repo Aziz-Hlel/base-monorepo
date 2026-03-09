@@ -9,6 +9,8 @@
     "yoavbls.pretty-ts-errors", // * TypeScript Errors
     "pkief.material-icon-theme", // * Material Icons
     "wix.vscode-import-cost", // * Import Cost
+    "mikestead.dotenv", // * Dotenv
+
     "usernamehw.errorlens" // * Error Lens
   ],
   "unwantedRecommendations": []
