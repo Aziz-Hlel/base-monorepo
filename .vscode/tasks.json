@@ -10,25 +10,51 @@
       "problemMatcher": []
     },
     {
-      "label": "local:api",
+      "label": "dev:api",
       "type": "shell",
-      "command": "pnpm --filter api dev",
+      "command": "pnpm dev:api",
       "presentation": { "panel": "new" },
       "problemMatcher": []
     },
     {
-      "label": "local:admin",
+      "label": "dev:admin",
       "type": "shell",
-      "command": "pnpm --filter ./apps/admin dev",
+      "command": "pnpm dev:admin",
       "presentation": { "panel": "new" },
       "problemMatcher": []
     },
     {
       "label": " LOCAL — All Services",
       "detail": "Run all services locally",
-      "dependsOn": ["local:docker", "local:api", "local:admin"],
+      "dependsOn": ["local:docker", "dev:api", "dev:admin"],
       "icon": {
         "color": "terminal.ansiGreen",
+        "id": "debug-alt"
+      },
+      "dependsOrder": "parallel"
+    },
+
+    // DOCKER:DEV
+    {
+      "label": " DOCKER DEV",
+      "detail": "Run all services locally",
+      "type": "shell",
+      "command": "pnpm docker:dev",
+      "presentation": { "panel": "new" },
+      "icon": {
+        "color": "terminal.ansiGreen",
+        "id": "debug-alt"
+      }
+    },
+
+    // STAGE
+    {
+      "label": "DOCKER STAGE",
+      "detail": "Run docker stage",
+      "type": "shell",
+      "command": "pnpm docker:stage",
+      "icon": {
+        "color": "terminal.ansiCyan",
         "id": "debug-alt"
       },
       "dependsOrder": "parallel"
