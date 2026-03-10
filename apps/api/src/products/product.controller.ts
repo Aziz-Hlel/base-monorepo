@@ -4,7 +4,8 @@ import { Request, Response } from 'express';
 import { ProductResponse } from '@contracts/schemas/product/productResponse';
 import { updateProductRequestSchema } from '@contracts/schemas/product/updateProductRequest';
 import { SimpleApiResponse } from '@contracts/types/api/SimpleApiResponse.dto';
-import { ProductPageQuerySortFields, productsQueryParamsSchema } from '@contracts/schemas/product/ProductPageQuery';
+import { productsQueryParamsSchema } from '@contracts/schemas/product/ProductPageQuery';
+import getParam from '@/utils/getParam';
 
 class ProductController {
   async create(req: Request, res: Response<ProductResponse>) {
@@ -16,14 +17,14 @@ class ProductController {
   }
 
   async getById(req: Request, res: Response<ProductResponse>) {
-    const { productId } = req.params;
+    const productId = getParam(req, 'id');
 
     const productResponse = await productService.getById(productId);
     res.status(200).json(productResponse);
   }
 
   async update(req: Request, res: Response<ProductResponse>) {
-    const { productId } = req.params;
+    const productId = getParam(req, 'id');
     const parsedSchema = updateProductRequestSchema.parse(req.body);
     const productResponse = await productService.update(productId, parsedSchema);
 
@@ -38,7 +39,7 @@ class ProductController {
   }
 
   async delete(req: Request, res: Response<SimpleApiResponse>) {
-    const { productId } = req.params;
+    const productId = getParam(req, 'id');
 
     await productService.delete(productId);
 
