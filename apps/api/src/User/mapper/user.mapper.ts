@@ -4,12 +4,16 @@ import { GenericEntityCreateInput } from '../../types/prisma/GenericEntityUtilit
 import { User } from '../../generated/prisma/client';
 import { StrictDecodedIdToken } from '../../types/auth/StrictDecodedIdToken';
 import { DefaultSearchParams } from '../../types/api/DefaultSearchParams';
-import { UserResponse } from '@contracts/schemas/user/UserResponse';
-import { ProfileRowResponse, UserProfileRowResponse, UserRowResponse } from '@contracts/schemas/user/UserRowResponse';
+import { UserResponse } from '@repo/contracts//schemas/user/UserResponse';
+import {
+  ProfileRowResponse,
+  UserProfileRowResponse,
+  UserRowResponse,
+} from '@repo/contracts//schemas/user/UserRowResponse';
 import { UserWithProfile } from '../types';
 import { ProfileMapper } from './profile.mapper';
-import { UserProfileResponse } from '@contracts/schemas/profile/UserProfileResponse';
-import { Page } from '@contracts/types/page/Page';
+import { UserProfileResponse } from '@repo/contracts//schemas/profile/UserProfileResponse';
+import { Page } from '@repo/contracts//types/page/Page';
 
 export type UserCreateInputCustom = GenericEntityCreateInput<UserCreateInput>;
 

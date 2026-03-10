@@ -1,5 +1,5 @@
 import { S3Client } from '@aws-sdk/client-s3';
-import { PresignedUrlGenerator } from '@contracts/storage/PresignedUrl';
+import { PresignedUrlGenerator } from '@repo/contracts//storage/PresignedUrl';
 
 export interface IStorageProvider {
   client: S3Client;

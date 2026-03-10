@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { HealthzResponseDto } from '../schemas/healthzResponse.dto';
-import { SimpleApiResponse } from '@contracts/types/api/SimpleApiResponse.dto';
+import { SimpleApiResponse } from '@repo/contracts//types/api/SimpleApiResponse.dto';
 
 class RootController {
   async getHealth(req: Request, res: Response<SimpleApiResponse>) {

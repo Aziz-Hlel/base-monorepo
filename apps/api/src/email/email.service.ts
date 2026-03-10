@@ -1,4 +1,4 @@
-import { SendContactUsRequest } from '@contracts/schemas/email/sendContactUsRequest';
+import { SendContactUsRequest } from '@repo/contracts//schemas/email/sendContactUsRequest';
 import { emailUtils } from './email.utils';
 import { emailProvider } from './email.provider';
 import ENV from '@/config/ENV';

@@ -1,4 +1,4 @@
-import { PresignedUrlGenerator } from '@contracts/storage/PresignedUrl';
+import { PresignedUrlGenerator } from '@repo/contracts//storage/PresignedUrl';
 import { IStorageProvider } from '../interface/storage.interface';
 import { S3Client } from '@aws-sdk/client-s3';
 

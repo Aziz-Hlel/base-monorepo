@@ -1,15 +1,16 @@
 import { Response } from 'express';
 import { AuthenticatedRequest } from '../../types/auth/AuthenticatedRequest';
 import { userService } from '../Service/user.service';
-import { UserProfileRowResponse } from '@contracts/schemas/user/UserRowResponse';
-import { queryParamsSchema } from '@contracts/schemas/user/UserPageQuery';
-import { createUserProfileRequestSchema } from '@contracts/schemas/profile/createUserProfileRequest';
-import { UserProfileResponse } from '@contracts/schemas/profile/UserProfileResponse';
-import PERMISSION_SCORE from '@contracts/utils/PermissionScore';
+import { UserProfileRowResponse } from '@repo/contracts//schemas/user/UserRowResponse';
+import { queryParamsSchema } from '@repo/contracts//schemas/user/UserPageQuery';
+import { createUserProfileRequestSchema } from '@repo/contracts//schemas/profile/createUserProfileRequest';
+import { UserProfileResponse } from '@repo/contracts//schemas/profile/UserProfileResponse';
+import PERMISSION_SCORE from '@repo/contracts//utils/PermissionScore';
 import { PermissionDeniedError } from '@/err/customErrors';
-import { SimpleApiResponse } from '@contracts/types/api/SimpleApiResponse.dto';
-import { updateUserProfileRequestSchema } from '@contracts/schemas/profile/updateUserProfileRequest';
-import { Page } from '@contracts/types/page/Page';
+import { SimpleApiResponse } from '@repo/contracts//types/api/SimpleApiResponse.dto';
+import { updateUserProfileRequestSchema } from '@repo/contracts//schemas/profile/updateUserProfileRequest';
+import { Page } from '@repo/contracts//types/page/Page';
+import getParam from '@/utils/getParam';
 
 class UserController {
   async getUserPage(req: AuthenticatedRequest, res: Response<Page<UserProfileRowResponse>>) {
@@ -31,7 +32,7 @@ class UserController {
   }
 
   async updateUserProfile(req: AuthenticatedRequest, res: Response<UserProfileResponse>) {
-    const userId = req.params.id;
+    const userId = getParam(req, 'id');
     const parsedBody = updateUserProfileRequestSchema.parse(req.body);
 
     const userRole = req.user.claims?.role;
@@ -41,7 +42,7 @@ class UserController {
   }
 
   async deleteUserProfile(req: AuthenticatedRequest, res: Response<SimpleApiResponse>) {
-    const userToDeleteId = req.params.id;
+    const userToDeleteId = getParam(req, 'id');
     const userRole = req.user.claims?.role;
 
     await userService.deleteUser(userToDeleteId, userRole);
@@ -50,7 +51,7 @@ class UserController {
   }
 
   async enableUser(req: AuthenticatedRequest, res: Response<SimpleApiResponse>) {
-    const userId = req.params.id;
+    const userId = getParam(req, 'id');
     const userRole = req.user.claims?.role;
 
     await userService.enableUser(userId, userRole);
@@ -59,7 +60,7 @@ class UserController {
   }
 
   async disableUser(req: AuthenticatedRequest, res: Response<SimpleApiResponse>) {
-    const userId = req.params.id;
+    const userId = getParam(req, 'id');
     const userRole = req.user.claims?.role;
 
     await userService.disableUser(userId, userRole);

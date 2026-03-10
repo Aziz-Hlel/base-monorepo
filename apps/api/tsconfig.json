@@ -1,4 +1,5 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "module": "commonjs",
     "target": "ES2020",
@@ -6,12 +7,14 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
+    "rootDir": "src",
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@contracts/*": ["../../packages/contracts/src/*"]
+      "@/*": ["src/*"],
+      "@repo/contracts/*": ["../../packages/contracts/src/*"]
     }
   },
-  "include": ["src/**/*", "src/index.ts", "../../packages/contracts/src/**/*"]
+  "references": [{ "path": "../../packages/contracts" }],
+  "include": ["src/**/*", "../../packages/contracts/src/**/*"]
 }

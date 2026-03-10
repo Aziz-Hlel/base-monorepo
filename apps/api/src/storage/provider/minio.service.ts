@@ -1,6 +1,6 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { IStorageProvider } from '../interface/storage.interface';
-import { PresignedUrlGenerator } from '@contracts/storage/PresignedUrl';
+import { PresignedUrlGenerator } from '@repo/contracts//storage/PresignedUrl';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 export type IMinioConfig = {

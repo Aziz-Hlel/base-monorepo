@@ -1,10 +1,10 @@
 import { Product } from '@/generated/prisma/client';
 import { mediaService } from '@/media/media.service';
 import { ProductWithThumbnail } from '@/types/getPayload';
-import { ProductResponse } from '@contracts/schemas/product/productResponse';
-import { ProductRowResponse } from '@contracts/schemas/product/productRowResponse';
-import { DefaultSearchParams } from '@contracts/types/api/DefaultSeachParams';
-import { Page } from '@contracts/types/page/Page';
+import { ProductResponse } from '@repo/contracts//schemas/product/productResponse';
+import { ProductRowResponse } from '@repo/contracts//schemas/product/productRowResponse';
+import { DefaultSearchParams } from '@repo/contracts//types/api/DefaultSeachParams';
+import { Page } from '@repo/contracts//types/page/Page';
 
 export class ProductMapper {
   static toResponse(product: ProductWithThumbnail): ProductResponse {

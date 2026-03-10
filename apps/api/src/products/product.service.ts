@@ -1,13 +1,13 @@
 import { mediaService } from '@/media/media.service';
-import { CreateProductRequest } from '@contracts/schemas/product/createProductRequest';
+import { CreateProductRequest } from '@repo/contracts//schemas/product/createProductRequest';
 import { productRepo } from './product.repo';
-import { ProductResponse } from '@contracts/schemas/product/productResponse';
+import { ProductResponse } from '@repo/contracts//schemas/product/productResponse';
 import { ProductMapper } from './product.mapper';
 import { NotFoundError } from '@/err/customErrors';
-import { UpdateProductRequest } from '@contracts/schemas/product/updateProductRequest';
-import { ProductPageQuery } from '@contracts/schemas/product/ProductPageQuery';
+import { UpdateProductRequest } from '@repo/contracts//schemas/product/updateProductRequest';
+import { ProductPageQuery } from '@repo/contracts//schemas/product/ProductPageQuery';
 import { ProductOrderByWithRelationInput, ProductWhereInput } from '@/generated/prisma/models';
-import { Page } from '@contracts/types/page/Page';
+import { Page } from '@repo/contracts//types/page/Page';
 
 class ProductService {
   async create(schema: CreateProductRequest): Promise<ProductResponse> {

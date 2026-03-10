@@ -1,7 +1,7 @@
 import { prisma } from '@/bootstrap/db.init';
 import { ProductInclude, ProductOrderByWithRelationInput, ProductWhereInput } from '@/generated/prisma/models';
-import { CreateProductRequest } from '@contracts/schemas/product/createProductRequest';
-import { UpdateProductRequest } from '@contracts/schemas/product/updateProductRequest';
+import { CreateProductRequest } from '@repo/contracts/schemas/product/createProductRequest';
+import { UpdateProductRequest } from '@repo/contracts/schemas/product/updateProductRequest';
 import { DefaultArgs } from '@prisma/client/runtime/client';
 
 class ProductRepo {

@@ -1,11 +1,20 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    // "module": "ESNext",
+    // "moduleResolution": "Bundler",
+    "target": "ES2022",
     "module": "CommonJS",
     "strict": true,
-    "skipLibCheck": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    // "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": false,
+    "tsBuildInfoFile": "./dist/tsconfig.node.tsbuildinfo",
+    "outDir": "dist",
+    "rootDir": "src"
   },
-  "include": ["src/**/*"]
+  "include": ["src"]
 }

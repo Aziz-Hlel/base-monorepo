@@ -3,7 +3,7 @@ import UserMapper from '../mapper/user.mapper';
 import { InternalServerError } from '../../err/customErrors';
 import { DecodedIdTokenWithClaims } from '../../types/auth/DecodedIdTokenWithClaims';
 import { userRepo } from '../repo/user.repo';
-import { UserProfileResponse } from '@contracts/schemas/profile/UserProfileResponse';
+import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
 
 class AuthService {
   private firebaseService = firebaseAuthService;
