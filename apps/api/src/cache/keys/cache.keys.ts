@@ -1,4 +1,4 @@
-import { UserPageQuery } from '@repo/contracts//schemas/user/UserPageQuery';
+import { UserPageQuery } from '@repo/contracts/schemas/user/UserPageQuery';
 import crypto from 'crypto';
 
 const stableHash = (value: unknown): string => {

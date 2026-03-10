@@ -1,7 +1,7 @@
-import { presignedUrlRequestSchema } from '@repo/contracts//schemas/media/PresignedUrlRequest';
+import { presignedUrlRequestSchema } from '@repo/contracts/schemas/media/PresignedUrlRequest';
 import { mediaService } from './media.service';
 import { Request, Response } from 'express';
-import { PresignedUrlResponse } from '@repo/contracts//schemas/media/PresignedUrlResponse';
+import { PresignedUrlResponse } from '@repo/contracts/schemas/media/PresignedUrlResponse';
 
 class MediaController {
   async getPresignedUrl(req: Request, res: Response<PresignedUrlResponse>) {

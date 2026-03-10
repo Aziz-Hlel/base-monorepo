@@ -1,7 +1,7 @@
 import { prisma } from '@/bootstrap/db.init';
 import { logger } from '@/bootstrap/logger.init';
 import { MediaStatus, Status } from '@/generated/prisma/enums';
-import { PresignedUrlRequest } from '@repo/contracts//schemas/media/PresignedUrlRequest';
+import { PresignedUrlRequest } from '@repo/contracts/schemas/media/PresignedUrlRequest';
 
 class MediaRepo {
   async createPendingMedia(preSignedUrlDto: PresignedUrlRequest, mediaKey: string) {

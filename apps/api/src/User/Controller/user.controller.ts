@@ -1,14 +1,14 @@
 import { Response } from 'express';
 import { AuthenticatedRequest } from '../../types/auth/AuthenticatedRequest';
 import { userService } from '../Service/user.service';
-import { UserProfileRowResponse } from '@repo/contracts//schemas/user/UserRowResponse';
-import { queryParamsSchema } from '@repo/contracts//schemas/user/UserPageQuery';
-import { createUserProfileRequestSchema } from '@repo/contracts//schemas/profile/createUserProfileRequest';
-import { UserProfileResponse } from '@repo/contracts//schemas/profile/UserProfileResponse';
+import { UserProfileRowResponse } from '@repo/contracts/schemas/user/UserRowResponse';
+import { queryParamsSchema } from '@repo/contracts/schemas/user/UserPageQuery';
+import { createUserProfileRequestSchema } from '@repo/contracts/schemas/profile/createUserProfileRequest';
+import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
 import PERMISSION_SCORE from '@repo/contracts//utils/PermissionScore';
 import { PermissionDeniedError } from '@/err/customErrors';
 import { SimpleApiResponse } from '@repo/contracts//types/api/SimpleApiResponse.dto';
-import { updateUserProfileRequestSchema } from '@repo/contracts//schemas/profile/updateUserProfileRequest';
+import { updateUserProfileRequestSchema } from '@repo/contracts/schemas/profile/updateUserProfileRequest';
 import { Page } from '@repo/contracts//types/page/Page';
 import getParam from '@/utils/getParam';
 

@@ -4,7 +4,7 @@ import { prettifyError, ZodError } from 'zod';
 import ENV from '../config/ENV';
 import { AppError } from '../err/customErrors';
 import { ApiError } from '../err/apiError.type';
-import { logger } from '@/bootstrap/logger.init';
+import { logger } from '../bootstrap/logger.init';
 
 const handleZodError = (error: ZodError<unknown>, req: Request): ApiError => {
   const formatted: Record<string, string> = {};

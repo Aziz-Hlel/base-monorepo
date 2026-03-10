@@ -1,9 +1,9 @@
 import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedIdTokenWithClaims';
-import { CreateProfileRequest } from '@repo/contracts//schemas/profile/createProfileRequest';
+import { CreateProfileRequest } from '@repo/contracts/schemas/profile/createProfileRequest';
 import { userRepo } from '../repo/user.repo';
 import { BadRequestError, ConflictError } from '@/err/customErrors';
 import { profileRepo } from '../repo/profile.repo';
-import { UserProfileResponse } from '@repo/contracts//schemas/profile/UserProfileResponse';
+import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
 import { ProfileMapper } from '../mapper/profile.mapper';
 
 class ProfileService {

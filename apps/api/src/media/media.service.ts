@@ -1,11 +1,11 @@
 import { storageService } from '@/storage/storage.service';
-import { PresignedUrlRequest } from '@repo/contracts//schemas/media/PresignedUrlRequest';
+import { PresignedUrlRequest } from '@repo/contracts/schemas/media/PresignedUrlRequest';
 import { mediaRepo } from './media.repo';
 import { NotFoundError } from '@/err/customErrors';
 import { MediaStatus } from '@/generated/prisma/enums';
-import { PresignedUrlResponse } from '@repo/contracts//schemas/media/PresignedUrlResponse';
+import { PresignedUrlResponse } from '@repo/contracts/schemas/media/PresignedUrlResponse';
 import { Media } from '@/generated/prisma/client';
-import { MediaResponse } from '@repo/contracts//schemas/media/MediaResponse';
+import { MediaResponse } from '@repo/contracts/schemas/media/MediaResponse';
 
 export class MediaService {
   async getPresignedUrl(schema: PresignedUrlRequest): Promise<PresignedUrlResponse> {

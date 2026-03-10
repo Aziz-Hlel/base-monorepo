@@ -1,6 +1,6 @@
 import { prisma } from '@/bootstrap/db.init';
 import { ProfileInclude } from '@/generated/prisma/models';
-import { CreateProfileRequest } from '@repo/contracts//schemas/profile/createProfileRequest';
+import { CreateProfileRequest } from '@repo/contracts/schemas/profile/createProfileRequest';
 import { DefaultArgs } from '@prisma/client/runtime/client';
 import { ProfileWithUser } from '../types';
 

@@ -1,4 +1,4 @@
-import { UserProfileRowResponse } from '@repo/contracts//schemas/user/UserRowResponse';
+import { UserProfileRowResponse } from '@repo/contracts/schemas/user/UserRowResponse';
 import { UserOrderByWithRelationInput, UserWhereInput } from '../../generated/prisma/models';
 import { prisma } from '../../bootstrap/db.init';
 import UserMapper from '../mapper/user.mapper';
@@ -8,16 +8,16 @@ import {
   RootKeys,
   rootLevelSortableFields,
   UserPageQuery,
-} from '@repo/contracts//schemas/user/UserPageQuery';
+} from '@repo/contracts/schemas/user/UserPageQuery';
 import { cacheService } from '@/cache/service/cache.service';
-import { CreateUserProfileRequest } from '@repo/contracts//schemas/profile/createUserProfileRequest';
+import { CreateUserProfileRequest } from '@repo/contracts/schemas/profile/createUserProfileRequest';
 import { userRepo } from '../repo/user.repo';
-import { UserProfileResponse } from '@repo/contracts//schemas/profile/UserProfileResponse';
+import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
 import { firebaseUserService } from '@/firebase/service/firebase.user.service';
 import { NotFoundError, PermissionDeniedError } from '@/err/customErrors';
 import { Role } from '@/generated/prisma/enums';
 import PERMISSION_SCORE from '@repo/contracts//utils/PermissionScore';
-import { UpdateUserProfileRequest } from '@repo/contracts//schemas/profile/updateUserProfileRequest';
+import { UpdateUserProfileRequest } from '@repo/contracts/schemas/profile/updateUserProfileRequest';
 import { logger } from '@/bootstrap/logger.init';
 import { RedisKeys } from '@/cache/keys/cache.keys';
 import { Page } from '@repo/contracts//types/page/Page';
