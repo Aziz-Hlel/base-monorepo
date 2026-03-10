@@ -1,0 +1,17 @@
+{
+  "jsc": {
+    "parser": {
+      "syntax": "typescript"
+    },
+    "target": "es2022",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+      //   "@repo/contracts/*": ["../../packages/contracts/src/*"]
+    }
+  },
+  "module": {
+    "type": "commonjs"
+  },
+  "sourceMaps": true
+}

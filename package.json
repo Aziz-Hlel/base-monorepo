@@ -17,7 +17,9 @@
     "docker:dev": "node scripts/docker-up.js dev",
     "docker:stage": "node scripts/docker-up.js stage",
     "docker:prod": "node scripts/docker-up.js prod ",
-    "build": "tsc -b",
+    "build:packages": "tsc -b",
+    "build:api": "tsc -b && pnpm --filter api build ",
+    "start": "pnpm --filter api start",
     "test": ""
   },
   "lint-staged": {
@@ -29,11 +31,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@swc/cli": "^0.8.0",
+    "@swc/core": "^1.15.18",
     "dotenv": "^17.2.3",
+    "esbuild": "^0.27.3",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
     "rimraf": "^6.1.3",
+    "@types/node": "^24.10.1",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3"
   }

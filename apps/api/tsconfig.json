@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "module": "commonjs",
     "target": "ES2020",
@@ -16,5 +15,5 @@
     }
   },
   "references": [{ "path": "../../packages/contracts" }],
-  "include": ["src/**/*", "../../packages/contracts/src/**/*"]
+  "include": ["src/**/*"]
 }

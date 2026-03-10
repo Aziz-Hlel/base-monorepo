@@ -5,6 +5,7 @@ packages:
 onlyBuiltDependencies:
   - '@firebase/util'
   - '@prisma/engines'
+  - '@swc/core'
   - esbuild
   - prisma
   - protobufjs
