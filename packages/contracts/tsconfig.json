@@ -9,6 +9,7 @@
     "moduleResolution": "bundler",
     // "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "moduleDetection": "force",
     "noEmit": false
   },

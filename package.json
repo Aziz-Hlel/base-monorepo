@@ -20,7 +20,8 @@
     "docker:stage": "node scripts/docker-up.js stage",
     "docker:prod": "node scripts/docker-up.js prod ",
     "build:packages": "tsc -b",
-    "build:api": "tsc -b && pnpm --filter api build ",
+    "build:api": "pnpm build:packages && pnpm --filter api build ",
+    "build:admin": "pnpm build:packages && pnpm --filter admin build ",
     "start": "pnpm --filter api start",
     "test": ""
   },
