@@ -4,6 +4,9 @@
     "composite": true,
     "tsBuildInfoFile": "./dist/tsconfig.node.tsbuildinfo",
 
+    "rootDir": "src",
+    "outDir": "dist",
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
