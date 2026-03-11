@@ -6,7 +6,7 @@ dotenv.config();
 const baseSchema = z
   .object({
     // APP
-    PORT: z.coerce.number().positive(),
+    API_PORT: z.coerce.number().positive(),
 
     // CORS
     ALLOWED_ORIGIN_PATTERNS: z.string({ error: 'ALLOWED_ORIGIN_PATTERNS is required in non production environment' }),

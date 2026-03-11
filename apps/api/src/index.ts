@@ -11,8 +11,8 @@ async function bootstrap() {
     console.error('❌ ERROR : Server failed to start', error);
     process.exit(1);
   });
-  app.listen(ENV.PORT, () => {
-    console.log(`✅ SUCCESS : Server running on port ${ENV.PORT}`);
+  app.listen(ENV.API_PORT, () => {
+    console.log(`✅ SUCCESS : Server running on port ${ENV.API_PORT}`);
   });
 }
 
