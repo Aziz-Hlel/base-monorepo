@@ -1,4 +1,4 @@
-import { PresignedUrlGenerator } from '@repo/contracts//storage/PresignedUrl';
+import { PresignedUrlGenerator } from '@repo/contracts/storage/PresignedUrl';
 import { IStorageProvider } from './interface/storage.interface';
 import { createStorageProvider } from './provider/storage.provider';
 import path from 'path';

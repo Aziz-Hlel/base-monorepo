@@ -7,7 +7,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-      //   "@repo/contracts/*": ["../../packages/contracts/src/*"]
     }
   },
   "module": {

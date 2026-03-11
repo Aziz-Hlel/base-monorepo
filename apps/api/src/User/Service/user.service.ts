@@ -16,11 +16,11 @@ import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfile
 import { firebaseUserService } from '@/firebase/service/firebase.user.service';
 import { NotFoundError, PermissionDeniedError } from '@/err/customErrors';
 import { Role } from '@/generated/prisma/enums';
-import PERMISSION_SCORE from '@repo/contracts//utils/PermissionScore';
+import PERMISSION_SCORE from '@repo/contracts/utils/PermissionScore';
 import { UpdateUserProfileRequest } from '@repo/contracts/schemas/profile/updateUserProfileRequest';
 import { logger } from '@/bootstrap/logger.init';
 import { RedisKeys } from '@/cache/keys/cache.keys';
-import { Page } from '@repo/contracts//types/page/Page';
+import { Page } from '@repo/contracts/types/page/Page';
 
 class UserService {
   async getUserPage(queryParams: UserPageQuery): Promise<Page<UserProfileRowResponse>> {

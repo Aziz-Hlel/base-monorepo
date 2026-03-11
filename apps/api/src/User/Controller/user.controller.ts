@@ -5,10 +5,10 @@ import { UserProfileRowResponse } from '@repo/contracts/schemas/user/UserRowResp
 import { queryParamsSchema } from '@repo/contracts/schemas/user/UserPageQuery';
 import { createUserProfileRequestSchema } from '@repo/contracts/schemas/profile/createUserProfileRequest';
 import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
-import PERMISSION_SCORE from '@repo/contracts//utils/PermissionScore';
+import PERMISSION_SCORE from '@repo/contracts/utils/PermissionScore';
 import { PermissionDeniedError } from '@/err/customErrors';
-import { SimpleApiResponse } from '@repo/contracts//types/api/SimpleApiResponse.dto';
-import { Page } from '@repo/contracts//types/page/Page';
+import { SimpleApiResponse } from '@repo/contracts/types/api/SimpleApiResponse.dto';
+import { Page } from '@repo/contracts/types/page/Page';
 import getParam from '@/utils/getParam';
 import { updateUserProfileRequestSchema } from '@repo/contracts/schemas/profile/updateUserProfileRequest';
 

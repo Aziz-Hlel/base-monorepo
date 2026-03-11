@@ -13,7 +13,7 @@ import {
 import { UserWithProfile } from '../types';
 import { ProfileMapper } from './profile.mapper';
 import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
-import { Page } from '@repo/contracts//types/page/Page';
+import { Page } from '@repo/contracts/types/page/Page';
 
 export type UserCreateInputCustom = GenericEntityCreateInput<UserCreateInput>;
 

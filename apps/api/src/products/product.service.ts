@@ -7,7 +7,7 @@ import { NotFoundError } from '@/err/customErrors';
 import { UpdateProductRequest } from '@repo/contracts/schemas/product/updateProductRequest';
 import { ProductPageQuery } from '@repo/contracts/schemas/product/ProductPageQuery';
 import { ProductOrderByWithRelationInput, ProductWhereInput } from '@/generated/prisma/models';
-import { Page } from '@repo/contracts//types/page/Page';
+import { Page } from '@repo/contracts/types/page/Page';
 
 class ProductService {
   async create(schema: CreateProductRequest): Promise<ProductResponse> {
