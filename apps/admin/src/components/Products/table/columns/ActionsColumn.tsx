@@ -3,7 +3,6 @@ import { EllipsisVertical, Trash2, SquarePen } from 'lucide-react';
 import React, { Fragment } from 'react';
 import type { TableRowType } from '../tableDeclarations/typesAndFieldsDeclaration';
 import type { Row } from '@tanstack/react-table';
-import PERMISSION_SCORE from '@repo/contracts/utils/PermissionScore';
 import { useUser } from '@/context/UserContext';
 import { useSelectedRow } from '../../context/selected-row-provider';
 import {
@@ -16,6 +15,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import RowContainer from '../ContainerComp/RowContainer';
 import { Button } from '@/components/ui/button';
+import PERMISSION_SCORE from '@repo/contracts/utils/PermissionScore';
 
 type RowAction = {
   key: 'edit' | 'delete' | 'disable' | 'enable';
