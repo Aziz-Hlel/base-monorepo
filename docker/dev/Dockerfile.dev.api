@@ -7,9 +7,9 @@ WORKDIR /app
 
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 
-COPY packages/contracts/package.json packages/contracts/
+COPY packages/contracts/package.json packages/contracts/package.json
 
-COPY apps/api/package.json apps/api/
+COPY apps/api/package.json apps/api/package.json
 
 RUN pnpm install     
 

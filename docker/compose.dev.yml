@@ -1,44 +1,25 @@
 services:
-  # web:
-  #   build:
-  #     context: ${PROJECT_ROOT}
-  #     dockerfile: docker/dev/Dockerfile.dev.web
-  #   ports:
-  #     - '${VITE_ADMIN_PORT:?VITE_ADMIN_PORT is required}:${VITE_ADMIN_PORT}'
-  #   volumes:
-  #     - ${PROJECT_ROOT}/apps/web/src:/app/apps/web/src
-  #     - ${PROJECT_ROOT}/apps/web/public:/app/apps/web/public
-  #     - ${PROJECT_ROOT}/packages/contracts/src:/app/packages/contracts/src
-  #   env_file:
-  #     - ${PROJECT_ROOT}/config/.env.dev
-  #     - ${PROJECT_ROOT}/.env.local
-  #     - ${PROJECT_ROOT}/.env
-  #   environment:
-  #     PORT: ${WEB_PORT}
-  #     CHOKIDAR_USEPOLLING: true
-  #     WATCHPACK_POLLING: true
-  #   depends_on:
-  #     - api
+  admin:
+    build:
+      context: ${PROJECT_ROOT}
+      dockerfile: docker/dev/Dockerfile.dev.admin
+    ports:
+      - '${VITE_ADMIN_PORT:?VITE_ADMIN_PORT is required}:${VITE_ADMIN_PORT}'
+    volumes:
+      - ${PROJECT_ROOT}/apps/admin/src:/app/apps/admin/src
+      - ${PROJECT_ROOT}/apps/admin/public:/app/apps/admin/public
+      - ${PROJECT_ROOT}/packages/contracts/src:/app/packages/contracts/src
+    env_file:
+      - ${PROJECT_ROOT}/config/.env.dev
+      - ${PROJECT_ROOT}/.env.local
+      - ${PROJECT_ROOT}/.env
+    command: sh -c "pnpm dev:admin"
 
-  # admin:
-  #   build:
-  #     context: ${PROJECT_ROOT}
-  #     dockerfile: docker/dev/Dockerfile.dev.admin
-  #   ports:
-  #     - '${VITE_ADMIN_PORT:?VITE_ADMIN_PORT is required}:${VITE_ADMIN_PORT}'
-  #   volumes:
-  #     - ${PROJECT_ROOT}/apps/admin/src:/app/apps/admin/src
-  #     - ${PROJECT_ROOT}/apps/admin/public:/app/apps/admin/public
-  #     - ${PROJECT_ROOT}/packages/contracts/src:/app/packages/contracts/src
-  #   env_file:
-  #     - ${PROJECT_ROOT}/config/.env.dev
-  #     - ${PROJECT_ROOT}/.env.local
-  #     - ${PROJECT_ROOT}/.env
-  #   environment:
-  #     CHOKIDAR_USEPOLLING: true
-  #     WATCHPACK_POLLING: true
-  #   depends_on:
-  #     - api
+    environment:
+      CHOKIDAR_USEPOLLING: true
+      WATCHPACK_POLLING: true
+    depends_on:
+      - api
 
   api:
     build:
@@ -57,6 +38,15 @@ services:
       - ${PROJECT_ROOT}/config/.env.dev
       - ${PROJECT_ROOT}/.env.local
       - ${PROJECT_ROOT}/.env
+    environment:
+      CHOKIDAR_USEPOLLING: true
+      WATCHPACK_POLLING: true
+
+      REDIS_PORT: 6379
+      DB_PORT: 5432
+      MINIO_PORT: 9000
+      SMTP_PORT: 1025
+
     depends_on:
       - db
       - redis

@@ -37,7 +37,7 @@
     // DOCKER:DEV
     {
       "label": " DOCKER DEV",
-      "detail": "Run all services locally",
+      "detail": "Run all services in docker in dev mode",
       "type": "shell",
       "command": "pnpm docker:dev",
       "presentation": { "panel": "new" },

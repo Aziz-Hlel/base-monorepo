@@ -7,11 +7,11 @@ WORKDIR /app
 
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 
-COPY packages/contracts/package.json packages/contracts/
+COPY packages/contracts/package.json packages/contracts/package.json
 
-COPY apps/web/package.json apps/web/
+COPY apps/admin/package.json apps/admin/package.json
 
 RUN pnpm install
 
 COPY packages/contracts ./packages/contracts
-COPY apps/web ./apps/web 
+COPY apps/admin ./apps/admin 
