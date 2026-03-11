@@ -1,4 +1,4 @@
-import { MediaResponse } from '../media/MediaResponse';
+import type { MediaResponse } from '../media/MediaResponse';
 
 export type ProductResponse = {
   id: string;

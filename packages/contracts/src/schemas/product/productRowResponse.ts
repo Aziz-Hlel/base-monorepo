@@ -1,5 +1,5 @@
 import { ProductStatus } from '../../types/enums/enums';
-import { MediaResponse } from '../media/MediaResponse';
+import type { MediaResponse } from '../media/MediaResponse';
 
 export type ProductRowResponse = {
   id: string;

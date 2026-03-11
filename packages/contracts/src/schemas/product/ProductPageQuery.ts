@@ -1,6 +1,6 @@
 import z from 'zod';
 import { ProductStatus } from '../../types/enums/enums';
-import { ProductRowResponse } from './productRowResponse';
+import type { ProductRowResponse } from './productRowResponse';
 
 export type TableRowType = ProductRowResponse;
 

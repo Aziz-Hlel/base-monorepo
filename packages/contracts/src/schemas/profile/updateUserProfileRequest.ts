@@ -14,11 +14,4 @@ export const updateUserProfileRequestSchema = z.object({
   }),
 });
 
-const a = updateUserProfileRequestSchema.pick({
-  username: true,
-  email: true,
-  status: true,
-  role: true,
-  profile: true,
-});
 export type UpdateUserProfileRequest = z.infer<typeof updateUserProfileRequestSchema>;
