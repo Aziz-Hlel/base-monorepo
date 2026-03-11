@@ -1,5 +1,4 @@
 import z from 'zod';
-import { ENTITY_TYPE } from './EntityType';
 
 const oneMb = 1024 * 1024;
 const maxFileSize = 100 * oneMb;

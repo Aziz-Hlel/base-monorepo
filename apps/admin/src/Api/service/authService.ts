@@ -1,11 +1,12 @@
 import { apiService } from '@/Api/apiService';
-import apiRoutes from '../routes/routes';
 import type { SignInResponseDto } from '@/types22/auth/SignInResponseDto';
 import type { FirebaseSignInRequestDto } from '@/types22/auth/SignInRequestDto';
-import type { ApiResponse } from '../../types22/api/ApiResponse';
 import type { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
 import type { FirebaseSignUpRequestSchema } from 'src/types22/auth/SignUpRequestDto';
 import type { SignUpResponseDto } from '@/types22/auth/SignUpResponseDto';
+import type { ApiResponse } from '@/types22/api/ApiResponse';
+import apiRoutes from '../routes/routes';
+
 export interface IauthService {
   signIn: (payload: FirebaseSignInRequestDto) => Promise<ApiResponse<SignInResponseDto>>;
 

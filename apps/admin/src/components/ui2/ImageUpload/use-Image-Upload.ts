@@ -69,7 +69,7 @@ const useImageUpload = ({ media, handleMediaUpload, clearErrors }: IUseImageUplo
       setProgress(10);
       setFile(null);
 
-      const { id, key, url } = await uploadImage({
+      const { id } = await uploadImage({
         uploadedImg: optimizedImg.blob,
         name: fileName,
         setProgress: (progress: any) => {

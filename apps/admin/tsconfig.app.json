@@ -22,8 +22,7 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/repo/contracts/*": ["../../packages/contracts/src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src", "../../packages/contracts/src/**/*"]

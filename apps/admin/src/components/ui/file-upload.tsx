@@ -7,7 +7,6 @@ import {
   forwardRef,
   useCallback,
   useContext,
-  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -69,7 +68,7 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps & React
     ref,
   ) => {
     const [isFileTooBig, setIsFileTooBig] = useState(false);
-    const [isLOF, setIsLOF] = useState(false);
+    const [isLOF, _] = useState(false);
     const [activeIndex, setActiveIndex] = useState(-1);
     const {
       accept = {

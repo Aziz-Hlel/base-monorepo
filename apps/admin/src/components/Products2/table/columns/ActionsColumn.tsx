@@ -1,4 +1,4 @@
-import { EllipsisVertical, Trash2, SquarePen, Star } from 'lucide-react';
+import { EllipsisVertical, Trash2, SquarePen } from 'lucide-react';
 
 import React, { Fragment } from 'react';
 import type { TableRowType } from '../tableDeclarations/typesAndFieldsDeclaration';
@@ -14,7 +14,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import RowContainer from '../ContainerComp/RowContainer';
 import { Button } from '@/components/ui/button';
-import { OfferStatus } from '@repo/contracts/types/enums/enums';
+import { ProductStatus } from '@repo/contracts/types/enums/enums';
 
 type RowAction = {
   key: 'edit' | 'delete' | 'feature';
@@ -34,10 +34,10 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
   const { handleDialogChange, setCurrentRow } = useSelectedRow();
 
   const getActionState = (actionKey: RowAction['key']): RowActionState => {
-    if (actionKey === 'feature' && row.original.status !== OfferStatus.ACTIVE) {
+    if (actionKey === 'feature' && row.original.status !== ProductStatus.AVAILABLE) {
       return {
         isPermitted: false,
-        tooltipMessage: 'Only offers with status ACTIVE can be featured',
+        tooltipMessage: 'Only products with status AVAILABLE can be featured',
       };
     }
     return {
@@ -57,16 +57,16 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
         handleDialogChange('edit');
       },
     },
-    {
-      key: 'feature',
-      label: row.original.isFeatured ? 'Unfeature' : 'Feature',
-      icon: <Star size={16} className="text-amber-500" />,
-      isPermitted: true,
-      onClick: () => {
-        setCurrentRow(row.original);
-        handleDialogChange('feature');
-      },
-    },
+    // {
+    //   key: 'feature',
+    //   label: row.original.isFeatured ? 'Unfeature' : 'Feature',
+    //   icon: <Star size={16} className="text-amber-500" />,
+    //   isPermitted: true,
+    //   onClick: () => {
+    //     setCurrentRow(row.original);
+    //     handleDialogChange('feature');
+    //   },
+    // },
     {
       key: 'delete',
       label: 'Delete',

@@ -1,7 +1,7 @@
-import z, { keyof } from 'zod';
+import z from 'zod';
 import { Role, Status } from '../../types/enums/enums';
+import type { Prettify } from '../../utils/Prettify';
 import { UserProfileRowResponse } from './UserRowResponse';
-import { Prettify } from '../../utils/Prettify';
 
 export type TableRowType = UserProfileRowResponse;
 export type NestedObject = Prettify<NonNullable<TableRowType['profile']>>;

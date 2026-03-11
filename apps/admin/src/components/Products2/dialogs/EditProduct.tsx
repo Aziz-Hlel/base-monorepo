@@ -2,6 +2,7 @@ import { useSelectedRow } from '../context/selected-row-provider';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogClose,
@@ -11,42 +12,47 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { toast } from 'sonner';
-import { ApiError } from '@/Api/ApiError';
+import { Spinner } from '@/components/ui/spinner';
+import { Separator } from '@/components/ui/separator';
+import productService from '@/Api/service/productService';
+import {
+  updateProductRequestSchema,
+  type UpdateProductRequest,
+} from '@repo/contracts/schemas/product/updateProductRequest';
 import { Textarea } from '@/components/ui/textarea';
-import ImageUpload from '@/components/ui2/ImageUpload/comp/ImageUpload';
 import InputNumberForm from '@/components/ui2/InputNumberForm/InputNumberForm';
-import { createOfferRequestSchema, type CreateOfferRequest } from '@repo/contracts/schemas/offre/createOfferRequest';
-import offerService from '@/Api/service/offerService';
+import SelectForm from '@/components/ui2/SelectForm/SelectForm';
+import ProductTextMapping from '@/EnumTextMapping/ProductTextMapping';
+import ImageUpload from '@/components/ui2/ImageUpload/comp/ImageUpload';
 
-const AddOffer = () => {
-  const { handleCancel, openDialog } = useSelectedRow();
+const EditProduct = () => {
+  const { handleCancel, currentRow, openDialog } = useSelectedRow();
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: ['offers', 'create'],
-    mutationFn: offerService.createOffer,
+    mutationKey: ['products', 'update'],
+    mutationFn: productService.updateProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['offers'], exact: false });
-      form.reset();
+      queryClient.invalidateQueries({ queryKey: ['products'], exact: false });
       handleCancel();
     },
   });
 
-  const defaultValues: CreateOfferRequest = {
-    title: '',
-    description: '',
-    points: undefined as any,
-    thumbnailId: '',
+  if (!currentRow) return null;
+
+  const defaultValues: UpdateProductRequest = {
+    name: currentRow?.name,
+    description: currentRow?.description,
+    price: currentRow?.price,
+    status: currentRow?.status,
+    thumbnailId: currentRow?.thumbnail?.id ?? '',
   };
 
-  const form = useForm<CreateOfferRequest>({
-    resolver: zodResolver(createOfferRequestSchema),
+  const form = useForm<UpdateProductRequest>({
+    resolver: zodResolver(updateProductRequestSchema),
     defaultValues: defaultValues,
   });
 
@@ -57,24 +63,17 @@ const AddOffer = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<CreateOfferRequest> = async (data) => {
+  const onSubmit: SubmitHandler<UpdateProductRequest> = async (data) => {
     try {
-      await mutateAsync(data);
-      toast.success('Offer created successfully');
+      await mutateAsync({ id: currentRow!.id, payload: data });
+      toast.success('Product updated successfully');
     } catch (error) {
-      console.log(error);
-      if (error instanceof ApiError && error.status === 409) {
-        console.log('t5l');
-        form.setError('title', { message: 'Title already exists' });
-        return;
-      }
-      toast.error('Failed to create offer');
+      toast.error('Failed to update product');
     }
   };
 
-  const dialogIsOpen = openDialog === 'add';
-
-  console.log('form :', form.getValues());
+  const dialogIsOpen = openDialog === 'edit';
+  console.log(form.formState.errors);
 
   const thumbnailErrors = [form.formState.errors.thumbnailId?.message];
 
@@ -89,27 +88,32 @@ const AddOffer = () => {
       newMediaId ? { shouldDirty: true, shouldValidate: true } : undefined,
     );
   };
+
   return (
     <Dialog onOpenChange={onOpenChange} open={dialogIsOpen}>
       <DialogContent className="sm:max-w-106.25 h-[calc(100dvh-4rem)] flex flex-col overflow-hidden  ">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex flex-col h-full">
           <DialogHeader>
-            <DialogTitle>Create Offer</DialogTitle>
-            <DialogDescription>Fill the form below to create a new offer.</DialogDescription>
+            <DialogTitle className=" text-center">Update Product</DialogTitle>
+            <DialogDescription className=" text-center">Fill the form below to update the product.</DialogDescription>
+            <Separator />
           </DialogHeader>
-          <div
-            className=" 
-              flex-1 min-h-0 overflow-y-auto pr-2  overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400"
-          >
+          <div className="flex-1 min-h-0 overflow-y-auto pr-2 overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400">
             <FieldGroup>
               <Controller
-                name="title"
+                name="name"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={`title-input`}>Title</FieldLabel>
-                    <Input {...field} id={`title-input`} aria-invalid={fieldState.invalid} placeholder="Title" />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    <FieldLabel htmlFor={`name-input`}>Name</FieldLabel>
+                    <Input
+                      {...field}
+                      id={`name-input`}
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Name"
+                      value={field.value ?? undefined}
+                    />
+                    <FieldError errors={[fieldState.error]} />
                   </Field>
                 )}
               />
@@ -124,32 +128,47 @@ const AddOffer = () => {
                       {...field}
                       id={`description-input`}
                       aria-invalid={fieldState.invalid}
+                      aria-rowcount={3}
                       placeholder="Description"
+                      className=" max-h-42 overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400"
                     />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    <FieldError errors={[fieldState.error]} />
                   </Field>
                 )}
               />
+
               <Controller
-                name="points"
+                name="price"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid} className="flex">
-                    <FieldLabel htmlFor={`points-input`}>Points</FieldLabel>
-                    <InputNumberForm field={field} emptyInitially />
+                    <FieldLabel htmlFor={`price-input`}>Price</FieldLabel>
+                    <InputNumberForm field={field} />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
               />
 
+              <Controller
+                name="status"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} className="flex">
+                    <FieldLabel htmlFor={`status-input`}>Status</FieldLabel>
+                    <SelectForm field={field} options={ProductTextMapping} placeholder="Select status" label="Status" />
+                  </Field>
+                )}
+              />
+
               <ImageUpload
-                initMedia={null}
+                initMedia={currentRow?.thumbnail ?? null}
                 mediaErrors={thumbnailErrors}
                 clearMediaErrors={clearMediaErrors}
                 handleMediaUpload={handleThumbnailUpload}
               />
             </FieldGroup>
           </div>
+
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline" onClick={handleCancel}>
@@ -166,4 +185,4 @@ const AddOffer = () => {
   );
 };
 
-export default AddOffer;
+export default EditProduct;

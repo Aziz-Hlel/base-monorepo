@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import type { TableRowType } from './tableDeclarations/typesAndFieldsDeclaration';
 import useQueryParams from './use-query-params';
 import type { Pageable } from '@repo/contracts/types/page/Pageable';
-import offerService from '@/Api/service/offerService';
+import productService from '@/Api/service/productService';
 
 const blankPagination: Pageable = {
   size: 0,
@@ -23,7 +23,7 @@ const useGetTableData = () => {
 
   const { data, isFetching } = useQuery({
     queryKey: ['offers', { ...queryParams }],
-    queryFn: async () => await offerService.getPage(adjustedQueryParams),
+    queryFn: async () => await productService.getProducts(adjustedQueryParams),
     placeholderData: (previousData) => previousData,
   });
 

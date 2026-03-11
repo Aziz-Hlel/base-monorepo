@@ -1,14 +1,14 @@
 import type { Page } from '@repo/contracts/types/page/Page';
 import { apiService } from '../apiService';
 import apiRoutes from '../routes/routes';
-import type { UserRowResponse } from '@repo/contracts/schemas/user/UserRowResponse';
+import type { UserProfileRowResponse } from '@repo/contracts/schemas/user/UserRowResponse';
 import type { CreateUserProfileRequest } from '@repo/contracts/schemas/profile/createUserProfileRequest';
 import type { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
 import type { UpdateUserProfileRequest } from '@repo/contracts/schemas/profile/updateUserProfileRequest';
 
 const userService = {
   getUsers: async (searchParams: { [k: string]: string | number | Array<string> }) =>
-    apiService.getThrowable<Page<UserRowResponse>>(apiRoutes.users.getUsers(), {
+    apiService.getThrowable<Page<UserProfileRowResponse>>(apiRoutes.users.getUsers(), {
       params: searchParams,
     }),
 

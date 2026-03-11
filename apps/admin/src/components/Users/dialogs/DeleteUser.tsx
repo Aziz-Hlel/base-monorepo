@@ -1,7 +1,6 @@
 import { useSelectedRow } from '../context/selected-row-provider';
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,

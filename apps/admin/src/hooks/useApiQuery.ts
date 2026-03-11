@@ -1,7 +1,7 @@
 import { apiService } from '../Api/apiService';
 import type { AxiosRequestConfig } from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import type { Pageable } from '@/types22/page/Pageable';
+import type { Pageable } from '@repo/contracts/types/page/Pageable';
 
 interface UseApiOptions {
   url: string;

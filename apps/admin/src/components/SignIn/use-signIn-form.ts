@@ -25,7 +25,7 @@ const useSignInForm = () => {
 
       const idToken = firebaseResponse.data;
 
-      const response = await signIn({
+      await signIn({
         idToken: idToken,
       });
 

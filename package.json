@@ -11,6 +11,7 @@
     "format:fix": "prettier --write .",
     "prisma:generate": "pnpm --filter api exec prisma generate",
     "prisma:migrate:dev": "pnpm --filter api exec prisma migrate dev",
+    "prisma:reset": "pnpm --filter api exec prisma migrate reset",
     "docker:local": "node scripts/docker-up.js local",
     "dev:api": "pnpm --filter api dev",
     "dev:admin": "pnpm --filter admin dev",
@@ -42,6 +43,7 @@
     "prettier": "^3.7.4",
     "rimraf": "^6.1.3",
     "tsc-alias": "^1.8.16",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {

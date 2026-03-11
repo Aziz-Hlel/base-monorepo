@@ -1,4 +1,4 @@
-import offerStatusTextMapping from '@/EnumTextMapping/offerStatusTextMapping';
+import offerStatusTextMapping from '@/EnumTextMapping/ProductStatusTextMapping';
 import type { TableRowType } from '../../tableDeclarations/typesAndFieldsDeclaration';
 
 export type ColumnFilter<T extends keyof TableRowType> = {

@@ -2,7 +2,6 @@ import { prisma } from '@/bootstrap/db.init';
 import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
 import { firebaseUserService } from '@/firebase/service/firebase.user.service';
 import { Role } from '@/generated/prisma/enums';
-import { UserCreateManyInput } from '@/generated/prisma/models';
 import { faker } from '@faker-js/faker';
 
 const prodUsers = [
@@ -33,11 +32,25 @@ export const seedProdUsers = async () => {
       role: user.role,
     });
 
-    prisma.user.create({
-      data: {
-        ...user,
-        authId: userRecord.uid,
-      },
+    const data = {
+      authId: userRecord.uid,
+      email: user.email,
+      username: user.username,
+      role: user.role,
+      provider: user.provider,
+      isEmailVerified: user.isEmailVerified,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+
+    const createdUser = await prisma.user.create({
+      data,
+    });
+
+    await firebaseAuthService.setCustomUserClaims({
+      userId: createdUser.id,
+      userAuthId: createdUser.authId,
+      userRole: createdUser.role,
     });
   });
 };

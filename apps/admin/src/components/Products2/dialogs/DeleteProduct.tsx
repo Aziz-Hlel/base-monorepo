@@ -11,51 +11,46 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import offerService from '@/Api/service/offerService';
+import productService from '@/Api/service/productService';
 
-const FeatureOffer = () => {
+const DeleteProduct = () => {
   const { handleCancel, openDialog, currentRow } = useSelectedRow();
   const queryClient = useQueryClient();
 
   const { mutateAsync } = useMutation({
-    mutationKey: ['offers', 'feature'],
-    mutationFn: offerService.toggleFeatured,
+    mutationKey: ['products', 'delete'],
+    mutationFn: productService.deleteProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['offers'], exact: false });
-      toast.success('Offer featured successfully');
+      queryClient.invalidateQueries({ queryKey: ['products'], exact: false });
+      toast.success('Product deleted successfully');
       handleCancel();
     },
   });
 
-  const featureOffer = async () => {
+  const deleteProduct = async () => {
     try {
       await mutateAsync(currentRow?.id!);
     } catch (error) {
-      toast.error('Failed to feature offer');
+      toast.error('Failed to delete product');
       handleCancel();
     }
   };
-  const dialogOpen = openDialog === 'feature';
-
-  const IsofferFeatured = currentRow?.isFeatured;
-
-  const title = IsofferFeatured ? 'unfeature' : 'feature';
-  const descriptionAction = IsofferFeatured
-    ? 'This action will unfeature the offer'
-    : 'This action will feature the offer';
-  const action = IsofferFeatured ? 'unfeaturing' : 'featuring';
+  const dialogOpen = openDialog === 'delete';
   return (
     <>
       <AlertDialog open={dialogOpen} onOpenChange={handleCancel}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className=" capitalize"> {title}</AlertDialogTitle>
-            <AlertDialogDescription>{descriptionAction}</AlertDialogDescription>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the product "{currentRow?.name}" and remove its
+              data from our servers.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
-            <Button onClick={featureOffer} className=" bg-blue-600 hover:bg-blue-500 capitalize">
-              {action}
+            <Button onClick={deleteProduct} className=" bg-red-600 hover:bg-red-500">
+              Delete
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -64,4 +59,4 @@ const FeatureOffer = () => {
   );
 };
 
-export default FeatureOffer;
+export default DeleteProduct;

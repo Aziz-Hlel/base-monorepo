@@ -12,7 +12,7 @@ import AuthProviderCell from '../EnumColumns/AuthProvider/AuthProviderCell';
 import AuthProviderHeader from '../EnumColumns/AuthProvider/AuthProviderHeader';
 import ActionsColumn from '../columns/ActionsColumn';
 
-type TableColumnDefinition<T> = ColumnDef<T> & { accessorKey?: keyof T };
+// type TableColumnDefinition<T> = ColumnDef<T> & { accessorKey?: keyof T };
 
 const columnsRowsDefinition: ColumnDef<TableRowType>[] = [
   {

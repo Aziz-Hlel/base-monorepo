@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { STATUS_VARIANTS } from './status-variants';
 import type { TableRowType } from '../../tableDeclarations/typesAndFieldsDeclaration';
-import offerStatusTextMapping from '@/EnumTextMapping/offerStatusTextMapping';
+import productStatusTextMapping from '@/EnumTextMapping/ProductStatusTextMapping';
 
 export type StatusType = TableRowType['status'];
 
@@ -13,7 +13,7 @@ const StatusComponent = ({ value }: { value: StatusType }) => {
   }
 
   const Icon = variant.Icon;
-  const textMapping = offerStatusTextMapping[value];
+  const textMapping = productStatusTextMapping[value];
   return (
     <Badge variant="outline" className={`rounded-sm cursor-default ${variant.className}`}>
       <Icon className="mr-1 h-4 w-4" />
