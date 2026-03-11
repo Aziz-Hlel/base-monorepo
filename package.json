@@ -19,7 +19,7 @@
     "docker:dev": "node scripts/docker-up.js dev",
     "docker:stage": "node scripts/docker-up.js stage",
     "docker:prod": "node scripts/docker-up.js prod ",
-    "build:packages": "tsc -b",
+    "build:packages": "pnpm -F contracts build",
     "build:api": "pnpm build:packages && pnpm -F api build ",
     "build:admin": "pnpm build:packages && pnpm -F admin build ",
     "start": "pnpm -F api start",

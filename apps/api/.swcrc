@@ -10,7 +10,8 @@
     }
   },
   "module": {
-    "type": "commonjs"
+    "type": "commonjs",
+    "resolveFully": true
   },
   "sourceMaps": true
 }

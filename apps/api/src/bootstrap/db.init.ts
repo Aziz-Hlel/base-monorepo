@@ -1,7 +1,7 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import ENV from '@/config/ENV';
-import { PrismaClient } from '../generated/prisma/client';
 import { logger } from './logger.init';
+import { PrismaClient } from '@/generated/prisma/client';
 
 const connectionString = `postgresql://${ENV.DB_USER}:${ENV.DB_PASSWORD}@${ENV.DB_HOST}:${ENV.DB_PORT}/${ENV.DB_NAME}`;
 

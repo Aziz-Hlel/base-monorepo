@@ -12,7 +12,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@repo/contracts/*": ["../../packages/contracts/src/*"]
+      "@repo/contracts/*": ["../../packages/contracts/src/*"],
+      "@prisma/client": ["./generated/prisma/client/*"]
     }
   },
   "references": [{ "path": "../../packages/contracts" }],

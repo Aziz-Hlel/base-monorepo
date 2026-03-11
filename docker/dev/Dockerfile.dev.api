@@ -1,6 +1,5 @@
 FROM node:22.14.0-alpine
 
-# Install pnpm globally
 RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
 
 WORKDIR /app
