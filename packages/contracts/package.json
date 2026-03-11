@@ -3,6 +3,9 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --noEmit && tsc -p tsconfig.build.json"
+  },
   "exports": {
     ".": "./dist/index.js",
     "./*": "./dist/*.js"

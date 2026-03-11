@@ -8,9 +8,9 @@ import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfile
 import PERMISSION_SCORE from '@repo/contracts//utils/PermissionScore';
 import { PermissionDeniedError } from '@/err/customErrors';
 import { SimpleApiResponse } from '@repo/contracts//types/api/SimpleApiResponse.dto';
-import { updateUserProfileRequestSchema } from '@repo/contracts/schemas/profile/updateUserProfileRequest';
 import { Page } from '@repo/contracts//types/page/Page';
 import getParam from '@/utils/getParam';
+import { updateUserProfileRequestSchema } from '@repo/contracts/schemas/profile/updateUserProfileRequest';
 
 class UserController {
   async getUserPage(req: AuthenticatedRequest, res: Response<Page<UserProfileRowResponse>>) {
