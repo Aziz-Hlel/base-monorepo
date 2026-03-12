@@ -3,20 +3,20 @@ import { z } from 'zod';
 const ENV_schema = z
   .object({
     VITE_NODE_ENV: z.enum(['dev', 'stage', 'build', 'production']),
-    VITE_PORT: z.coerce.number().int().positive().optional(),
+    VITE_ADMIN_PORT: z.coerce.number().int().positive().optional(),
     VITE_API_URL: z.string(),
   })
   .refine(
     (data) => {
       // If env is not dev/test, then web port must exist
       if (['dev'].includes(data.VITE_NODE_ENV)) {
-        return data.VITE_PORT !== undefined;
+        return data.VITE_ADMIN_PORT !== undefined;
       }
       return true;
     },
     {
-      path: ['VITE_WEB_PORT'], // points error to the right field
-      message: 'VITE_WEB_PORT is required in development or test environments',
+      path: ['VITE_ADMIN_PORT'], // points error to the right field
+      message: 'VITE_ADMIN_PORT is required in development or test environments',
     },
   );
 
