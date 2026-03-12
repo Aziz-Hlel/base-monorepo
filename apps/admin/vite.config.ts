@@ -27,12 +27,12 @@ export default ({ mode }: { mode: string }) => {
     plugins: [
       react(),
       tailwindcss(),
-      visualizer({
-        open: true, // automatically opens the report in browser
-        filename: 'dist/stats.html', // explicit output location
-        gzipSize: true, // show gzip size (useful for actual deploy size)
-        brotliSize: true, // show brotli size (useful for CDN/server compression)
-      }),
+      // visualizer({
+      //   open: true, // automatically opens the report in browser
+      //   filename: 'dist/stats.html', // explicit output location
+      //   gzipSize: true, // show gzip size (useful for actual deploy size)
+      //   brotliSize: true, // show brotli size (useful for CDN/server compression)
+      // }),
       // tsconfigPaths(),
     ],
     resolve: {

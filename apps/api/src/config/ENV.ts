@@ -58,7 +58,7 @@ const prodSchema = baseSchema.extend({
 });
 
 const devSchema = baseSchema.extend({
-  NODE_ENV: z.enum(['dev', 'test']),
+  NODE_ENV: z.enum(['dev', 'build']),
   MINIO_REGION: z.string(),
   MINIO_ROOT_USER: z.string(),
   MINIO_ROOT_PASSWORD: z.string(),

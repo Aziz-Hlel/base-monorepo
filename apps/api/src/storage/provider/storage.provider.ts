@@ -6,7 +6,7 @@ import { AwsStorageService } from './awsStorage.service';
 export function createStorageProvider(): IStorageProvider {
   switch (ENV.NODE_ENV) {
     case 'dev':
-    case 'test':
+    case 'build':
       return new MinioService({
         MINIO_Region: ENV.MINIO_REGION,
         MINIO_PORT: ENV.MINIO_PORT,

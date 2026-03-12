@@ -1,22 +1,22 @@
 services:
-  # reverse-proxy:
-  #   build:
-  #     context: ${PROJECT_ROOT}
-  #     dockerfile: ./docker/stage/Dockerfile.stage.caddy
-  #     args:
-  #       VITE_NODE_ENV: ${NODE_ENV}
-  #       VITE_API_URL: ${API_URL}
+  reverse-proxy:
+    build:
+      context: ${PROJECT_ROOT}
+      dockerfile: ./docker/build/Dockerfile.build.caddy
+      args:
+        VITE_NODE_ENV: ${NODE_ENV}
+        VITE_API_URL: ${API_URL}
 
-  #   ports:
-  #     - ${PROXY_WEB_PORT}:3000
-  #     - ${PROXY_ADMIN_PORT}:3001
+    ports:
+      - ${PROXY_WEB_PORT}:3000
+      - ${PROXY_ADMIN_PORT}:3001
 
-  #   # command: 'sleep infinity'
+    # command: 'sleep infinity'
 
   api:
     build:
       context: ${PROJECT_ROOT}
-      dockerfile: docker/stage/Dockerfile.stage.api
+      dockerfile: docker/build/Dockerfile.build.api
 
     environment:
       NODE_ENV: ${NODE_ENV}
@@ -49,7 +49,8 @@ services:
       SMTP_USER: ${SMTP_USER}
       SMTP_PASS: ${SMTP_PASS}
 
-    command: sh -c "sleep infinity"
+    command: sh -c "pnpm start:api"
+
     depends_on:
       - db
       - redis
@@ -64,12 +65,12 @@ services:
       POSTGRES_DB: ${DB_NAME:?DB_NAME is required}
       POSTGRES_PORT: ${DB_PORT}
     volumes:
-      - jj_db_stage_volume:/var/lib/postgresql/data
+      - jj_db_build_volume:/var/lib/postgresql/data
 
   db-backup:
     build:
       context: ${PROJECT_ROOT}
-      dockerfile: docker/stage/Dockerfile.dbBackup.stage
+      dockerfile: docker/build/Dockerfile.dbBackup.build
 
     environment:
       DB_PASSWORD: ${DB_PASSWORD}
@@ -89,7 +90,7 @@ services:
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD:-password}
     volumes:
-      - jj_redis_stage_volume:/data
+      - jj_redis_build_volume:/data
     command: ['redis-server', '--requirepass', '${REDIS_PASSWORD:-password}', '--appendonly', 'yes'] # enables persistence
 
   minio:
@@ -101,7 +102,7 @@ services:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     volumes:
-      - jj_minio_stage_volume:/data
+      - jj_minio_build_volume:/data
     command: server /data --console-address ":9001"
 
   minio-init:
@@ -126,9 +127,11 @@ services:
     image: axllent/mailpit
     restart: unless-stopped
     ports:
-      - '${SMTP_UI_PORT:?SMTP_UI_PORT is required}:8025' # Web UI
+      - ${SMTP_UI_PORT:?SMTP_UI_PORT is required}:8025 # Web UI
+    expose:
+      - 1025
 
 volumes:
-  jj_db_stage_volume:
-  jj_redis_stage_volume:
-  jj_minio_stage_volume:
+  jj_db_build_volume:
+  jj_redis_build_volume:
+  jj_minio_build_volume:

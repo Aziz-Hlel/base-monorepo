@@ -47,6 +47,19 @@
       }
     },
 
+    // BUILD
+    {
+      "label": "DOCKER BUILD",
+      "detail": "Run docker build",
+      "type": "shell",
+      "command": "pnpm docker:build",
+      "icon": {
+        "color": "terminal.ansiCyan",
+        "id": "debug-alt"
+      },
+      "dependsOrder": "parallel"
+    },
+
     // STAGE
     {
       "label": "DOCKER STAGE",

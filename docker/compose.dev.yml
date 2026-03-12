@@ -4,7 +4,7 @@ services:
       context: ${PROJECT_ROOT}
       dockerfile: docker/dev/Dockerfile.dev.admin
     ports:
-      - '${VITE_ADMIN_PORT:?VITE_ADMIN_PORT is required}:${VITE_ADMIN_PORT}'
+      - ${VITE_ADMIN_PORT:?VITE_ADMIN_PORT is required}:${VITE_ADMIN_PORT}
     volumes:
       - ${PROJECT_ROOT}/apps/admin/src:/app/apps/admin/src
       - ${PROJECT_ROOT}/apps/admin/public:/app/apps/admin/public
@@ -26,7 +26,7 @@ services:
       context: ${PROJECT_ROOT}
       dockerfile: docker/dev/Dockerfile.dev.api
     ports:
-      - '${API_PORT:?API_PORT is required}:${API_PORT}'
+      - ${API_PORT:?API_PORT is required}:${API_PORT}
     volumes:
       - ${PROJECT_ROOT}/apps/api/src:/app/apps/api/src
       - ${PROJECT_ROOT}/apps/api/prisma:/app/apps/api/prisma
@@ -56,11 +56,11 @@ services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_USER: '${DB_USER:?DB_USER is required}'
-      POSTGRES_PASSWORD: '${DB_PASSWORD:?DB_PASSWORD is required}'
-      POSTGRES_DB: '${DB_NAME:?DB_NAME is required}'
+      POSTGRES_USER: ${DB_USER:?DB_USER is required}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+      POSTGRES_DB: ${DB_NAME:?DB_NAME is required}
     ports:
-      - '${DB_PORT:?DB_PORT is required}:5432'
+      - ${DB_PORT:?DB_PORT is required}:5432
     volumes:
       - db_volume:/var/lib/postgresql/data
 
@@ -68,7 +68,7 @@ services:
     image: redis:latest
 
     ports:
-      - '${REDIS_PORT:?REDIS_PORT is required}:6379'
+      - ${REDIS_PORT:?REDIS_PORT is required}:6379
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD:-password}
     volumes:
@@ -80,8 +80,8 @@ services:
     image: quay.io/minio/minio:latest
 
     ports:
-      - '${MINIO_PORT:?MINIO_PORT is required}:9000'
-      - '${MINIO_UI_PORT:?MINIO_UI_PORT is required}:9001' # Web UI
+      - ${MINIO_PORT:?MINIO_PORT is required}:9000
+      - ${MINIO_UI_PORT:?MINIO_UI_PORT is required}:9001 # Web UI
 
     env_file:
       - ${PROJECT_ROOT}/config/.env.dev
@@ -117,8 +117,8 @@ services:
     image: axllent/mailpit
     restart: unless-stopped
     ports:
-      - '${SMTP_UI_PORT:?SMTP_UI_PORT is required}:8025' # Web UI
-      - '${SMTP_PORT:?SMTP_PORT is required}:1025'
+      - ${SMTP_UI_PORT:?SMTP_UI_PORT is required}:8025 # Web UI
+      - ${SMTP_PORT:?SMTP_PORT is required}:1025
 
 volumes:
   db_volume:

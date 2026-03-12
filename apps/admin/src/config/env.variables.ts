@@ -2,14 +2,14 @@ import { z } from 'zod';
 
 const ENV_schema = z
   .object({
-    VITE_NODE_ENV: z.enum(['dev', 'stage', 'production', 'test']).default('dev'),
+    VITE_NODE_ENV: z.enum(['dev', 'stage', 'build', 'production']),
     VITE_PORT: z.coerce.number().int().positive().optional(),
     VITE_API_URL: z.string(),
   })
   .refine(
     (data) => {
       // If env is not dev/test, then web port must exist
-      if (['development', 'test'].includes(data.VITE_NODE_ENV)) {
+      if (['dev'].includes(data.VITE_NODE_ENV)) {
         return data.VITE_PORT !== undefined;
       }
       return true;

@@ -1,0 +1,30 @@
+:3000 {
+
+    # -----------------------
+    # API 
+    # -----------------------
+    handle /api/* {
+        reverse_proxy api:3000
+    }
+	
+    log {
+		level ERROR
+        format console
+    }
+}
+
+
+# -----------------------
+# Admin panel
+# -----------------------
+:3001 {
+    root * /srv/admin
+    encode gzip
+    file_server
+    try_files {path} /index.html
+
+    log {
+		level ERROR
+        format console
+    }
+}

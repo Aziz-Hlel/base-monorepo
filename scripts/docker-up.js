@@ -17,9 +17,9 @@ if (!envArg) {
   process.exit(1);
 }
 
-if (!['local', 'dev', 'stage', 'prod'].includes(envArg)) {
+if (!['local', 'dev', 'build', 'stage', 'prod'].includes(envArg)) {
   console.error(`Invalid environment: ${envArg}`);
-  console.error('Available environments: local, dev, stage, prod');
+  console.error('Available environments: local, dev, build, stage, prod');
   process.exit(1);
 }
 
@@ -33,6 +33,7 @@ const ENV_ROOT = join(ROOT, '.env');
 const ENV_MAP = {
   local: join(ROOT, 'config', '.env.local'),
   dev: join(ROOT, 'config', '.env.dev'),
+  build: join(ROOT, 'config', '.env.build'),
   stage: join(ROOT, 'config', '.env.stage'),
   prod: join(ROOT, 'config', '.env.prod'),
 };
@@ -40,6 +41,7 @@ const ENV_MAP = {
 const DOCKER_COMPOSE_MAP = {
   local: join(DOCKER_ROOT, 'compose.local.yml'),
   dev: join(DOCKER_ROOT, 'compose.dev.yml'),
+  build: join(DOCKER_ROOT, 'compose.build.yml'),
   stage: join(DOCKER_ROOT, 'compose.stage.yml'),
   prod: join(DOCKER_ROOT, 'compose.prod.yml'),
 };
