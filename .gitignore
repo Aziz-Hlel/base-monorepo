@@ -22,6 +22,7 @@
 # ===============================
 **/target/
 **/build/
+!docker/build
 **/out/
 **/.gradle/
 **/.mvn/
