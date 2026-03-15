@@ -6,7 +6,6 @@
 **/.env
 **/.env.*
 !config/.env.local
-**/pnpm-lock.yaml
 
 # ===============================
 # 🧱 Web (React)
@@ -22,6 +21,7 @@
 # ===============================
 **/target/
 **/build/
+!docker/build
 **/out/
 **/.gradle/
 **/.mvn/

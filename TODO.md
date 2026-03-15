@@ -19,3 +19,8 @@
 -- add update my profile as user and delete my account
 
 -- the repo doesnt actualyy work fine at startup, it missed some setups like pnpm prisma generate and pnpm prisma migrate dev
+
+-- add condition to check if project name exits before runnig docker so that you keep volumes named like this acrroos all you dockerfiles :
+volumes:
+db_volume:
+and since with project name they ll be named like this : ${PROJECT_NAME}\_db_volume

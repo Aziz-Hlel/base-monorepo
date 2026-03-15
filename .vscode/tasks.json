@@ -42,7 +42,7 @@
       "command": "pnpm docker:dev",
       "presentation": { "panel": "new" },
       "icon": {
-        "color": "terminal.ansiGreen",
+        "color": "terminal.ansiYellow",
         "id": "debug-alt"
       }
     },
@@ -54,7 +54,7 @@
       "type": "shell",
       "command": "pnpm docker:build",
       "icon": {
-        "color": "terminal.ansiCyan",
+        "color": "terminal.ansiMagenta",
         "id": "debug-alt"
       },
       "dependsOrder": "parallel"
@@ -67,7 +67,7 @@
       "type": "shell",
       "command": "pnpm docker:stage",
       "icon": {
-        "color": "terminal.ansiCyan",
+        "color": "terminal.ansiRed",
         "id": "debug-alt"
       },
       "dependsOrder": "parallel"
