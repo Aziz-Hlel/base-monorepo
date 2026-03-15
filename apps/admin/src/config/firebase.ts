@@ -5,8 +5,6 @@ import { getAuth } from 'firebase/auth';
 import ENV from './env.variables';
 // ! fix this it s wrong it can get you this erro in production :
 // Uncaught FirebaseError: Firebase: No Firebase App '[DEFAULT]' has been created - call initializeApp() first (app/no-app).
-// you just copy pased the fix from chat but this is not quite good , you re doing the same logic twice it s like a race condition thing,
-// both racin to init first, you prob already need to change the whol imp in the first place
 
 export const firebaseConfig = {
   apiKey: ENV.VITE_FIREBASE_API_KEY,
