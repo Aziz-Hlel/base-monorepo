@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { prisma } from '../../bootstrap/db.init';
 import { Role, Status } from '@/generated/prisma/enums';
+import pMap from 'p-map';
 
 faker.seed(1); // Ensure consistent fake data across runs
 
@@ -31,13 +32,16 @@ const seedUsers = async (nbr: number) => {
   const fakeUsers = faker.helpers.multiple((_, index) => createFakeUser(index), {
     count: nbr,
   });
-  for (const user of fakeUsers) {
-    await prisma.user.upsert({
+
+  const dbQuery = (user: (typeof fakeUsers)[0]) => {
+    prisma.user.upsert({
       where: { email: user.email },
       create: { ...user, profile: { create: user.profile } },
       update: { ...user, profile: { update: user.profile } },
     });
-  }
+  };
+
+  await pMap(fakeUsers, dbQuery, { concurrency: 10 });
 };
 
 export default seedUsers;
