@@ -2,6 +2,8 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
+// ! fix this it s wrong it can get you this erro in production :
+// Uncaught FirebaseError: Firebase: No Firebase App '[DEFAULT]' has been created - call initializeApp() first (app/no-app).
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDWKplAl5Vp43pG0j5j3vnThRJIPwv1E44',

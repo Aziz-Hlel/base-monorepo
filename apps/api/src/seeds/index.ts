@@ -6,6 +6,7 @@ import { seedProducts } from './fakes/products.fake';
 
 const seed = async () => {
   if (ENV.NODE_ENV === 'production') {
+    // ! you need to add the user seed here for the prod
     console.log('ℹ️ NOTE : Skipped seeding in production environment.');
     return;
   }
