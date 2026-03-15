@@ -1,9 +1,10 @@
 import cors from 'cors';
 import ENV from './ENV';
+import { isProdEnv } from './NodeEnvs';
 
 export function configureCors() {
   return cors({
-    origin: new RegExp(ENV.ALLOWED_ORIGIN_PATTERNS || '.*'),
+    origin: isProdEnv(ENV) ? ENV.ALLOWED_ORIGIN_PATTERNS : '.*',
 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
