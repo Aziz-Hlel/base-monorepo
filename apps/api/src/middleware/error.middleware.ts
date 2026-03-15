@@ -1,7 +1,7 @@
 // src/middleware/error.middleware.ts
 import { Request, Response, NextFunction } from 'express';
 import { prettifyError, ZodError } from 'zod';
-import ENV from '../config/ENV';
+import ENV from '../config/env';
 import { AppError } from '../err/customErrors';
 import { ApiError } from '../err/apiError.type';
 import { logger } from '../bootstrap/logger.init';

@@ -1,4 +1,4 @@
-import ENV from '@/config/ENV';
+import ENV from '@/config/env';
 import nodemailer, { Transporter } from 'nodemailer';
 
 // required for AWS SES

@@ -1,4 +1,4 @@
-import ENV from '../config/ENV';
+import ENV from '../config/env';
 import envSeeds from './seedPerEnv';
 
 const seed = async () => {

@@ -1,4 +1,4 @@
-import ENV from './config/ENV';
+import ENV from './config/env';
 import { createExpressApp } from './app/app';
 import asyncBootstrapHandlers from './bootstrap/bootstraps';
 import { logger } from '@/bootstrap/logger.init';

@@ -4,7 +4,7 @@ import { PresignedUrlGenerator } from '@repo/contracts/storage/PresignedUrl';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 export type IMinioConfig = {
-  MINIO_Region: string;
+  MINIO_REGION: string;
   MINIO_PORT: number;
   MINIO_ROOT_USER: string;
   MINIO_ROOT_PASSWORD: string;
@@ -13,17 +13,17 @@ export type IMinioConfig = {
 
 export class MinioService implements IStorageProvider {
   client: S3Client;
-  private MINIO_Region: string;
+  private MINIO_REGION: string;
   private MINIO_PORT: number;
   private MINIO_BUCKET: string;
 
-  constructor({ MINIO_Region, MINIO_PORT, MINIO_ROOT_USER, MINIO_ROOT_PASSWORD, MINIO_BUCKET }: IMinioConfig) {
-    this.MINIO_Region = MINIO_Region;
+  constructor({ MINIO_REGION, MINIO_PORT, MINIO_ROOT_USER, MINIO_ROOT_PASSWORD, MINIO_BUCKET }: IMinioConfig) {
+    this.MINIO_REGION = MINIO_REGION;
     this.MINIO_PORT = MINIO_PORT;
     this.MINIO_BUCKET = MINIO_BUCKET;
 
     this.client = new S3Client({
-      region: this.MINIO_Region,
+      region: this.MINIO_REGION,
       endpoint: `http://localhost:${this.MINIO_PORT}/`,
       credentials: {
         accessKeyId: MINIO_ROOT_USER,

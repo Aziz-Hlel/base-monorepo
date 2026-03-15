@@ -1,4 +1,4 @@
-import { Env } from '@/config/ENV';
+import { Env } from '@/config/env';
 import { seedProducts } from './fakes/products.fake';
 import seedUsers from './fakes/users.fake';
 import { seedProdUsers } from './prod/users';

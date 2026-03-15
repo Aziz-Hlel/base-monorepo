@@ -1,4 +1,4 @@
-import ENV from '@/config/ENV';
+import ENV from '@/config/env';
 import Redis from 'ioredis';
 
 const redis = new Redis({
