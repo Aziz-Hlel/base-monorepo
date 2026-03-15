@@ -1,11 +1,15 @@
-import { getAuth, onAuthStateChanged, signOut, type User } from 'firebase/auth';
+import { firebaseConfig } from '@/config/firebase';
+import { getApps, initializeApp } from 'firebase/app';
+import { getAuth, onAuthStateChanged, signOut, type Auth, type User } from 'firebase/auth';
 
 class JwtTokenManager {
-  private auth = getAuth();
+  private auth: Auth;
   private currentUser: User | null = null;
   private initializing: Promise<void>;
 
   constructor() {
+    const app = getApps()[0] || initializeApp(firebaseConfig);
+    this.auth = getAuth(app);
     this.initializing = new Promise((resolve) => {
       onAuthStateChanged(this.auth, (user) => {
         this.currentUser = user;
