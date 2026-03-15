@@ -5,7 +5,7 @@ import { Role, Status } from '@/generated/prisma/enums';
 faker.seed(1); // Ensure consistent fake data across runs
 
 const createFakeUser = (index: number) => {
-  const fakeEmail = `user${index}@example.com`;
+  const fakeEmail = `fake-user-${index}@fake.com`;
   const fakeUser = {
     email: fakeEmail,
     username: faker.internet.username(),

@@ -63,7 +63,7 @@ const devSchema = baseSchema.extend({
   MINIO_ROOT_USER: z.string(),
   MINIO_ROOT_PASSWORD: z.string(),
   MINIO_BUCKET: z.string(),
-  MINIO_PORT: z.coerce.number(),
+  MINIO_PORT: z.coerce.number().positive(),
 });
 
 const envSchema = z.discriminatedUnion('NODE_ENV', [prodSchema, devSchema]);
@@ -78,4 +78,5 @@ const ENV = validatedEnv.data;
 
 console.log('✅ SUCCESS : ENV is valid');
 
+export type Env = z.infer<typeof envSchema>;
 export default ENV;
