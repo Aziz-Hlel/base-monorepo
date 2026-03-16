@@ -4,7 +4,7 @@ import { isAllowedOriginPatternsExist } from './env/NodeEnvs';
 
 export function configureCors() {
   return cors({
-    origin: isAllowedOriginPatternsExist(ENV) ? ENV.ALLOWED_ORIGIN_PATTERNS : '.*',
+    origin: isAllowedOriginPatternsExist(ENV) ? ENV.ALLOWED_ORIGIN_PATTERNS : '*',
 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],

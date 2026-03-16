@@ -10,8 +10,8 @@ const devSchema = baseSchema.extend({
   ...minioSchema,
 
   // CORS
-  // ? kept it here just so i don't forget what i did
-  ...corsSchema,
+  // // ? kept it here just so i don't forget what i did
+  // ...corsSchema,
 });
 
 export default devSchema;

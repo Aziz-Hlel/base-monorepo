@@ -34,10 +34,10 @@ const seedUsers = async (nbr: number) => {
   });
 
   const dbQuery = (user: (typeof fakeUsers)[0]) => {
-    prisma.user.upsert({
+    return prisma.user.upsert({
       where: { email: user.email },
       create: { ...user, profile: { create: user.profile } },
-      update: { ...user, profile: { update: user.profile } },
+      update: {},
     });
   };
 

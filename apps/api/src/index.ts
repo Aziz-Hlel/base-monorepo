@@ -1,12 +1,11 @@
 import ENV from './config/env';
 import { createExpressApp } from './app/app';
 import asyncBootstrapHandlers from './bootstrap/bootstraps';
-import { logger } from '@/bootstrap/logger.init';
 
 async function bootstrap() {
-  await asyncBootstrapHandlers(); // your async checks
+  await asyncBootstrapHandlers();
 
-  const app = createExpressApp(); // sync function only
+  const app = createExpressApp();
   app.on('mount', (error) => {
     console.error('❌ ERROR : Server failed to start', error);
     process.exit(1);

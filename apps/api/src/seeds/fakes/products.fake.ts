@@ -23,7 +23,7 @@ const fakeProducts = fakeProductsData.map((product) => ({
 
 export const seedProducts = async () => {
   const dbQuery = (product: (typeof fakeProducts)[0]) => {
-    prisma.product.upsert({
+    return prisma.product.upsert({
       where: { name: product.name },
       create: {
         description: product.description,
