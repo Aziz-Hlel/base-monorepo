@@ -93,8 +93,8 @@ services:
   minio:
     image: quay.io/minio/minio:latest
     ports:
-      - ${MINIO_PORT}:${MINIO_PORT}
-      - '${MINIO_UI_PORT:?MINIO_UI_PORT is required}:9001' # Web UI
+      - ${MINIO_PORT}:9000
+      - ${MINIO_UI_PORT:?MINIO_UI_PORT is required}:9001 # Web UI
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}

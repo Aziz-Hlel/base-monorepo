@@ -22,10 +22,15 @@ const generateSeedMedia = (props: { prefix: string; baseName: string } | { key: 
     };
   }
 
-  const { prefix, baseName } = props;
+  const { prefix: unsanitzedPrefix, baseName } = props;
+
+  let prefix = unsanitzedPrefix;
+  if (unsanitzedPrefix.endsWith('/')) prefix = unsanitzedPrefix.slice(0, -1);
+  if (unsanitzedPrefix.startsWith('/')) prefix = unsanitzedPrefix.slice(1);
+
   return {
     baseName,
-    key: `${prefix}${baseName}`,
+    key: `${prefix}/${baseName}`,
     fileType: baseName.split('.')[1],
     mimeType: baseName.split('.')[1],
     fileSize: 1024 * 500,
