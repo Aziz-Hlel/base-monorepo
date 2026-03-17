@@ -23,10 +23,10 @@ import {
   type UpdateProductRequest,
 } from '@repo/contracts/schemas/product/updateProductRequest';
 import { Textarea } from '@/components/ui/textarea';
-import InputNumberForm from '@/components/ui2/InputNumberForm/InputNumberForm';
-import SelectForm from '@/components/ui2/SelectForm/SelectForm';
+import InputNumberForm from '@/components/custom/InputNumberForm/InputNumberForm';
+import SelectForm from '@/components/custom/SelectForm/SelectForm';
 import ProductTextMapping from '@/EnumTextMapping/ProductTextMapping';
-import ImageUpload from '@/components/ui2/ImageUpload/comp/ImageUpload';
+import ImageUpload from '@/components/custom/ImageUpload/comp/ImageUpload';
 
 const EditProduct = () => {
   const { handleCancel, currentRow, openDialog } = useSelectedRow();

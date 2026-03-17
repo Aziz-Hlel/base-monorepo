@@ -19,15 +19,15 @@ import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { ApiError } from '@/Api/ApiError';
 import { Textarea } from '@/components/ui/textarea';
-import ImageUpload from '@/components/ui2/ImageUpload/comp/ImageUpload';
-import InputNumberForm from '@/components/ui2/InputNumberForm/InputNumberForm';
+import ImageUpload from '@/components/custom/ImageUpload/comp/ImageUpload';
+import InputNumberForm from '@/components/custom/InputNumberForm/InputNumberForm';
 import productService from '@/Api/service/productService';
 import {
   createProductRequestSchema,
   type CreateProductRequest,
 } from '@repo/contracts/schemas/product/createProductRequest';
 import { ProductStatus } from '@repo/contracts/types/enums/enums';
-import SelectForm from '@/components/ui2/SelectForm/SelectForm';
+import SelectForm from '@/components/custom/SelectForm/SelectForm';
 import ProductTextMapping from '@/EnumTextMapping/ProductTextMapping';
 
 const AddProduct = () => {
