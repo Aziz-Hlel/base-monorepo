@@ -1,10 +1,10 @@
 import z from 'zod';
 import baseSchema from './schema.base';
-import { devEnvs } from './NodeEnvs';
-import { corsSchema, minioSchema } from './envs.fields';
+import { NODE_ENVS } from './NodeEnvs';
+import { minioSchema } from './envs.fields';
 
 const devSchema = baseSchema.extend({
-  NODE_ENV: z.enum(devEnvs),
+  NODE_ENV: z.enum([NODE_ENVS.dev, NODE_ENVS.build]),
 
   // STORAGE
   ...minioSchema,
