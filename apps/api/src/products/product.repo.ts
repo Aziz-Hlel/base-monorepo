@@ -3,6 +3,7 @@ import { ProductInclude, ProductOrderByWithRelationInput, ProductWhereInput } fr
 import { CreateProductRequest } from '@repo/contracts/schemas/product/createProductRequest';
 import { UpdateProductRequest } from '@repo/contracts/schemas/product/updateProductRequest';
 import { DefaultArgs } from '@prisma/client/runtime/client';
+import { ProductTransaction } from '@/types/transactions';
 
 class ProductRepo {
   private includeThumbnail() {
@@ -12,19 +13,16 @@ class ProductRepo {
   }
   async create(schema: CreateProductRequest) {
     const product = await prisma.product.create({
-      data: {
-        ...schema,
-      },
+      data: { ...schema },
       include: this.includeThumbnail(),
     });
     return product;
   }
 
-  async findById(productId: string) {
-    const product = await prisma.product.findUnique({
-      where: {
-        id: productId,
-      },
+  async findById(props: { productId: string; tx?: ProductTransaction }) {
+    const orm = props.tx ?? prisma.product;
+    const product = await orm.findUnique({
+      where: { id: props.productId },
       include: this.includeThumbnail(),
     });
     return product;
@@ -32,24 +30,17 @@ class ProductRepo {
 
   async update(productId: string, schema: UpdateProductRequest, thumbnailId: string | null) {
     const product = await prisma.product.update({
-      where: {
-        id: productId,
-      },
-      data: {
-        ...schema,
-        thumbnailId,
-      },
+      where: { id: productId },
+      data: { ...schema, thumbnailId },
       include: this.includeThumbnail(),
     });
     return product;
   }
 
-  async delete(productId: string): Promise<void> {
-    await prisma.product.delete({
-      where: {
-        id: productId,
-      },
-    });
+  async delete(props: { productId: string; tx?: ProductTransaction }) {
+    const orm = props.tx ?? prisma.product;
+    const { count } = await orm.deleteMany({ where: { id: props.productId } });
+    return count;
   }
 
   async getPage({

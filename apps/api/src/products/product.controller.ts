@@ -38,12 +38,12 @@ class ProductController {
     res.status(200).json(productPage);
   }
 
-  async delete(req: Request, res: Response<SimpleApiResponse>) {
+  async delete(req: Request, res: Response) {
     const productId = getParam(req, 'id');
 
     await productService.delete(productId);
 
-    res.status(200).send({ message: 'Product deleted successfully' });
+    res.status(204).send();
   }
 }
 

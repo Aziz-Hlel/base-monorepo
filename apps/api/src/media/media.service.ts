@@ -6,6 +6,8 @@ import { MediaStatus } from '@/generated/prisma/enums';
 import { PresignedUrlResponse } from '@repo/contracts/schemas/media/PresignedUrlResponse';
 import { Media } from '@/generated/prisma/client';
 import { MediaResponse } from '@repo/contracts/schemas/media/MediaResponse';
+import { MediaDelegate } from '@/generated/prisma/models';
+import { DefaultArgs } from '@prisma/client/runtime/client';
 
 export class MediaService {
   async getPresignedUrl(schema: PresignedUrlRequest): Promise<PresignedUrlResponse> {
@@ -28,11 +30,11 @@ export class MediaService {
     };
   }
 
-  async deleteMediaById(mediaId: string) {
-    const media = await mediaRepo.findMediaById(mediaId);
-    if (!media) throw new NotFoundError(`Media with id ${mediaId} not found`);
+  async deleteMediaById(props: { mediaId: string; tx?: MediaDelegate<DefaultArgs, { omit: undefined }> }) {
+    const media = await mediaRepo.findMediaById({ mediaId: props.mediaId, tx: props.tx });
+    if (!media) return;
 
-    await mediaRepo.deleteMediaById(mediaId);
+    await mediaRepo.deleteMediaById({ mediaId: props.mediaId, tx: props.tx });
   }
 
   async confirmMediaUploadByKey(mediaKey: string) {
@@ -47,7 +49,7 @@ export class MediaService {
   }
 
   async confirmMediaUploadById(mediaId: string) {
-    const media = await mediaRepo.findMediaById(mediaId);
+    const media = await mediaRepo.findMediaById({ mediaId });
 
     if (!media) throw new NotFoundError(`Media with id ${mediaId} not found`);
 

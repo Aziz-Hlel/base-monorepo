@@ -8,6 +8,7 @@ import { UpdateProductRequest } from '@repo/contracts/schemas/product/updateProd
 import { ProductPageQuery } from '@repo/contracts/schemas/product/ProductPageQuery';
 import { ProductOrderByWithRelationInput, ProductWhereInput } from '@/generated/prisma/models';
 import { Page } from '@repo/contracts/types/page/Page';
+import { prisma } from '@/bootstrap/db.init';
 
 class ProductService {
   async create(schema: CreateProductRequest): Promise<ProductResponse> {
@@ -21,7 +22,7 @@ class ProductService {
   }
 
   async getById(productId: string): Promise<ProductResponse> {
-    const product = await productRepo.findById(productId);
+    const product = await productRepo.findById({ productId });
 
     if (!product) {
       throw new NotFoundError(`Product with id ${productId} not found`);
@@ -65,7 +66,7 @@ class ProductService {
   }
 
   async update(productId: string, schema: UpdateProductRequest): Promise<ProductResponse> {
-    const existingProduct = await productRepo.findById(productId);
+    const existingProduct = await productRepo.findById({ productId });
 
     if (!existingProduct) {
       throw new NotFoundError(`Product with id ${productId} not found`);
@@ -89,17 +90,19 @@ class ProductService {
   }
 
   async delete(productId: string): Promise<void> {
-    const existingProduct = await productRepo.findById(productId);
+    await prisma.$transaction(async (tx) => {
+      const existingProduct = await productRepo.findById({ productId, tx: tx.product });
 
-    if (!existingProduct) {
-      throw new NotFoundError(`Product with id ${productId} not found`);
-    }
+      if (!existingProduct) return;
 
-    if (existingProduct.thumbnailId) {
-      await mediaService.deleteMediaById(existingProduct.thumbnailId);
-    }
+      const count = await productRepo.delete({ productId, tx: tx.product });
 
-    await productRepo.delete(productId);
+      if (count === 0) return;
+
+      if (existingProduct.thumbnailId) {
+        await mediaService.deleteMediaById({ mediaId: existingProduct.thumbnailId, tx: tx.media });
+      }
+    });
   }
 }
 
