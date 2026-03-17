@@ -12,7 +12,7 @@ function getPort(mode: string): number | undefined {
 
   const value = env.VITE_ADMIN_PORT;
 
-  if (!value && ['dev', 'test'].includes(NODE_ENV))
+  if (!value && ['dev', 'build'].includes(NODE_ENV))
     throw new Error(`❌ Missing required VITE_ADMIN_PORT when VITE_NODE_ENV is ${NODE_ENV}`);
   if (value && isNaN(Number(value)))
     throw new Error(`❌ Invalid value for VITE_ADMIN_PORT: "${value}" is not a number`);
