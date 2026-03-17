@@ -3,7 +3,6 @@ import { productService } from './product.service';
 import { Request, Response } from 'express';
 import { ProductResponse } from '@repo/contracts/schemas/product/productResponse';
 import { updateProductRequestSchema } from '@repo/contracts/schemas/product/updateProductRequest';
-import { SimpleApiResponse } from '@repo/contracts/types/api/SimpleApiResponse.dto';
 import { productsQueryParamsSchema } from '@repo/contracts/schemas/product/ProductPageQuery';
 import getParam from '@/utils/getParam';
 
