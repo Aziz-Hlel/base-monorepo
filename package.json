@@ -51,5 +51,11 @@
   },
   "dependencies": {
     "zod": "^4.3.6"
+  },
+  "pnpm": {
+    "overrides": {
+      "bullmq": "5.71.0",
+      "ioredis": "5.9.3"
+    }
   }
 }
