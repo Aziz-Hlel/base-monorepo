@@ -7,6 +7,7 @@ class JwtTokenManager {
   private currentUser: User | null = null;
   private initializing: Promise<void>;
 
+  // ! bullshit solution, had to add this below , probably some race condition thing, this code get excuted before the init firebase that s why
   constructor() {
     const app = getApps()[0] || initializeApp(firebaseConfig);
     this.auth = getAuth(app);
