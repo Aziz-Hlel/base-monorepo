@@ -6,9 +6,7 @@ WORKDIR /app
 COPY package.json pnpm-workspace.yaml tsconfig.json pnpm-lock.yaml ./
 COPY packages/contracts/package.json packages/contracts/package.json
 COPY apps/api/package.json apps/api/package.json
-RUN pnpm install  --frozen-lockfile
-
-ENV PRISMA_CLIENT_ENGINE_TYPE=binary
+RUN pnpm install  --frozen-lockfile --production
 
 
     
@@ -26,8 +24,10 @@ RUN pnpm install --frozen-lockfile
 COPY apps/api apps/api
 COPY packages/contracts packages/contracts
 
-RUN pnpm prisma:generate
-RUN pnpm build:api
+WORKDIR /app/apps/api
+RUN pnpm dlx prisma generate
+RUN pnpm build
+
 
 
 FROM node:22.14.0-alpine AS runner
@@ -36,7 +36,7 @@ RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
 
 
 COPY --from=deps /app/node_modules /app/node_modules
-COPY --from=deps /app/packages/contracts/node_modules /app/packages/contracts/node_modules
+# COPY --from=deps /app/packages/contracts/node_modules /app/packages/contracts/node_modules
 COPY --from=deps /app/apps/api/node_modules /app/apps/api/node_modules
 
 COPY --from=builder /app/pnpm-workspace.yaml /app/pnpm-workspace.yaml
@@ -51,4 +51,4 @@ COPY --from=builder /app/apps/api/package.json /app/apps/api/package.json
 COPY --from=builder /app/apps/api/prisma /app/apps/api/prisma
 COPY --from=builder /app/apps/api/prisma.config.ts /app/apps/api/prisma.config.ts
 
-WORKDIR /app
+WORKDIR /app/apps/api

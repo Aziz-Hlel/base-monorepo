@@ -46,7 +46,7 @@ services:
       SMTP_USER: ${SMTP_USER}
       SMTP_PASS: ${SMTP_PASS}
 
-    command: sh -c "pnpm prisma:migrate:deploy && pnpm start:api"
+    command: sh -c "pnpm dlx prisma migrate deploy && pnpm start"
 
     depends_on:
       - db
