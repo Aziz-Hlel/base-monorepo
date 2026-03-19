@@ -2,9 +2,9 @@ services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_USER: '${DB_USER:?DB_USER is required}'
-      POSTGRES_PASSWORD: '${DB_PASSWORD:?DB_PASSWORD is required}'
-      POSTGRES_DB: '${DB_NAME:?DB_NAME is required}'
+      POSTGRES_USER: ${DB_USER:?DB_USER is required}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+      POSTGRES_DB: ${DB_NAME:?DB_NAME is required}
     ports:
       - ${DB_PORT:?DB_PORT is required}:5432
     volumes:
@@ -26,7 +26,7 @@ services:
     image: quay.io/minio/minio:latest
 
     ports:
-      - ${MINIO_PORT:?MINIO_PORT is required}:${MINIO_DOCKER_PORT:?MINIO_DOCKER_PORT is required}
+      - ${MINIO_PORT:?MINIO_PORT is required}:9000
       - ${MINIO_UI_PORT:?MINIO_UI_PORT is required}:9001 # Web UI
 
     environment:
@@ -47,7 +47,6 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-      MINIO_DOCKER_PORT: ${MINIO_DOCKER_PORT}
       MINIO_BUCKET: ${MINIO_BUCKET:?MINIO_BUCKET is required}
 
     volumes:

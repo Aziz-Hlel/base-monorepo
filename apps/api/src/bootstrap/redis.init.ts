@@ -12,6 +12,8 @@ const redis = new Redis({
 
 export async function connectRedis() {
   if (redis.status === 'ready') return;
+  if (redis.status === 'connecting') return;
+  if (redis.status === 'connect') return;
 
   try {
     await redis.connect();
