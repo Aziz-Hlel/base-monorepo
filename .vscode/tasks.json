@@ -24,9 +24,16 @@
       "problemMatcher": []
     },
     {
+      "label": "dev:worker",
+      "type": "shell",
+      "command": "pnpm dev:worker",
+      "presentation": { "panel": "new" },
+      "problemMatcher": []
+    },
+    {
       "label": " LOCAL — All Services",
       "detail": "Run all services locally",
-      "dependsOn": ["local:docker", "dev:api", "dev:admin"],
+      "dependsOn": ["local:docker", "dev:api", "dev:admin", "dev:worker"],
       "icon": {
         "color": "terminal.ansiGreen",
         "id": "debug-alt"

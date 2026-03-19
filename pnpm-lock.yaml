@@ -239,6 +239,9 @@ importers:
       '@repo/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@repo/queue':
+        specifier: workspace:*
+        version: link:../../packages/queue
       '@swc/core':
         specifier: ^1.15.18
         version: 1.15.18
@@ -310,7 +313,28 @@ importers:
         specifier: ^7.2.0
         version: 7.4.2(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
 
+  apps/worker:
+    dependencies:
+      '@repo/queue':
+        specifier: workspace:*
+        version: link:../../packages/queue
+      bullmq:
+        specifier: 5.71.0
+        version: 5.71.0
+      ioredis:
+        specifier: 5.9.3
+        version: 5.9.3
+      nodemailer:
+        specifier: ^8.0.1
+        version: 8.0.1
+    devDependencies:
+      '@types/nodemailer':
+        specifier: ^7.0.11
+        version: 7.0.11
+
   packages/contracts: {}
+
+  packages/queue: {}
 
 packages:
 

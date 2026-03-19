@@ -1,4 +1,4 @@
-import ENV from '@/config/env';
+import ENV from '@/config/ENV';
 import nodemailer, { Transporter } from 'nodemailer';
 
 let Emailtransporter: Transporter;

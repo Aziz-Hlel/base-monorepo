@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    // "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
+    "moduleDetection": "force",
+    "noEmit": false
+  },
+  "include": ["src"]
+}

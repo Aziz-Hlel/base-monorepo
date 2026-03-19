@@ -12,11 +12,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@repo/contracts/*": ["../../packages/contracts/src/*"],
-      "@repo/queue/*": ["../../packages/queue/src/*"],
-      "@prisma/client": ["./generated/prisma/client/*"]
+      "@repo/queue/*": ["../../packages/queue/src/*"]
     }
   },
-  "references": [{ "path": "../../packages/contracts" }, { "path": "../../packages/queue" }],
+  "references": [{ "path": "../../packages/queue" }],
   "include": ["src/**/*"]
 }

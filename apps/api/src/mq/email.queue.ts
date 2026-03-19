@@ -1,7 +1,8 @@
 import redis from '@/bootstrap/redis.init';
 import { Queue } from 'bullmq';
+import { EmailJob } from '@repo/queue/types/emailJob';
 
-export const emailQueue = new Queue('emailQueue', {
+export const emailQueue = new Queue<EmailJob>('emailQueue', {
   connection: redis,
   defaultJobOptions: {
     attempts: 3, // retry up to 3 times

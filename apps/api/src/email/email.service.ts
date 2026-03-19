@@ -1,7 +1,7 @@
 import { SendContactUsRequest } from '@repo/contracts/schemas/email/sendContactUsRequest';
 import { emailUtils } from './email.utils';
-import { emailProvider } from './email.provider';
 import ENV from '@/config/env';
+import { emailQueue } from '@/mq/email.queue';
 
 class EmailService {
   private readonly EMAIL_ADDRESSES = {
@@ -20,11 +20,12 @@ class EmailService {
   async sendContactEmail(payload: SendContactUsRequest) {
     const html = emailUtils.createContactUsHtml(payload);
     const mailSubject = `New Contact Us Request from ${payload.name}`;
-    await emailProvider.sendEmail({
+    await emailQueue.add('sendEmail', {
+      type: 'contact-us',
       from: this.mailer.contactUs.from,
       to: this.mailer.contactUs.to,
       subject: mailSubject,
-      text: html,
+      html,
     });
   }
 }

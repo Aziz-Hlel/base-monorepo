@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "tsBuildInfoFile": "./dist/tsconfig.node.tsbuildinfo",
+
+    "strict": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationMap": true
+  }
+}
