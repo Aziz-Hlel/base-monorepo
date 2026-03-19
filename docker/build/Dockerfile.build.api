@@ -41,7 +41,6 @@ COPY --from=deps /app/apps/api/node_modules /app/apps/api/node_modules
 
 COPY --from=builder /app/pnpm-workspace.yaml /app/pnpm-workspace.yaml
 COPY --from=builder /app/package.json /app/package.json
-# COPY --from=builder /app/tsconfig.json /app/tsconfig.json
 
 COPY --from=builder /app/packages/contracts/dist /app/packages/contracts/dist
 COPY --from=builder /app/packages/contracts/package.json /app/packages/contracts/package.json
