@@ -14,14 +14,14 @@ import { IUserService } from '../Service/user.service';
 
 export class UserController {
   constructor(private readonly userService: IUserService) {}
-  async getUserPage(req: AuthenticatedRequest, res: Response<Page<UserProfileRowResponse>>) {
+  getUserPage = async (req: AuthenticatedRequest, res: Response<Page<UserProfileRowResponse>>) => {
     const parsedQuery = queryParamsSchema.parse(req.query);
 
     const response = await this.userService.getUserPage(parsedQuery);
     res.json(response);
-  }
+  };
 
-  async createUserProfile(req: AuthenticatedRequest, res: Response<UserProfileResponse>) {
+  createUserProfile = async (req: AuthenticatedRequest, res: Response<UserProfileResponse>) => {
     const parsedBody = createUserProfileRequestSchema.parse(req.body);
 
     const userRole = req.user.claims?.role;
@@ -30,9 +30,9 @@ export class UserController {
     }
     const response = await this.userService.createUserProfile(parsedBody);
     res.status(201).json(response);
-  }
+  };
 
-  async updateUserProfile(req: AuthenticatedRequest, res: Response<UserProfileResponse>) {
+  updateUserProfile = async (req: AuthenticatedRequest, res: Response<UserProfileResponse>) => {
     const userId = getParam(req, 'id');
     const parsedBody = updateUserProfileRequestSchema.parse(req.body);
 
@@ -40,32 +40,32 @@ export class UserController {
 
     const response = await this.userService.updateUserProfile(userId, parsedBody, userRole);
     res.status(200).json(response);
-  }
+  };
 
-  async deleteUserProfile(req: AuthenticatedRequest, res: Response<SimpleApiResponse>) {
+  deleteUserProfile = async (req: AuthenticatedRequest, res: Response<SimpleApiResponse>) => {
     const userToDeleteId = getParam(req, 'id');
     const userRole = req.user.claims?.role;
 
     await this.userService.deleteUser(userToDeleteId, userRole);
 
     res.status(204).send({ message: 'User deleted successfully' });
-  }
+  };
 
-  async enableUser(req: AuthenticatedRequest, res: Response<SimpleApiResponse>) {
+  enableUser = async (req: AuthenticatedRequest, res: Response<SimpleApiResponse>) => {
     const userId = getParam(req, 'id');
     const userRole = req.user.claims?.role;
 
     await this.userService.enableUser(userId, userRole);
 
     res.status(200).send({ message: 'User enabled successfully' });
-  }
+  };
 
-  async disableUser(req: AuthenticatedRequest, res: Response<SimpleApiResponse>) {
+  disableUser = async (req: AuthenticatedRequest, res: Response<SimpleApiResponse>) => {
     const userId = getParam(req, 'id');
     const userRole = req.user.claims?.role;
 
     await this.userService.disableUser(userId, userRole);
 
     res.status(200).send({ message: 'User disabled successfully' });
-  }
+  };
 }

@@ -1,4 +1,3 @@
-import { mediaService } from '@/media/media.service';
 import { CreateProductRequest } from '@repo/contracts/schemas/product/createProductRequest';
 import { ProductResponse } from '@repo/contracts/schemas/product/productResponse';
 import { ProductMapper } from './product.mapper';
@@ -9,6 +8,7 @@ import { ProductOrderByWithRelationInput, ProductWhereInput } from '@/generated/
 import { Page } from '@repo/contracts/types/page/Page';
 import { prisma } from '@/bootstrap/db.init';
 import { ProductRepo } from './product.repo';
+import { MediaService } from '@/media/media.service';
 
 export interface IProductService {
   create(schema: CreateProductRequest): Promise<ProductResponse>;
@@ -19,13 +19,17 @@ export interface IProductService {
 }
 
 export class ProductService implements IProductService {
-  constructor(private readonly productRepo: ProductRepo) {}
+  constructor(
+    private readonly productRepo: ProductRepo,
+    private readonly mediaService: MediaService,
+  ) {}
   async create(schema: CreateProductRequest): Promise<ProductResponse> {
-    await mediaService.confirmMediaUploadById(schema.thumbnailId);
+    await this.mediaService.confirmMediaUploadById(schema.thumbnailId);
 
     const product = await this.productRepo.create(schema);
+    const productThumbnail = await this.mediaService.generateMediaResponse(product.thumbnail);
 
-    const productResponse = ProductMapper.toResponse(product);
+    const productResponse = ProductMapper.toResponse({ product, thumbnail: productThumbnail });
 
     return productResponse;
   }
@@ -36,7 +40,9 @@ export class ProductService implements IProductService {
     if (!product) {
       throw new NotFoundError(`Product with id ${productId} not found`);
     }
-    const productResponse = ProductMapper.toResponse(product);
+    const productThumbnail = await this.mediaService.generateMediaResponse(product.thumbnail);
+
+    const productResponse = ProductMapper.toResponse({ product, thumbnail: productThumbnail });
 
     return productResponse;
   }
@@ -65,8 +71,13 @@ export class ProductService implements IProductService {
 
     const { content, totalElements } = await this.productRepo.getPage({ skip, take, where, orderBy });
 
+    const productsResponses = content.map((product) => {
+      const thumbnail = this.mediaService.generateMediaResponse(product.thumbnail);
+      return ProductMapper.toRowResponse({ product, thumbnail });
+    });
+
     const productPage = ProductMapper.toProductPageResponse({
-      products: content,
+      content: productsResponses,
       totalElements,
       pagination: queryParams,
     });
@@ -84,7 +95,7 @@ export class ProductService implements IProductService {
     let thumbnailId: string | null = existingProduct.thumbnailId;
     const hasThumbnailChanged = schema.thumbnailId !== existingProduct.thumbnailId;
     if (hasThumbnailChanged) {
-      const newThumbnailId = await mediaService.switchMediaIds({
+      const newThumbnailId = await this.mediaService.switchMediaIds({
         oldMediaKey: existingProduct.thumbnailId,
         newMediaKey: schema.thumbnailId,
       });
@@ -93,7 +104,9 @@ export class ProductService implements IProductService {
 
     const updatedProduct = await this.productRepo.update(productId, schema, thumbnailId);
 
-    const productResponse = ProductMapper.toResponse(updatedProduct);
+    const thumbnailResponse = this.mediaService.generateMediaResponse(updatedProduct.thumbnail);
+
+    const productResponse = ProductMapper.toResponse({ product: updatedProduct, thumbnail: thumbnailResponse });
 
     return productResponse;
   }
@@ -109,7 +122,7 @@ export class ProductService implements IProductService {
       if (count === 0) return;
 
       if (existingProduct.thumbnailId) {
-        await mediaService.deleteMediaById({ mediaId: existingProduct.thumbnailId, tx: tx.media });
+        await this.mediaService.deleteMediaById({ mediaId: existingProduct.thumbnailId, tx: tx.media });
       }
     });
   }

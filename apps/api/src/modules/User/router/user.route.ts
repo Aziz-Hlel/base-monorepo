@@ -7,7 +7,7 @@ import requireRole from '@/middleware/requireRole.middleware';
 import { UserRepo } from '../repo/user.repo';
 import { UserService } from '../Service/user.service';
 
-const createRouter = (controller: UserController) => {
+const createUserRouter = (controller: UserController) => {
   const router = Router();
 
   router.post('/', requireAuth, requireRole(Role.ADMIN), asyncHandler(controller.createUserProfile));
@@ -20,9 +20,4 @@ const createRouter = (controller: UserController) => {
   return router;
 };
 
-const repo = new UserRepo();
-const service = new UserService(repo);
-const controller = new UserController(service);
-const router = createRouter(controller);
-
-export const UserPage = router;
+export default createUserRouter;

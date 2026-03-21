@@ -1,57 +1,57 @@
 import { Product } from '@/generated/prisma/client';
-import { mediaService } from '@/media/media.service';
 import { ProductWithThumbnail } from '@/types/getPayload';
+import { MediaResponse } from '@repo/contracts/schemas/media/MediaResponse';
 import { ProductResponse } from '@repo/contracts/schemas/product/productResponse';
 import { ProductRowResponse } from '@repo/contracts/schemas/product/productRowResponse';
 import { DefaultSearchParams } from '@repo/contracts/types/api/DefaultSeachParams';
 import { Page } from '@repo/contracts/types/page/Page';
 
 export class ProductMapper {
-  static toResponse(product: ProductWithThumbnail): ProductResponse {
-    const thumbnail = mediaService.getMediaKeyAndUrl(product.thumbnail);
+  static toResponse(params: { product: ProductWithThumbnail; thumbnail: MediaResponse | null }): ProductResponse {
     return {
-      id: product.id,
-      name: product.name,
-      description: product.description,
-      price: Number(product.price),
-      thumbnail: thumbnail,
-      createdAt: product.createdAt.toISOString(),
-      updatedAt: product.updatedAt.toISOString(),
+      id: params.product.id,
+      name: params.product.name,
+      description: params.product.description,
+      price: Number(params.product.price),
+      thumbnail: params.thumbnail,
+      createdAt: params.product.createdAt.toISOString(),
+      updatedAt: params.product.updatedAt.toISOString(),
     };
   }
-  static toRowResponse(product: ProductWithThumbnail): ProductRowResponse {
-    const thumbnail = mediaService.getMediaKeyAndUrl(product.thumbnail);
+  static toRowResponse(params: { product: ProductWithThumbnail; thumbnail: MediaResponse | null }): ProductRowResponse {
     return {
-      id: product.id,
-      name: product.name,
-      description: product.description,
-      price: Number(product.price),
-      thumbnail: thumbnail,
-      status: product.status,
-      createdAt: product.createdAt.toISOString(),
-      updatedAt: product.updatedAt.toISOString(),
+      id: params.product.id,
+      name: params.product.name,
+      description: params.product.description,
+      price: Number(params.product.price),
+      thumbnail: params.thumbnail,
+      status: params.product.status,
+      createdAt: params.product.createdAt.toISOString(),
+      updatedAt: params.product.updatedAt.toISOString(),
     };
   }
 
-  static toProductRowResponses(products: ProductWithThumbnail[]): ProductRowResponse[] {
-    return products.map(this.toRowResponse);
+  static toProductRowResponses(params: {
+    products: ProductWithThumbnail[];
+    thumbnails: Record<string, MediaResponse>;
+  }): ProductRowResponse[] {
+    return params.products.map((product) => this.toRowResponse({ product, thumbnail: params.thumbnails[product.id] }));
   }
 
   static toProductPageResponse(params: {
-    products: ProductWithThumbnail[];
+    content: ProductRowResponse[];
     totalElements: number;
     pagination: DefaultSearchParams;
   }): Page<ProductRowResponse> {
-    const productRowResponses = this.toProductRowResponses(params.products);
     return {
-      content: productRowResponses,
+      content: params.content,
       pagination: {
         number: params.pagination.page,
         size: params.pagination.size,
         totalElements: params.totalElements,
         totalPages: Math.ceil(params.totalElements / params.pagination.size),
         offset: params.pagination.page * params.pagination.size,
-        pageSize: params.products.length,
+        pageSize: params.content.length,
       },
     };
   }

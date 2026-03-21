@@ -1,16 +1,12 @@
 import { Router } from 'express';
-import { AuthRouter } from '@/modules/User/router/auth.route';
-import { UserPage } from '@/modules/User/router/user.route';
-import { mediaRouter } from '@/media/media.route';
 import { EmailRouter } from '@/email/email.route';
-import { productRouter } from '@/modules/products/products.route';
-import { RootRouter } from '@/modules/root/router/root.router';
+import { authRouter, mediaRouter, productRouter, rootRouter, userRouter } from '@/container';
 
 const router = Router();
 
-router.use('/', RootRouter);
-router.use('/auth', AuthRouter);
-router.use('/users', UserPage);
+router.use('/', rootRouter);
+router.use('/auth', authRouter);
+router.use('/users', userRouter);
 router.use('/media', mediaRouter);
 router.use('/products', productRouter);
 router.use('/email', EmailRouter);

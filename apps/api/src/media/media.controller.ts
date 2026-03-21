@@ -1,14 +1,14 @@
 import { presignedUrlRequestSchema } from '@repo/contracts/schemas/media/PresignedUrlRequest';
-import { mediaService } from './media.service';
 import { Request, Response } from 'express';
 import { PresignedUrlResponse } from '@repo/contracts/schemas/media/PresignedUrlResponse';
+import { IMediaService } from './media.service';
 
-class MediaController {
-  async getPresignedUrl(req: Request, res: Response<PresignedUrlResponse>) {
+export class MediaController {
+  constructor(private readonly mediaService: IMediaService) {}
+
+  getPresignedUrl = async (req: Request, res: Response<PresignedUrlResponse>) => {
     const schema = presignedUrlRequestSchema.parse(req.body);
-    const presignedUrlResponse = await mediaService.getPresignedUrl(schema);
+    const presignedUrlResponse = await this.mediaService.getPresignedUrl(schema);
     res.json(presignedUrlResponse);
-  }
+  };
 }
-
-export const mediaController = new MediaController();

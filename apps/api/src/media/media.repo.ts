@@ -4,7 +4,7 @@ import { MediaStatus } from '@/generated/prisma/enums';
 import { MediaTransaction } from '@/types/transactions';
 import { PresignedUrlRequest } from '@repo/contracts/schemas/media/PresignedUrlRequest';
 
-class MediaRepo {
+export class MediaRepo {
   async createPendingMedia(preSignedUrlDto: PresignedUrlRequest, mediaKey: string) {
     const createdMedia = await prisma.media.create({
       data: {
@@ -132,5 +132,3 @@ class MediaRepo {
     return mediaId;
   }
 }
-
-export const mediaRepo = new MediaRepo();

@@ -26,3 +26,5 @@ db_volume:
 and since with project name they ll be named like this : ${PROJECT_NAME}\_db_volume
 
 -- just remove the .prod .stage .dev from the dockerfile name , it s useless, the folder name is enough
+
+-- make an internal user service and make authservice depend on it , so that userservice handle http-facing operations

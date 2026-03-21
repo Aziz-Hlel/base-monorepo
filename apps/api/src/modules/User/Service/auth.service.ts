@@ -3,7 +3,7 @@ import UserMapper from '../mapper/user.mapper';
 import { InternalServerError } from '../../../err/customErrors';
 import { DecodedIdTokenWithClaims } from '../../../types/auth/DecodedIdTokenWithClaims';
 import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
-import { UserRepo } from '../repo/user.repo';
+import { UserInternalService } from './user.internal.service';
 
 export interface IAuthService {
   registerUser(tokenId: string): Promise<UserProfileResponse>;
@@ -13,7 +13,7 @@ export interface IAuthService {
 }
 
 export class AuthService implements IAuthService {
-  constructor(private readonly userRepo: UserRepo) {}
+  constructor(private readonly userInternalService: UserInternalService) {}
   private firebaseService = firebaseAuthService;
 
   async registerUser(tokenId: string): Promise<UserProfileResponse> {
@@ -21,7 +21,7 @@ export class AuthService implements IAuthService {
 
     let email = decodedToken.email as string;
 
-    const isEmailExist = await this.userRepo.isUserEmailExists(email);
+    const isEmailExist = await this.userInternalService.isUserEmailExists(email);
 
     if (isEmailExist)
       throw new InternalServerError(
@@ -30,7 +30,7 @@ export class AuthService implements IAuthService {
       );
 
     const userToCreate = UserMapper.toUserCreateInput(decodedToken);
-    const newUser = await this.userRepo.createUser(userToCreate);
+    const newUser = await this.userInternalService.createUser(userToCreate);
 
     await this.firebaseService.setCustomUserClaims({
       userId: newUser.id,
@@ -48,7 +48,7 @@ export class AuthService implements IAuthService {
 
     const userAuthId = decodedToken.uid;
 
-    const user = await this.userRepo.getUserByAuthId(userAuthId);
+    const user = await this.userInternalService.getUserByAuthId(userAuthId);
 
     if (!user) {
       throw new InternalServerError(`User with authId ${userAuthId} does not exist in the system.`);
@@ -62,11 +62,11 @@ export class AuthService implements IAuthService {
 
     const userAuthId = decodedToken.uid;
     console.log('user auth id', userAuthId);
-    let user = await this.userRepo.getUserByAuthId(userAuthId);
+    let user = await this.userInternalService.getUserByAuthId(userAuthId);
 
     if (!user) {
       const userToCreate = UserMapper.toUserCreateInput(decodedToken);
-      user = await this.userRepo.createUser(userToCreate);
+      user = await this.userInternalService.createUser(userToCreate);
       await this.firebaseService.setCustomUserClaims({
         userId: user.id,
         userAuthId: user.authId,
@@ -80,7 +80,7 @@ export class AuthService implements IAuthService {
   async me(decodedToken: DecodedIdTokenWithClaims): Promise<UserProfileResponse> {
     const userAuthId = decodedToken.uid;
 
-    const user = await this.userRepo.getUserByAuthId(userAuthId);
+    const user = await this.userInternalService.getUserByAuthId(userAuthId);
 
     if (!user) {
       throw new InternalServerError(
