@@ -1,15 +1,14 @@
 import { Router } from 'express';
-import { RootRouter } from '../../root/router/root.router';
-import { AuthRouter } from '../../User/router/auth.route';
-import { UserPage } from '../../User/router/user.route';
-import { productRouter } from '@/products/products.route';
+import { AuthRouter } from '@/modules/User/router/auth.route';
+import { UserPage } from '@/modules/User/router/user.route';
 import { mediaRouter } from '@/media/media.route';
 import { EmailRouter } from '@/email/email.route';
+import { productRouter } from '@/modules/products/products.route';
+import { RootRouter } from '@/modules/root/router/root.router';
 
 const router = Router();
 
 router.use('/', RootRouter);
-
 router.use('/auth', AuthRouter);
 router.use('/users', UserPage);
 router.use('/media', mediaRouter);

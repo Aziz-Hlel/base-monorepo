@@ -1,5 +1,5 @@
 import { UserInclude } from '@/generated/prisma/models';
-import { prisma } from '../../bootstrap/db.init';
+import { prisma } from '../../../bootstrap/db.init';
 import { DefaultArgs } from '@prisma/client/runtime/client';
 import { UserWithProfile } from '../types';
 import { CreateUserProfileRequest } from '@repo/contracts/schemas/profile/createUserProfileRequest';
@@ -122,5 +122,3 @@ export class UserRepo {
     });
   }
 }
-
-export const userRepo = new UserRepo();

@@ -12,6 +12,7 @@
   "dependencies": {
     "@repo/queue": "workspace:*",
     "bullmq": "5.71.0",
+    "axios": "^1.9.0",
     "ioredis": "5.9.3",
     "nodemailer": "^8.0.1"
   },

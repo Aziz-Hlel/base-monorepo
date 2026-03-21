@@ -21,5 +21,3 @@ export class ProfileRepo {
     return profile;
   }
 }
-
-export const profileRepo = new ProfileRepo();

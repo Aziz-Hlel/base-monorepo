@@ -1,49 +1,48 @@
 import { createProductRequestSchema } from '@repo/contracts/schemas/product/createProductRequest';
-import { productService } from './product.service';
 import { Request, Response } from 'express';
 import { ProductResponse } from '@repo/contracts/schemas/product/productResponse';
 import { updateProductRequestSchema } from '@repo/contracts/schemas/product/updateProductRequest';
 import { productsQueryParamsSchema } from '@repo/contracts/schemas/product/ProductPageQuery';
 import getParam from '@/utils/getParam';
+import { IProductService } from './product.service';
 
-class ProductController {
-  async create(req: Request, res: Response<ProductResponse>) {
+export class ProductController {
+  constructor(private readonly productService: IProductService) {}
+  create = async (req: Request, res: Response<ProductResponse>) => {
     const parsedSchema = createProductRequestSchema.parse(req.body);
 
-    const productResponse = await productService.create(parsedSchema);
+    const productResponse = await this.productService.create(parsedSchema);
 
     res.status(201).json(productResponse);
-  }
+  };
 
-  async getById(req: Request, res: Response<ProductResponse>) {
+  getById = async (req: Request, res: Response<ProductResponse>) => {
     const productId = getParam(req, 'id');
 
-    const productResponse = await productService.getById(productId);
+    const productResponse = await this.productService.getById(productId);
     res.status(200).json(productResponse);
-  }
+  };
 
-  async update(req: Request, res: Response<ProductResponse>) {
+  update = async (req: Request, res: Response<ProductResponse>) => {
     const productId = getParam(req, 'id');
     const parsedSchema = updateProductRequestSchema.parse(req.body);
-    const productResponse = await productService.update(productId, parsedSchema);
+    const productResponse = await this.productService.update(productId, parsedSchema);
 
     res.status(200).json(productResponse);
-  }
+  };
 
-  async getPage(req: Request, res: Response) {
+  getPage = async (req: Request, res: Response) => {
     const queryParams = productsQueryParamsSchema.parse(req.query);
-    const productPage = await productService.getPage(queryParams);
+    const productPage = await this.productService.getPage(queryParams);
 
     res.status(200).json(productPage);
-  }
+  };
 
-  async delete(req: Request, res: Response) {
+  delete = async (req: Request, res: Response) => {
     const productId = getParam(req, 'id');
 
-    await productService.delete(productId);
+    await this.productService.delete(productId);
 
     res.status(204).send();
-  }
+  };
 }
-
-export const productController = new ProductController();

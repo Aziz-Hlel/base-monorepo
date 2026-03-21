@@ -1,6 +1,5 @@
 import { Response } from 'express';
-import { AuthenticatedRequest } from '../../types/auth/AuthenticatedRequest';
-import { userService } from '../Service/user.service';
+import { AuthenticatedRequest } from '../../../types/auth/AuthenticatedRequest';
 import { UserProfileRowResponse } from '@repo/contracts/schemas/user/UserRowResponse';
 import { queryParamsSchema } from '@repo/contracts/schemas/user/UserPageQuery';
 import { createUserProfileRequestSchema } from '@repo/contracts/schemas/profile/createUserProfileRequest';
@@ -11,12 +10,14 @@ import { SimpleApiResponse } from '@repo/contracts/types/api/SimpleApiResponse.d
 import { Page } from '@repo/contracts/types/page/Page';
 import getParam from '@/utils/getParam';
 import { updateUserProfileRequestSchema } from '@repo/contracts/schemas/profile/updateUserProfileRequest';
+import { IUserService } from '../Service/user.service';
 
-class UserController {
+export class UserController {
+  constructor(private readonly userService: IUserService) {}
   async getUserPage(req: AuthenticatedRequest, res: Response<Page<UserProfileRowResponse>>) {
     const parsedQuery = queryParamsSchema.parse(req.query);
 
-    const response = await userService.getUserPage(parsedQuery);
+    const response = await this.userService.getUserPage(parsedQuery);
     res.json(response);
   }
 
@@ -27,7 +28,7 @@ class UserController {
     if (PERMISSION_SCORE[userRole] < PERMISSION_SCORE[parsedBody.role]) {
       throw new PermissionDeniedError(`Insufficient permissions to create a user with role ${parsedBody.role}`);
     }
-    const response = await userService.createUserProfile(parsedBody);
+    const response = await this.userService.createUserProfile(parsedBody);
     res.status(201).json(response);
   }
 
@@ -37,7 +38,7 @@ class UserController {
 
     const userRole = req.user.claims?.role;
 
-    const response = await userService.updateUserProfile(userId, parsedBody, userRole);
+    const response = await this.userService.updateUserProfile(userId, parsedBody, userRole);
     res.status(200).json(response);
   }
 
@@ -45,7 +46,7 @@ class UserController {
     const userToDeleteId = getParam(req, 'id');
     const userRole = req.user.claims?.role;
 
-    await userService.deleteUser(userToDeleteId, userRole);
+    await this.userService.deleteUser(userToDeleteId, userRole);
 
     res.status(204).send({ message: 'User deleted successfully' });
   }
@@ -54,7 +55,7 @@ class UserController {
     const userId = getParam(req, 'id');
     const userRole = req.user.claims?.role;
 
-    await userService.enableUser(userId, userRole);
+    await this.userService.enableUser(userId, userRole);
 
     res.status(200).send({ message: 'User enabled successfully' });
   }
@@ -63,10 +64,8 @@ class UserController {
     const userId = getParam(req, 'id');
     const userRole = req.user.claims?.role;
 
-    await userService.disableUser(userId, userRole);
+    await this.userService.disableUser(userId, userRole);
 
     res.status(200).send({ message: 'User disabled successfully' });
   }
 }
-
-export const userController = new UserController();

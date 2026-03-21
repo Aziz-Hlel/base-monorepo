@@ -1,6 +1,6 @@
 import { UserProfileRowResponse } from '@repo/contracts/schemas/user/UserRowResponse';
-import { UserOrderByWithRelationInput, UserWhereInput } from '../../generated/prisma/models';
-import { prisma } from '../../bootstrap/db.init';
+import { UserOrderByWithRelationInput, UserWhereInput } from '../../../generated/prisma/models';
+import { prisma } from '../../../bootstrap/db.init';
 import UserMapper from '../mapper/user.mapper';
 import {
   ProfileKeys,
@@ -11,7 +11,6 @@ import {
 } from '@repo/contracts/schemas/user/UserPageQuery';
 import { cacheService } from '@/cache/service/cache.service';
 import { CreateUserProfileRequest } from '@repo/contracts/schemas/profile/createUserProfileRequest';
-import { userRepo } from '../repo/user.repo';
 import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
 import { firebaseUserService } from '@/firebase/service/firebase.user.service';
 import { NotFoundError, PermissionDeniedError } from '@/err/customErrors';
@@ -21,8 +20,19 @@ import { UpdateUserProfileRequest } from '@repo/contracts/schemas/profile/update
 import { logger } from '@/bootstrap/logger.init';
 import { RedisKeys } from '@/cache/keys/cache.keys';
 import { Page } from '@repo/contracts/types/page/Page';
+import { UserRepo } from '../repo/user.repo';
 
-class UserService {
+export interface IUserService {
+  getUserPage(queryParams: UserPageQuery): Promise<Page<UserProfileRowResponse>>;
+  createUserProfile(schema: CreateUserProfileRequest): Promise<UserProfileResponse>;
+  updateUserProfile(id: string, data: UpdateUserProfileRequest, currentUserRole: Role): Promise<UserProfileResponse>;
+  deleteUser(userToDeleteId: string, currentUserRole: Role): Promise<void>;
+  disableUser(userId: string, currentUserRole: Role): Promise<void>;
+  enableUser(userId: string, currentUserRole: Role): Promise<void>;
+}
+
+export class UserService implements IUserService {
+  constructor(private readonly userRepo: UserRepo) {}
   async getUserPage(queryParams: UserPageQuery): Promise<Page<UserProfileRowResponse>> {
     const cachedKey = RedisKeys.usersPage.genKey(queryParams);
     const cachedResult = await cacheService.get<Page<UserProfileRowResponse>>({ key: cachedKey });
@@ -97,7 +107,7 @@ class UserService {
       role: schema.role,
     });
 
-    const user = await userRepo.createUserProfile(schema, userRecord.uid);
+    const user = await this.userRepo.createUserProfile(schema, userRecord.uid);
 
     const userProfileResponse = UserMapper.toUserProfileResponse(user, null);
     return userProfileResponse;
@@ -108,7 +118,7 @@ class UserService {
     data: UpdateUserProfileRequest,
     currentUserRole: Role,
   ): Promise<UserProfileResponse> {
-    const user = await userRepo.getUserById(id);
+    const user = await this.userRepo.getUserById(id);
     if (!user) {
       throw new NotFoundError('User not found');
     }
@@ -118,13 +128,13 @@ class UserService {
       throw new PermissionDeniedError('You do not have permission to update this user');
     }
 
-    const updatedUser = await userRepo.updateUserProfile(id, data);
+    const updatedUser = await this.userRepo.updateUserProfile(id, data);
     const userProfileResponse = UserMapper.toUserProfileResponse(updatedUser, null);
     return userProfileResponse;
   }
 
   async deleteUser(userToDeleteId: string, currentUserRole: Role): Promise<void> {
-    const user = await userRepo.getUserById(userToDeleteId);
+    const user = await this.userRepo.getUserById(userToDeleteId);
     if (!user) {
       throw new NotFoundError('User not found');
     }
@@ -133,11 +143,11 @@ class UserService {
     }
 
     await firebaseUserService.deleteUser(user.authId);
-    await userRepo.deleteUser(userToDeleteId);
+    await this.userRepo.deleteUser(userToDeleteId);
   }
 
   async disableUser(userId: string, currentUserRole: Role): Promise<void> {
-    const user = await userRepo.getUserById(userId);
+    const user = await this.userRepo.getUserById(userId);
     if (!user) {
       throw new NotFoundError('User not found');
     }
@@ -147,11 +157,11 @@ class UserService {
     }
 
     await firebaseUserService.disableUser(user.authId);
-    await userRepo.disableUser(userId);
+    await this.userRepo.disableUser(userId);
   }
 
   async enableUser(userId: string, currentUserRole: Role): Promise<void> {
-    const user = await userRepo.getUserById(userId);
+    const user = await this.userRepo.getUserById(userId);
     if (!user) {
       throw new NotFoundError('User not found');
     }
@@ -161,8 +171,6 @@ class UserService {
     }
 
     await firebaseUserService.enableUser(user.authId);
-    await userRepo.enableUser(userId);
+    await this.userRepo.enableUser(userId);
   }
 }
-
-export const userService = new UserService();

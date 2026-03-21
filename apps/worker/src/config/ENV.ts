@@ -26,7 +26,12 @@ const smtpSchema = {
   SMTP_PASS: z.string().trim(),
 };
 
-const envSchema = z.object({ ...redisSchema, ...smtpSchema, NODE_ENV: nodeEnvSchema });
+const oneSignalSchema = {
+  ONE_SIGNAL_APP_ID: z.string().trim(),
+  ONE_SIGNAL_APP_SECRET: z.string().trim(),
+};
+
+const envSchema = z.object({ ...redisSchema, ...smtpSchema, ...oneSignalSchema, NODE_ENV: nodeEnvSchema });
 
 const ENV = envSchema.parse(process.env);
 

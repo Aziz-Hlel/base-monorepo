@@ -1,6 +1,5 @@
 import { mediaService } from '@/media/media.service';
 import { CreateProductRequest } from '@repo/contracts/schemas/product/createProductRequest';
-import { productRepo } from './product.repo';
 import { ProductResponse } from '@repo/contracts/schemas/product/productResponse';
 import { ProductMapper } from './product.mapper';
 import { NotFoundError } from '@/err/customErrors';
@@ -9,12 +8,22 @@ import { ProductPageQuery } from '@repo/contracts/schemas/product/ProductPageQue
 import { ProductOrderByWithRelationInput, ProductWhereInput } from '@/generated/prisma/models';
 import { Page } from '@repo/contracts/types/page/Page';
 import { prisma } from '@/bootstrap/db.init';
+import { ProductRepo } from './product.repo';
 
-class ProductService {
+export interface IProductService {
+  create(schema: CreateProductRequest): Promise<ProductResponse>;
+  getById(productId: string): Promise<ProductResponse>;
+  getPage(queryParams: ProductPageQuery): Promise<Page<ProductResponse>>;
+  update(productId: string, schema: UpdateProductRequest): Promise<ProductResponse>;
+  delete(productId: string): Promise<void>;
+}
+
+export class ProductService implements IProductService {
+  constructor(private readonly productRepo: ProductRepo) {}
   async create(schema: CreateProductRequest): Promise<ProductResponse> {
     await mediaService.confirmMediaUploadById(schema.thumbnailId);
 
-    const product = await productRepo.create(schema);
+    const product = await this.productRepo.create(schema);
 
     const productResponse = ProductMapper.toResponse(product);
 
@@ -22,7 +31,7 @@ class ProductService {
   }
 
   async getById(productId: string): Promise<ProductResponse> {
-    const product = await productRepo.findById({ productId });
+    const product = await this.productRepo.findById({ productId });
 
     if (!product) {
       throw new NotFoundError(`Product with id ${productId} not found`);
@@ -54,7 +63,7 @@ class ProductService {
       orderBy[queryParams.sort] = queryParams.order;
     }
 
-    const { content, totalElements } = await productRepo.getPage({ skip, take, where, orderBy });
+    const { content, totalElements } = await this.productRepo.getPage({ skip, take, where, orderBy });
 
     const productPage = ProductMapper.toProductPageResponse({
       products: content,
@@ -66,7 +75,7 @@ class ProductService {
   }
 
   async update(productId: string, schema: UpdateProductRequest): Promise<ProductResponse> {
-    const existingProduct = await productRepo.findById({ productId });
+    const existingProduct = await this.productRepo.findById({ productId });
 
     if (!existingProduct) {
       throw new NotFoundError(`Product with id ${productId} not found`);
@@ -82,7 +91,7 @@ class ProductService {
       thumbnailId = newThumbnailId;
     }
 
-    const updatedProduct = await productRepo.update(productId, schema, thumbnailId);
+    const updatedProduct = await this.productRepo.update(productId, schema, thumbnailId);
 
     const productResponse = ProductMapper.toResponse(updatedProduct);
 
@@ -91,11 +100,11 @@ class ProductService {
 
   async delete(productId: string): Promise<void> {
     await prisma.$transaction(async (tx) => {
-      const existingProduct = await productRepo.findById({ productId, tx: tx.product });
+      const existingProduct = await this.productRepo.findById({ productId, tx: tx.product });
 
       if (!existingProduct) return;
 
-      const count = await productRepo.delete({ productId, tx: tx.product });
+      const count = await this.productRepo.delete({ productId, tx: tx.product });
 
       if (count === 0) return;
 
@@ -105,5 +114,3 @@ class ProductService {
     });
   }
 }
-
-export const productService = new ProductService();

@@ -1,10 +1,10 @@
 import Emailtransporter from './email.init';
 import { EmailJob } from '@repo/queue/types/emailJob';
 
-class EmailProvider {
+class EmailService {
   async sendEmail(payload: EmailJob, options: { throwable: boolean } = { throwable: true }) {
     try {
-      const info = await Emailtransporter.sendMail({
+      await Emailtransporter.sendMail({
         from: payload.from,
         to: payload.to,
         subject: payload.subject,
@@ -20,4 +20,4 @@ class EmailProvider {
   }
 }
 
-export const emailProvider = new EmailProvider();
+export const emailService = new EmailService();

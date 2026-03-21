@@ -1,6 +1,16 @@
 import ENV from '@/config/ENV';
 import nodemailer, { Transporter } from 'nodemailer';
 
+export const testEmailTransporterConnection = async () => {
+  try {
+    await Emailtransporter.verify();
+    console.log('✅ SUCCESS : Email transporter verified successfully.');
+  } catch (error) {
+    console.error('❌ ERROR : Failed to create email transporter:', error);
+    process.exit(1);
+  }
+};
+
 let Emailtransporter: Transporter;
 
 try {

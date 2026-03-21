@@ -5,7 +5,7 @@ import { UpdateProductRequest } from '@repo/contracts/schemas/product/updateProd
 import { DefaultArgs } from '@prisma/client/runtime/client';
 import { ProductTransaction } from '@/types/transactions';
 
-class ProductRepo {
+export class ProductRepo {
   private includeThumbnail() {
     return {
       thumbnail: true,
@@ -68,5 +68,3 @@ class ProductRepo {
     return { content, totalElements };
   }
 }
-
-export const productRepo = new ProductRepo();
