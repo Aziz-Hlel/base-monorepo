@@ -45,6 +45,7 @@ export default ({ mode }: { mode: string }) => {
       port: getPort(mode),
       strictPort: true,
       host: '0.0.0.0', // for docker
+      allowedHosts: true, // enable port forwarding
     },
   });
 };
