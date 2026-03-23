@@ -1,12 +1,11 @@
-import createEmailWorker from './email';
-import { testEmailTransporterConnection } from './email/email.init';
-import { validateOneSignalConfig } from './notification/notification.init';
+import initEmail from './email';
+import { initNotification } from './notification';
 
 const init = async () => {
-  await testEmailTransporterConnection();
-  await validateOneSignalConfig();
+  const { workers: emailWorkers } = await initEmail();
+  const { workers: notificationWorkers } = initNotification();
 
-  const workers = [createEmailWorker()];
+  const workers = [...emailWorkers, ...notificationWorkers];
 
   process.on('SIGINT', async () => {
     await Promise.all(workers.map((w) => w.close()));

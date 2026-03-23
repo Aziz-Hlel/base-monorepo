@@ -315,6 +315,9 @@ importers:
 
   apps/worker:
     dependencies:
+      '@repo/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
       '@repo/queue':
         specifier: workspace:*
         version: link:../../packages/queue
@@ -337,7 +340,11 @@ importers:
 
   packages/contracts: {}
 
-  packages/queue: {}
+  packages/queue:
+    dependencies:
+      '@repo/contracts':
+        specifier: '*'
+        version: link:../contracts
 
 packages:
 

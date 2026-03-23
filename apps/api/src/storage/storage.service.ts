@@ -10,6 +10,7 @@ export class StorageService implements IStorageProvider {
   async generatePresignedUrl(params: PresignedUrlGenerator): Promise<string> {
     return this.storageProvider.generatePresignedUrl(params);
   }
+
   getObjectUrl(fileKey: string): string {
     return this.storageProvider.getObjectUrl(fileKey);
   }

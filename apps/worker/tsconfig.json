@@ -12,9 +12,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@repo/queue/*": ["../../packages/queue/src/*"]
+      "@repo/queue/*": ["../../packages/queue/src/*"],
+      "@repo/contracts/*": ["../../packages/contracts/src/*"]
     }
   },
-  "references": [{ "path": "../../packages/queue" }],
+  "references": [{ "path": "../../packages/queue" }, { "path": "../../packages/contracts" }],
   "include": ["src/**/*"]
 }

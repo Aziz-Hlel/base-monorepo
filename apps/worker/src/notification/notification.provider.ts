@@ -1,9 +1,13 @@
 import ENV from '@/config/ENV';
-import { LocalizedString, NotificationJob } from '@repo/queue/types/notificationJob';
+import { LocalizedString, NotificationJob } from '@repo/contracts/jobs/notificationJob';
+import { NotificationRecipientType } from '@repo/contracts/types/enums/enums';
 import axios from 'axios';
 
 interface INotificationProvider {
-  send(payload: NotificationJob): Promise<void>;
+  sendToAllUsers(baseNotificationPayload: BaseNotificationPayload): OneSignalPayload[];
+  sendToCountry(baseNotificationPayload: BaseNotificationPayload, countries: string[]): OneSignalPayload[];
+  sendToUser(baseNotificationPayload: BaseNotificationPayload, userIds: string[]): OneSignalPayload[];
+  sendToRole(baseNotificationPayload: BaseNotificationPayload, userIds: string[]): OneSignalPayload[];
 }
 
 type OneSignalPayload = {
@@ -30,8 +34,28 @@ type BaseNotificationPayload = {
   contents: LocalizedString;
 };
 
-class NotificationProvider implements INotificationProvider {
-  private oneSignalUrl = 'https://onesignal.com/api/v1/notifications';
+export class NotificationProvider implements INotificationProvider {
+  private oneSignalBaseUrl = 'https://onesignal.com/api/v1';
+  private oneSignalUrl = `${this.oneSignalBaseUrl}/notifications`;
+
+  private validateOneSignalConfig = async () => {
+    try {
+      await axios.get(`${this.oneSignalBaseUrl}/apps/${ENV.ONE_SIGNAL_APP_ID}`, {
+        headers: {
+          Authorization: `Basic ${ENV.ONE_SIGNAL_APP_SECRET}`,
+        },
+      });
+
+      console.log('✅ SUCCESS : OneSignal configuration is valid');
+    } catch (error) {
+      console.error('❌ ERROR : OneSignal configuration is INVALID');
+      throw error;
+    }
+  };
+
+  constructor() {
+    this.validateOneSignalConfig();
+  }
 
   sendToAllUsers(baseNotificationPayload: BaseNotificationPayload): OneSignalPayload[] {
     return [
@@ -41,6 +65,7 @@ class NotificationProvider implements INotificationProvider {
       },
     ];
   }
+
   sendToCountry(baseNotificationPayload: BaseNotificationPayload, countries: string[]): OneSignalPayload[] {
     return countries.map((country) => {
       return {
@@ -55,6 +80,20 @@ class NotificationProvider implements INotificationProvider {
       };
     });
   }
+
+  sendToRole(baseNotificationPayload: BaseNotificationPayload, userIds: string[]): OneSignalPayload[] {
+    const userBatches = [];
+    for (let i = 0; i < userIds.length; i += 1000) {
+      userBatches.push(userIds.slice(i, i + 1000));
+    }
+    return userBatches.map((userBatch) => {
+      return {
+        ...baseNotificationPayload,
+        include_external_user_ids: userBatch,
+      };
+    });
+  }
+
   sendToUser(baseNotificationPayload: BaseNotificationPayload, userIds: string[]): OneSignalPayload[] {
     const userBatches = [];
     for (let i = 0; i < userIds.length; i += 1000) {
@@ -67,7 +106,8 @@ class NotificationProvider implements INotificationProvider {
       };
     });
   }
-  async send(payload: NotificationJob) {
+
+  send = async (payload: NotificationJob) => {
     const baseNotificationPayload = {
       app_id: ENV.ONE_SIGNAL_APP_ID,
       target_channel: 'push',
@@ -77,34 +117,34 @@ class NotificationProvider implements INotificationProvider {
     };
 
     let payloads: OneSignalPayload[];
-    switch (payload.recipient.type) {
-      case 'all':
+    switch (payload.recipients.type) {
+      case NotificationRecipientType.ALL:
         payloads = this.sendToAllUsers(baseNotificationPayload);
         break;
-      case 'country':
-        payloads = this.sendToCountry(baseNotificationPayload, payload.recipient.countries);
+      case NotificationRecipientType.COUNTRY:
+        payloads = this.sendToCountry(baseNotificationPayload, payload.recipients.countries);
         break;
-      case 'user':
-        payloads = this.sendToUser(baseNotificationPayload, payload.recipient.userIds);
+      case NotificationRecipientType.USER:
+      case NotificationRecipientType.ROLE:
+        payloads = this.sendToUser(baseNotificationPayload, payload.recipients.userIds);
         break;
     }
 
     await Promise.all(payloads.map(this.sendNotification));
-  }
+  };
 
   async sendNotification(payload: OneSignalPayload) {
-    try {
-      await axios.post(this.oneSignalUrl, payload, {
-        headers: {
-          Authorization: `Bearer ${ENV.ONE_SIGNAL_APP_SECRET}`,
-          'Content-Type': 'application/json',
-        },
-      });
-    } catch (error) {
-      console.error('❌ ERROR : Notification job failed', error);
-      throw error;
-    }
+    throw new Error('Not implemented yet!');
+    // try {
+    //   await axios.post(this.oneSignalUrl, payload, {
+    //     headers: {
+    //       Authorization: `Bearer ${ENV.ONE_SIGNAL_APP_SECRET}`,
+    //       'Content-Type': 'application/json',
+    //     },
+    //   });
+    // } catch (error) {
+    //   console.error('❌ ERROR : Notification job failed', error);
+    //   throw error;
+    // }
   }
 }
-
-export const notificationProvider = new NotificationProvider();

@@ -1,10 +1,9 @@
-import { NotificationJob } from '@repo/queue/types/notificationJob';
-import { notificationProvider } from './notification.provider';
+import { NotificationProvider } from './notification.provider';
+import { NotificationJob } from '@repo/contracts/jobs/notificationJob';
 
-class NotificationService {
+export class NotificationService {
+  constructor(private readonly notificationProvider: NotificationProvider) {}
   async sendNotification(payload: NotificationJob) {
-    await notificationProvider.send(payload);
+    await this.notificationProvider.send(payload);
   }
 }
-
-export const notificationService = new NotificationService();

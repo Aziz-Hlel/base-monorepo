@@ -11,7 +11,12 @@
     "verbatimModuleSyntax": true,
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "moduleDetection": "force",
-    "noEmit": false
+    "noEmit": false,
+
+    "paths": {
+      "@repo/contracts/*": ["../../packages/contracts/src/*"]
+    }
   },
-  "include": ["src"]
+  "references": [{ "path": "../../packages/contracts" }],
+  "include": ["src", "../contracts/src/jobs/emailJob.ts", "../contracts/src/jobs/notificationJob.ts"]
 }

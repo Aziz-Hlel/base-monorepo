@@ -1,10 +1,11 @@
-import Emailtransporter from './email.init';
-import { EmailJob } from '@repo/queue/types/emailJob';
+import { EmailProvider } from './email.init';
+import { EmailJob } from '@repo/contracts/jobs/emailJob';
 
-class EmailService {
+export class EmailService {
+  constructor(private readonly emailProvider: EmailProvider) {}
   async sendEmail(payload: EmailJob, options: { throwable: boolean } = { throwable: true }) {
     try {
-      await Emailtransporter.sendMail({
+      await this.emailProvider.getInstance().sendMail({
         from: payload.from,
         to: payload.to,
         subject: payload.subject,
@@ -19,5 +20,3 @@ class EmailService {
     }
   }
 }
-
-export const emailService = new EmailService();

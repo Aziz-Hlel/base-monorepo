@@ -9,5 +9,8 @@
   "exports": {
     ".": "./dist/index.js",
     "./*": "./dist/*.js"
+  },
+  "dependencies": {
+    "@repo/contracts": "*"
   }
 }

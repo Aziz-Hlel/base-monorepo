@@ -22,7 +22,7 @@
     "docker:build": "node scripts/docker-up.js build",
     "docker:stage": "node scripts/docker-up.js stage",
     "docker:prod": "node scripts/docker-up.js prod ",
-    "build:packages": "pnpm -F contracts build",
+    "build:packages": "pnpm -F contracts build && pnpm -F queue build",
     "build:api": "pnpm build:packages && pnpm -F api build",
     "build:admin": "pnpm build:packages && pnpm -F admin build ",
     "start:api": "pnpm -F api start",
