@@ -43,21 +43,21 @@ export const ProductStatus = {
 
 export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus];
 
-export const NotificationRecipientType = {
+export const NotificationRecipientEnum = {
   ALL: 'ALL',
   COUNTRY: 'COUNTRY',
   ROLE: 'ROLE',
   USER: 'USER',
 } as const;
 
-export type NotificationRecipientType = (typeof NotificationRecipientType)[keyof typeof NotificationRecipientType];
+export type NotificationRecipientEnum = (typeof NotificationRecipientEnum)[keyof typeof NotificationRecipientEnum];
 
-export const NotificationScheduleType = {
+export const NotificationScheduleEnum = {
   SCHEDULED: 'SCHEDULED',
   DELAYED: 'DELAYED',
 } as const;
 
-export type NotificationScheduleType = (typeof NotificationScheduleType)[keyof typeof NotificationScheduleType];
+export type NotificationScheduleEnum = (typeof NotificationScheduleEnum)[keyof typeof NotificationScheduleEnum];
 
 export const NotificationLanguage = {
   en: 'en',

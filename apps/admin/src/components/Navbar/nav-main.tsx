@@ -1,4 +1,4 @@
-import { ChevronRight, LayoutDashboard, Settings2, UsersRound, Package } from 'lucide-react';
+import { ChevronRight, LayoutDashboard, Settings2, UsersRound, Package, BellRing } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   SidebarGroup,
@@ -12,8 +12,8 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Link } from 'react-router-dom';
-import type { Prettify } from 'node_modules/zod/v4/core/util.d.cts';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import type { Prettify } from '@repo/contracts/utils/Prettify';
 
 type NavRoute = {
   title: string;
@@ -52,6 +52,12 @@ const navRoutes: NavRoute[] = [
     title: 'Products',
     url: '/products',
     icon: Package,
+    isActive: true,
+  },
+  {
+    title: 'Notification',
+    url: '/notification',
+    icon: BellRing,
     isActive: true,
   },
   {

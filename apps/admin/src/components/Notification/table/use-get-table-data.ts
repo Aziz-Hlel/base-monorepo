@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import type { TableRowType } from './tableDeclarations/typesAndFieldsDeclaration';
+import type { TableRowType } from '../core/types';
 import useQueryParams from './use-query-params';
 import type { Pageable } from '@repo/contracts/types/page/Pageable';
-import productService from '@/Api/service/productService';
+import { MODULE_NAME } from '../core/core';
+import notificationService from '@/Api/service/notificationService';
 
 const blankPagination: Pageable = {
   size: 0,
@@ -18,12 +19,11 @@ const useGetTableData = () => {
   const adjustedQueryParams = {
     ...queryParams,
     page: queryParams.page,
-    status: queryParams.status.join(','),
   };
 
-  const { data, isFetching, error } = useQuery({
-    queryKey: ['products', { ...queryParams }],
-    queryFn: async () => await productService.getProducts(adjustedQueryParams),
+  const { data, isFetching } = useQuery({
+    queryKey: [MODULE_NAME, { ...queryParams }],
+    queryFn: async () => await notificationService.getPage(adjustedQueryParams),
     placeholderData: (previousData) => previousData,
   });
 

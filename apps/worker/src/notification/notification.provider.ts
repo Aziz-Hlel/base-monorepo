@@ -1,6 +1,6 @@
 import ENV from '@/config/ENV';
 import { LocalizedString, NotificationJob } from '@repo/contracts/jobs/notificationJob';
-import { NotificationRecipientType } from '@repo/contracts/types/enums/enums';
+import { NotificationRecipientEnum } from '@repo/contracts/types/enums/enums';
 import axios from 'axios';
 
 interface INotificationProvider {
@@ -118,14 +118,14 @@ export class NotificationProvider implements INotificationProvider {
 
     let payloads: OneSignalPayload[];
     switch (payload.recipients.type) {
-      case NotificationRecipientType.ALL:
+      case NotificationRecipientEnum.ALL:
         payloads = this.sendToAllUsers(baseNotificationPayload);
         break;
-      case NotificationRecipientType.COUNTRY:
+      case NotificationRecipientEnum.COUNTRY:
         payloads = this.sendToCountry(baseNotificationPayload, payload.recipients.countries);
         break;
-      case NotificationRecipientType.USER:
-      case NotificationRecipientType.ROLE:
+      case NotificationRecipientEnum.USER:
+      case NotificationRecipientEnum.ROLE:
         payloads = this.sendToUser(baseNotificationPayload, payload.recipients.userIds);
         break;
     }
@@ -136,12 +136,19 @@ export class NotificationProvider implements INotificationProvider {
   sendNotification = async (payload: OneSignalPayload) => {
     // throw new Error('Not implemented yet!');
     try {
-      await axios.post(this.oneSignalUrl, payload, {
-        headers: {
-          Authorization: `Bearer ${ENV.ONE_SIGNAL_APP_SECRET}`,
-          'Content-Type': 'application/json',
+      await axios.post(
+        this.oneSignalUrl,
+        {
+          ...payload,
+          big_picture: 'https://teresbahrain.com/images/friday.jpg',
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${ENV.ONE_SIGNAL_APP_SECRET}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
     } catch (error) {
       console.error('❌ ERROR : Notification job failed', error);
       throw error;

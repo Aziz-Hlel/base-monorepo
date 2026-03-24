@@ -1,9 +1,18 @@
 import { prisma } from '@/bootstrap/db.init';
-import { Notification } from '@/generated/prisma/client';
+import { Notification, Prisma } from '@/generated/prisma/client';
+import { NotificationOrderByWithRelationInput, NotificationWhereInput } from '@/generated/prisma/models';
 import { CreateNotificationRequest } from '@repo/contracts/schemas/notification/createNotification';
+import { NotificationPageQuery } from '@repo/contracts/schemas/notification/notificationPageQuery';
 
 export class NotificationRepo {
-  private includeTranslations = { translations: true };
+  private includeTranslations = {
+    translations: true,
+    recipients: {
+      include: {
+        user: true,
+      },
+    },
+  } satisfies Prisma.NotificationInclude;
 
   create = async (payload: CreateNotificationRequest): Promise<Notification> => {
     const delaySeconds = payload.schedule.scheduleType === 'DELAYED' ? payload.schedule.delaySeconds : null;
@@ -28,5 +37,30 @@ export class NotificationRepo {
       include: this.includeTranslations,
     });
     return createdNotification;
+  };
+
+  getPage = async ({
+    skip,
+    take,
+    where,
+    orderBy,
+  }: {
+    skip: number;
+    take: number;
+    where: NotificationWhereInput;
+    orderBy: NotificationOrderByWithRelationInput;
+  }) => {
+    const notifications = prisma.notification.findMany({
+      skip,
+      take,
+      where,
+      orderBy,
+      include: this.includeTranslations,
+    });
+    const notificationsCount = prisma.notification.count({ where });
+
+    const [content, totalElements] = await Promise.all([notifications, notificationsCount]);
+
+    return { content, totalElements };
   };
 }
