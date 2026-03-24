@@ -1,4 +1,3 @@
-import { Notification } from '@/generated/prisma/client';
 import { NotificationJob } from '@repo/contracts/jobs/notificationJob';
 import { CreateNotificationRequest } from '@repo/contracts/schemas/notification/createNotification';
 import { NotificationSchedule } from '@repo/contracts/schemas/notification/types/notificationSchedule';
@@ -31,6 +30,6 @@ export class NotificationMapper {
     if (schedule.scheduleType === 'DELAYED') {
       return schedule.delaySeconds * 1000;
     }
-    return new Date(schedule.scheduledAt).getTime() - new Date().getTime();
+    return schedule.scheduledAt.getTime() - Date.now();
   };
 }

@@ -18,7 +18,7 @@ const handleZodError = (error: ZodError<unknown>, req: Request): ApiError => {
   const apiResponse: ApiError = {
     success: false,
     message: 'Validation failed',
-    details: { 'World war Z ': prettifyError(error) },
+    details: { 'Zod Error': prettifyError(error) },
     timestamp: new Date(),
     path: req.originalUrl,
   };

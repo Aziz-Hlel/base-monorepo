@@ -3,7 +3,7 @@ import { initNotification } from './notification';
 
 const init = async () => {
   const { workers: emailWorkers } = await initEmail();
-  const { workers: notificationWorkers } = initNotification();
+  const { workers: notificationWorkers } = await initNotification();
 
   const workers = [...emailWorkers, ...notificationWorkers];
 

@@ -133,18 +133,18 @@ export class NotificationProvider implements INotificationProvider {
     await Promise.all(payloads.map(this.sendNotification));
   };
 
-  async sendNotification(payload: OneSignalPayload) {
-    throw new Error('Not implemented yet!');
-    // try {
-    //   await axios.post(this.oneSignalUrl, payload, {
-    //     headers: {
-    //       Authorization: `Bearer ${ENV.ONE_SIGNAL_APP_SECRET}`,
-    //       'Content-Type': 'application/json',
-    //     },
-    //   });
-    // } catch (error) {
-    //   console.error('❌ ERROR : Notification job failed', error);
-    //   throw error;
-    // }
-  }
+  sendNotification = async (payload: OneSignalPayload) => {
+    // throw new Error('Not implemented yet!');
+    try {
+      await axios.post(this.oneSignalUrl, payload, {
+        headers: {
+          Authorization: `Bearer ${ENV.ONE_SIGNAL_APP_SECRET}`,
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      console.error('❌ ERROR : Notification job failed', error);
+      throw error;
+    }
+  };
 }

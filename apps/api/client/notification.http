@@ -1,0 +1,41 @@
+@baseUrl = http://localhost:10000/api
+
+
+
+### 
+# @name create-notification
+POST {{baseUrl}}/notification
+Content-Type: application/json
+
+{
+    "title": "Notification Title",
+    "description": "Notification Message",
+    "schedule": {
+        "scheduleType": "SCHEDULED",
+        "scheduledAt": "2026-03-24T12:22:50.243Z"
+    },
+    "recipients": {
+        "type": "ALL"
+    },
+    "payload": {
+        "en": {
+            "language": "en",
+            "title": "Notification Title",
+            "content": "Notification Message",
+            "data": "Notification Data"
+        },
+        "fr": {
+            "language": "fr",
+            "title": "Titre de la notification",
+            "content": "Message de la notification",
+            "data": "Données de la notification"
+        },
+
+        "ar": {
+            "language": "ar",
+            "title": "عنوان الإشعار",
+            "content": "رسالة الإشعار",
+            "data": "بيانات الإشعار"
+        }
+    }
+}

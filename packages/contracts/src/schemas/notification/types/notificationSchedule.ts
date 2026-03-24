@@ -7,7 +7,7 @@ export const notificationScheduleSchema = z.discriminatedUnion('scheduleType', [
   }),
   z.object({
     scheduleType: z.literal('SCHEDULED'),
-    scheduledAt: z.date(),
+    scheduledAt: z.coerce.date().refine((date) => date > new Date(), 'Scheduled date must be in the future'),
   }),
 ]);
 

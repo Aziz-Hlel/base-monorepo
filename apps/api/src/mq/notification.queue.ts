@@ -27,7 +27,7 @@ export class NotificationQueue implements INotificationQueue {
   }
 
   add = async ({ payload, delay }: AddNotificationProps) => {
-    await this.queue.add(payload.id, payload, {
+    await this.queue.add(QUEUE_NAMES.notification, payload, {
       delay: delay,
       jobId: payload.id,
     });
