@@ -1,4 +1,4 @@
-import ENV from '../config/ENV';
+import ENV from '../config/env';
 import { ApiError } from './apiError.type';
 import ERRORS, { ErrNames, ErrObject } from './Errors.object';
 import ErrorNames, { ErrorNameKeys } from './errors.names';

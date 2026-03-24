@@ -42,3 +42,27 @@ export const ProductStatus = {
 } as const;
 
 export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus];
+
+export const NotificationRecipientType = {
+  ALL: 'ALL',
+  COUNTRY: 'COUNTRY',
+  ROLE: 'ROLE',
+  USER: 'USER',
+} as const;
+
+export type NotificationRecipientType = (typeof NotificationRecipientType)[keyof typeof NotificationRecipientType];
+
+export const NotificationScheduleType = {
+  SCHEDULED: 'SCHEDULED',
+  DELAYED: 'DELAYED',
+} as const;
+
+export type NotificationScheduleType = (typeof NotificationScheduleType)[keyof typeof NotificationScheduleType];
+
+export const NotificationLanguage = {
+  en: 'en',
+  ar: 'ar',
+  fr: 'fr',
+} as const;
+
+export type NotificationLanguage = (typeof NotificationLanguage)[keyof typeof NotificationLanguage];

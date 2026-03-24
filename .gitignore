@@ -6,7 +6,6 @@
 **/.env
 **/.env.*
 !config/.env.local
-**/pnpm-lock.yaml
 
 # ===============================
 # 🧱 Web (React)

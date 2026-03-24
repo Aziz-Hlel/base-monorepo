@@ -13,9 +13,10 @@
     "paths": {
       "@/*": ["src/*"],
       "@repo/contracts/*": ["../../packages/contracts/src/*"],
+      "@repo/queue/*": ["../../packages/queue/src/*"],
       "@prisma/client": ["./generated/prisma/client/*"]
     }
   },
-  "references": [{ "path": "../../packages/contracts" }],
+  "references": [{ "path": "../../packages/contracts" }, { "path": "../../packages/queue" }],
   "include": ["src/**/*"]
 }

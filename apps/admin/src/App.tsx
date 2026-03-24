@@ -14,6 +14,7 @@ import { UserSessionProvider } from './context/UserContext';
 import UserPage from './pages/User';
 import ProductPage from './pages/Products';
 import { ThemeProvider } from './utils/theme-provider';
+import { ScrollToTop } from './components/helpers/ScrollToTop';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,6 +37,7 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <NetworkStatusGuard>
             <Router>
+              <ScrollToTop />
               <AuthProvider>
                 <Routes>
                   <Route path="/signin" element={<SignIn />} />

@@ -109,4 +109,52 @@ model Product {
   updatedAt   DateTime    @updatedAt
 }
 
+enum NotificationRecipientType {
+  ALL
+  COUNTRY
+  ROLE
+  USER
+}
 
+enum NotificationScheduleType {
+  SCHEDULED
+  DELAYED
+}
+
+enum NotificationLanguage {
+  en
+  ar
+  fr
+}
+
+model NotificationTranslation {
+  id        String @id @default(uuid())
+
+  language  NotificationLanguage
+
+  title     String
+  content   String
+  data      String
+
+  notificationId String
+  notification Notification @relation(fields: [notificationId], references: [id])
+
+  @@unique([notificationId, language])
+}
+
+
+model Notification {
+  id String @id @default(uuid())
+  title String 
+  description String?
+  recipientType NotificationRecipientType
+
+  scheduleType NotificationScheduleType
+  delaySeconds Int?
+  scheduledAt  DateTime?
+  
+  translations NotificationTranslation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

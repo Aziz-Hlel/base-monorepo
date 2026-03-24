@@ -1,10 +1,5 @@
-import ENV from '@/config/ENV';
+import ENV from '@/config/env';
 import nodemailer, { Transporter } from 'nodemailer';
-
-// required for AWS SES
-const additionalHeader = {
-  'X-SES-CONFIGURATION-SET': ENV.NODE_ENV === 'production' ? 'voltobahrain-prod' : 'voltobahrain-dev',
-};
 
 let Emailtransporter: Transporter;
 
@@ -13,12 +8,12 @@ try {
     host: ENV.SMTP_HOST,
     port: ENV.SMTP_PORT,
     secure: ENV.SMTP_SECURE,
-
-    headers: {
-      ...additionalHeader,
-    },
     tls: {
       rejectUnauthorized: false,
+    },
+    auth: {
+      user: ENV.SMTP_USER,
+      pass: ENV.SMTP_PASS,
     },
   });
 

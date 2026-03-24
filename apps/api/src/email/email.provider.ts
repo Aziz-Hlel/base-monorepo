@@ -2,7 +2,7 @@ import Emailtransporter from '@/bootstrap/email.init';
 import { logger } from '@/bootstrap/logger.init';
 import { sesErrorExplanations, SES_ErrorCode } from '@/err/infra/ses.errors';
 import { Mailpit_ErrorCode, mailpitErrorExplanations } from '@/err/infra/mailpit.errors';
-import ENV from '@/config/ENV';
+import ENV from '@/config/env';
 
 class TransporterError extends Error {
   constructor(message: string) {

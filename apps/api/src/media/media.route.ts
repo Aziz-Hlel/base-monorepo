@@ -3,18 +3,20 @@ import { asyncHandler } from '@/core/async-handler';
 import { Router } from 'express';
 
 import { Request, Response } from 'express';
-import { mediaController } from './media.controller';
 import requireRole from '@/middleware/requireRole.middleware';
 import { Role } from '@/generated/prisma/enums';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
+import { MediaController } from './media.controller';
 
-const router = Router();
+export const createRouter = (controller: MediaController) => {
+  const router = Router();
 
-router.post(
-  '/presigned-url',
-  requireAuth,
-  requireRole(Role.ADMIN),
-  asyncHandler((req: Request, res: Response) => mediaController.getPresignedUrl(req, res)),
-);
+  router.post(
+    '/presigned-url',
+    requireAuth,
+    requireRole(Role.ADMIN),
+    asyncHandler((req: Request, res: Response) => controller.getPresignedUrl(req, res)),
+  );
 
-export const mediaRouter = router;
+  return router;
+};

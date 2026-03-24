@@ -26,9 +26,9 @@ import { ProductStatus } from '@repo/contracts/types/enums/enums';
 import productService from '@/Api/service/productService';
 import { Textarea } from '@/components/ui/textarea';
 import ProductTextMapping from '@/EnumTextMapping/ProductTextMapping';
-import SelectForm from '@/components/ui2/SelectForm/SelectForm';
-import ImageUpload from '@/components/ui2/ImageUpload/comp/ImageUpload';
-import InputNumberForm from '@/components/ui2/InputNumberForm/InputNumberForm';
+import SelectForm from '@/components/custom/SelectForm/SelectForm';
+import ImageUpload from '@/components/custom/ImageUpload/comp/ImageUpload';
+import InputNumberForm from '@/components/custom/InputNumberForm/InputNumberForm';
 
 const AddProduct = () => {
   const { handleCancel, openDialog } = useSelectedRow();

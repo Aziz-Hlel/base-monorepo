@@ -1,20 +1,32 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app';
+import { getApps, initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
+import ENV from './env.variables';
+// ! fix this it s wrong it can get you this erro in production :
+// Uncaught FirebaseError: Firebase: No Firebase App '[DEFAULT]' has been created - call initializeApp() first (app/no-app).
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyDWKplAl5Vp43pG0j5j3vnThRJIPwv1E44',
-  authDomain: 'uber-588cf.firebaseapp.com',
-  projectId: 'uber-588cf',
-  storageBucket: 'uber-588cf.firebasestorage.app',
-  messagingSenderId: '371351638566',
-  appId: '1:371351638566:web:16c040ae9fb03d5382cce7',
-  measurementId: 'G-DH71YEDZKQ',
+export const firebaseConfig = {
+  apiKey: ENV.VITE_FIREBASE_API_KEY,
+  authDomain: ENV.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: ENV.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: ENV.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: ENV.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: ENV.VITE_FIREBASE_APP_ID,
+  measurementId: ENV.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-getAnalytics(app);
+// Initialize Firebase app only once
+const app = getApps()[0] || initializeApp(firebaseConfig);
+
+// Initialize Analytics safely (optional)
+if (typeof window !== 'undefined') {
+  try {
+    getAnalytics(app);
+  } catch (err) {
+    console.warn('Analytics not supported in this environment:', err);
+  }
+}
 
 export const firebaseAuth = getAuth(app);
+export default app;

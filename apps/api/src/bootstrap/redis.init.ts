@@ -1,4 +1,4 @@
-import ENV from '@/config/ENV';
+import ENV from '@/config/env';
 import Redis from 'ioredis';
 
 const redis = new Redis({
@@ -12,6 +12,8 @@ const redis = new Redis({
 
 export async function connectRedis() {
   if (redis.status === 'ready') return;
+  if (redis.status === 'connecting') return;
+  if (redis.status === 'connect') return;
 
   try {
     await redis.connect();

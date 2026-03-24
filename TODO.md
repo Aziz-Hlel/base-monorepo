@@ -19,3 +19,14 @@
 -- add update my profile as user and delete my account
 
 -- the repo doesnt actualyy work fine at startup, it missed some setups like pnpm prisma generate and pnpm prisma migrate dev
+
+-- add condition to check if project name exits before runnig docker so that you keep volumes named like this acrroos all you dockerfiles :
+volumes:
+db_volume:
+and since with project name they ll be named like this : ${PROJECT_NAME}\_db_volume
+
+-- just remove the .prod .stage .dev from the dockerfile name , it s useless, the folder name is enough
+
+-- make an internal user service and make authservice depend on it , so that userservice handle http-facing operations
+
+-- maby extract redis to an independant worskpace, maybe ? so that you can use it in the worker and the api
