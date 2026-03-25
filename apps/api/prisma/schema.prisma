@@ -40,7 +40,10 @@ model User {
   status Status @default(ACTIVE)
 
   profile Profile?
-  notifications NotificationRecipient[]
+
+  notificationTargets NotificationTargetUser[]
+
+  createdNotifications   Notification[] @relation("NotificationCreatedBy")
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -110,69 +113,5 @@ model Product {
   updatedAt   DateTime    @updatedAt
 }
 
-enum NotificationRecipientEnum {
-  ALL
-  COUNTRY
-  ROLE
-  USER
-}
-
-enum NotificationScheduleEnum {
-  SCHEDULED
-  DELAYED
-}
-
-enum NotificationLanguage {
-  en
-  ar
-  fr
-}
-
-model NotificationTranslation {
-  id        String @id @default(uuid())
-
-  language  NotificationLanguage
-
-  title     String
-  content   String
-  data      String
-
-  notificationId String
-  notification Notification @relation(fields: [notificationId], references: [id])
-
-  @@unique([notificationId, language])
-}
-
-model NotificationRecipient {
-  id String @id @default(uuid())
-
-  notificationId String
-  recipientId String
-  country String[]
-  
-  user User[] @relation(fields: [recipientId], references: [id])
-
-  notification Notification
-  
-}
 
 
-model Notification {
-  id String @id @default(uuid())
-  title String 
-  description String?
-  recipientType NotificationRecipientEnum
-
-  scheduleType NotificationScheduleEnum
-  delaySeconds Int?
-  scheduledAt  DateTime?
-
-  
-  translations NotificationTranslation[]
-
-  recipientId String
-  recipients NotificationRecipient @relation(fields: [recipientId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}

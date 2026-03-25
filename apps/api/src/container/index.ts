@@ -10,12 +10,12 @@ const { rootRouter } = createRootModule();
 // * MEDIA
 const { mediaRouter, mediaService } = createMediaModule();
 
-// * NOTIFICATION
-const { notificationRouter } = createNotificationModule();
-
 // * USER
-const { userRouter, userInternalService } = createUserModule();
+const { userRouter, userInternalService, userRepo } = createUserModule();
 const { authRouter } = createAuthModule(userInternalService);
+
+// * NOTIFICATION
+const { notificationRouter } = createNotificationModule({ userRepo });
 
 // * PRODUCT
 const { productRouter } = createProductModule(mediaService);

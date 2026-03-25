@@ -20,8 +20,8 @@ Content-Type: application/json
     "payload": {
         "en": {
             "language": "en",
-            "title": "Notification Title",
-            "content": "Notification Message",
+            "title": "Notification Test",
+            "content": "Notification Message Test",
             "data": "Notification Data"
         },
         "fr": {

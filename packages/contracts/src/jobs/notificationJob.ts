@@ -1,5 +1,5 @@
-import type { NotificationRecipient } from '../schemas/notification/types/notificationRecipient';
 import type { NotificationSchedule } from '../schemas/notification/types/notificationSchedule';
+import type { NotificationTargetingJob } from './notificationTargetingJob';
 
 export type LocalizedString = {
   en: string;
@@ -12,6 +12,6 @@ export type NotificationJob = {
   titles: LocalizedString;
   contents: LocalizedString;
   data: LocalizedString;
-  recipients: NotificationRecipient;
+  targeting: NotificationTargetingJob;
   schedule: NotificationSchedule;
 };

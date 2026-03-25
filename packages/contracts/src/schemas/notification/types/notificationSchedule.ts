@@ -12,3 +12,13 @@ export const notificationScheduleSchema = z.discriminatedUnion('scheduleType', [
 ]);
 
 export type NotificationSchedule = z.infer<typeof notificationScheduleSchema>;
+
+export type NotificationScheduleResponse =
+  | {
+      scheduleType: 'DELAYED';
+      delaySeconds: number;
+    }
+  | {
+      scheduleType: 'SCHEDULED';
+      scheduledAt: string;
+    };

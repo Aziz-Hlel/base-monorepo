@@ -3,11 +3,14 @@ import { NotificationController } from './notification.controller';
 import { NotificationRepo } from './notification.repo';
 import { NotificationService } from './notification.service';
 import { createNotificationRouter } from './notification.route';
+import { NotificationHelper } from './notification.helper';
+import { UserRepo } from '@/modules/User/repo/user.repo';
 
-export const createNotificationModule = () => {
-  const notificationRepo = new NotificationRepo();
+export const createNotificationModule = ({ userRepo }: { userRepo: UserRepo }) => {
   const notificationQueue = new NotificationQueue();
-  const notificationService = new NotificationService(notificationRepo, notificationQueue);
+  const notificationRepo = new NotificationRepo();
+  const notificationHelper = new NotificationHelper(userRepo);
+  const notificationService = new NotificationService(notificationRepo, notificationQueue, notificationHelper);
   const notificationController = new NotificationController(notificationService);
   const notificationRouter = createNotificationRouter(notificationController);
   return { notificationRouter };

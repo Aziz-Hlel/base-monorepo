@@ -117,16 +117,15 @@ export class NotificationProvider implements INotificationProvider {
     };
 
     let payloads: OneSignalPayload[];
-    switch (payload.recipients.type) {
+    switch (payload.targeting.type) {
       case NotificationRecipientEnum.ALL:
         payloads = this.sendToAllUsers(baseNotificationPayload);
         break;
       case NotificationRecipientEnum.COUNTRY:
-        payloads = this.sendToCountry(baseNotificationPayload, payload.recipients.countries);
+        payloads = this.sendToCountry(baseNotificationPayload, payload.targeting.countries);
         break;
-      case NotificationRecipientEnum.USER:
       case NotificationRecipientEnum.ROLE:
-        payloads = this.sendToUser(baseNotificationPayload, payload.recipients.userIds);
+        payloads = this.sendToUser(baseNotificationPayload, payload.targeting.userIds);
         break;
     }
 

@@ -5,7 +5,7 @@ import { UserWithProfile } from '../types';
 import { CreateUserProfileRequest } from '@repo/contracts/schemas/profile/createUserProfileRequest';
 import { StrictDecodedIdToken } from '@/types/auth/StrictDecodedIdToken';
 import UserMapper, { UserCreateInputCustom } from '../mapper/user.mapper';
-import { Status } from '@/generated/prisma/enums';
+import { Role, Status } from '@/generated/prisma/enums';
 import { UpdateUserProfileRequest } from '@repo/contracts/schemas/profile/updateUserProfileRequest';
 
 export class UserRepo {
@@ -80,6 +80,10 @@ export class UserRepo {
       include: this.includeProfile(),
     });
     return user;
+  }
+
+  async getUsersByRole(roles: Exclude<Role, 'USER'>[]): Promise<UserWithProfile[]> {
+    return await prisma.user.findMany({ where: { role: { in: roles } }, include: this.includeProfile() });
   }
 
   async updateUserProfile(id: string, data: UpdateUserProfileRequest): Promise<UserWithProfile> {

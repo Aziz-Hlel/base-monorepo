@@ -22,7 +22,7 @@ const createUserModule = () => {
   const controller = new UserController(service);
   const userRouter = createUserRouter(controller);
 
-  return { userRouter, userInternalService };
+  return { userRouter, userInternalService, userRepo: repo };
 };
 
 export { createAuthModule, createUserModule };

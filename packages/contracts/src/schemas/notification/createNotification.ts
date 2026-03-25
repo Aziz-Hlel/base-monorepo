@@ -4,7 +4,6 @@ import { notificationScheduleSchema } from './types/notificationSchedule';
 import { optionalLanguagesSchema, TranslationSchema } from './types/languagePayload';
 
 export const createNotificationSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
   description: z
     .string()
     .nullable()
