@@ -30,3 +30,7 @@ and since with project name they ll be named like this : ${PROJECT_NAME}\_db_vol
 -- make an internal user service and make authservice depend on it , so that userservice handle http-facing operations
 
 -- maby extract redis to an independant worskpace, maybe ? so that you can use it in the worker and the api
+
+-- add a condition to check if the odcker used is v1 or v2 so you dont fall into the same problem you had with mehyar tryin to deploy your projects to his ec2, you can add the projectName+env directly from the script you make without needing to do it in the env each time,
+
+-- aad prefix seed

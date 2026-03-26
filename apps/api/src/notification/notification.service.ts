@@ -15,7 +15,12 @@ import { NotificationHelper } from './notification.helper';
 import { NotificationMapper } from './notification.mapper';
 import { NotificationRepo } from './notification.repo';
 
-export class NotificationService {
+export interface INotificationService {
+  create: (payload: CreateNotificationRequest) => Promise<void>;
+  getPage: (queryParams: NotificationPageQuery) => Promise<Page<NotificationResponse>>;
+}
+
+export class NotificationService implements INotificationService {
   constructor(
     private readonly notificationRepo: NotificationRepo,
     private readonly notificationQueue: INotificationQueue,

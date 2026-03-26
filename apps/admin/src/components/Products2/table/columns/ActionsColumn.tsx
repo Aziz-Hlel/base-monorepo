@@ -1,7 +1,6 @@
 import { EllipsisVertical, Trash2, SquarePen } from 'lucide-react';
-
 import React, { Fragment } from 'react';
-import type { TableRowType } from '../tableDeclarations/typesAndFieldsDeclaration';
+import type { TableRowType } from '../../core/types';
 import type { Row } from '@tanstack/react-table';
 import { useSelectedRow } from '../../context/selected-row-provider';
 import {
@@ -11,10 +10,8 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import RowContainer from '../ContainerComp/RowContainer';
 import { Button } from '@/components/ui/button';
-import { ProductStatus } from '@repo/contracts/types/enums/enums';
 
 type RowAction = {
   key: 'edit' | 'delete' | 'feature';
@@ -31,15 +28,9 @@ type RowActionState = {
 };
 
 const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
-  const { handleDialogChange, setCurrentRow } = useSelectedRow();
+  const { handleDialogStateChange } = useSelectedRow();
 
-  const getActionState = (actionKey: RowAction['key']): RowActionState => {
-    if (actionKey === 'feature' && row.original.status !== ProductStatus.AVAILABLE) {
-      return {
-        isPermitted: false,
-        tooltipMessage: 'Only products with status AVAILABLE can be featured',
-      };
-    }
+  const getActionState = (): RowActionState => {
     return {
       isPermitted: true,
       tooltipMessage: undefined,
@@ -52,10 +43,7 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
       label: 'Edit',
       icon: <SquarePen size={16} className="text-green-500" />,
       isPermitted: true,
-      onClick: () => {
-        setCurrentRow(row.original);
-        handleDialogChange('edit');
-      },
+      onClick: () => handleDialogStateChange({ openDialog: 'edit', selectedRow: row.original }),
     },
     // {
     //   key: 'feature',
@@ -73,20 +61,19 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
       icon: <Trash2 size={16} className="text-red-500" />,
       isVisible: true,
       onClick: () => {
-        setCurrentRow(row.original);
-        handleDialogChange('delete');
+        handleDialogStateChange({ openDialog: 'delete', selectedRow: row.original });
       },
     },
   ].map((action) => ({
     ...action,
-    ...getActionState(action.key as RowAction['key']),
+    ...getActionState(),
     key: action.key as RowAction['key'],
   }));
 
   return (
     <>
       <RowContainer className="justify-end ps-0">
-        <DropdownMenu modal={false}>
+        <DropdownMenu>
           <DropdownMenuTrigger asChild className=" flex justify-center">
             <Button variant="ghost" className="flex  p-0 data-[state=open]:bg-muted has-[>svg]:px-0  h-fit">
               <EllipsisVertical className=" size-4 rotate-90 rounded-full hover:bg-gray-200  cursor-pointer" />
@@ -95,22 +82,8 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
           <DropdownMenuContent align="end" className="w-40">
             {actions.map((action) => (
               <Fragment key={action.key}>
-                <DropdownMenuItem
-                  onClick={action.isPermitted ? action.onClick : undefined}
-                  className={!action.isPermitted ? 'cursor-not-allowed' : ''}
-                >
-                  {action.isPermitted ? (
-                    <span>{action.label}</span>
-                  ) : (
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span className="opacity-50">{action.label}</span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>{action.tooltipMessage}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  )}
+                <DropdownMenuItem onClick={action.onClick}>
+                  <span>{action.label}</span>
                   <DropdownMenuShortcut>{action.icon}</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </Fragment>

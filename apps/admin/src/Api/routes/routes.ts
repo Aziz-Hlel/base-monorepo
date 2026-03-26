@@ -29,6 +29,11 @@ const apiRoutes = {
     deleteProduct: (id: string) => `/products/${id}` as const,
   },
 
+  notification: {
+    getPage: () => '/notification' as const,
+    createNotification: () => '/notification/' as const,
+  },
+
   services: {
     emailContactUs: () => '/services/email/contact-us' as const,
     emailProperty: () => '/services/email/property' as const,

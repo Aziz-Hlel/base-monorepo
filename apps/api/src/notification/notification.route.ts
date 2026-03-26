@@ -5,5 +5,6 @@ import { NotificationController } from './notification.controller';
 export const createNotificationRouter = (notificationController: NotificationController) => {
   const router = Router();
   router.post('/', asyncHandler(notificationController.create));
+  router.get('/', asyncHandler(notificationController.getPage));
   return router;
 };

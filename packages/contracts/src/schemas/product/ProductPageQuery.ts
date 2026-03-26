@@ -42,9 +42,9 @@ export const productsQueryParamsSchema = z.object({
   status: csvEnumArray(Object.values(ProductStatus)).catch([]),
 });
 export type TableQueryParams = z.infer<typeof productsQueryParamsSchema>;
-export type RequiredTableQueryParams = TableQueryParams;
+export type RequiredProductTableQueryParams = TableQueryParams;
 
-export const productDefaultQuery: RequiredTableQueryParams = {
+export const productDefaultQuery: RequiredProductTableQueryParams = {
   page: 1,
   size: 10,
   sort: 'updatedAt',
@@ -54,3 +54,17 @@ export const productDefaultQuery: RequiredTableQueryParams = {
 };
 
 export type ProductPageQuery = z.infer<typeof productsQueryParamsSchema>;
+
+export const productsTableData = {
+  columnFiltersKeys,
+  sortableColumnKeys,
+  queryParamsSchema: productsQueryParamsSchema,
+  productDefaultQuery,
+  ProductPageQuerySortFields,
+};
+
+export type ProductTableTypes = {
+  TableRowType: TableRowType;
+  TableRowKeys: TableRowKeys;
+  RequiredProductTableQueryParams: RequiredProductTableQueryParams;
+};

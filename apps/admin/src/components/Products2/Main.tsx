@@ -4,20 +4,22 @@ import { Button } from '../ui/button';
 import MainTable from './Table';
 import { useSelectedRow } from './context/selected-row-provider';
 import DialogContainer from './dialogs/DialogContainer';
-import { CARD_DATA } from './core/core';
+import { TableData } from './core/core';
 
 const Main = () => {
-  const { handleDialogChange } = useSelectedRow();
+  const { handleDialogStateChange } = useSelectedRow();
   return (
     <div>
-      <BreadcrumbHeader breadcrumbs={[{ title: CARD_DATA.title, href: '/offers' }]} />
-      <div className=" w-full mx-auto">
+      <BreadcrumbHeader breadcrumbs={[{ title: TableData.MainCard.title, href: TableData.href }]} />
+      <div className="w-full mx-auto">
         <Card>
           <CardHeader>
-            <CardTitle>{CARD_DATA.title}</CardTitle>
-            <CardDescription>{CARD_DATA.description}</CardDescription>
+            <CardTitle>{TableData.MainCard.title}</CardTitle>
+            <CardDescription>{TableData.MainCard.description}</CardDescription>
             <CardAction>
-              <Button onClick={() => handleDialogChange('add')}>{CARD_DATA.addButton.label}</Button>
+              <Button onClick={() => handleDialogStateChange({ openDialog: 'add' })}>
+                {TableData.MainCard.addButton.label}
+              </Button>
             </CardAction>
           </CardHeader>
           <CardContent>

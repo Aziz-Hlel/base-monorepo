@@ -2,7 +2,7 @@ import type { Table } from '@tanstack/react-table';
 import { DataTableViewOptions } from './view-options';
 import SearchInput from './SearchInput';
 import EnumFilterToolBar from './EnumFilterToolBar';
-import type { TableRowType } from '../tableDeclarations/typesAndFieldsDeclaration';
+import type { TableRowType } from '../../core/types';
 
 type DataTableToolbarProps = {
   table: Table<TableRowType>;

@@ -3,7 +3,7 @@ import { LoaderCircleIcon, SearchIcon } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import type { Table } from '@tanstack/react-table';
 import { useDebounce } from '@uidotdev/usehooks';
-import type { TableRowType } from '../tableDeclarations/typesAndFieldsDeclaration';
+import type { TableRowType } from '../../core/types';
 
 const SearchInput = ({ table }: { table: Table<TableRowType> }) => {
   const queryValue = (table.getState().globalFilter as string) ?? '';

@@ -3,7 +3,7 @@ import type { Table } from '@tanstack/react-table';
 import { DataTableFacetedFilter } from './faceted-filter';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import type { TableRowType } from '../tableDeclarations/typesAndFieldsDeclaration';
+import type { TableRowType } from '../../core/types';
 
 type EnumFilterToolBarProps = {
   table: Table<TableRowType>;

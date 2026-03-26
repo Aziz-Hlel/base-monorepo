@@ -1,25 +1,25 @@
 import dayjs from '@/utils/dayjsConfig';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ArrowUp, ChevronsUpDown } from 'lucide-react';
-import StatusComponent, { type StatusType } from '../EnumColumns/Status/StatusComponent';
 import HeaderContainer from '../ContainerComp/HeaderContainer';
 import RowContainer from '../ContainerComp/RowContainer';
-import type { TableRowType } from './typesAndFieldsDeclaration';
+import type { TableRowType } from '../../core/types';
 import ActionsColumn from '../columns/ActionsColumn';
+import type { EventDay, EventType } from '@repo/contracts/types/enums/enums';
+import EventDayMapping from '@repo/contracts/map/EventDayMapping';
+import EventTypeMapping from '@repo/contracts/map/EventTypeMapping';
 
 type ColumnDefCustom<T> = ColumnDef<T> & { accessorKey?: keyof T };
 
 const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
   {
-    id: 'name',
-    accessorKey: 'name',
-    accessorFn: (row: TableRowType) => ({
-      name: row.name,
-    }),
+    id: 'type',
+    accessorKey: 'type',
+
     header: ({ column }) => {
       return (
         <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          <span>Name </span>
+          <span>Type </span>
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
           {column.getIsSorted() === false && <ChevronsUpDown />}
@@ -27,15 +27,38 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
       );
     },
     cell: ({ getValue }) => {
-      const { name } = getValue<{
-        name: string;
-      }>();
-      return <RowContainer className="lowercase w-96 ">{name}</RowContainer>;
+      const type = getValue<EventType>();
+      return <RowContainer className="lowercase w-96 ">{EventTypeMapping[type]}</RowContainer>;
     },
 
     enableSorting: true,
     enableHiding: true,
     enableGlobalFilter: true,
+  },
+  {
+    id: 'day',
+    accessorKey: 'day',
+    header: ({ column }) => {
+      return (
+        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          <span>Day</span>
+          {column.getIsSorted() === 'asc' && <ArrowUp />}
+          {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
+          {column.getIsSorted() === false && <ChevronsUpDown />}
+        </HeaderContainer>
+      );
+    },
+    cell: ({ getValue }) => {
+      const day = getValue<EventDay | null>();
+      return (
+        <RowContainer className="">
+          {day ? <span>{EventDayMapping[day]}</span> : <span className="">-</span>}
+        </RowContainer>
+      );
+    },
+
+    enableSorting: true,
+    enableHiding: true,
   },
   {
     id: 'description',
@@ -58,58 +81,34 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
     enableSorting: true,
     enableHiding: true,
   },
-  {
-    id: 'status',
-    accessorKey: 'status',
-    header: ({ column }) => {
-      return (
-        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          <span>Status</span>
-          {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
-          {column.getIsSorted() === false && <ChevronsUpDown />}
-        </HeaderContainer>
-      );
-    },
-    cell: ({ getValue }) => {
-      const status = getValue<StatusType>();
-      return (
-        <RowContainer className="">
-          <StatusComponent value={status} />
-        </RowContainer>
-      );
-    },
 
-    enableSorting: true,
-    enableHiding: true,
-  },
-  {
-    id: 'price',
-    accessorKey: 'price',
-    header: ({ column }) => {
-      return (
-        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          <span>Price</span>
-          {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
-          {column.getIsSorted() === false && <ChevronsUpDown />}
-        </HeaderContainer>
-      );
-    },
-    cell: ({ getValue }) => {
-      const price = getValue<string>();
-      return <RowContainer className=" w-96 truncate whitespace-nowrap ">{price}</RowContainer>;
-    },
-
-    enableSorting: true,
-    enableHiding: true,
-  },
   {
     accessorKey: 'createdAt',
     header: ({ column }) => {
       return (
         <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           <span>Created At</span>
+          {column.getIsSorted() === 'asc' && <ArrowUp />}
+          {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
+          {column.getIsSorted() === false && <ChevronsUpDown />}
+        </HeaderContainer>
+      );
+    },
+    cell: ({ getValue }) => {
+      const dateString = getValue<string>();
+      const formattedDate = dayjs(dateString).format('LL');
+      return <RowContainer className=" w-full">{formattedDate}</RowContainer>;
+    },
+
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: 'updatedAt',
+    header: ({ column }) => {
+      return (
+        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          <span>Updated At</span>
           {column.getIsSorted() === 'asc' && <ArrowUp />}
           {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
           {column.getIsSorted() === false && <ChevronsUpDown />}

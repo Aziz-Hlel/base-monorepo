@@ -1,36 +1,46 @@
 import { createContext, useContext, useState } from 'react';
-import type { TableRowType } from '../table/tableDeclarations/typesAndFieldsDeclaration';
+import type { TableRowType } from '../core/types';
 
-export type TableDialogType = 'add' | 'edit' | 'delete' | 'feature' | null;
+export type TableDialogType = 'add' | 'edit' | 'delete' | null;
+
+export type DialogState =
+  | {
+      openDialog: 'add' | null;
+    }
+  | {
+      openDialog: 'edit' | 'delete';
+      selectedRow: TableRowType;
+    };
 
 type SelectedRowContextType = {
-  openDialog: TableDialogType;
-  handleDialogChange: (dialogType: TableDialogType, row?: TableRowType) => void;
-  currentRow: TableRowType | null;
-  setCurrentRow: React.Dispatch<React.SetStateAction<TableRowType | null>>;
   handleCancel: () => void;
+  dialogState: DialogState;
+  handleDialogStateChange: (dialogState: DialogState) => void;
 };
 
 const SelectedRowContext = createContext<SelectedRowContextType | null>(null);
 
 export function SelectedRowProvider({ children }: { children: React.ReactNode }) {
-  const [openDialog, setOpenDialog] = useState<TableDialogType>(null);
-  const [currentRow, setCurrentRow] = useState<TableRowType | null>(null);
+  const [dialogState, setDialogState] = useState<DialogState>({
+    openDialog: null,
+  });
 
   const handleCancel = () => {
-    setCurrentRow(null);
-    setOpenDialog(null);
+    setDialogState({ openDialog: null });
   };
 
-  const handleDialogChange = (dialogType: TableDialogType, row?: TableRowType) => {
-    setOpenDialog(dialogType);
-    if (row) {
-      setCurrentRow(row);
-    }
+  const handleDialogStateChange = (dialogState: DialogState) => {
+    setDialogState(dialogState);
   };
 
   return (
-    <SelectedRowContext.Provider value={{ openDialog, handleDialogChange, currentRow, setCurrentRow, handleCancel }}>
+    <SelectedRowContext.Provider
+      value={{
+        handleCancel,
+        dialogState,
+        handleDialogStateChange,
+      }}
+    >
       {children}
     </SelectedRowContext.Provider>
   );
