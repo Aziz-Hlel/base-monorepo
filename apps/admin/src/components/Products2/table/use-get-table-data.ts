@@ -3,7 +3,7 @@ import type { TableRowType } from '../core/types';
 import useQueryParams from './use-query-params';
 import type { Pageable } from '@repo/contracts/types/page/Pageable';
 import { MODULE_NAME } from '../core/core';
-import { services } from '../core/services';
+import { operations } from '../core/services';
 
 const blankPagination: Pageable = {
   size: 0,
@@ -23,7 +23,8 @@ const useGetTableData = () => {
 
   const { data, isFetching } = useQuery({
     queryKey: [MODULE_NAME, { ...queryParams }],
-    queryFn: async () => await services.getPage(adjustedQueryParams),
+    queryFn: async () => await operations.getPage.fn(adjustedQueryParams),
+    // queryFn: async () => await services.getPage(adjustedQueryParams),
     placeholderData: (previousData) => previousData,
   });
 

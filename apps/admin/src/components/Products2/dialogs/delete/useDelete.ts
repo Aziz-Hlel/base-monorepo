@@ -1,19 +1,19 @@
 import { ApiError } from '@/Api/ApiError';
-import eventService from '@/Api/service/eventService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { toast } from 'sonner';
 import { useSelectedRow } from '../../context/selected-row-provider';
 import { TableData } from '../../core/core';
 import type { TableRowType } from '../../core/types';
+import { operations } from '../../core/services';
 
 const useDelete = ({ selectedRow }: { selectedRow: TableRowType }) => {
   const queryClient = useQueryClient();
   const { handleCancel } = useSelectedRow();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: [TableData.MODULE_NAME, 'delete'],
-    mutationFn: eventService.delete,
+    mutationKey: operations.delete.mutationKey(),
+    mutationFn: operations.delete.fn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [TableData.MODULE_NAME], exact: false });
     },

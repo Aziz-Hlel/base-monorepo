@@ -8,7 +8,6 @@ interface LoadingInRowsCompProps<T> {
   pageSize: number;
 }
 export const LoadingInRowsComp = <T,>({ table, pageSize }: LoadingInRowsCompProps<T>) => {
-  console.log('page size from the ', pageSize);
   return (
     <>
       <TableRow className="pointer-events-none ">

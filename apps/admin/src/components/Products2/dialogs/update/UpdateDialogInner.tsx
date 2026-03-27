@@ -1,10 +1,8 @@
-import eventService from '@/Api/service/eventService';
 import { Button } from '@/components/ui/button';
 import { DialogClose, DialogFooter } from '@/components/ui/dialog';
 import { FieldGroup } from '@/components/ui/field';
 import { Spinner } from '@/components/ui/spinner';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { updateEventSchema, type UpdateEventSchema } from '@repo/contracts/schemas/events/updateEventSchema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -12,6 +10,7 @@ import { useSelectedRow } from '../../context/selected-row-provider';
 import { MODULE_NAME } from '../../core/core';
 import FormUI from '../shared/FormUI';
 import type { TableRowType } from '../../core/types';
+import { operations, type schemasType } from '../../core/services';
 
 const UpdateDialogInner = ({ selectedRow }: { selectedRow: TableRowType }) => {
   const { handleCancel } = useSelectedRow();
@@ -19,27 +18,24 @@ const UpdateDialogInner = ({ selectedRow }: { selectedRow: TableRowType }) => {
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: [MODULE_NAME, 'update'],
-    mutationFn: eventService.update,
+    mutationKey: operations.update.mutationKey({}),
+    mutationFn: operations.update.fn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [MODULE_NAME], exact: false });
       handleCancel();
     },
   });
 
-  const defaultValues: UpdateEventSchema = {
-    description: selectedRow.description,
-    thumbnailId: selectedRow.thumbnail?.id ?? '',
-  };
+  const defaultValues = operations.update.defaultValues(selectedRow);
 
-  const form = useForm<UpdateEventSchema>({
-    resolver: zodResolver(updateEventSchema),
+  const form = useForm<schemasType['update']>({
+    resolver: zodResolver(operations.update.schema),
     defaultValues: defaultValues,
   });
 
-  const onSubmit: SubmitHandler<UpdateEventSchema> = async (data) => {
+  const onSubmit: SubmitHandler<schemasType['update']> = async (payload) => {
     try {
-      await mutateAsync({ id: selectedRow.id, data });
+      await mutateAsync({ id: selectedRow.id, payload });
       toast.success('Product updated successfully');
     } catch (error) {
       toast.error('Failed to update product');

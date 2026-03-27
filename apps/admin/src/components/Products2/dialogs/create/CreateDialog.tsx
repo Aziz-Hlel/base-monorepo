@@ -18,7 +18,7 @@ import { FieldGroup } from '@/components/ui/field';
 import { toast } from 'sonner';
 import { TableData } from '../../core/core';
 import FormUI from '../shared/FormUI';
-import { services, type schemasType } from '../../core/services';
+import { operations, type schemasType } from '../../core/services';
 
 const CreateDialog = () => {
   const { handleCancel, dialogState } = useSelectedRow();
@@ -26,7 +26,7 @@ const CreateDialog = () => {
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: [TableData.MODULE_NAME, 'create'],
-    mutationFn: services.create,
+    mutationFn: operations.create.fn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [TableData.MODULE_NAME], exact: false });
       form.reset();
@@ -34,13 +34,10 @@ const CreateDialog = () => {
     },
   });
 
-  const defaultValues: schemasType['create'] = {
-    description: '',
-    thumbnailId: '',
-  };
+  const defaultValues = operations.create.defaultValues({});
 
   const form = useForm<schemasType['create']>({
-    resolver: zodResolver(createEventSchema),
+    resolver: zodResolver(operations.create.schema),
     defaultValues: defaultValues,
   });
 

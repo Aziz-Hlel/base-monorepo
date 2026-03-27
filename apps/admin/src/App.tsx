@@ -16,6 +16,7 @@ import ProductPage from './pages/Products';
 import { ThemeProvider } from './utils/theme-provider';
 import { ScrollToTop } from './components/helpers/ScrollToTop';
 import NotificationPage from './pages/Notification';
+import Product2Page from './pages/Products2';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,7 +52,7 @@ function App() {
                         <Route index path="/profile" element={<Profile />} />
                         <Route path="users/" element={<UserPage />} />
                         <Route path="products/" element={<ProductPage />} />
-                        {/* <Route path="products2/" element={<Product2Page />} /> */}
+                        <Route path="products2/" element={<Product2Page />} />
                         <Route path="notification/" element={<NotificationPage />} />
                       </Route>
                     </Route>

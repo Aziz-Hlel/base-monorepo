@@ -61,6 +61,12 @@ const navRoutes: NavRoute[] = [
     isActive: true,
   },
   {
+    title: 'Products2',
+    url: '/products2',
+    icon: Package,
+    isActive: true,
+  },
+  {
     title: 'Settings',
     url: '/settings',
     icon: Settings2,
