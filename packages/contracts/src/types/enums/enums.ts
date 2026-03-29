@@ -8,6 +8,40 @@
  * 🟢 You can import this file directly.
  */
 
+export const NotificationRecipientType = {
+  ALL: 'ALL',
+  COUNTRY: 'COUNTRY',
+  ROLE: 'ROLE',
+  USER: 'USER',
+} as const;
+
+export type NotificationRecipientType = (typeof NotificationRecipientType)[keyof typeof NotificationRecipientType];
+
+export const NotificationScheduleType = {
+  SCHEDULED: 'SCHEDULED',
+  DELAYED: 'DELAYED',
+} as const;
+
+export type NotificationScheduleType = (typeof NotificationScheduleType)[keyof typeof NotificationScheduleType];
+
+export const NotificationLanguage = {
+  en: 'en',
+  ar: 'ar',
+  fr: 'fr',
+} as const;
+
+export type NotificationLanguage = (typeof NotificationLanguage)[keyof typeof NotificationLanguage];
+
+export const DeliveryStatus = {
+  PENDING: 'PENDING',
+  SENT: 'SENT',
+  DELIVERED: 'DELIVERED',
+  READ: 'READ',
+  FAILED: 'FAILED',
+} as const;
+
+export type DeliveryStatus = (typeof DeliveryStatus)[keyof typeof DeliveryStatus];
+
 export const Role = {
   USER: 'USER',
   ADMIN: 'ADMIN',
@@ -42,27 +76,3 @@ export const ProductStatus = {
 } as const;
 
 export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus];
-
-export const NotificationRecipientEnum = {
-  ALL: 'ALL',
-  COUNTRY: 'COUNTRY',
-  ROLE: 'ROLE',
-  USER: 'USER',
-} as const;
-
-export type NotificationRecipientEnum = (typeof NotificationRecipientEnum)[keyof typeof NotificationRecipientEnum];
-
-export const NotificationScheduleEnum = {
-  SCHEDULED: 'SCHEDULED',
-  DELAYED: 'DELAYED',
-} as const;
-
-export type NotificationScheduleEnum = (typeof NotificationScheduleEnum)[keyof typeof NotificationScheduleEnum];
-
-export const NotificationLanguage = {
-  en: 'en',
-  ar: 'ar',
-  fr: 'fr',
-} as const;
-
-export type NotificationLanguage = (typeof NotificationLanguage)[keyof typeof NotificationLanguage];

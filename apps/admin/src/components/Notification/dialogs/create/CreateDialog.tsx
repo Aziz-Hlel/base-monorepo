@@ -17,9 +17,12 @@ import { Spinner } from '@/components/ui/spinner';
 import { FieldGroup } from '@/components/ui/field';
 import { toast } from 'sonner';
 import { TableData } from '../../core/core';
-import { createEventSchema, type CreateEventSchema } from '@repo/contracts/schemas/events/createEventSchema';
-import eventService from '@/Api/service/eventService';
 import FormUI from '../shared/FormUI';
+import notificationService from '@/Api/service/notificationService';
+import {
+  createNotificationSchema,
+  type CreateNotificationRequest,
+} from '@repo/contracts/schemas/notification/createNotification';
 
 const CreateDialog = () => {
   const { handleCancel, dialogState } = useSelectedRow();
@@ -27,7 +30,7 @@ const CreateDialog = () => {
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: [TableData.MODULE_NAME, 'create'],
-    mutationFn: eventService.create,
+    mutationFn: notificationService.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [TableData.MODULE_NAME], exact: false });
       form.reset();
@@ -35,13 +38,27 @@ const CreateDialog = () => {
     },
   });
 
-  const defaultValues: CreateEventSchema = {
+  const defaultValues: CreateNotificationRequest = {
     description: '',
-    thumbnailId: '',
+    recipients: {
+      type: 'ALL',
+    },
+    payload: {
+      en: {
+        language: 'en',
+        title: '',
+        content: '',
+        data: '',
+      },
+    },
+    schedule: {
+      scheduleType: 'DELAYED',
+      delaySeconds: 0,
+    },
   };
 
-  const form = useForm<CreateEventSchema>({
-    resolver: zodResolver(createEventSchema),
+  const form = useForm<CreateNotificationRequest>({
+    resolver: zodResolver(createNotificationSchema),
     defaultValues: defaultValues,
   });
 
@@ -52,7 +69,7 @@ const CreateDialog = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<CreateEventSchema> = async (data) => {
+  const onSubmit: SubmitHandler<CreateNotificationRequest> = async (data) => {
     try {
       await mutateAsync(data);
       toast.success(`${TableData.ModuleName} created successfully`);
@@ -62,17 +79,6 @@ const CreateDialog = () => {
   };
 
   const dialogIsOpen = dialogState.openDialog === 'add';
-
-  const thumbnailErrors = [form.formState.errors.thumbnailId?.message];
-
-  const clearMediaErrors = () => {
-    form.clearErrors('thumbnailId');
-  };
-
-  const handleThumbnailUpload = (newMediaId: string | null) => {
-    const options = newMediaId ? { shouldDirty: true, shouldValidate: true } : undefined;
-    form.setValue('thumbnailId', newMediaId ?? '', options);
-  };
 
   return (
     <Dialog onOpenChange={onOpenChange} open={dialogIsOpen}>
@@ -87,13 +93,7 @@ const CreateDialog = () => {
               flex-1 min-h-0 overflow-y-auto pr-2  overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400"
           >
             <FieldGroup>
-              <FormUI
-                form={form}
-                initMedia={null}
-                thumbnailErrors={thumbnailErrors}
-                clearMediaErrors={clearMediaErrors}
-                handleThumbnailUpload={handleThumbnailUpload}
-              />
+              <FormUI form={form} initMedia={null} />
             </FieldGroup>
           </div>
           <DialogFooter>

@@ -17,7 +17,7 @@ export const notificationRecipientSchema = z.discriminatedUnion('type', [
     type: z.literal(notificationRecipientType.ROLE),
     roles: z.array(z.enum(Object.values(Role).filter((role) => role !== 'USER'))),
   }),
-  // z.object({ type: z.literal(notificationRecipientType.USER), userIds: z.array(z.uuid()) }),
+  z.object({ type: z.literal(notificationRecipientType.USER), userIds: z.array(z.uuid()) }),
 ]);
 
 export type NotificationRecipient = z.infer<typeof notificationRecipientSchema>;

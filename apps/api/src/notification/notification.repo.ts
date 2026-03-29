@@ -2,12 +2,10 @@ import { prisma } from '@/bootstrap/db.init';
 import { Notification, Prisma } from '@/generated/prisma/client';
 import {
   NotificationOrderByWithRelationInput,
-  NotificationTargetingCreateNestedOneWithoutNotificationInput,
   NotificationTargetingCreateWithoutNotificationInput,
   NotificationWhereInput,
 } from '@/generated/prisma/models';
 import { CreateNotificationRequest } from '@repo/contracts/schemas/notification/createNotification';
-import { NotificationPageQuery } from '@repo/contracts/schemas/notification/notificationPageQuery';
 
 export class NotificationRepo {
   private includeTranslations = () => {

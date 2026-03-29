@@ -1,5 +1,8 @@
 import z from 'zod';
+import { isValidDate } from '../../../utils/isValidDate';
+import isDateInFuture from '../../../utils/isDateInFuture';
 
+// ! Add IMMEDIATE type
 export const notificationScheduleSchema = z.discriminatedUnion('scheduleType', [
   z.object({
     scheduleType: z.literal('DELAYED'),
@@ -7,7 +10,10 @@ export const notificationScheduleSchema = z.discriminatedUnion('scheduleType', [
   }),
   z.object({
     scheduleType: z.literal('SCHEDULED'),
-    scheduledAt: z.coerce.date().refine((date) => date > new Date(), 'Scheduled date must be in the future'),
+    scheduledAt: z
+      .string()
+      .refine(isValidDate, 'Invalid date')
+      .refine((date) => isDateInFuture(new Date(date)), 'Scheduled date must be in the future'),
   }),
 ]);
 

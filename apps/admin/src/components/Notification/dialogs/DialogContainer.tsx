@@ -1,4 +1,4 @@
-// import CreateDialog from './create/CreateDialog';
+import CreateDialog from './create/CreateDialog';
 // import DeleteDialog from './delete/DeleteDialog';
 // import UpdateDialog from './update/UpdateDialog';
 import { useSelectedRow } from '../context/selected-row-provider';
@@ -8,8 +8,8 @@ const DialogContainer = () => {
   return (
     <>
       {/* {dialogState.openDialog === 'edit' && <UpdateDialog />}
-      {dialogState.openDialog === 'add' && <CreateDialog />}
       {dialogState.openDialog === 'delete' && <DeleteDialog />} */}
+      <CreateDialog />
     </>
   );
 };

@@ -7,7 +7,7 @@ import type { NotificationResponse } from '@repo/contracts/schemas/notification/
 const notificationService = {
   getPage: async (searchParams: { [k: string]: string | number | Array<string> }) =>
     apiService.getThrowable<Page<NotificationResponse>>(apiRoutes.notification.getPage(), searchParams),
-  createNotification: async (payload: CreateNotificationRequest) =>
+  create: async (payload: CreateNotificationRequest) =>
     apiService.postThrowable(apiRoutes.notification.createNotification(), payload),
 };
 
