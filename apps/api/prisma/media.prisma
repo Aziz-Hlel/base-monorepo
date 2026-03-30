@@ -1,0 +1,36 @@
+
+enum MediaStatus {
+  PENDING
+  CONFIRMED
+  DELETED
+  FAILED
+}
+
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  DOCUMENT
+}
+
+
+model Media {
+  id           String      @id @default(uuid())
+  key          String     @unique
+  baseName     String
+  type         MediaType
+  mimeType     String
+  fileSize     Int?
+  status       MediaStatus @default(PENDING)
+
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+  confirmedAt  DateTime?
+
+
+  school     School?   @relation
+  user        USER?      @relation
+  student     Student?   @relation
+}

@@ -1,6 +1,6 @@
 import ENV from '@/config/ENV';
 import { LocalizedString, NotificationJob } from '@repo/contracts/jobs/notificationJob';
-import { NotificationRecipientEnum } from '@repo/contracts/types/enums/enums';
+import { NotificationRecipientType } from '@repo/contracts/types/enums/enums';
 import axios from 'axios';
 
 interface INotificationProvider {
@@ -118,15 +118,16 @@ export class NotificationProvider implements INotificationProvider {
 
     let payloads: OneSignalPayload[];
     switch (payload.targeting.type) {
-      case NotificationRecipientEnum.ALL:
+      case NotificationRecipientType.ALL:
         payloads = this.sendToAllUsers(baseNotificationPayload);
         break;
-      case NotificationRecipientEnum.COUNTRY:
+      case NotificationRecipientType.COUNTRY:
         payloads = this.sendToCountry(baseNotificationPayload, payload.targeting.countries);
         break;
-      case NotificationRecipientEnum.ROLE:
+      case NotificationRecipientType.ROLE:
         payloads = this.sendToUser(baseNotificationPayload, payload.targeting.userIds);
         break;
+      // ! missing user case, you made migration but forgot why and how
     }
 
     await Promise.all(payloads.map(this.sendNotification));

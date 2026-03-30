@@ -37,7 +37,7 @@ model Notification {
 
   // Who created this notification
   createdById String
-  createdBy   User   @relation("NotificationCreatedBy", fields: [createdById], references: [id])
+  createdBy   Account   @relation("NotificationCreatedBy", fields: [createdById], references: [id])
 
   sentAt    DateTime?
   createdAt DateTime  @default(now())
@@ -75,7 +75,7 @@ model NotificationTargeting {
   countries String[] // e.g. ["TN", "FR", "US"]
 
   // Populated when recipientType = ROLE
-  roles Role[]
+  roles AccountRole[]
 
   // Populated when recipientType = USER or ROLE (explicit user list)
   users NotificationTargetUser[]
@@ -91,7 +91,7 @@ model NotificationTargetUser {
   targeting  NotificationTargeting @relation(fields: [targetingId], references: [id], onDelete: Cascade)
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   Account   @relation(fields: [userId], references: [id])
 
   @@unique([targetingId, userId]) // prevent duplicates
 }
