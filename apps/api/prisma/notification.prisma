@@ -22,8 +22,8 @@ enum NotificationLanguage {
 
 // ─── Core Notification ────────────────────────────────────────────────────────
 model Notification {
-  id          String   @id @default(uuid())
-  description String?  // internal label/note for admins, not user-facing
+  id          String   @id @default(uuid()) @db.Uuid
+  description String?  @db.Text // internal label/note for admins, not user-facing
 
   recipientType NotificationRecipientType
   scheduleType  NotificationScheduleType
@@ -36,7 +36,7 @@ model Notification {
   notificationDeliveries NotificationDelivery[]
 
   // Who created this notification
-  createdById String
+  createdById String @db.Uuid
   createdBy   Account   @relation("NotificationCreatedBy", fields: [createdById], references: [id])
 
   sentAt    DateTime?
@@ -50,14 +50,14 @@ model Notification {
 // ─── Translations (multilingual payload) ─────────────────────────────────────
 
 model NotificationTranslation {
-  id       String               @id @default(uuid())
+  id       String               @id @default(uuid()) @db.Uuid
   language NotificationLanguage
 
   title   String
   content String
   data    Json?   
 
-  notificationId String
+  notificationId String @db.Uuid
   notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
 
   @@unique([notificationId, language])
@@ -67,8 +67,8 @@ model NotificationTranslation {
 // Separates "who receives this" from "what is sent"
 
 model NotificationTargeting {
-  id             String @id @default(uuid())
-  notificationId String @unique
+  id             String @id @default(uuid()) @db.Uuid
+  notificationId String @unique @db.Uuid
   notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
 
   // Populated when recipientType = COUNTRY
@@ -86,11 +86,11 @@ model NotificationTargeting {
 // Used when recipientType = USER, or optionally ROLE with explicit override
 
 model NotificationTargetUser {
-  id         String @id @default(uuid())
-  targetingId String
+  id         String @id @default(uuid()) @db.Uuid
+  targetingId String @db.Uuid
   targeting  NotificationTargeting @relation(fields: [targetingId], references: [id], onDelete: Cascade)
 
-  userId String
+  userId String @db.Uuid
   user   Account   @relation(fields: [userId], references: [id])
 
   @@unique([targetingId, userId]) // prevent duplicates
@@ -100,8 +100,8 @@ model NotificationTargetUser {
 // Separate from targeting — this is the audit trail of actual sends
 
 model NotificationDelivery {
-  id             String   @id @default(uuid())
-  notificationId String
+  id             String   @id @default(uuid()) @db.Uuid
+  notificationId String @db.Uuid
   notification   Notification @relation(fields: [notificationId], references: [id])
 
 

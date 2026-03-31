@@ -1,0 +1,37 @@
+
+
+enum ClassGrade {
+  KG
+  ONE
+  TWO
+  THREE
+  FOUR
+  FIVE
+  SIX
+}
+
+
+
+model Class{
+  id String @id @default(uuid()) @db.Uuid
+
+  name String @db.VarChar(255) 
+  description String @db.Text
+  grade ClassGrade
+
+  sessions ClassSessions[]
+  examSessions ExamSessions[]
+
+  schoolId String @db.Uuid
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([schoolId,name])
+
+  @@map("classes")
+}
+
+
+

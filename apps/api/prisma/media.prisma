@@ -15,11 +15,11 @@ enum MediaType {
 
 
 model Media {
-  id           String      @id @default(uuid())
-  key          String     @unique
-  baseName     String
+  id           String      @id @default(uuid()) @db.Uuid
+  key          String     @unique @db.VarChar(255)
+  baseName     String @db.VarChar(255)
   type         MediaType
-  mimeType     String
+  mimeType     String @db.VarChar(255)
   fileSize     Int?
   status       MediaStatus @default(PENDING)
 
@@ -30,7 +30,7 @@ model Media {
   confirmedAt  DateTime?
 
 
-  school     School?   @relation
-  user        USER?      @relation
-  student     Student?   @relation
+  school     School?  @relation
+  user        Account?  @relation
+  student     Student?  @relation
 }

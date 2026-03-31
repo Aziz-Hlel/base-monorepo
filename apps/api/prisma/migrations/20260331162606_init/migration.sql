@@ -1,0 +1,531 @@
+-- CreateEnum
+CREATE TYPE "AccountRole" AS ENUM ('USER', 'ADMIN', 'SUPER_ADMIN');
+
+-- CreateEnum
+CREATE TYPE "AccountStatus" AS ENUM ('ACTIVE', 'INACTIVE', 'DISABLED', 'DELETED');
+
+-- CreateEnum
+CREATE TYPE "SchoolPlan" AS ENUM ('FREE', 'PRO', 'ENTERPRISE');
+
+-- CreateEnum
+CREATE TYPE "SchoolStatus" AS ENUM ('ACTIVE', 'SUSPENDED', 'DELETED');
+
+-- CreateEnum
+CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'INACTIVE', 'DISABLED', 'DELETED');
+
+-- CreateEnum
+CREATE TYPE "UserRole" AS ENUM ('OWNER', 'DIRECTOR', 'MANAGER', 'TEACHER', 'PARENT', 'NURSE', 'DRIVER');
+
+-- CreateEnum
+CREATE TYPE "ClassGrade" AS ENUM ('KG', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX');
+
+-- CreateEnum
+CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE');
+
+-- CreateEnum
+CREATE TYPE "DayOfWeek" AS ENUM ('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY');
+
+-- CreateEnum
+CREATE TYPE "AttendanceStatus" AS ENUM ('PRESENT', 'ABSENT', 'LATE', 'EXCUSED');
+
+-- CreateEnum
+CREATE TYPE "MediaStatus" AS ENUM ('PENDING', 'CONFIRMED', 'DELETED', 'FAILED');
+
+-- CreateEnum
+CREATE TYPE "MediaType" AS ENUM ('IMAGE', 'VIDEO', 'DOCUMENT');
+
+-- CreateEnum
+CREATE TYPE "NotificationRecipientType" AS ENUM ('ALL', 'COUNTRY', 'ROLE', 'USER');
+
+-- CreateEnum
+CREATE TYPE "NotificationScheduleType" AS ENUM ('SCHEDULED', 'DELAYED');
+
+-- CreateEnum
+CREATE TYPE "NotificationLanguage" AS ENUM ('en', 'ar', 'fr');
+
+-- CreateEnum
+CREATE TYPE "DeliveryStatus" AS ENUM ('PENDING', 'SENT', 'DELIVERED', 'READ', 'FAILED');
+
+-- CreateTable
+CREATE TABLE "accounts" (
+    "id" UUID NOT NULL,
+    "authId" VARCHAR(255) NOT NULL,
+    "email" VARCHAR(255),
+    "provider" VARCHAR(255) NOT NULL,
+    "username" VARCHAR(255),
+    "role" "AccountRole" NOT NULL DEFAULT 'USER',
+    "isEmailVerified" BOOLEAN NOT NULL,
+    "status" "AccountStatus" NOT NULL DEFAULT 'ACTIVE',
+    "avatarId" UUID,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "accounts_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "schools" (
+    "id" UUID NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "address" TEXT NOT NULL,
+    "phone" VARCHAR(255) NOT NULL,
+    "email" VARCHAR(255) NOT NULL,
+    "plan" "SchoolPlan" NOT NULL DEFAULT 'FREE',
+    "logoId" UUID,
+    "status" "SchoolStatus" NOT NULL DEFAULT 'ACTIVE',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "schools_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "user_roles" (
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
+    "role" "UserRole" NOT NULL DEFAULT 'PARENT',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "user_roles_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "users" (
+    "id" UUID NOT NULL,
+    "firstName" VARCHAR(255) NOT NULL,
+    "lastName" VARCHAR(255) NOT NULL,
+    "gender" "Gender" NOT NULL,
+    "dateOfBirth" DATE,
+    "phoneNumber" VARCHAR(20),
+    "address" VARCHAR(255),
+    "cin" VARCHAR(50),
+    "schoolId" UUID NOT NULL,
+    "accountId" UUID NOT NULL,
+    "status" "UserStatus" NOT NULL DEFAULT 'ACTIVE',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "classes" (
+    "id" UUID NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "description" TEXT NOT NULL,
+    "grade" "ClassGrade" NOT NULL,
+    "schoolId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "classes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "feeItems" (
+    "id" UUID NOT NULL,
+    "title" VARCHAR(255) NOT NULL,
+    "description" TEXT,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "feeId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "feeItems_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "fees" (
+    "id" UUID NOT NULL,
+    "schoolId" UUID NOT NULL,
+    "studentId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "fees_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Media" (
+    "id" UUID NOT NULL,
+    "key" VARCHAR(255) NOT NULL,
+    "baseName" VARCHAR(255) NOT NULL,
+    "type" "MediaType" NOT NULL,
+    "mimeType" VARCHAR(255) NOT NULL,
+    "fileSize" INTEGER,
+    "status" "MediaStatus" NOT NULL DEFAULT 'PENDING',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
+    "confirmedAt" TIMESTAMP(3),
+
+    CONSTRAINT "Media_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Notification" (
+    "id" UUID NOT NULL,
+    "description" TEXT,
+    "recipientType" "NotificationRecipientType" NOT NULL,
+    "scheduleType" "NotificationScheduleType" NOT NULL,
+    "delaySeconds" INTEGER,
+    "scheduledAt" TIMESTAMP(3),
+    "createdById" UUID NOT NULL,
+    "sentAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "NotificationTranslation" (
+    "id" UUID NOT NULL,
+    "language" "NotificationLanguage" NOT NULL,
+    "title" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "data" JSONB,
+    "notificationId" UUID NOT NULL,
+
+    CONSTRAINT "NotificationTranslation_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "NotificationTargeting" (
+    "id" UUID NOT NULL,
+    "notificationId" UUID NOT NULL,
+    "countries" TEXT[],
+    "roles" "AccountRole"[],
+
+    CONSTRAINT "NotificationTargeting_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "NotificationTargetUser" (
+    "id" UUID NOT NULL,
+    "targetingId" UUID NOT NULL,
+    "userId" UUID NOT NULL,
+
+    CONSTRAINT "NotificationTargetUser_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "NotificationDelivery" (
+    "id" UUID NOT NULL,
+    "notificationId" UUID NOT NULL,
+    "status" "DeliveryStatus" NOT NULL DEFAULT 'PENDING',
+    "sentAt" TIMESTAMP(3),
+    "readAt" TIMESTAMP(3),
+    "failedAt" TIMESTAMP(3),
+    "errorMessage" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "NotificationDelivery_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "students" (
+    "id" UUID NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "dateOfBirth" DATE NOT NULL,
+    "gender" "Gender" NOT NULL,
+    "schoolId" UUID NOT NULL,
+    "avatarId" UUID,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "students_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "parents" (
+    "id" UUID NOT NULL,
+    "emergencyPhone" VARCHAR(20),
+    "userId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "parents_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "parent_students" (
+    "id" UUID NOT NULL,
+    "parentId" UUID NOT NULL,
+    "studentId" UUID NOT NULL,
+
+    CONSTRAINT "parent_students_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "teachers" (
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "teachers_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "nurses" (
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "nurses_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "owners" (
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "owners_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "directors" (
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "directors_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "managers" (
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "managers_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "drivers" (
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "drivers_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "classSessions" (
+    "id" UUID NOT NULL,
+    "classId" UUID NOT NULL,
+    "title" VARCHAR(255) NOT NULL,
+    "description" TEXT,
+    "day" "DayOfWeek" NOT NULL,
+    "startTime" TIME NOT NULL,
+    "endTime" TIME NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "teacherId" UUID NOT NULL,
+
+    CONSTRAINT "classSessions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "examSessions" (
+    "id" UUID NOT NULL,
+    "classId" UUID NOT NULL,
+    "title" VARCHAR(255) NOT NULL,
+    "description" TEXT,
+    "day" "DayOfWeek" NOT NULL,
+    "startTime" TIME NOT NULL,
+    "endTime" TIME NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "teacherId" UUID NOT NULL,
+
+    CONSTRAINT "examSessions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "extraCurricularSessions" (
+    "id" UUID NOT NULL,
+    "title" VARCHAR(255) NOT NULL,
+    "description" TEXT,
+    "day" "DayOfWeek" NOT NULL,
+    "startTime" TIME NOT NULL,
+    "endTime" TIME NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "teacherId" UUID NOT NULL,
+
+    CONSTRAINT "extraCurricularSessions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE INDEX "accounts_status_idx" ON "accounts"("status");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "accounts_email_key" ON "accounts"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "accounts_authId_key" ON "accounts"("authId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "accounts_avatarId_key" ON "accounts"("avatarId");
+
+-- CreateIndex
+CREATE INDEX "schools_plan_idx" ON "schools"("plan");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "schools_logoId_key" ON "schools"("logoId");
+
+-- CreateIndex
+CREATE INDEX "user_roles_userId_role_idx" ON "user_roles"("userId", "role");
+
+-- CreateIndex
+CREATE INDEX "users_accountId_schoolId_idx" ON "users"("accountId", "schoolId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "classes_schoolId_name_key" ON "classes"("schoolId", "name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "fees_schoolId_studentId_key" ON "fees"("schoolId", "studentId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Media_key_key" ON "Media"("key");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "NotificationTranslation_notificationId_language_key" ON "NotificationTranslation"("notificationId", "language");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "NotificationTargeting_notificationId_key" ON "NotificationTargeting"("notificationId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "NotificationTargetUser_targetingId_userId_key" ON "NotificationTargetUser"("targetingId", "userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "students_avatarId_key" ON "students"("avatarId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "students_schoolId_key" ON "students"("schoolId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "parents_userId_key" ON "parents"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "parent_students_parentId_studentId_key" ON "parent_students"("parentId", "studentId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "teachers_userId_key" ON "teachers"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "nurses_userId_key" ON "nurses"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "owners_userId_key" ON "owners"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "directors_userId_key" ON "directors"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "managers_userId_key" ON "managers"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "drivers_userId_key" ON "drivers"("userId");
+
+-- AddForeignKey
+ALTER TABLE "accounts" ADD CONSTRAINT "accounts_avatarId_fkey" FOREIGN KEY ("avatarId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "schools" ADD CONSTRAINT "schools_logoId_fkey" FOREIGN KEY ("logoId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_roles" ADD CONSTRAINT "user_roles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "users" ADD CONSTRAINT "users_schoolId_fkey" FOREIGN KEY ("schoolId") REFERENCES "schools"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "users" ADD CONSTRAINT "users_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "accounts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "classes" ADD CONSTRAINT "classes_schoolId_fkey" FOREIGN KEY ("schoolId") REFERENCES "schools"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "feeItems" ADD CONSTRAINT "feeItems_feeId_fkey" FOREIGN KEY ("feeId") REFERENCES "fees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "fees" ADD CONSTRAINT "fees_schoolId_fkey" FOREIGN KEY ("schoolId") REFERENCES "schools"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "fees" ADD CONSTRAINT "fees_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "students"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "accounts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotificationTranslation" ADD CONSTRAINT "NotificationTranslation_notificationId_fkey" FOREIGN KEY ("notificationId") REFERENCES "Notification"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotificationTargeting" ADD CONSTRAINT "NotificationTargeting_notificationId_fkey" FOREIGN KEY ("notificationId") REFERENCES "Notification"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotificationTargetUser" ADD CONSTRAINT "NotificationTargetUser_targetingId_fkey" FOREIGN KEY ("targetingId") REFERENCES "NotificationTargeting"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotificationTargetUser" ADD CONSTRAINT "NotificationTargetUser_userId_fkey" FOREIGN KEY ("userId") REFERENCES "accounts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NotificationDelivery" ADD CONSTRAINT "NotificationDelivery_notificationId_fkey" FOREIGN KEY ("notificationId") REFERENCES "Notification"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "students" ADD CONSTRAINT "students_schoolId_fkey" FOREIGN KEY ("schoolId") REFERENCES "schools"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "students" ADD CONSTRAINT "students_avatarId_fkey" FOREIGN KEY ("avatarId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "parents" ADD CONSTRAINT "parents_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "parent_students" ADD CONSTRAINT "parent_students_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "parents"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "parent_students" ADD CONSTRAINT "parent_students_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "students"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "teachers" ADD CONSTRAINT "teachers_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "nurses" ADD CONSTRAINT "nurses_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "owners" ADD CONSTRAINT "owners_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "directors" ADD CONSTRAINT "directors_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "managers" ADD CONSTRAINT "managers_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "drivers" ADD CONSTRAINT "drivers_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "classSessions" ADD CONSTRAINT "classSessions_classId_fkey" FOREIGN KEY ("classId") REFERENCES "classes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "classSessions" ADD CONSTRAINT "classSessions_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "teachers"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "examSessions" ADD CONSTRAINT "examSessions_classId_fkey" FOREIGN KEY ("classId") REFERENCES "classes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "examSessions" ADD CONSTRAINT "examSessions_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "teachers"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "extraCurricularSessions" ADD CONSTRAINT "extraCurricularSessions_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "teachers"("id") ON DELETE CASCADE ON UPDATE CASCADE;

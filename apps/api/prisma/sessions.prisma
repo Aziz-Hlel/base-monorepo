@@ -1,0 +1,71 @@
+
+
+
+model ClassSessions{
+  id String @id @default(uuid()) @db.Uuid
+
+  classId String @db.Uuid
+  class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+
+  title String @db.VarChar(255)
+  description String? @db.Text
+  day DayOfWeek
+  startTime DateTime @db.Time
+  endTime DateTime @db.Time
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teacherId String @db.Uuid
+  teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+
+  @@map("classSessions")
+}
+
+
+
+model ExamSessions{
+  id String @id @default(uuid()) @db.Uuid
+
+  classId String @db.Uuid
+  class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+
+  title String @db.VarChar(255)
+  description String? @db.Text
+  day DayOfWeek
+  startTime DateTime @db.Time
+  endTime DateTime @db.Time
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teacherId String @db.Uuid
+  teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+
+  @@map("examSessions")
+}
+
+
+
+model ExtraCurricularSessions{
+  id String @id @default(uuid()) @db.Uuid
+
+  title String @db.VarChar(255)
+  description String? @db.Text
+  day DayOfWeek
+  startTime DateTime @db.Time
+  endTime DateTime @db.Time
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teacherId String @db.Uuid
+  teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+
+  @@map("extraCurricularSessions")
+}
