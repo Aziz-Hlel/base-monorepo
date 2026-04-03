@@ -62,6 +62,11 @@ const ERRORS = {
     message: 'Service Unavailable',
     name: 'ServiceUnavailableError',
   },
+  NOT_IMPLEMENTED: {
+    status: 501,
+    message: 'Not Implemented',
+    name: 'NotImplementedError',
+  },
 } as const satisfies Record<string, Err>;
 
 const a = {

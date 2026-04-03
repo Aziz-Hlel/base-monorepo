@@ -1,8 +1,11 @@
 
 
+
+
 model Student {
   id String @id @default(uuid()) @db.Uuid
-  name String @db.VarChar(255)
+  firstName String @db.VarChar(255)
+  lastName String @db.VarChar(255)
   dateOfBirth DateTime @db.Date
   gender Gender
 
@@ -21,7 +24,7 @@ model Student {
   updatedAt DateTime @updatedAt
 
   @@unique([avatarId])
-  @@unique([schoolId])
+  @@unique([schoolId,id])
 
   @@map("students")
 }
@@ -81,81 +84,3 @@ model Teacher {
 }
 
 
-model Nurse{
-  id String @id @default(uuid()) @db.Uuid
-
-  userId String @db.Uuid
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId])
-
-  @@map("nurses")
-}
-
-
-model Owner{
-  id String @id @default(uuid()) @db.Uuid
-
-  userId String @db.Uuid
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId])
-
-  @@map("owners")
-}
-
-
-model Director{
-  id String @id @default(uuid()) @db.Uuid
-
-  userId String @db.Uuid
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId])
-
-  @@map("directors")
-}
-
-
-model Manager{
-  id String @id @default(uuid()) @db.Uuid
-
-  userId String @db.Uuid
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId])
-
-  @@map("managers")
-}
-
-
-model Driver{
-  id String @id @default(uuid()) @db.Uuid
-
-  userId String @db.Uuid
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId])
-
-  @@map("drivers")
-}

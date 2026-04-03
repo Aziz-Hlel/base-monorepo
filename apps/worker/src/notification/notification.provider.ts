@@ -35,7 +35,7 @@ type BaseNotificationPayload = {
 };
 
 export class NotificationProvider implements INotificationProvider {
-  private oneSignalBaseUrl = 'https://onesignal.com/api/v1';
+  private oneSignalBaseUrl = 'https://onesignal.com/api/v1'; // https://api.onesignal.com new one ?
   private oneSignalUrl = `${this.oneSignalBaseUrl}/notifications`;
 
   private validateOneSignalConfig = async () => {

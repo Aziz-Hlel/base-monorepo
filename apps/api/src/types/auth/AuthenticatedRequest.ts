@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { DecodedIdTokenWithClaims } from './DecodedIdTokenWithClaims';
+import { DecodedIdTokenWithClaims as DecodedTokenWithClaims } from './DecodedTokenWithClaims';
 
 // export interface AuthenticatedRequest<
 //   ReqBody = never,
@@ -11,5 +11,5 @@ import { DecodedIdTokenWithClaims } from './DecodedIdTokenWithClaims';
 // }
 
 export interface AuthenticatedRequest extends Request {
-  user: DecodedIdTokenWithClaims;
+  user: DecodedTokenWithClaims;
 }

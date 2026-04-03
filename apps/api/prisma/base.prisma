@@ -4,6 +4,7 @@ enum AccountRole {
   SUPER_ADMIN
 }
 
+
 enum AccountStatus {
   ACTIVE
   INACTIVE
@@ -23,6 +24,7 @@ model Account {
   status AccountStatus @default(ACTIVE)
 
   users User[]
+  owner Owner?
 
   notificationTargets NotificationTargetUser[]
 
@@ -30,7 +32,6 @@ model Account {
 
   avatarId String? @db.Uuid
   avatar Media? @relation(fields: [avatarId], references: [id])
-
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -45,30 +46,62 @@ model Account {
 }
 
 
-
 enum SchoolPlan {
   FREE
   PRO
   ENTERPRISE
 }
 
+
 enum SchoolStatus {
   ACTIVE
+  PENDING
   SUSPENDED
   DELETED
 }
 
+
+model Owner {
+  id String @id @default(uuid()) @db.Uuid
+
+  firstName String @db.VarChar(255)
+  lastName String @db.VarChar(255)
+  phoneNumber String @db.VarChar(20)
+  
+
+
+  accountId String @db.Uuid @unique
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade) // * CASCADE : if the account is deleted, the owner will be deleted too
+
+  school School?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
+  @@map("school_owner")
+}
+
+
 model School {
   id String @id @default(uuid()) @db.Uuid
-  name String @db.VarChar(255)
-  address String @db.Text   
-  phone String @db.VarChar(255)
+
+  nameEn String @db.VarChar(255)
+  nameFr String @db.VarChar(255)
+  nameAr String @db.VarChar(255)
+  
+  address String @db.Text
+  phone String @db.VarChar(20)
   email String @db.VarChar(255)
   plan SchoolPlan @default(FREE)
-  
+  slug String @db.VarChar(255)
+
   logoId String? @db.Uuid
   logo Media? @relation(fields: [logoId], references: [id], onDelete: SetNull)
 
+
+  ownerId String @db.Uuid @unique
+  owner Owner @relation(fields: [ownerId], references: [id], onDelete: Restrict) // * RESTRICT : the owner have to delete the school first
 
   users User[]
   students Student[]
@@ -76,12 +109,13 @@ model School {
   studentFees Fees[]
 
 
-  status SchoolStatus @default(ACTIVE)
+  status SchoolStatus @default(PENDING)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([plan])
 
+  @@unique([slug])
   @@unique([logoId])
 
   @@map("schools")
@@ -95,8 +129,8 @@ enum UserStatus {
   DELETED
 }
 
+
 enum UserRole {
-  OWNER
   DIRECTOR
   MANAGER
   TEACHER
@@ -142,13 +176,8 @@ model User {
   
   roles UserRoles[]
 
-  owner Owner?
-  director Director?
-  manager Manager?
   teacher Teacher?
   parent Parent?
-  nurse Nurse?
-  driver Driver?
   
 
   status UserStatus @default(ACTIVE)
@@ -158,3 +187,4 @@ model User {
   @@index([accountId, schoolId])
   @@map("users")
 }
+

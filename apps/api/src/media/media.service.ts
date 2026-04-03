@@ -1,6 +1,6 @@
 import { storageService } from '@/storage/storage.service';
 import { PresignedUrlRequest } from '@repo/contracts/schemas/media/PresignedUrlRequest';
-import { MediaRepo } from './media.repo';
+import { MediaRepo, singletonMediaRepo } from './media.repo';
 import { NotFoundError } from '@/err/customErrors';
 import { MediaStatus } from '@/generated/prisma/enums';
 import { PresignedUrlResponse } from '@repo/contracts/schemas/media/PresignedUrlResponse';
@@ -104,3 +104,5 @@ export class MediaService implements IMediaService {
     };
   }
 }
+
+export const globalMediaService = new MediaService(singletonMediaRepo);

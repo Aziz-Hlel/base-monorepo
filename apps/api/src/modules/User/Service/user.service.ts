@@ -100,7 +100,7 @@ export class UserService implements IUserService {
   }
 
   async createUserProfile(schema: CreateUserProfileRequest): Promise<UserProfileResponse> {
-    const userRecord = await firebaseUserService.createUser({
+    const userRecord = await firebaseUserService.createAccount({
       email: schema.email,
       password: schema.password,
       displayName: schema.username,

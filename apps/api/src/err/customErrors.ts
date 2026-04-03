@@ -125,6 +125,20 @@ export class PermissionDeniedError extends AppError {
   }
 }
 
+export class NotImplementedError extends AppError {
+  constructor(payload: CusmtomErrorPayload) {
+    if (typeof payload === 'string') {
+      super({ errorObject: ERRORS.NOT_IMPLEMENTED, message: payload });
+    } else {
+      super({
+        errorObject: ERRORS.NOT_IMPLEMENTED,
+        message: payload.message,
+        clientDisplayMessage: payload.clientDisplayMessage,
+      });
+    }
+  }
+}
+
 export class InternalServerError extends AppError {
   constructor(payload: CusmtomErrorPayload) {
     if (typeof payload === 'string') {

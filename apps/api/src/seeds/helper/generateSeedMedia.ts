@@ -1,4 +1,6 @@
 import { MediaStatus } from '@/generated/prisma/enums';
+import { MediaCreateInput } from '@/generated/prisma/models';
+import { faker } from '@faker-js/faker/.';
 
 export type SeedMedia = {
   baseName: string;
@@ -7,6 +9,17 @@ export type SeedMedia = {
   mimeType: string;
   fileSize: number;
   status: MediaStatus;
+};
+
+export const generateFakeMediaInstance = (): MediaCreateInput => {
+  return {
+    baseName: faker.lorem.slug(),
+    key: faker.image.avatar(),
+    mimeType: 'image/png',
+    fileSize: 1024 * 500,
+    status: MediaStatus.CONFIRMED,
+    type: 'IMAGE',
+  };
 };
 
 const generateSeedMedia = (props: { prefix: string; baseName: string } | { key: string }): SeedMedia => {

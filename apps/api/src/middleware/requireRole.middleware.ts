@@ -1,10 +1,10 @@
 import { PermissionDeniedError, UnauthorizedError } from '@/err/customErrors';
-import { Role } from '@/generated/prisma/enums';
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import PERMISSION_SCORE from '@repo/contracts/utils/PermissionScore';
 import { NextFunction, Response, Request } from 'express';
+import { AccountRole } from '@/generated/prisma/enums';
 
-const requireRole = (role: Role) => {
+const requireRole = (role: AccountRole) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const userReq = req as AuthenticatedRequest;
     if (!userReq.user) {

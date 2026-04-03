@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from 'express';
-import { DecodedIdTokenWithClaims } from '../types/auth/DecodedIdTokenWithClaims';
+import { DecodedIdTokenWithClaims } from '../types/auth/DecodedTokenWithClaims';
 import { firebaseAuthService } from '../firebase/service/firebase.auth.service';
 import { AuthenticatedRequest } from '../types/auth/AuthenticatedRequest';
 

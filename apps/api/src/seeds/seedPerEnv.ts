@@ -1,12 +1,10 @@
 import { Env } from '@/config/env';
-import { seedProducts } from './fakes/products.fake';
-import seedUsers from './fakes/users.fake';
-import { seedProdUsers } from './prod/users';
+import seedDev from './dev/seedDev';
 
-type EnvSeeds = Record<Env['NODE_ENV'], Function[]>;
+type EnvSeeds = Record<Env['NODE_ENV'], Function[] | readonly []>;
 
-const devSeeds = [seedProdUsers, () => seedUsers(50), seedProducts];
-const prodSeeds = [seedProdUsers];
+const devSeeds = [] as const; //[seedDev];
+const prodSeeds = [() => {}]; //[seedProdUsers];
 
 const envSeeds: EnvSeeds = {
   dev: devSeeds,

@@ -1,5 +1,4 @@
 import z from 'zod';
-import { ProductStatus } from '../../types/enums/enums';
 import type { ProductRowResponse } from './productRowResponse';
 
 export type TableRowType = ProductRowResponse;
@@ -39,7 +38,6 @@ export const productsQueryParamsSchema = z.object({
   order: z.enum(['asc', 'desc']).catch('desc'),
   search: z.string().trim().catch(''),
   // Filters
-  status: csvEnumArray(Object.values(ProductStatus)).catch([]),
 });
 export type TableQueryParams = z.infer<typeof productsQueryParamsSchema>;
 export type RequiredProductTableQueryParams = TableQueryParams;
@@ -50,7 +48,6 @@ export const productDefaultQuery: RequiredProductTableQueryParams = {
   sort: 'updatedAt',
   order: 'desc',
   search: '',
-  status: [],
 };
 
 export type ProductPageQuery = z.infer<typeof productsQueryParamsSchema>;

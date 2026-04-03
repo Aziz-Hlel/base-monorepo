@@ -8,6 +8,116 @@
  * 🟢 You can import this file directly.
  */
 
+export const AccountRole = {
+  USER: 'USER',
+  ADMIN: 'ADMIN',
+  SUPER_ADMIN: 'SUPER_ADMIN',
+} as const;
+
+export type AccountRole = (typeof AccountRole)[keyof typeof AccountRole];
+
+export const AccountStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  DISABLED: 'DISABLED',
+  DELETED: 'DELETED',
+} as const;
+
+export type AccountStatus = (typeof AccountStatus)[keyof typeof AccountStatus];
+
+export const SchoolPlan = {
+  FREE: 'FREE',
+  PRO: 'PRO',
+  ENTERPRISE: 'ENTERPRISE',
+} as const;
+
+export type SchoolPlan = (typeof SchoolPlan)[keyof typeof SchoolPlan];
+
+export const SchoolStatus = {
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED',
+  DELETED: 'DELETED',
+} as const;
+
+export type SchoolStatus = (typeof SchoolStatus)[keyof typeof SchoolStatus];
+
+export const UserStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  DISABLED: 'DISABLED',
+  DELETED: 'DELETED',
+} as const;
+
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus];
+
+export const UserRole = {
+  DIRECTOR: 'DIRECTOR',
+  MANAGER: 'MANAGER',
+  TEACHER: 'TEACHER',
+  PARENT: 'PARENT',
+  NURSE: 'NURSE',
+  DRIVER: 'DRIVER',
+} as const;
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole];
+
+export const ClassGrade = {
+  KG: 'KG',
+  ONE: 'ONE',
+  TWO: 'TWO',
+  THREE: 'THREE',
+  FOUR: 'FOUR',
+  FIVE: 'FIVE',
+  SIX: 'SIX',
+} as const;
+
+export type ClassGrade = (typeof ClassGrade)[keyof typeof ClassGrade];
+
+export const Gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+} as const;
+
+export type Gender = (typeof Gender)[keyof typeof Gender];
+
+export const DayOfWeek = {
+  MONDAY: 'MONDAY',
+  TUESDAY: 'TUESDAY',
+  WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY',
+  SATURDAY: 'SATURDAY',
+  SUNDAY: 'SUNDAY',
+} as const;
+
+export type DayOfWeek = (typeof DayOfWeek)[keyof typeof DayOfWeek];
+
+export const AttendanceStatus = {
+  PRESENT: 'PRESENT',
+  ABSENT: 'ABSENT',
+  LATE: 'LATE',
+  EXCUSED: 'EXCUSED',
+} as const;
+
+export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus];
+
+export const MediaStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  DELETED: 'DELETED',
+  FAILED: 'FAILED',
+} as const;
+
+export type MediaStatus = (typeof MediaStatus)[keyof typeof MediaStatus];
+
+export const MediaType = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  DOCUMENT: 'DOCUMENT',
+} as const;
+
+export type MediaType = (typeof MediaType)[keyof typeof MediaType];
+
 export const NotificationRecipientType = {
   ALL: 'ALL',
   COUNTRY: 'COUNTRY',
@@ -41,38 +151,3 @@ export const DeliveryStatus = {
 } as const;
 
 export type DeliveryStatus = (typeof DeliveryStatus)[keyof typeof DeliveryStatus];
-
-export const Role = {
-  USER: 'USER',
-  ADMIN: 'ADMIN',
-  SUPER_ADMIN: 'SUPER_ADMIN',
-  STAFF: 'STAFF',
-} as const;
-
-export type Role = (typeof Role)[keyof typeof Role];
-
-export const Status = {
-  ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
-  DISABLED: 'DISABLED',
-  DELETED: 'DELETED',
-} as const;
-
-export type Status = (typeof Status)[keyof typeof Status];
-
-export const MediaStatus = {
-  PENDING: 'PENDING',
-  CONFIRMED: 'CONFIRMED',
-  DELETED: 'DELETED',
-  FAILED: 'FAILED',
-} as const;
-
-export type MediaStatus = (typeof MediaStatus)[keyof typeof MediaStatus];
-
-export const ProductStatus = {
-  AVAILABLE: 'AVAILABLE',
-  OUT_OF_STOCK: 'OUT_OF_STOCK',
-  DISCONTINUED: 'DISCONTINUED',
-} as const;
-
-export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus];

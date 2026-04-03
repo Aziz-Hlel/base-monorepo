@@ -1,14 +1,14 @@
 import { prisma } from '@/bootstrap/db.init';
 import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
 import { firebaseUserService } from '@/firebase/service/firebase.user.service';
-import { Role } from '@/generated/prisma/enums';
+import { AccountRole } from '@/generated/prisma/enums';
 import { faker } from '@faker-js/faker';
 
 const prodUsers = [
   {
     email: 'tigana137@gmail.com',
     username: 'Tigana',
-    role: Role.SUPER_ADMIN,
+    role: AccountRole.SUPER_ADMIN,
     authId: 'google-oauth2|11223344556677889900',
     provider: 'google.com',
     isEmailVerified: true,
@@ -19,13 +19,13 @@ const prodUsers = [
 
 export const seedProdUsers = async () => {
   prodUsers.forEach(async (user) => {
-    const userExists = await prisma.user.findUnique({
+    const userExists = await prisma.account.findUnique({
       where: { email: user.email },
     });
     if (userExists) {
       return;
     }
-    const userRecord = await firebaseUserService.createUser({
+    const userRecord = await firebaseUserService.createAccount({
       email: user.email,
       password: 'SecureP@ssw0rd!',
       displayName: user.username,
@@ -43,14 +43,17 @@ export const seedProdUsers = async () => {
       updatedAt: user.updatedAt,
     };
 
-    const createdUser = await prisma.user.create({
+    const createdUser = await prisma.account.create({
       data,
     });
 
-    await firebaseAuthService.setCustomUserClaims({
-      userId: createdUser.id,
-      userAuthId: createdUser.authId,
-      userRole: createdUser.role,
+    await firebaseAuthService.setAccountClaims({
+      authId: createdUser.authId,
+      claims: {
+        id: createdUser.id,
+        role: createdUser.role,
+        users: [],
+      },
     });
   });
 };

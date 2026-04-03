@@ -1,7 +1,6 @@
 import z from 'zod';
 import type { Prettify } from '../../utils/Prettify';
 import type { UserProfileRowResponse } from './UserRowResponse';
-import { Role, Status } from '../../types/enums/enums';
 
 export type TableRowType = UserProfileRowResponse;
 export type NestedObject = Prettify<NonNullable<TableRowType['profile']>>;
@@ -44,8 +43,6 @@ export const queryParamsSchema = z.object({
   order: z.enum(['asc', 'desc']).catch('desc'),
   search: z.string().trim().catch(''),
   // Filters
-  role: csvEnumArray(Object.values(Role)).catch([]),
-  status: csvEnumArray(Object.values(Status)).catch([]),
 });
 export type TableQueryParams = z.infer<typeof queryParamsSchema>;
 export type UsersRequiredTableQueryParams = TableQueryParams;
@@ -56,8 +53,6 @@ export const usersDefaultQuery: UsersRequiredTableQueryParams = {
   sort: 'createdAt',
   order: 'desc',
   search: '',
-  role: [],
-  status: [],
 };
 
 export type UserPageQuery = z.infer<typeof queryParamsSchema>;

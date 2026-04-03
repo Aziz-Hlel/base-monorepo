@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { prisma } from '../../bootstrap/db.init';
-import { Role, Status } from '@/generated/prisma/enums';
 import pMap from 'p-map';
 
 faker.seed(1); // Ensure consistent fake data across runs

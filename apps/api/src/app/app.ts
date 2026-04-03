@@ -5,6 +5,7 @@ import { globalErrorHandler } from '../middleware/error.middleware';
 import { pinoHttpMiddleware } from '@/config/pinoHttp';
 import { compressionMiddleware } from '@/middleware/compression.middleware';
 import { AppRouter } from './routes';
+import validateClaimsSchemaMiddleware from '@/middleware/validateClaims.middleware';
 
 export function createExpressApp() {
   const app = express();
@@ -23,6 +24,7 @@ export function createExpressApp() {
 
   app.use(compressionMiddleware);
 
+  app.use(validateClaimsSchemaMiddleware);
   app.use('/api', AppRouter);
 
   app.use((req: Request, res: Response, next: NextFunction) => {

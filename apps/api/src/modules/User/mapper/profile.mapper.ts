@@ -1,5 +1,5 @@
 import { ProfileWithUser } from '../types';
-import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedIdTokenWithClaims';
+import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
 import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
 import { ProfileResponse } from '@repo/contracts/schemas/profile/ProfileResponse';
 import UserMapper from './user.mapper';

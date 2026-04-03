@@ -132,3 +132,5 @@ export class MediaRepo {
     return mediaId;
   }
 }
+
+export const singletonMediaRepo = new MediaRepo();

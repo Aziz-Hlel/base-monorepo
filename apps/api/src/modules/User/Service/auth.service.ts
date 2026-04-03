@@ -1,7 +1,7 @@
 import { firebaseAuthService } from '../../../firebase/service/firebase.auth.service';
 import UserMapper from '../mapper/user.mapper';
 import { InternalServerError } from '../../../err/customErrors';
-import { DecodedIdTokenWithClaims } from '../../../types/auth/DecodedIdTokenWithClaims';
+import { DecodedIdTokenWithClaims } from '../../../types/auth/DecodedTokenWithClaims';
 import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
 import { UserInternalService } from './user.internal.service';
 
@@ -32,10 +32,10 @@ export class AuthService implements IAuthService {
     const userToCreate = UserMapper.toUserCreateInput(decodedToken);
     const newUser = await this.userInternalService.createUser(userToCreate);
 
-    await this.firebaseService.setCustomUserClaims({
+    await this.firebaseService.setAccountClaims({
       userId: newUser.id,
-      userAuthId: newUser.authId,
-      userRole: newUser.role,
+      userAuthId: 'newUser.authId',
+      userRole: 'newUser.role',
     });
 
     const userWithNoProfile = { ...newUser, profile: null };
@@ -67,7 +67,7 @@ export class AuthService implements IAuthService {
     if (!user) {
       const userToCreate = UserMapper.toUserCreateInput(decodedToken);
       user = await this.userInternalService.createUser(userToCreate);
-      await this.firebaseService.setCustomUserClaims({
+      await this.firebaseService.setAccountClaims({
         userId: user.id,
         userAuthId: user.authId,
         userRole: user.role,
@@ -87,9 +87,9 @@ export class AuthService implements IAuthService {
         `User with authId ${userAuthId} registered in auth provider but does not exist in the system.`,
       );
     }
-    const isValidClaims = this.firebaseService.validateCustomClaims(user, decodedToken);
+    const isValidClaims = this.firebaseService.validateClaims(user, decodedToken);
     if (!isValidClaims) {
-      await this.firebaseService.setCustomUserClaims({
+      await this.firebaseService.setAccountClaims({
         userId: user.id,
         userAuthId: user.authId,
         userRole: user.role,

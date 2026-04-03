@@ -6,7 +6,7 @@ import { IAuthService } from '../Service/auth.service';
 export class AuthController {
   constructor(private readonly authService: IAuthService) {}
   register = async (req: Request, res: Response) => {
-    const { idToken } = CreateUserSchema.parse(req.body);
+    const { token: idToken } = CreateUserSchema.parse(req.body);
 
     const user = await this.authService.registerUser(idToken);
 
@@ -14,14 +14,14 @@ export class AuthController {
   };
 
   loginWithPassword = async (req: Request, res: Response) => {
-    const { idToken } = CreateUserSchema.parse(req.body);
+    const { token: idToken } = CreateUserSchema.parse(req.body);
 
     const user = await this.authService.authenticateWithPassword(idToken);
     res.status(200).json(user);
   };
 
   authenticateWithProvider = async (req: Request, res: Response) => {
-    const { idToken } = CreateUserSchema.parse(req.body);
+    const { token: idToken } = CreateUserSchema.parse(req.body);
     const user = await this.authService.authenticateWithProvider(idToken);
 
     res.status(200).json(user);

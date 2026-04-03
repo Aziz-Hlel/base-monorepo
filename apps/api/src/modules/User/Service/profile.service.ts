@@ -1,4 +1,4 @@
-import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedIdTokenWithClaims';
+import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
 import { CreateProfileRequest } from '@repo/contracts/schemas/profile/createProfileRequest';
 import { UserRepo } from '../repo/user.repo';
 import { BadRequestError, ConflictError } from '@/err/customErrors';
