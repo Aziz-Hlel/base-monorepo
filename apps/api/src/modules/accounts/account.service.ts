@@ -9,6 +9,8 @@ import { AccountResponse } from '@repo/contracts/schemas/account/accountResponse
 import { AccountHelper } from './account.helper';
 import { AccountMapper } from './account.mapper';
 import { AccountRepo } from './account.repo';
+import { AccountRole } from '@/generated/prisma/enums';
+import { AuthResponse } from '@repo/contracts/schemas/auth/authResponse';
 
 export class AccountService {
   constructor(
@@ -16,7 +18,7 @@ export class AccountService {
     private readonly accountHelper: AccountHelper,
   ) {}
 
-  async createAdminAccountWithPassword(token: string): Promise<AccountResponse> {
+  async createAdminAccountWithPassword(token: string): Promise<AuthResponse> {
     const decodedToken = await firebaseAuthService.verifyToken(token);
 
     const userAuthId = decodedToken.uid;
@@ -38,8 +40,8 @@ export class AccountService {
     return accountResponse;
   }
 
-  async authenticateWithPassword(token: string): Promise<AccountResponse> {
-    const decodedToken = await firebaseAuthService.verifyToken(token);
+  async authenticateWithPassword(token: string): Promise<AuthResponse> {
+    const decodedToken = await firebaseAuthService.verifyTokenWithClaims(token);
 
     const userAuthId = decodedToken.uid;
 
@@ -54,9 +56,10 @@ export class AccountService {
       throw new NotFoundError(`Account Not found`);
     }
 
-    if (account.users.length === 0) {
+    if (account.users.length === 0 && account.role === AccountRole.USER) {
       throw new NotFoundError(`Account Not found`);
     }
+
     const accountAvatar = globalMediaService.generateMediaResponse(account.avatar);
 
     const accountResponse = AccountMapper.toAuthResponse2({ account, avatar: accountAvatar });
@@ -64,8 +67,8 @@ export class AccountService {
     return accountResponse;
   }
 
-  async authenticateWithProvider(token: string): Promise<AccountResponse> {
-    const decodedToken = await firebaseAuthService.verifyToken(token);
+  async authenticateWithProvider(token: string): Promise<AuthResponse> {
+    const decodedToken = await firebaseAuthService.verifyTokenWithClaims(token);
 
     const userAuthId = decodedToken.uid;
 
@@ -93,7 +96,7 @@ export class AccountService {
     return accountResponse;
   }
 
-  me = async (decodedToken: DecodedIdTokenWithClaims): Promise<AccountResponse> => {
+  me = async (decodedToken: DecodedIdTokenWithClaims): Promise<AuthResponse> => {
     const userAuthId = decodedToken.uid;
 
     const account = await this.accountRepo.getAccountByAuthId({

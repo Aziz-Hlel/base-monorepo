@@ -58,9 +58,8 @@ class FirebaseUserService {
       firebaseAuthService.setAccountClaims({
         authId: userRecord.uid,
         claims: {
-          id: userRecord.uid,
-          role: role,
-          users: [], // *
+          accountId: userRecord.uid,
+          accountRole: role,
         },
       });
 

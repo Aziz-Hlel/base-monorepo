@@ -1,5 +1,4 @@
 import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
-import { AccountRepo } from '../accounts/account.repo';
 import { CreateOwnerRequest } from '@repo/contracts/schemas/owner/createOwnerRequest';
 import { AccountHelper } from '../accounts/account.helper';
 import { prisma } from '@/bootstrap/db.init';
@@ -14,30 +13,30 @@ export class OwnerService {
   ) {}
 
   create = async ({ schema, token }: { schema: CreateOwnerRequest; token: DecodedIdTokenWithClaims }) => {
-    prisma.$transaction(async (tx) => {
-      const accountHasOwner = await this.accountHelper.isAccountHasOwner({ accountId: token.claims.id, tx });
+    await prisma.$transaction(async (tx) => {
+      const accountHasOwner = await this.accountHelper.isAccountHasOwner({ accountId: token.claims.accountId, tx });
       if (accountHasOwner) {
         throw new ConflictError('Account already registered as school owner');
       }
 
       await this.ownerRepo.create({
         schema,
-        accountId: token.claims.id,
+        accountId: token.claims.accountId,
         tx,
       });
     });
   };
 
   update = async ({ schema, token }: { schema: UpdateOwnerRequest; token: DecodedIdTokenWithClaims }) => {
-    prisma.$transaction(async (tx) => {
-      const accountHasOwner = await this.accountHelper.isAccountHasOwner({ accountId: token.claims.id, tx });
-      if (accountHasOwner) {
-        throw new ConflictError('Account already registered as school owner');
+    await prisma.$transaction(async (tx) => {
+      const accountHasOwner = await this.accountHelper.isAccountHasOwner({ accountId: token.claims.accountId, tx });
+      if (!accountHasOwner) {
+        throw new ConflictError('Account not registered as school owner');
       }
 
       await this.ownerRepo.update({
         schema,
-        accountId: token.claims.id,
+        accountId: token.claims.accountId,
         tx,
       });
     });

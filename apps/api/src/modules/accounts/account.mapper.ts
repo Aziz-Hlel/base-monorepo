@@ -7,7 +7,6 @@ import {
   administrationRolesSet,
   AdministrationWorkspace,
   AuthResponse,
-  AuthResponse2,
   ParentWorkspace,
 } from '@repo/contracts/schemas/auth/authResponse';
 import { MediaResponse } from '@repo/contracts/schemas/media/MediaResponse';
@@ -33,14 +32,18 @@ export class AccountMapper {
 
   static toNewAccountResponse({ account }: { account: Account }): AuthResponse {
     return {
-      id: account.id,
-      authId: account.authId,
-      email: account.email,
-      avatar: null,
-      role: account.role,
-      users: [],
-      createdAt: account.createdAt.toISOString(),
-      updatedAt: account.updatedAt.toISOString(),
+      account: {
+        id: account.id,
+        authId: account.authId,
+        email: account.email,
+        avatar: null,
+        role: account.role,
+        createdAt: account.createdAt.toISOString(),
+        updatedAt: account.updatedAt.toISOString(),
+      },
+      administration: [],
+      teacher: [],
+      parent: [],
     };
   }
 
@@ -89,10 +92,10 @@ export class AccountMapper {
   }: {
     account: AccountEntityRequest;
     avatar: MediaResponse | null;
-  }): AuthResponse2 {
-    const administrationWorkspaces: AuthResponse2['administration'] = [];
-    const teacherWorkspaces: AuthResponse2['teacher'] = [];
-    const parentWorkspaces: AuthResponse2['parent'] = [];
+  }): AuthResponse {
+    const administrationWorkspaces: AuthResponse['administration'] = [];
+    const teacherWorkspaces: AuthResponse['teacher'] = [];
+    const parentWorkspaces: AuthResponse['parent'] = [];
 
     if (account.owner) {
       administrationWorkspaces.push({
@@ -181,7 +184,7 @@ export class AccountMapper {
 
     const accountResponse = this.toAccountResponse({ account, avatar });
     return {
-      ...accountResponse,
+      account: accountResponse,
       administration: administrationWorkspaces,
       teacher: teacherWorkspaces,
       parent: parentWorkspaces,

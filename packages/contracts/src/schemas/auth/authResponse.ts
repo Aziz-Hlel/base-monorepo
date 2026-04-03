@@ -17,23 +17,6 @@ type SchoolResponse = {
   };
 };
 
-export type AuthResponse = {
-  users: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    roles: UserRole[];
-    children: StudentResponse[];
-    school: SchoolResponse;
-    teacher: {
-      id: string;
-    } | null;
-    parent: {
-      id: string;
-    } | null;
-  }[];
-} & AccountResponse;
-
 export const schoolWorkspace = {
   ADMINISTRATION: 'ADMINISTRATION',
   PARENT: 'PARENT',
@@ -87,7 +70,8 @@ export type ParentWorkspace = {
   student: StudentResponse;
 };
 
-export type AuthResponse2 = AccountResponse & {
+export type AuthResponse = {
+  account: AccountResponse;
   administration: AdministrationWorkspace[];
   teacher: TeacherWorkspace[];
   parent: ParentWorkspace[];

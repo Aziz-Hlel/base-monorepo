@@ -18,8 +18,8 @@ const seedDev = async () => {
     await firebaseAuthService.setAccountClaims({
       authId: account.authId,
       claims: {
-        id: account.id,
-        role: account.role,
+        accountId: account.id,
+        accountRole: account.role,
       },
     });
   });

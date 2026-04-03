@@ -33,7 +33,13 @@ export class MinioService implements IStorageProvider {
     });
   }
 
+  private isFakerMedia(fileKey: string): boolean {
+    return fileKey.startsWith(`http://`) || fileKey.startsWith(`https://`);
+  }
+
   async generatePresignedUrl({ mediaKey: fileKey, mimeType, expiresIn }: PresignedUrlGenerator): Promise<string> {
+    if (this.isFakerMedia(fileKey)) return fileKey;
+
     const command = new PutObjectCommand({
       Bucket: this.MINIO_BUCKET,
       Key: fileKey,

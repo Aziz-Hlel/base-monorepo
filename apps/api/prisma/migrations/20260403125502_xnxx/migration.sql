@@ -8,13 +8,13 @@ CREATE TYPE "AccountStatus" AS ENUM ('ACTIVE', 'INACTIVE', 'DISABLED', 'DELETED'
 CREATE TYPE "SchoolPlan" AS ENUM ('FREE', 'PRO', 'ENTERPRISE');
 
 -- CreateEnum
-CREATE TYPE "SchoolStatus" AS ENUM ('ACTIVE', 'SUSPENDED', 'DELETED');
+CREATE TYPE "SchoolStatus" AS ENUM ('ACTIVE', 'PENDING', 'SUSPENDED', 'DELETED');
 
 -- CreateEnum
 CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'INACTIVE', 'DISABLED', 'DELETED');
 
 -- CreateEnum
-CREATE TYPE "UserRole" AS ENUM ('OWNER', 'DIRECTOR', 'MANAGER', 'TEACHER', 'PARENT', 'NURSE', 'DRIVER');
+CREATE TYPE "UserRole" AS ENUM ('DIRECTOR', 'MANAGER', 'TEACHER', 'PARENT', 'NURSE', 'DRIVER');
 
 -- CreateEnum
 CREATE TYPE "ClassGrade" AS ENUM ('KG', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX');
@@ -64,15 +64,34 @@ CREATE TABLE "accounts" (
 );
 
 -- CreateTable
+CREATE TABLE "school_owner" (
+    "id" UUID NOT NULL,
+    "firstName" VARCHAR(255) NOT NULL,
+    "lastName" VARCHAR(255) NOT NULL,
+    "phone" VARCHAR(20) NOT NULL,
+    "accountId" UUID NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "school_owner_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "schools" (
     "id" UUID NOT NULL,
-    "name" VARCHAR(255) NOT NULL,
-    "address" TEXT NOT NULL,
-    "phone" VARCHAR(255) NOT NULL,
+    "nameEn" VARCHAR(255) NOT NULL,
+    "nameFr" VARCHAR(255) NOT NULL,
+    "nameAr" VARCHAR(255) NOT NULL,
+    "description" TEXT,
+    "address" TEXT,
+    "phone" VARCHAR(20) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
+    "website" VARCHAR(255),
     "plan" "SchoolPlan" NOT NULL DEFAULT 'FREE',
+    "slug" VARCHAR(255) NOT NULL,
     "logoId" UUID,
-    "status" "SchoolStatus" NOT NULL DEFAULT 'ACTIVE',
+    "ownerId" UUID NOT NULL,
+    "status" "SchoolStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -227,7 +246,8 @@ CREATE TABLE "NotificationDelivery" (
 -- CreateTable
 CREATE TABLE "students" (
     "id" UUID NOT NULL,
-    "name" VARCHAR(255) NOT NULL,
+    "firstName" VARCHAR(255) NOT NULL,
+    "lastName" VARCHAR(255) NOT NULL,
     "dateOfBirth" DATE NOT NULL,
     "gender" "Gender" NOT NULL,
     "schoolId" UUID NOT NULL,
@@ -266,56 +286,6 @@ CREATE TABLE "teachers" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "teachers_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "nurses" (
-    "id" UUID NOT NULL,
-    "userId" UUID NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "nurses_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "owners" (
-    "id" UUID NOT NULL,
-    "userId" UUID NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "owners_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "directors" (
-    "id" UUID NOT NULL,
-    "userId" UUID NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "directors_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "managers" (
-    "id" UUID NOT NULL,
-    "userId" UUID NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "managers_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "drivers" (
-    "id" UUID NOT NULL,
-    "userId" UUID NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "drivers_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -378,7 +348,16 @@ CREATE UNIQUE INDEX "accounts_authId_key" ON "accounts"("authId");
 CREATE UNIQUE INDEX "accounts_avatarId_key" ON "accounts"("avatarId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "school_owner_accountId_key" ON "school_owner"("accountId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "schools_ownerId_key" ON "schools"("ownerId");
+
+-- CreateIndex
 CREATE INDEX "schools_plan_idx" ON "schools"("plan");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "schools_slug_key" ON "schools"("slug");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "schools_logoId_key" ON "schools"("logoId");
@@ -411,7 +390,7 @@ CREATE UNIQUE INDEX "NotificationTargetUser_targetingId_userId_key" ON "Notifica
 CREATE UNIQUE INDEX "students_avatarId_key" ON "students"("avatarId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "students_schoolId_key" ON "students"("schoolId");
+CREATE UNIQUE INDEX "students_schoolId_id_key" ON "students"("schoolId", "id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "parents_userId_key" ON "parents"("userId");
@@ -422,26 +401,17 @@ CREATE UNIQUE INDEX "parent_students_parentId_studentId_key" ON "parent_students
 -- CreateIndex
 CREATE UNIQUE INDEX "teachers_userId_key" ON "teachers"("userId");
 
--- CreateIndex
-CREATE UNIQUE INDEX "nurses_userId_key" ON "nurses"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "owners_userId_key" ON "owners"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "directors_userId_key" ON "directors"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "managers_userId_key" ON "managers"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "drivers_userId_key" ON "drivers"("userId");
-
 -- AddForeignKey
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_avatarId_fkey" FOREIGN KEY ("avatarId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "school_owner" ADD CONSTRAINT "school_owner_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "accounts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "schools" ADD CONSTRAINT "schools_logoId_fkey" FOREIGN KEY ("logoId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "schools" ADD CONSTRAINT "schools_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "school_owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "user_roles" ADD CONSTRAINT "user_roles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -499,21 +469,6 @@ ALTER TABLE "parent_students" ADD CONSTRAINT "parent_students_studentId_fkey" FO
 
 -- AddForeignKey
 ALTER TABLE "teachers" ADD CONSTRAINT "teachers_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "nurses" ADD CONSTRAINT "nurses_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "owners" ADD CONSTRAINT "owners_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "directors" ADD CONSTRAINT "directors_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "managers" ADD CONSTRAINT "managers_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "drivers" ADD CONSTRAINT "drivers_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "classSessions" ADD CONSTRAINT "classSessions_classId_fkey" FOREIGN KEY ("classId") REFERENCES "classes"("id") ON DELETE CASCADE ON UPDATE CASCADE;

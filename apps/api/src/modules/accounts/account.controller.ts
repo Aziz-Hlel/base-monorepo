@@ -25,7 +25,7 @@ export class AccountController {
   };
 
   me = async (req: AuthenticatedRequest, res: Response) => {
-    const user = await this.accountService.me(req.user);
+    const user = await this.accountService.me(req.token);
     res.status(200).json(user);
   };
 }

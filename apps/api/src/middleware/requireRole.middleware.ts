@@ -7,11 +7,11 @@ import { AccountRole } from '@/generated/prisma/enums';
 const requireRole = (role: AccountRole) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const userReq = req as AuthenticatedRequest;
-    if (!userReq.user) {
+    if (!userReq.token?.claims) {
       throw new UnauthorizedError('Unauthenticated');
     }
 
-    const userRole = userReq.user?.claims?.role;
+    const userRole = userReq.token.claims.accountRole;
 
     if (!userRole) {
       throw new PermissionDeniedError('User role missing');

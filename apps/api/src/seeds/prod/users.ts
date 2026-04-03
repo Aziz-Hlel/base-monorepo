@@ -50,8 +50,8 @@ export const seedProdUsers = async () => {
     await firebaseAuthService.setAccountClaims({
       authId: createdUser.authId,
       claims: {
-        id: createdUser.id,
-        role: createdUser.role,
+        accountId: createdUser.id,
+        accountRole: createdUser.role,
         users: [],
       },
     });

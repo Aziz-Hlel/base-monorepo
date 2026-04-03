@@ -24,7 +24,7 @@ export class UserController {
   createUserProfile = async (req: AuthenticatedRequest, res: Response<UserProfileResponse>) => {
     const parsedBody = createUserProfileRequestSchema.parse(req.body);
 
-    const userRole = req.user.claims?.role;
+    const userRole = req.token.claims?.accountRole;
     if (PERMISSION_SCORE[userRole] < PERMISSION_SCORE[parsedBody.role]) {
       throw new PermissionDeniedError(`Insufficient permissions to create a user with role ${parsedBody.role}`);
     }
@@ -36,7 +36,7 @@ export class UserController {
     const userId = getParam(req, 'id');
     const parsedBody = updateUserProfileRequestSchema.parse(req.body);
 
-    const userRole = req.user.claims?.role;
+    const userRole = req.token.claims?.accountRole;
 
     const response = await this.userService.updateUserProfile(userId, parsedBody, userRole);
     res.status(200).json(response);
@@ -44,7 +44,7 @@ export class UserController {
 
   deleteUserProfile = async (req: AuthenticatedRequest, res: Response<SimpleApiResponse>) => {
     const userToDeleteId = getParam(req, 'id');
-    const userRole = req.user.claims?.role;
+    const userRole = req.token.claims?.accountRole;
 
     await this.userService.deleteUser(userToDeleteId, userRole);
 
@@ -53,7 +53,7 @@ export class UserController {
 
   enableUser = async (req: AuthenticatedRequest, res: Response<SimpleApiResponse>) => {
     const userId = getParam(req, 'id');
-    const userRole = req.user.claims?.role;
+    const userRole = req.token.claims?.accountRole;
 
     await this.userService.enableUser(userId, userRole);
 
@@ -62,7 +62,7 @@ export class UserController {
 
   disableUser = async (req: AuthenticatedRequest, res: Response<SimpleApiResponse>) => {
     const userId = getParam(req, 'id');
-    const userRole = req.user.claims?.role;
+    const userRole = req.token.claims?.accountRole;
 
     await this.userService.disableUser(userId, userRole);
 

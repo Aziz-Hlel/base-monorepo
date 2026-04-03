@@ -26,7 +26,7 @@ const seedOwner = async ({
       accountId,
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
-      phoneNumber: faker.phone.number(),
+      phone: faker.phone.number(),
     },
     include: {
       school: true,
@@ -36,9 +36,8 @@ const seedOwner = async ({
   await firebaseAuthService.setAccountClaims({
     authId: authId,
     claims: {
-      id: accountId,
-      role: accountRole,
-      users: [],
+      accountId: accountId,
+      accountRole: accountRole,
     },
   });
   return createdOwner;

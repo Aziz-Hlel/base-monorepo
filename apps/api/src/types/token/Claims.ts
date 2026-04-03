@@ -2,13 +2,13 @@ import { AccountRole, UserRole } from '@/generated/prisma/client';
 import z from 'zod';
 
 export type NewAdminCustomClaims = {
-  id: string;
-  role: AccountRole;
+  accountId: string;
+  accountRole: AccountRole;
 };
 
 export const claimsSchema = z.object({
-  id: z.uuid(),
-  role: z.enum(AccountRole),
+  accountId: z.uuid(),
+  accountRole: z.enum(AccountRole),
 });
 
 export type Claims = z.infer<typeof claimsSchema>;

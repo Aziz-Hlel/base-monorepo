@@ -28,7 +28,7 @@ export class AuthController {
   };
 
   me = async (req: AuthenticatedRequest, res: Response) => {
-    const idToken = req.user;
+    const idToken = req.token;
 
     const user = await this.authService.me(idToken);
 

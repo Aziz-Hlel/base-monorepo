@@ -66,7 +66,7 @@ model Owner {
 
   firstName String @db.VarChar(255)
   lastName String @db.VarChar(255)
-  phoneNumber String @db.VarChar(20)
+  phone String @db.VarChar(20)  
   
 
 
@@ -90,9 +90,12 @@ model School {
   nameFr String @db.VarChar(255)
   nameAr String @db.VarChar(255)
   
-  address String @db.Text
+  description String? @db.Text
+  address String? @db.Text
   phone String @db.VarChar(20)
   email String @db.VarChar(255)
+  website String? @db.VarChar(255)
+  
   plan SchoolPlan @default(FREE)
   slug String @db.VarChar(255)
 

@@ -11,5 +11,5 @@ import { DecodedIdTokenWithClaims as DecodedTokenWithClaims } from './DecodedTok
 // }
 
 export interface AuthenticatedRequest extends Request {
-  user: DecodedTokenWithClaims;
+  token: DecodedTokenWithClaims;
 }

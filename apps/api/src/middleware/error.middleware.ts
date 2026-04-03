@@ -31,10 +31,7 @@ export const globalErrorHandler = (error: Error, req: Request, res: Response<Api
   // Zod validation errors
   if (error instanceof ZodError) {
     const apiError = handleZodError(error, req);
-    logger.warn(
-      { err: { ...error, message: JSON.parse(error.message), stack: error.stack }, path },
-      'Validation error',
-    );
+    logger.warn({ err: { ...error, message: JSON.parse(error.message) }, path }, 'Validation error');
     return res.status(400).json(apiError);
   }
 

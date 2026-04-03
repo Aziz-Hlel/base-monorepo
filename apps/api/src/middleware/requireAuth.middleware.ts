@@ -2,6 +2,7 @@ import { NextFunction, Response, Request } from 'express';
 import { DecodedIdTokenWithClaims } from '../types/auth/DecodedTokenWithClaims';
 import { firebaseAuthService } from '../firebase/service/firebase.auth.service';
 import { AuthenticatedRequest } from '../types/auth/AuthenticatedRequest';
+import { logger } from '@/bootstrap/logger.init';
 
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -17,12 +18,11 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
     }
     const decoded = await firebaseAuthService.verifyToken(token);
 
-    (req as AuthenticatedRequest).user = decoded as DecodedIdTokenWithClaims;
-
+    (req as AuthenticatedRequest).token = decoded as DecodedIdTokenWithClaims;
     next();
     return;
   } catch (error) {
-    console.error('Authentication error:', error);
+    logger.error({ error }, 'Authentication error:');
     return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };

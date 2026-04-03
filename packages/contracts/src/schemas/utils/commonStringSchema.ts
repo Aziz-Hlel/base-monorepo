@@ -1,6 +1,6 @@
 import z from 'zod';
 
-const removeSpecialCharacters = (value: string) => value.replace(/[^a-zA-Z0-9]/g, '');
+const removeSpecialCharacters = (value: string) => value.replace(/[^a-zA-Z0-9 ]/g, '');
 
 type CommonStringSchemaProps = {
   min?: number;

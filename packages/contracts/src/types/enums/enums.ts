@@ -35,6 +35,7 @@ export type SchoolPlan = (typeof SchoolPlan)[keyof typeof SchoolPlan];
 
 export const SchoolStatus = {
   ACTIVE: 'ACTIVE',
+  PENDING: 'PENDING',
   SUSPENDED: 'SUSPENDED',
   DELETED: 'DELETED',
 } as const;

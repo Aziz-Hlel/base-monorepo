@@ -9,7 +9,7 @@ export class OwnerController {
 
   create = async (req: AuthenticatedRequest, res: Response) => {
     const schema = createOwnerRequestSchema.parse(req.body);
-    const token = req.user;
+    const token = req.token;
     const user = await this.ownerService.create({ schema, token });
     res.status(201).json(user);
   };
