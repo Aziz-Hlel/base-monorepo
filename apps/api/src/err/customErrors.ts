@@ -9,7 +9,6 @@ interface IAppError {
   clientDisplayMessage?: string;
   message?: string;
   customLog?: string;
-  stack?: string;
   cause?: Error;
 }
 
@@ -18,17 +17,14 @@ export class AppError extends Error {
   name: ErrNames;
   clientDisplayMessage?: string;
   customLog?: string;
-  stack?: string;
   cause?: Error;
 
-  constructor({ errorObject, clientDisplayMessage, message, customLog, stack, cause }: IAppError) {
-    super(message || errorObject.message);
+  constructor({ errorObject, clientDisplayMessage, message, customLog, cause }: IAppError) {
+    super(message || errorObject.message, { cause });
     this.name = errorObject.name;
     this.status = errorObject.status;
     this.clientDisplayMessage = clientDisplayMessage;
     this.customLog = customLog;
-    this.stack = stack;
-    this.cause = cause;
   }
 
   static isAppError(error: Error): error is AppError {
@@ -45,7 +41,32 @@ export class AppError extends Error {
     ENV.NODE_ENV !== 'production' && error.stack && (apiResponse.stack = error.stack);
     return apiResponse;
   }
+
+  static toApppError<T extends Error>({
+    error,
+    name,
+    message,
+    clientDisplayMessage,
+    customLog,
+  }: ToAppErrorProps<T>): AppError {
+    if (AppError.isAppError(error)) {
+      return error;
+    }
+    error.name = name;
+    error.message = message;
+    error.clientDisplayMessage = clientDisplayMessage;
+    error.customLog = customLog;
+    return error;
+  }
 }
+
+type ToAppErrorProps<T extends Error> = {
+  error: T;
+  name: ErrNames;
+  message?: string;
+  clientDisplayMessage?: string;
+  customLog?: string;
+};
 
 type CusmtomErrorPayload =
   | string

@@ -6,7 +6,7 @@
 
 @baseUrl = http://localhost:10000/api
 
-@email = tigana004@gmail.com
+@email = tigana006@gmail.com
 @password = 12345678
 
 ### 
@@ -63,7 +63,7 @@ Authorization: Bearer {{firebase_token_refresh.response.body.id_token}}
 # @name createSchool
 POST {{baseUrl}}/schools
 Content-Type: application/json
-Authorization: Bearer {{firebase_token_refresh.response.body.id_token}}
+Authorization: Bearer {{firebase_login.response.body.idToken}}
 
 {
     "nameEn": "RestClient School",

@@ -5,6 +5,8 @@ import ENV from '../config/env';
 import { AppError } from '../err/customErrors';
 import { ApiError } from '../err/apiError.type';
 import { logger } from '../bootstrap/logger.init';
+import { AppError2 } from '@/err/customErrors2';
+import { serializeUnknownError } from '@/utils/serializeUnknownError';
 
 const handleZodError = (error: ZodError<unknown>, req: Request): ApiError => {
   const formatted: Record<string, string> = {};
@@ -35,6 +37,10 @@ export const globalErrorHandler = (error: Error, req: Request, res: Response<Api
     return res.status(400).json(apiError);
   }
 
+  if (error instanceof AppError2) {
+    logger.warn({ err: error, cause: serializeUnknownError(error.cause), path }, 'Application error');
+    return res.status(error.status).json(AppError2.toApiErrorResponse(error, req));
+  }
   if (AppError.isAppError(error)) {
     logger.warn({ err: error, path }, 'Application error');
     return res.status(error.status).json(AppError.toApiErrorResponse(error, req));

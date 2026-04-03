@@ -5,6 +5,7 @@ import { ConflictError } from '@/err/customErrors';
 import { isUniqueConstraintError } from '@/utils/prismaError';
 import { UpdateSchoolRequest } from '@repo/contracts/schemas/school/updateSchoolRequest';
 import { logger } from '@/bootstrap/logger.init';
+import { ConflictError2 } from '@/err/customErrors2';
 
 export class SchoolRepo {
   create = async ({
@@ -29,11 +30,15 @@ export class SchoolRepo {
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (isUniqueConstraintError(error)) {
-          throw new ConflictError({
-            message: 'School already exists',
-            clientDisplayMessage: 'School already exists',
-            cause: error,
-          });
+          // logger.error(error);
+          throw new ConflictError2({ message: 'School already exists', error });
+
+          // throw error;
+          // throw new ConflictError({
+          //   message: 'School already exists',
+          //   clientDisplayMessage: 'School already exists',
+          //   cause: error,
+          // });
         }
       }
       throw error;
