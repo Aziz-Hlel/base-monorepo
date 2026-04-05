@@ -1,0 +1,118 @@
+
+enum TimeOfDayEnum {
+  MORNING
+  EVENING
+}
+
+
+enum MajorEnum {
+  MATH
+  SCIENCE
+  LETTRE
+  TECHNIQUE
+  ECO
+  INFORMATIQUE
+  SPORT
+}
+
+enum TermEnum {
+  PRINCIPAL
+  RETAKE
+}
+
+
+model Major {
+    id String @id @default(uuid())
+    name String @unique @db.VarChar(255)
+    
+
+    exams MajorExams[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+
+model MajorExams {
+    id String @id @default(uuid())
+    name String 
+
+    date DateTime @db.Date
+    startTime DateTime @db.Time
+    endTime DateTime @db.Time
+    timeOfDay TimeOfDayEnum
+    term TermEnum 
+
+
+    majorId String @db.Uuid
+    major Major @relation(fields: [majorId], references: [id])
+    
+    @@index([term])
+    
+    @@unique([majorId, name, term])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+
+enum OptionalSubjectEnum {
+  SPANISH
+  ITALIAN
+  GERMAN
+}
+
+
+model OptionalSubject {
+    id String @id @default(uuid())
+    name OptionalSubjectEnum @unique 
+
+    date DateTime @db.Date
+    startTime DateTime @db.Time
+    endTime DateTime @db.Time
+    timeOfDay TimeOfDayEnum
+    term TermEnum
+
+    @@index([term])
+
+    @@unique([name, term])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+enum CityEnum {
+    YAOUNDE
+    DOUALA
+    BAMENDA
+    MAROUA
+    GAROUA
+    KUMBO
+}
+
+
+model School {
+    id String @id @default(uuid())
+    name String @db.VarChar(255)
+    publicId String // @unique
+    city CityEnum 
+
+    classes Class[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+
+model Class {
+    id String @id @default(uuid())
+    name String @db.VarChar(255)
+
+    schoolId String @db.Uuid
+    school School @relation(fields: [schoolId], references: [id])
+
+    @@unique([schoolId, name])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
