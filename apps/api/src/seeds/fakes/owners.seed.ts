@@ -1,7 +1,7 @@
 import { prisma } from '@/bootstrap/db.init';
 import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
 import { AccountRole } from '@/generated/prisma/enums';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/dist/';
 
 const seedOwner = async ({
   accountId,

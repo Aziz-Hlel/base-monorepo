@@ -19,8 +19,8 @@ type DataTableToolbarProps = {
 
 export function DataTableToolbar({ table, filters = [] }: DataTableToolbarProps) {
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex flex-1 flex-col-reverse items-start gap-y-2 sm:flex-row sm:items-center sm:space-x-2">
+    <div className='flex items-center justify-between'>
+      <div className='flex flex-1 flex-col-reverse items-start gap-y-2 sm:flex-row sm:items-center sm:space-x-2'>
         <SearchInput table={table} />
         <EnumFilterToolBar table={table} filters={filters} />
       </div>

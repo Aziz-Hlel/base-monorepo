@@ -90,17 +90,17 @@ const EditUser = () => {
   console.log(form.formState.errors);
   return (
     <Dialog onOpenChange={onOpenChange} open={dialogIsOpen}>
-      <DialogContent className="sm:max-w-106.25">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <DialogContent className='sm:max-w-106.25'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
           <DialogHeader>
-            <DialogTitle className=" text-center">Edit User</DialogTitle>
-            <DialogDescription className=" text-center">Fill the form below to edit the user.</DialogDescription>
+            <DialogTitle className='text-center'>Edit User</DialogTitle>
+            <DialogDescription className='text-center'>Fill the form below to edit the user.</DialogDescription>
             <Separator />
           </DialogHeader>
 
           <FieldGroup>
             <Controller
-              name="username"
+              name='username'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -109,7 +109,7 @@ const EditUser = () => {
                     {...field}
                     id={`username-input`}
                     aria-invalid={fieldState.invalid}
-                    placeholder="Username"
+                    placeholder='Username'
                     value={field.value ?? undefined}
                   />
                   <FieldError errors={[fieldState.error]} />
@@ -118,16 +118,16 @@ const EditUser = () => {
             />
 
             <Controller
-              name="email"
+              name='email'
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className="cursor-not-allowed">
+                <Field data-invalid={fieldState.invalid} className='cursor-not-allowed'>
                   <FieldLabel htmlFor={`email-input`}>Email</FieldLabel>
                   <Input
                     {...field}
                     id={`email-input`}
                     aria-invalid={fieldState.invalid}
-                    placeholder="Email"
+                    placeholder='Email'
                     aria-disabled
                     disabled
                   />
@@ -137,10 +137,10 @@ const EditUser = () => {
             />
 
             <Controller
-              name="role"
+              name='role'
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className="flex">
+                <Field data-invalid={fieldState.invalid} className='flex'>
                   <FieldLabel htmlFor={`role-input`}>Role</FieldLabel>
 
                   <Select
@@ -150,8 +150,8 @@ const EditUser = () => {
                         field.onChange(value);
                     }}
                   >
-                    <SelectTrigger className="w-45">
-                      <SelectValue placeholder="Select role" />
+                    <SelectTrigger className='w-45'>
+                      <SelectValue placeholder='Select role' />
                     </SelectTrigger>
 
                     <SelectContent>
@@ -173,7 +173,7 @@ const EditUser = () => {
                                     value={key}
                                     aria-disabled
                                     onSelect={(e) => e.preventDefault()}
-                                    className="opacity-50 cursor-not-allowed"
+                                    className='cursor-not-allowed opacity-50'
                                   >
                                     {value}
                                   </SelectItem>
@@ -199,7 +199,7 @@ const EditUser = () => {
             />
 
             <Controller
-              name="profile.phoneNumber"
+              name='profile.phoneNumber'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -207,10 +207,10 @@ const EditUser = () => {
                   <PhoneInput
                     {...field}
                     value={field.value ?? undefined}
-                    defaultCountry="BH"
+                    defaultCountry='BH'
                     id={`phoneNumber-input`}
                     aria-invalid={fieldState.invalid}
-                    placeholder="Phone Number"
+                    placeholder='Phone Number'
                   />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
@@ -218,7 +218,7 @@ const EditUser = () => {
             />
 
             <Controller
-              name="profile.address"
+              name='profile.address'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -228,7 +228,7 @@ const EditUser = () => {
                     value={field.value ?? ''}
                     id={`address-input`}
                     aria-invalid={fieldState.invalid}
-                    placeholder="Address"
+                    placeholder='Address'
                   />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
@@ -237,11 +237,11 @@ const EditUser = () => {
           </FieldGroup>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline" onClick={handleCancel}>
+              <Button variant='outline' onClick={handleCancel}>
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" className=" w-28" disabled={isPending}>
+            <Button type='submit' className='w-28' disabled={isPending}>
               {isPending ? <Spinner /> : <span>Save changes</span>}
             </Button>
           </DialogFooter>

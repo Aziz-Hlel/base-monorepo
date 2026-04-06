@@ -4,7 +4,7 @@ const HeaderContainer: React.FC<React.ComponentProps<'div'>> = ({ children, ...p
   return (
     <div
       className={cn(
-        "truncate cursor-pointer flex items-center justify-start space-x-2 whitespace-nowrap w-auto rounded-md text-sm font-medium transition-all [&_svg:not([class*='size-'])]:size-4  ps-2 ",
+        "flex w-auto cursor-pointer items-center justify-start space-x-2 truncate rounded-md ps-2 text-sm font-medium whitespace-nowrap transition-all [&_svg:not([class*='size-'])]:size-4",
         props.className,
       )}
       {...props}

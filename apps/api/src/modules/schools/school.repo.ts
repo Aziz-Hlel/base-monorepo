@@ -31,7 +31,7 @@ export class SchoolRepo {
         if (isUniqueConstraintError(error)) {
           throw new ConflictError({
             message: 'School already exists',
-            clientDisplayMessage: 'School already exists',
+            clientMessage: 'School already exists',
             cause: error,
           });
         }

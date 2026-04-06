@@ -1,8 +1,7 @@
 import { prisma } from '@/bootstrap/db.init';
 import { firebaseUserService } from '@/firebase/service/firebase.user.service';
-import { Prisma } from '@/generated/prisma/client';
-import { AccountRole, AccountStatus } from '@/generated/prisma/enums';
-import { faker } from '@faker-js/faker';
+import { AccountRole, AccountStatus, Prisma } from '@/generated/prisma/client';
+import { faker } from '@faker-js/faker/dist/';
 
 type CreateAccountPayload = Prisma.XOR<Prisma.AccountCreateInput, Prisma.AccountUncheckedCreateInput>;
 
@@ -19,7 +18,7 @@ const seedAccount = async ({ email, accountRole }: { email: string; accountRole?
   if (accountExists) {
     return accountExists;
   }
-
+  console.log(accountRole ?? faker.helpers.arrayElement(Object.values(AccountRole)));
   const accountRecord = await firebaseUserService.createAccount({
     email: email,
     password: '12345678',
@@ -31,6 +30,7 @@ const seedAccount = async ({ email, accountRole }: { email: string; accountRole?
     email,
     username: faker.internet.username(),
     authId: accountRecord.uid,
+    role: accountRole ?? faker.helpers.arrayElement(Object.values(AccountRole)),
     provider: faker.helpers.arrayElement(['fake', 'google.com', 'apple.com', 'password']),
     status: AccountStatus.ACTIVE,
     isEmailVerified: faker.datatype.boolean(),

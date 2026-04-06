@@ -16,7 +16,7 @@ const UsersIndex = () => {
           { title: 'Profile', href: '/users/profile' },
         ]}
       />
-      <div className=" w-full mx-auto">
+      <div className='mx-auto w-full'>
         <Card>
           <CardHeader>
             <CardTitle>User List</CardTitle>

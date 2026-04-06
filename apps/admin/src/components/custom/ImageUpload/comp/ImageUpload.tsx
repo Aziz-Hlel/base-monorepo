@@ -53,7 +53,7 @@ const ImageUpload = ({ initMedia, mediaErrors, handleMediaUpload, clearMediaErro
 
   return (
     <>
-      <div className=" h-105 ">
+      <div className='h-105'>
         {currentDisplayed === 'fileUpload' && (
           <FileUploadComp
             onFileChange={onFileChange}
@@ -77,11 +77,11 @@ const ImageUpload = ({ initMedia, mediaErrors, handleMediaUpload, clearMediaErro
         )}
 
         {currentDisplayed === 'loading' && (
-          <div className="relative w-full h-full flex flex-col justify-start ">
-            <div className=" text-sm text-left w-full font-semibold mb-1">Thumbnail</div>
-            <div className=" text-sm text-left w-full text-gray-600 font-light mb-4">Loading ...</div>
-            <div className="flex justify-center items-center mx-auto gap-2 h-full">
-              <span className=" -translate-y-0.5">Loading</span>
+          <div className='relative flex h-full w-full flex-col justify-start'>
+            <div className='mb-1 w-full text-left text-sm font-semibold'>Thumbnail</div>
+            <div className='mb-4 w-full text-left text-sm font-light text-gray-600'>Loading ...</div>
+            <div className='mx-auto flex h-full items-center justify-center gap-2'>
+              <span className='-translate-y-0.5'>Loading</span>
               <CircularProgressBar progress={progress} />
             </div>
           </div>
@@ -98,7 +98,7 @@ const ImageUpload = ({ initMedia, mediaErrors, handleMediaUpload, clearMediaErro
           />
         )}
         {mediaErrors.map((errorMessage, index) => (
-          <div key={index} className="text-red-500 text-sm">
+          <div key={index} className='text-sm text-red-500'>
             {errorMessage}
           </div>
         ))}

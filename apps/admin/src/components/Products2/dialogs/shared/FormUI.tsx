@@ -21,12 +21,12 @@ const FormUI = ({
   return (
     <>
       <Controller
-        name="description"
+        name='description'
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor={`description-input`}>Description</FieldLabel>
-            <Textarea {...field} id={`description-input`} aria-invalid={fieldState.invalid} placeholder="Description" />
+            <Textarea {...field} id={`description-input`} aria-invalid={fieldState.invalid} placeholder='Description' />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}

@@ -33,7 +33,7 @@ function App() {
   const dir: 'rtl' | 'ltr' = 'ltr';
 
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
       <div dir={dir}>
         <Toaster />
         <QueryClientProvider client={queryClient}>
@@ -42,23 +42,23 @@ function App() {
               <ScrollToTop />
               <AuthProvider>
                 <Routes>
-                  <Route path="/signin" element={<SignIn />} />
-                  <Route path="/signup" element={<SignUp />} />
+                  <Route path='/signin' element={<SignIn />} />
+                  <Route path='/signup' element={<SignUp />} />
 
                   <Route element={<AuthenticatedRoutes />}>
                     <Route element={<UserSessionProvider />}>
                       <Route element={<Sidebar dir={dir} />}>
-                        <Route path="/" element={<Home />} />
-                        <Route index path="/profile" element={<Profile />} />
-                        <Route path="users/" element={<UserPage />} />
-                        <Route path="products/" element={<ProductPage />} />
-                        <Route path="products2/" element={<Product2Page />} />
-                        <Route path="notification/" element={<NotificationPage />} />
+                        <Route path='/' element={<Home />} />
+                        <Route index path='/profile' element={<Profile />} />
+                        <Route path='users/' element={<UserPage />} />
+                        <Route path='products/' element={<ProductPage />} />
+                        <Route path='products2/' element={<Product2Page />} />
+                        <Route path='notification/' element={<NotificationPage />} />
                       </Route>
                     </Route>
                   </Route>
 
-                  <Route path="*" element={<NotFound />} />
+                  <Route path='*' element={<NotFound />} />
                 </Routes>
               </AuthProvider>
             </Router>

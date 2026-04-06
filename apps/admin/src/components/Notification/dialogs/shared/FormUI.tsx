@@ -16,7 +16,7 @@ const FormUI = ({
   return (
     <>
       <Controller
-        name="description"
+        name='description'
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
@@ -26,7 +26,7 @@ const FormUI = ({
               value={field.value ?? undefined}
               id={`description-input`}
               aria-invalid={fieldState.invalid}
-              placeholder="Description"
+              placeholder='Description'
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
@@ -34,12 +34,12 @@ const FormUI = ({
       />
 
       <Controller
-        name="recipients.type"
+        name='recipients.type'
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor={`recipients-type-input`}>Recipients</FieldLabel>
-            <Tabs {...field} value={field.value} onValueChange={field.onChange} className="w-100">
+            <Tabs {...field} value={field.value} onValueChange={field.onChange} className='w-100'>
               <TabsList>
                 {Object.values(notificationRecipientType).map((type) => (
                   <TabsTrigger key={type} value={type}>
@@ -58,7 +58,7 @@ const FormUI = ({
         )}
       />
 
-      <MediaUpload initMedia={initMedia} form={form} fieldName="payload.en.data" mediaErrors={[]} />
+      <MediaUpload initMedia={initMedia} form={form} fieldName='payload.en.data' mediaErrors={[]} />
     </>
   );
 };

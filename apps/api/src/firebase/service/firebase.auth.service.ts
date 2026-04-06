@@ -50,6 +50,7 @@ class FirebaseAuthService {
       }
       const firebaseToken = await this.firebaseSession.verifyIdToken(token);
       this.validateClaimsSchema(firebaseToken.claims);
+      console.log(firebaseToken.claims);
       return firebaseToken as DecodedIdTokenWithClaims;
     } catch (error: unknown) {
       if (isFirebaseError(error)) handleFirebaseError(error);
@@ -91,9 +92,22 @@ class FirebaseAuthService {
   };
 
   private validateClaimsSchema = (claims: Object | undefined): claims is Claims => {
+    /**
+     * // !
+     * A very sricky situation , an account created a long time ago, with claims set long time ago too, now he s trying to login and you run this
+     * if the claims schema changed in the meantime, this will fail, so we need to handle this case
+     * you might need to reset it s claims to return a 401 but at the same time you dont want to return that in the login, since this one get
+     * triggred in the logins too,
+     * so the solution going to be is to re-set the claims to the new schema, be careful here you might run into a cicular hell if this validation
+     * does not conform with the setClaims method,
+     * another thing you might add a new field in the verifyToken func to trigger validation or not so you cant skip in the login and the moment he sents another
+     * request post login it ll return 401 and he'll have to refresh then
+     * another fuit for thought i think you might have to treat this claims and the chnaging of the claims very carefully as if it s a mogration thing
+     * otherwise you can block all users from loggin into the app with a simple or stupid mistake
+     */
     const result = claimsSchema.safeParse(claims);
     if (!result.success) {
-      throw new UnauthorizedError('Invalid claims schema');
+      throw new UnauthorizedError({ message: 'Invalid claims schema', cause: result.error });
     }
     return true;
   };

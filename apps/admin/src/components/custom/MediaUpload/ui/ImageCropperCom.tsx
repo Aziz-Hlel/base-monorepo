@@ -20,10 +20,10 @@ export default function ImageCropperCom({ aspect: aspectProp }: ImageCropperComP
   const handleCancel = () => handleFileChange(null);
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-center items-center mr-auto ">
-      <div className="border border-black rounded-lg border-dashed h-full w-full p-2 ">
-        <div className=" relative w-full h-68   ">
-          <div className="bg-white">
+    <div className='relative mr-auto flex h-full w-full flex-col items-center justify-center'>
+      <div className='h-full w-full rounded-lg border border-dashed border-black p-2'>
+        <div className='relative h-68 w-full'>
+          <div className='bg-white'>
             <Cropper
               image={image}
               crop={crop}
@@ -38,23 +38,23 @@ export default function ImageCropperCom({ aspect: aspectProp }: ImageCropperComP
           </div>
         </div>
 
-        <div className=" w-full mr-auto">
+        <div className='mr-auto w-full'>
           <input
-            type="range"
+            type='range'
             value={zoom}
             min={1}
             max={3}
             step={0.1}
-            aria-labelledby="Zoom"
+            aria-labelledby='Zoom'
             onChange={onZoomChange}
-            className=" w-full"
+            className='w-full'
           />
         </div>
-        <div className=" w-full mr-auto flex justify-end gap-4">
-          <Button onClick={handleCancel} variant="outline" className="cursor-pointer">
+        <div className='mr-auto flex w-full justify-end gap-4'>
+          <Button onClick={handleCancel} variant='outline' className='cursor-pointer'>
             Cancel
           </Button>
-          <Button onClick={process_upload_File} variant="default" className="cursor-pointer">
+          <Button onClick={process_upload_File} variant='default' className='cursor-pointer'>
             Confirm
           </Button>
         </div>

@@ -16,11 +16,11 @@ const ToggleColumnVisibility = <T,>({ table }: ToggleColumnVisibilityProps<T>) =
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="">
+        <Button variant='outline' className=''>
           Columns <ChevronDown />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align='end'>
         {table
           .getAllColumns()
           .filter((column) => column.getCanHide())
@@ -28,7 +28,7 @@ const ToggleColumnVisibility = <T,>({ table }: ToggleColumnVisibilityProps<T>) =
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}
-                className="capitalize"
+                className='capitalize'
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >

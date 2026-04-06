@@ -29,35 +29,35 @@ export function NavUser() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              size='lg'
+              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className='h-8 w-8 rounded-lg'>
                 <AvatarImage src={user.avatar ?? undefined} alt={user.username ?? 'User avatar'} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.username}</span>
-                <span className="truncate text-xs">{user.email}</span>
+              <div className='grid flex-1 text-left text-sm leading-tight'>
+                <span className='truncate font-medium'>{user.username}</span>
+                <span className='truncate text-xs'>{user.email}</span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <ChevronsUpDown className='ml-auto size-4' />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+            className='w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg'
             side={isMobile ? 'bottom' : 'right'}
-            align="end"
+            align='end'
             sideOffset={4}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
+            <DropdownMenuLabel className='p-0 font-normal'>
+              <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
+                <Avatar className='h-8 w-8 rounded-lg'>
                   <AvatarImage src={user.avatar ?? undefined} alt={user.username ?? 'User avatar'} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
                 </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.username}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                <div className='grid flex-1 text-left text-sm leading-tight'>
+                  <span className='truncate font-medium'>{user.username}</span>
+                  <span className='truncate text-xs'>{user.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -65,10 +65,10 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={logout}
-              className="group cursor-pointer  hover:bg-red-500 hover:text-white "
-              variant="destructive"
+              className='group cursor-pointer hover:bg-red-500 hover:text-white'
+              variant='destructive'
             >
-              <LogOut className=" group-hover:text-white" />
+              <LogOut className='group-hover:text-white' />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -50,7 +50,7 @@ const DisableUser = () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
-            <Button onClick={disableUser} className="bg-red-600 hover:bg-red-500 w-20" disabled={isPending}>
+            <Button onClick={disableUser} className='w-20 bg-red-600 hover:bg-red-500' disabled={isPending}>
               {!isPending ? <span>Disable</span> : <Spinner />}
             </Button>
           </AlertDialogFooter>

@@ -8,10 +8,14 @@ import { requireAuth } from '@/middleware/requireAuth.middleware';
 export const createSchoolRoute = (controller: SchoolController) => {
   const router = Router();
   router.post('/', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.create));
-  router.put('/:schoolId', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.update));
-  router.get('/:schoolId', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.getById));
+
   router.get('/', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.getPage));
   router.get('/my-school', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.getMySchool));
+  router.get('/:schoolId', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.getById));
+
+  router.put('/:schoolId', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.update));
+
   router.delete('/:schoolId', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.delete));
+
   return router;
 };

@@ -1,6 +1,6 @@
 import { prisma } from '@/bootstrap/db.init';
 import { SchoolPlan } from '@/generated/prisma/client';
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/dist/';
 import { generateFakeMediaInstance } from '../helper/generateSeedMedia';
 
 const seedSchool = async ({ ownerId, schoolName }: { ownerId: string; schoolName: string }) => {

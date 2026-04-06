@@ -55,13 +55,6 @@ class FirebaseUserService {
         password,
         displayName,
       });
-      firebaseAuthService.setAccountClaims({
-        authId: userRecord.uid,
-        claims: {
-          accountId: userRecord.uid,
-          accountRole: role,
-        },
-      });
 
       return userRecord;
     } catch (error: unknown) {

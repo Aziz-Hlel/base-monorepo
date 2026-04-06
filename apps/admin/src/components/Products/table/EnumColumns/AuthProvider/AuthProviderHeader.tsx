@@ -8,7 +8,7 @@ const AuthProviderHeader = ({ column }: { column: Column<TableRowType> }) => {
     <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <span className=" underline hover:cursor-help">A.P</span>
+          <span className='underline hover:cursor-help'>A.P</span>
         </TooltipTrigger>
         <TooltipContent>
           <p>Auth Provider</p>

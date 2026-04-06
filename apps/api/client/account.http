@@ -6,7 +6,7 @@
 
 @baseUrl = http://localhost:10000/api
 
-@email = tigana004@gmail.com
+@email = tigana137@gmail.com
 @password = 12345678
 
 ### 
@@ -79,24 +79,6 @@ Authorization: Bearer {{firebase_token_refresh.response.body.id_token}}
 }
 
 
-###
-# @name updateSchool
-PUT {{baseUrl}}/schools/{{createSchool.response.body.id}}
-Content-Type: application/json
-Authorization: Bearer {{firebase_token_refresh.response.body.id_token}}
-
-{
-    "nameEn": "Updated RestClient School",
-    "nameFr": "Updated RestClient School",
-    "nameAr": "Updated RestClient School",
-    "description": "Updated RestClient School description",
-    "address": "Updated RestClient School address",
-    "phone": "+212612345678",
-    "email": "restclientschool@test.com",
-    "logoId": null,
-    "website": "https://www.google.com"
-    
-}
 
 
 
@@ -127,5 +109,25 @@ Content-Type: application/json
 # @name getMySchool
 GET {{baseUrl}}/schools/my-school
 Content-Type: application/json
-Authorization: Bearer {{firebase_token_refresh.response.body.id_token}}
+Authorization: Bearer {{firebase_login.response.body.idToken}}
 
+
+
+###
+# @name updateSchool
+PUT {{baseUrl}}/schools/{{getMySchool.response.body.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "nameEn": "Updated RestClient School",
+    "nameFr": "Updated RestClient School",
+    "nameAr": "Updated RestClient School",
+    "description": "Updated RestClient School description",
+    "address": "Updated RestClient School address",
+    "phone": "+212612345678",
+    "email": "restclientschool@test.com",
+    "logoId": null,
+    "website": "https://www.google.com"
+    
+}

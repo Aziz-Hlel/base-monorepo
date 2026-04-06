@@ -64,7 +64,7 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
     {
       key: 'edit',
       label: 'Edit',
-      icon: <UserPen size={16} className="text-green-500" />,
+      icon: <UserPen size={16} className='text-green-500' />,
       isVisible: true,
 
       onClick: () => {
@@ -75,7 +75,7 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
     {
       key: 'disable',
       label: 'Disable',
-      icon: <CircleMinus size={16} className="text-amber-500" />,
+      icon: <CircleMinus size={16} className='text-amber-500' />,
       isVisible: !isDisabled,
       onClick: () => {
         setCurrentRow(row.original);
@@ -85,7 +85,7 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
     {
       key: 'enable',
       label: 'Enable',
-      icon: <CircleMinus size={16} className="text-blue-500" />,
+      icon: <CircleMinus size={16} className='text-blue-500' />,
       isVisible: isDisabled,
       onClick: () => {
         setCurrentRow(row.original);
@@ -95,7 +95,7 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
     {
       key: 'delete',
       label: 'Delete',
-      icon: <Trash2 size={16} className="text-red-500" />,
+      icon: <Trash2 size={16} className='text-red-500' />,
       isVisible: true,
       onClick: () => {
         setCurrentRow(row.original);
@@ -110,14 +110,14 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
 
   return (
     <>
-      <RowContainer className="justify-end ps-0">
+      <RowContainer className='justify-end ps-0'>
         <DropdownMenu modal={false}>
-          <DropdownMenuTrigger asChild className=" flex justify-center">
-            <Button variant="ghost" className="flex  p-0 data-[state=open]:bg-muted has-[>svg]:px-0  h-fit">
-              <EllipsisVertical className=" size-4 rotate-90 rounded-full hover:bg-gray-200  cursor-pointer" />
+          <DropdownMenuTrigger asChild className='flex justify-center'>
+            <Button variant='ghost' className='data-[state=open]:bg-muted flex h-fit p-0 has-[>svg]:px-0'>
+              <EllipsisVertical className='size-4 rotate-90 cursor-pointer rounded-full hover:bg-gray-200' />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40">
+          <DropdownMenuContent align='end' className='w-40'>
             {actions
               .filter((action) => action.isVisible)
               .map((action) => (
@@ -131,7 +131,7 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
                     ) : (
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span className="opacity-50">{action.label}</span>
+                          <span className='opacity-50'>{action.label}</span>
                         </TooltipTrigger>
                         <TooltipContent>
                           <p>{action.tooltipMessage}</p>

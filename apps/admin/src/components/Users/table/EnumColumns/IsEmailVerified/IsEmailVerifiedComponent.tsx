@@ -7,7 +7,7 @@ const IsEmailVerifiedComponent = ({ isEmailVerified }: { isEmailVerified: boolea
       <>
         <Tooltip>
           <TooltipTrigger>
-            <MailCheck className="h-4 w-4 text-green-500" />
+            <MailCheck className='h-4 w-4 text-green-500' />
           </TooltipTrigger>
           <TooltipContent>
             <p>Email is verified</p>
@@ -21,7 +21,7 @@ const IsEmailVerifiedComponent = ({ isEmailVerified }: { isEmailVerified: boolea
       <>
         <Tooltip>
           <TooltipTrigger>
-            <MailX className="h-4 w-4 text-gray-500" />
+            <MailX className='h-4 w-4 text-gray-500' />
           </TooltipTrigger>
           <TooltipContent>
             <p>Email is not verified</p>

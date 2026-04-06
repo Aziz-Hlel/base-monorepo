@@ -63,8 +63,8 @@ const UpdateDialogInner = ({ selectedRow }: { selectedRow: TableRowType }) => {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex flex-col h-full">
-      <div className="flex-1 min-h-0 overflow-y-auto pr-2 overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400">
+    <form onSubmit={form.handleSubmit(onSubmit)} className='flex h-full flex-col space-y-6'>
+      <div className='scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400 min-h-0 flex-1 overflow-y-auto overscroll-contain pr-2'>
         <FieldGroup>
           <FormUI
             form={form}
@@ -78,11 +78,11 @@ const UpdateDialogInner = ({ selectedRow }: { selectedRow: TableRowType }) => {
 
       <DialogFooter>
         <DialogClose asChild>
-          <Button variant="outline" onClick={handleCancel}>
+          <Button variant='outline' onClick={handleCancel}>
             Cancel
           </Button>
         </DialogClose>
-        <Button type="submit" className=" w-28" disabled={isPending}>
+        <Button type='submit' className='w-28' disabled={isPending}>
           {isPending ? <Spinner /> : <span>Save changes</span>}
         </Button>
       </DialogFooter>

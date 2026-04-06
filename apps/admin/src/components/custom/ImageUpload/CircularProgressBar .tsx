@@ -4,28 +4,28 @@ const CircularProgressBar = ({ progress }: { progress: number }) => {
   const strokeDashoffset = circumference - ((100 - progress) / 100) * circumference;
 
   return (
-    <div className="flex items-center justify-center z-50">
-      <svg className="w-5 h-5 -rotate-90" viewBox="0 0 100 100">
+    <div className='z-50 flex items-center justify-center'>
+      <svg className='h-5 w-5 -rotate-90' viewBox='0 0 100 100'>
         {/* Background Circle */}
         <circle
-          cx="50"
-          cy="50"
+          cx='50'
+          cy='50'
           r={radius}
-          fill="transparent"
-          strokeWidth="10"
-          className="stroke-blue-600 bg-gray-200"
+          fill='transparent'
+          strokeWidth='10'
+          className='bg-gray-200 stroke-blue-600'
         />
 
         {/* Progress Circle */}
         <circle
-          cx="50"
-          cy="50"
+          cx='50'
+          cy='50'
           r={radius}
-          fill="transparent"
-          strokeWidth="10"
+          fill='transparent'
+          strokeWidth='10'
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
-          className="bg-blue-600 stroke-current transition-all duration-500 ease-in-out "
+          className='bg-blue-600 stroke-current transition-all duration-500 ease-in-out'
         />
       </svg>
 

@@ -36,7 +36,7 @@ export class SchoolService implements ISchoolService {
         throw new ConflictError('Account already has a school');
       }
 
-      const slug = schema.nameEn.toLowerCase().replace(/\s/g, '-');
+      const slug = `${schema.nameEn.toLowerCase().replace(/\s+/g, '-')}-${Math.floor(Math.random() * 10000)}`;
       const createSchoolPayload = SchoolMapper.toCreateSchoolPayload({ schema, slug });
       const createdSchool = await this.schoolRepo.create({ payload: createSchoolPayload, ownerId: owner.id, tx });
       return createdSchool;

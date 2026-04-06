@@ -15,8 +15,8 @@ const StatusComponent = ({ value }: { value: StatusType }) => {
   const Icon = variant.Icon;
   const textMapping = StatusTextMapping[value];
   return (
-    <Badge variant="outline" className={`rounded-sm cursor-default ${variant.className}`}>
-      <Icon className="mr-1 h-4 w-4" />
+    <Badge variant='outline' className={`cursor-default rounded-sm ${variant.className}`}>
+      <Icon className='mr-1 h-4 w-4' />
       {textMapping}
     </Badge>
   );

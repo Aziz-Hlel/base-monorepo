@@ -23,7 +23,7 @@ const EnumFilterToolBar = ({ table, filters }: EnumFilterToolBarProps) => {
 
   return (
     <>
-      <div className="flex gap-x-2">
+      <div className='flex gap-x-2'>
         {filters.map((filter) => {
           const column = table.getColumn(filter.columnId);
           if (!column) return null;
@@ -39,14 +39,14 @@ const EnumFilterToolBar = ({ table, filters }: EnumFilterToolBarProps) => {
       </div>
       {isFiltered && (
         <Button
-          variant="ghost"
+          variant='ghost'
           onClick={async () => {
             await table.resetColumnFilters();
           }}
-          className="h-8 px-2 lg:px-3"
+          className='h-8 px-2 lg:px-3'
         >
           Reset
-          <X className="ms-2 h-4 w-4" />
+          <X className='ms-2 h-4 w-4' />
         </Button>
       )}
     </>

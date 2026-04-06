@@ -87,9 +87,9 @@ const MediaUpload_Main = <T extends FieldValues>({ fieldName, mediaErrors, optio
           {currentDisplayed === mediaState.CROP && <ImageCropperCom aspect={options?.aspect} />}
 
           {currentDisplayed === mediaState.UPLOADING_MEDIA && (
-            <div className="relative w-full h-full flex flex-col justify-start ">
-              <div className="flex justify-center items-center mx-auto gap-2 h-full">
-                <span className=" -translate-y-0.5">Loading</span>
+            <div className='relative flex h-full w-full flex-col justify-start'>
+              <div className='mx-auto flex h-full items-center justify-center gap-2'>
+                <span className='-translate-y-0.5'>Loading</span>
                 <CircularProgressBar />
               </div>
             </div>
@@ -121,7 +121,7 @@ const MediaUpload = <T extends FieldValues>({
   return (
     <>
       <FileProvider initMedia={initMedia} form={form} fieldName={fieldName}>
-        <div className=" h-105 ">
+        <div className='h-105'>
           <MediaUpload_Main
             fieldName={fieldName}
             initMedia={initMedia}

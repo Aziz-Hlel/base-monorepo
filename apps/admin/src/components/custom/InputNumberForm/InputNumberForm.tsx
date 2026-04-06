@@ -28,9 +28,9 @@ const InputNumberForm = <T extends Object>({ field, placeholder, emptyInitially 
     <>
       <Input
         placeholder={placeholder}
-        type="text"
-        pattern="^\d+(\.\d{0,2})?$"
-        inputMode="decimal"
+        type='text'
+        pattern='^\d+(\.\d{0,2})?$'
+        inputMode='decimal'
         value={value}
         onChange={handleChange}
       />

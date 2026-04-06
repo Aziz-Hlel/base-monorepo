@@ -1,9 +1,9 @@
 import { Env } from '@/config/env';
 import seedDev from './dev/seedDev';
 
-type EnvSeeds = Record<Env['NODE_ENV'], Function[] | readonly []>;
+type EnvSeeds = Record<Env['NODE_ENV'], Function[] | []>;
 
-const devSeeds = [] as const; //[seedDev];
+const devSeeds = [seedDev]; //[seedDev];
 const prodSeeds = [() => {}]; //[seedProdUsers];
 
 const envSeeds: EnvSeeds = {

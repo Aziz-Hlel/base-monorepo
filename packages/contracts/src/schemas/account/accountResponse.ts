@@ -9,8 +9,8 @@ const accountResponseSchema = z.object({
   email: z.email().nullable(),
   avatar: mediaResponseSchema.nullable(),
   role: z.enum(AccountRole),
-  createdAt: dateStringSchema,
-  updatedAt: dateStringSchema,
+  createdAt: dateStringSchema(),
+  updatedAt: dateStringSchema(),
 });
 
 export type AccountResponse = z.infer<typeof accountResponseSchema>;

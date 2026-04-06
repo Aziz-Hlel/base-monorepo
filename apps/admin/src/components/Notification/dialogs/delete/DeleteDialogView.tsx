@@ -28,7 +28,7 @@ const DeleteDialogView = ({ selectedRow }: Props) => {
         <AlertDialogCancel onClick={handleCancel} disabled={isPending}>
           {TableData.DeleteDialog.buttons.cancel}
         </AlertDialogCancel>
-        <Button onClick={handleDelete} disabled={isPending} className=" bg-red-600 hover:bg-red-500">
+        <Button onClick={handleDelete} disabled={isPending} className='bg-red-600 hover:bg-red-500'>
           {TableData.DeleteDialog.buttons.submit}
         </Button>
       </AlertDialogFooter>

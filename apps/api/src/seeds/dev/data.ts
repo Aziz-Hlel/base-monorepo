@@ -1,3 +1,5 @@
+import { AccountRole } from '@/generated/prisma/enums';
+
 type SeedTenantData = {
   account: {
     email: string;
@@ -12,7 +14,7 @@ type SeedTenantData = {
 const tenant1: SeedTenantData = {
   account: {
     email: 'tigana137@gmail.com',
-    role: 'ADMIN',
+    role: AccountRole.ADMIN,
   },
   owner: {},
   school: {

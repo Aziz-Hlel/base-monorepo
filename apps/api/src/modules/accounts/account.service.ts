@@ -2,15 +2,14 @@ import { logger } from '@/bootstrap/logger.init';
 import { ConflictError, NotFoundError, UnauthorizedError } from '@/err/customErrors';
 import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
 import { FirebaseMapper } from '@/firebase/service/firebase.mapper';
-import { globalMediaService, MediaService } from '@/media/media.service';
+import { AccountRole } from '@/generated/prisma/enums';
+import { globalMediaService } from '@/media/media.service';
 import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
 import { accountInclude } from '@/types/includes/account';
-import { AccountResponse } from '@repo/contracts/schemas/account/accountResponse';
+import { AuthResponse } from '@repo/contracts/schemas/auth/authResponse';
 import { AccountHelper } from './account.helper';
 import { AccountMapper } from './account.mapper';
 import { AccountRepo } from './account.repo';
-import { AccountRole } from '@/generated/prisma/enums';
-import { AuthResponse } from '@repo/contracts/schemas/auth/authResponse';
 
 export class AccountService {
   constructor(
@@ -26,7 +25,7 @@ export class AccountService {
     const account = await this.accountRepo.isAccountExists({ authId: userAuthId });
 
     if (account) {
-      throw new ConflictError({ message: 'Account already exists', clientDisplayMessage: 'Account already exists' });
+      throw new ConflictError({ message: 'Account already exists', clientMessage: 'Account already exists' });
     }
 
     const newAccount = await this.accountHelper.createAdminAccount(decodedToken);
@@ -57,7 +56,10 @@ export class AccountService {
     }
 
     if (account.users.length === 0 && account.role === AccountRole.USER) {
-      throw new NotFoundError(`Account Not found`);
+      throw new NotFoundError({
+        message: `Account Not found`,
+        internalLog: 'Account exists but send 404 since it has no users',
+      });
     }
 
     const accountAvatar = globalMediaService.generateMediaResponse(account.avatar);

@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker/dist/';
 import { prisma } from '../../bootstrap/db.init';
 import pMap from 'p-map';
 

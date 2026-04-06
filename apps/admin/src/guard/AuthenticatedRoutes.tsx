@@ -13,8 +13,8 @@ const AuthenticatedRoutes = () => {
     return (
       <>
         {' '}
-        <div className=" pr-5">Not logged in</div>{' '}
-        <div className=" underline hover:cursor-pointer" onClick={() => navigate('/signin')}>
+        <div className='pr-5'>Not logged in</div>{' '}
+        <div className='underline hover:cursor-pointer' onClick={() => navigate('/signin')}>
           go Home
         </div>{' '}
       </>

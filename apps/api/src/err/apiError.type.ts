@@ -5,4 +5,6 @@ export type ApiError = {
   path: string;
   timestamp: Date;
   stack?: string;
+  internalLog?: string;
+  cause?: Error;
 };

@@ -9,7 +9,7 @@ const AuthProviderCell = ({ value }: { value: string }) => {
   }
   if (!(value in AUTH_PROVIDER_VARIANTS)) {
     return (
-      <RowContainer className="w-fit">
+      <RowContainer className='w-fit'>
         <div>N/A</div>
       </RowContainer>
     );
@@ -17,7 +17,7 @@ const AuthProviderCell = ({ value }: { value: string }) => {
   const Svg = AUTH_PROVIDER_VARIANTS[value as keyof typeof AUTH_PROVIDER_VARIANTS].Svg;
   const displayLabel = AUTH_PROVIDER_VARIANTS[value as keyof typeof AUTH_PROVIDER_VARIANTS].label;
   return (
-    <RowContainer className="w-fit">
+    <RowContainer className='w-fit'>
       <Tooltip>
         <TooltipTrigger asChild>
           <Button variant={'ghost'}>{Svg}</Button>

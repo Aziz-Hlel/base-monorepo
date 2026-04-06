@@ -18,10 +18,10 @@ const ProductsTable = () => {
   return (
     <>
       <SelectedRowProvider>
-        <div className="w-full max-w-full flex flex-col gap-4  ">
+        <div className='flex w-full max-w-full flex-col gap-4'>
           <DataTableToolbar table={table} filters={productTableFilters} />
-          <div className=" rounded-md border  overflow-hidden">
-            <Table className="table-fixed ">
+          <div className='overflow-hidden rounded-md border'>
+            <Table className='table-fixed'>
               <TableHeaders<TableRowType> table={table} />
               <TableBody>
                 <TableBodyContent table={table} isLoading={isLoading} pageSize={pageSize} />
@@ -29,7 +29,7 @@ const ProductsTable = () => {
             </Table>
           </div>
           <div>
-            <DataTablePagination table={table} className="mt-auto" />
+            <DataTablePagination table={table} className='mt-auto' />
             <DialogContainer />
           </div>
         </div>

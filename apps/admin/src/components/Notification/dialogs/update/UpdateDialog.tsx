@@ -17,10 +17,10 @@ const UpdateDialog = () => {
 
   return (
     <Dialog onOpenChange={onOpenChange} open={dialogIsOpen}>
-      <DialogContent className="sm:max-w-106.25 h-[calc(100dvh-4rem)] flex flex-col overflow-hidden  ">
+      <DialogContent className='flex h-[calc(100dvh-4rem)] flex-col overflow-hidden sm:max-w-106.25'>
         <DialogHeader>
-          <DialogTitle className=" text-center">{TableData.EditDialog.title}</DialogTitle>
-          <DialogDescription className=" text-center">{TableData.EditDialog.description}</DialogDescription>
+          <DialogTitle className='text-center'>{TableData.EditDialog.title}</DialogTitle>
+          <DialogDescription className='text-center'>{TableData.EditDialog.description}</DialogDescription>
           <Separator />
         </DialogHeader>
         {dialogIsOpen && <UpdateDialogInner selectedRow={dialogState.selectedRow} />}

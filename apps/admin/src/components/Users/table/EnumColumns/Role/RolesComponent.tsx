@@ -14,8 +14,8 @@ const RolesComponent = ({ value }: { value: RoleType }) => {
   const Icon = variant.Icon;
   const textMapping = RolesTextMapping[value];
   return (
-    <div className="flex items-center gap-2">
-      <Icon className="h-4 w-4" />
+    <div className='flex items-center gap-2'>
+      <Icon className='h-4 w-4' />
       <span>{textMapping}</span>
     </div>
   );

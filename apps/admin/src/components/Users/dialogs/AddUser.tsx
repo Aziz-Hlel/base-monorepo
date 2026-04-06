@@ -98,39 +98,39 @@ const AddUser = () => {
   console.log('form :', form.getValues());
   return (
     <Dialog onOpenChange={onOpenChange} open={dialogIsOpen}>
-      <DialogContent className="sm:max-w-106.25">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <DialogContent className='sm:max-w-106.25'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
           <DialogHeader>
             <DialogTitle>Create User</DialogTitle>
             <DialogDescription>Fill the form below to create a new user.</DialogDescription>
           </DialogHeader>
           <FieldGroup>
             <Controller
-              name="username"
+              name='username'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={`username-input`}>Username</FieldLabel>
-                  <Input {...field} id={`username-input`} aria-invalid={fieldState.invalid} placeholder="Username" />
+                  <Input {...field} id={`username-input`} aria-invalid={fieldState.invalid} placeholder='Username' />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
             />
 
             <Controller
-              name="email"
+              name='email'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={`email-input`}>Email</FieldLabel>
-                  <Input {...field} id={`email-input`} aria-invalid={fieldState.invalid} placeholder="Email" />
+                  <Input {...field} id={`email-input`} aria-invalid={fieldState.invalid} placeholder='Email' />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
             />
 
             <Controller
-              name="password"
+              name='password'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -139,9 +139,9 @@ const AddUser = () => {
                     {...field}
                     id={`password-input`}
                     aria-invalid={fieldState.invalid}
-                    placeholder="Password"
-                    type="password"
-                    autoComplete="off"
+                    placeholder='Password'
+                    type='password'
+                    autoComplete='off'
                   />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
@@ -149,10 +149,10 @@ const AddUser = () => {
             />
 
             <Controller
-              name="role"
+              name='role'
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className="flex">
+                <Field data-invalid={fieldState.invalid} className='flex'>
                   <FieldLabel htmlFor={`role-input`}>Role</FieldLabel>
 
                   <Select
@@ -162,8 +162,8 @@ const AddUser = () => {
                         field.onChange(value);
                     }}
                   >
-                    <SelectTrigger className="w-45">
-                      <SelectValue placeholder="Select role" />
+                    <SelectTrigger className='w-45'>
+                      <SelectValue placeholder='Select role' />
                     </SelectTrigger>
 
                     <SelectContent>
@@ -185,7 +185,7 @@ const AddUser = () => {
                                     value={key}
                                     aria-disabled
                                     onSelect={(e) => e.preventDefault()}
-                                    className="opacity-50 cursor-not-allowed"
+                                    className='cursor-not-allowed opacity-50'
                                   >
                                     {value}
                                   </SelectItem>
@@ -211,7 +211,7 @@ const AddUser = () => {
             />
 
             <Controller
-              name="profile.phoneNumber"
+              name='profile.phoneNumber'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -219,10 +219,10 @@ const AddUser = () => {
                   <PhoneInput
                     {...field}
                     value={field.value ?? undefined}
-                    defaultCountry="BH"
+                    defaultCountry='BH'
                     id={`phoneNumber-input`}
                     aria-invalid={fieldState.invalid}
-                    placeholder="Phone Number"
+                    placeholder='Phone Number'
                   />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
@@ -230,7 +230,7 @@ const AddUser = () => {
             />
 
             <Controller
-              name="profile.address"
+              name='profile.address'
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -240,7 +240,7 @@ const AddUser = () => {
                     value={field.value ?? ''}
                     id={`address-input`}
                     aria-invalid={fieldState.invalid}
-                    placeholder="Address"
+                    placeholder='Address'
                   />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
@@ -249,11 +249,11 @@ const AddUser = () => {
           </FieldGroup>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline" onClick={handleCancel}>
+              <Button variant='outline' onClick={handleCancel}>
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" className=" w-28" disabled={isPending}>
+            <Button type='submit' className='w-28' disabled={isPending}>
               {isPending ? <Spinner /> : <span>Save changes</span>}
             </Button>
           </DialogFooter>

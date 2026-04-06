@@ -6,28 +6,25 @@ import { Request } from 'express';
 
 interface IAppError {
   errorObject: ErrObject;
-  clientDisplayMessage?: string;
+  clientMessage?: string;
   message?: string;
-  customLog?: string;
-  stack?: string;
+  internalLog?: string;
   cause?: Error;
 }
 
 export class AppError extends Error {
   status: number;
   name: ErrNames;
-  clientDisplayMessage?: string;
-  customLog?: string;
-  stack?: string;
+  clientMessage?: string;
+  internalLog?: string;
   cause?: Error;
 
-  constructor({ errorObject, clientDisplayMessage, message, customLog, stack, cause }: IAppError) {
-    super(message || errorObject.message);
+  constructor({ errorObject, clientMessage, message, internalLog, cause }: IAppError) {
+    super(message || errorObject.message, { cause });
     this.name = errorObject.name;
     this.status = errorObject.status;
-    this.clientDisplayMessage = clientDisplayMessage;
-    this.customLog = customLog;
-    this.stack = stack;
+    this.clientMessage = clientMessage;
+    this.internalLog = internalLog;
     this.cause = cause;
   }
 
@@ -42,14 +39,19 @@ export class AppError extends Error {
       timestamp: new Date(),
       path: req.originalUrl,
     };
-    ENV.NODE_ENV !== 'production' && error.stack && (apiResponse.stack = error.stack);
+    if (ENV.NODE_ENV !== 'production') {
+      apiResponse.internalLog = error.internalLog;
+      apiResponse.stack = error.stack;
+      apiResponse.cause = error.cause;
+    }
     return apiResponse;
   }
 }
 
 type CusmtomErrorPayload =
   | string
-  | { message: string; clientDisplayMessage?: string; customLog?: string; stack?: string; cause?: Error };
+  | { message: string; clientMessage?: string; internalLog?: string; stack?: string; cause?: Error };
+
 export class BadRequestError extends AppError {
   constructor(payload: CusmtomErrorPayload) {
     super(toSuperPayload({ errorObject: ERRORS.BAD_REQUEST, payload }));
@@ -107,9 +109,8 @@ const toSuperPayload = ({ errorObject, payload }: { errorObject: ErrObject; payl
     return {
       errorObject,
       message: payload.message,
-      clientDisplayMessage: payload.clientDisplayMessage,
-      customLog: payload.customLog,
-      stack: payload.stack,
+      clientMessage: payload.clientMessage,
+      internalLog: payload.internalLog,
       cause: payload.cause,
     };
   }

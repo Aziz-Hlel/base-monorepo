@@ -108,13 +108,13 @@ const NestedRoute = ({ route }: { route: INestedRoute }) => {
 
   if (state === 'expanded')
     return (
-      <Collapsible key={route.title} asChild defaultOpen={route.isActive} className="group/collapsible group">
+      <Collapsible key={route.title} asChild defaultOpen={route.isActive} className='group/collapsible group'>
         <SidebarMenuItem>
           <CollapsibleTrigger asChild>
             <SidebarMenuButton>
               <route.icon />
               <span>{route.title}</span>
-              <ChevronRight className="ml-auto transition-transform duration-200 group-open:rotate-90 group-data-[state=open]/collapsible:rotate-90" />
+              <ChevronRight className='ml-auto transition-transform duration-200 group-open:rotate-90 group-data-[state=open]/collapsible:rotate-90' />
             </SidebarMenuButton>
           </CollapsibleTrigger>
 
@@ -148,7 +148,7 @@ const NestedRoute = ({ route }: { route: INestedRoute }) => {
         <DropdownMenuContent
           side={isMobile ? 'bottom' : 'right'}
           align={isMobile ? 'end' : 'start'}
-          className="min-w-56 rounded-lg"
+          className='min-w-56 rounded-lg'
         >
           {route.items?.map((item, itemIndex) => (
             <DropdownMenuItem asChild key={itemIndex} disabled={!item.isActive}>
@@ -166,8 +166,8 @@ type ISimpleRoute = Omit<NavRoute, 'items'>;
 const SimpleRoute = ({ route }: { route: ISimpleRoute }) => {
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton aria-disabled={!route.isActive} asChild className="cursor-pointer" tooltip={route.title}>
-        <Link to={route.url} className="flex items-center gap-2">
+      <SidebarMenuButton aria-disabled={!route.isActive} asChild className='cursor-pointer' tooltip={route.title}>
+        <Link to={route.url} className='flex items-center gap-2'>
           <route.icon />
           <span>{route.title}</span>
         </Link>

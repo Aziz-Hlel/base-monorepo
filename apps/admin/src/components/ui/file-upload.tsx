@@ -140,7 +140,7 @@ export const FileUploader = forwardRef<HTMLDivElement, FileUploaderProps & React
           ref={ref}
           tabIndex={0}
           // onKeyDownCapture={handleKeyDown}
-          className={cn('grid w-full focus:outline-none overflow-hidden ', className, {
+          className={cn('grid w-full overflow-hidden focus:outline-none', className, {
             'gap-2': value,
           })}
           dir={dir}
@@ -161,12 +161,12 @@ export const FileUploaderContent = forwardRef<HTMLDivElement, React.HTMLAttribut
     const containerRef = useRef<HTMLDivElement>(null);
 
     return (
-      <div className={cn('w-full px-1')} ref={containerRef} aria-description="content file holder">
+      <div className={cn('w-full px-1')} ref={containerRef} aria-description='content file holder'>
         <div
           {...props}
           ref={ref}
           className={cn(
-            'flex rounded-xl gap-1',
+            'flex gap-1 rounded-xl',
             orientation === 'horizontal' ? 'flex-row flex-wrap' : 'flex-col',
             className,
           )}
@@ -189,22 +189,22 @@ export const FileUploaderItem = forwardRef<HTMLDivElement, { index: number } & R
         ref={ref}
         className={cn(
           buttonVariants({ variant: 'ghost' }),
-          'h-6 p-1 justify-between cursor-pointer relative',
+          'relative h-6 cursor-pointer justify-between p-1',
           className,
           isSelected ? 'bg-muted' : '',
         )}
         {...props}
       >
-        <div className="font-medium leading-none tracking-tight flex items-center gap-1.5 h-full w-full">
+        <div className='flex h-full w-full items-center gap-1.5 leading-none font-medium tracking-tight'>
           {children}
         </div>
         <button
-          type="button"
+          type='button'
           className={cn('absolute', direction === 'rtl' ? 'top-1 left-1' : 'top-1 right-1')}
           onClick={() => removeFileFromSet(index)}
         >
-          <span className="sr-only">remove item {index}</span>
-          <RemoveIcon className="w-4 h-4 hover:stroke-destructive duration-200 ease-in-out" />
+          <span className='sr-only'>remove item {index}</span>
+          <RemoveIcon className='hover:stroke-destructive h-4 w-4 duration-200 ease-in-out' />
         </button>
       </div>
     );
@@ -221,18 +221,17 @@ export const FileInput = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
       <div
         ref={ref}
         {...props}
-        className={`relative w-full ${isLOF ? 'opacity-50 cursor-not-allowed ' : 'cursor-pointer '}`}
+        className={`relative w-full ${isLOF ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
       >
         <div
           className={cn(
-            `w-full rounded-lg duration-300 ease-in-out
-         ${
-           dropzoneState.isDragAccept
-             ? 'border-green-500'
-             : dropzoneState.isDragReject || isFileTooBig
-               ? 'border-red-500'
-               : 'border-gray-300'
-         }`,
+            `w-full rounded-lg duration-300 ease-in-out ${
+              dropzoneState.isDragAccept
+                ? 'border-green-500'
+                : dropzoneState.isDragReject || isFileTooBig
+                  ? 'border-red-500'
+                  : 'border-gray-300'
+            }`,
             className,
           )}
           {...rootProps}

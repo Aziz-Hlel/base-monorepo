@@ -22,7 +22,7 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
         <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           <span>Name </span>
           {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
+          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
           {column.getIsSorted() === false && <ChevronsUpDown />}
         </HeaderContainer>
       );
@@ -31,7 +31,7 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
       const { name } = getValue<{
         name: string;
       }>();
-      return <RowContainer className="lowercase w-96 ">{name}</RowContainer>;
+      return <RowContainer className='w-96 lowercase'>{name}</RowContainer>;
     },
 
     enableSorting: true,
@@ -46,14 +46,14 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
         <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           <span>Description</span>
           {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
+          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
           {column.getIsSorted() === false && <ChevronsUpDown />}
         </HeaderContainer>
       );
     },
     cell: ({ getValue }) => {
       const description = getValue<string>();
-      return <RowContainer className=" w-96 truncate whitespace-nowrap ">{description}</RowContainer>;
+      return <RowContainer className='w-96 truncate whitespace-nowrap'>{description}</RowContainer>;
     },
 
     enableSorting: true,
@@ -67,7 +67,7 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
         <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           <span>Status</span>
           {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
+          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
           {column.getIsSorted() === false && <ChevronsUpDown />}
         </HeaderContainer>
       );
@@ -75,7 +75,7 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
     cell: ({ getValue }) => {
       const status = getValue<StatusType>();
       return (
-        <RowContainer className="">
+        <RowContainer className=''>
           <StatusComponent value={status} />
         </RowContainer>
       );
@@ -92,14 +92,14 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
         <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           <span>Price</span>
           {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
+          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
           {column.getIsSorted() === false && <ChevronsUpDown />}
         </HeaderContainer>
       );
     },
     cell: ({ getValue }) => {
       const price = getValue<string>();
-      return <RowContainer className=" w-96 truncate whitespace-nowrap ">{price}</RowContainer>;
+      return <RowContainer className='w-96 truncate whitespace-nowrap'>{price}</RowContainer>;
     },
 
     enableSorting: true,
@@ -112,7 +112,7 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
         <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
           <span>Created At</span>
           {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
+          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
           {column.getIsSorted() === false && <ChevronsUpDown />}
         </HeaderContainer>
       );
@@ -120,7 +120,7 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
     cell: ({ getValue }) => {
       const dateString = getValue<string>();
       const formattedDate = dayjs(dateString).format('LL');
-      return <RowContainer className=" w-full">{formattedDate}</RowContainer>;
+      return <RowContainer className='w-full'>{formattedDate}</RowContainer>;
     },
 
     enableSorting: true,

@@ -4,16 +4,16 @@ const Home = () => {
   const navigate = useNavigate();
   return (
     <>
-      <div className="flex flex-col w-full items-center gap-2">
+      <div className='flex w-full flex-col items-center gap-2'>
         <div>Home</div>
         <button
-          className=" border rounded-lg p-1 text-white bg-blue-600 hover:bg-blue-700 transition hover:cursor-pointer"
+          className='rounded-lg border bg-blue-600 p-1 text-white transition hover:cursor-pointer hover:bg-blue-700'
           onClick={() => navigate('/signin')}
         >
           sign In
         </button>
         <button
-          className=" border rounded-lg p-1 text-white bg-green-600 hover:bg-green-700 transition hover:cursor-pointer"
+          className='rounded-lg border bg-green-600 p-1 text-white transition hover:cursor-pointer hover:bg-green-700'
           onClick={() => navigate('/signup')}
         >
           sign Up

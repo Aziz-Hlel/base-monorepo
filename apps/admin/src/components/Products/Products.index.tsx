@@ -11,7 +11,7 @@ const ProductsIndex = () => {
   return (
     <div>
       <BreadcrumbHeader breadcrumbs={[{ title: 'Products', href: '/products' }]} />
-      <div className=" w-full mx-auto">
+      <div className='mx-auto w-full'>
         <Card>
           <CardHeader>
             <CardTitle>Product List</CardTitle>

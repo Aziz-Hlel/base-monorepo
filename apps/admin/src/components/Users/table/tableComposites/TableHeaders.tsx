@@ -9,7 +9,7 @@ const TableHeaders = <T,>({ table }: { table: Table<T> }) => {
           {headerGroup.headers.map((header) => {
             return (
               <TableHead
-                className="group/head relative h-10 select-none last:[&>.cursor-col-resize]:opacity-0"
+                className='group/head relative h-10 select-none last:[&>.cursor-col-resize]:opacity-0'
                 key={header.id}
                 {...{
                   colSpan: header.colSpan,

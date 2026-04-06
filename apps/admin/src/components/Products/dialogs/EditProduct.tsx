@@ -91,17 +91,17 @@ const EditProduct = () => {
 
   return (
     <Dialog onOpenChange={onOpenChange} open={dialogIsOpen}>
-      <DialogContent className="sm:max-w-106.25 h-[calc(100dvh-4rem)] flex flex-col overflow-hidden  ">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex flex-col h-full">
+      <DialogContent className='flex h-[calc(100dvh-4rem)] flex-col overflow-hidden sm:max-w-106.25'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='flex h-full flex-col space-y-6'>
           <DialogHeader>
-            <DialogTitle className=" text-center">Update Product</DialogTitle>
-            <DialogDescription className=" text-center">Fill the form below to update the product.</DialogDescription>
+            <DialogTitle className='text-center'>Update Product</DialogTitle>
+            <DialogDescription className='text-center'>Fill the form below to update the product.</DialogDescription>
             <Separator />
           </DialogHeader>
-          <div className="flex-1 min-h-0 overflow-y-auto pr-2 overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400">
+          <div className='scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400 min-h-0 flex-1 overflow-y-auto overscroll-contain pr-2'>
             <FieldGroup>
               <Controller
-                name="name"
+                name='name'
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
@@ -110,7 +110,7 @@ const EditProduct = () => {
                       {...field}
                       id={`name-input`}
                       aria-invalid={fieldState.invalid}
-                      placeholder="Name"
+                      placeholder='Name'
                       value={field.value ?? undefined}
                     />
                     <FieldError errors={[fieldState.error]} />
@@ -119,7 +119,7 @@ const EditProduct = () => {
               />
 
               <Controller
-                name="description"
+                name='description'
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
@@ -129,8 +129,8 @@ const EditProduct = () => {
                       id={`description-input`}
                       aria-invalid={fieldState.invalid}
                       aria-rowcount={3}
-                      placeholder="Description"
-                      className=" max-h-42 overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400"
+                      placeholder='Description'
+                      className='scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400 max-h-42 overscroll-contain'
                     />
                     <FieldError errors={[fieldState.error]} />
                   </Field>
@@ -138,10 +138,10 @@ const EditProduct = () => {
               />
 
               <Controller
-                name="price"
+                name='price'
                 control={form.control}
                 render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="flex">
+                  <Field data-invalid={fieldState.invalid} className='flex'>
                     <FieldLabel htmlFor={`price-input`}>Price</FieldLabel>
                     <InputNumberForm field={field} />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -150,12 +150,12 @@ const EditProduct = () => {
               />
 
               <Controller
-                name="status"
+                name='status'
                 control={form.control}
                 render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="flex">
+                  <Field data-invalid={fieldState.invalid} className='flex'>
                     <FieldLabel htmlFor={`status-input`}>Status</FieldLabel>
-                    <SelectForm field={field} options={ProductTextMapping} placeholder="Select status" label="Status" />
+                    <SelectForm field={field} options={ProductTextMapping} placeholder='Select status' label='Status' />
                   </Field>
                 )}
               />
@@ -171,11 +171,11 @@ const EditProduct = () => {
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline" onClick={handleCancel}>
+              <Button variant='outline' onClick={handleCancel}>
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" className=" w-28" disabled={isPending}>
+            <Button type='submit' className='w-28' disabled={isPending}>
               {isPending ? <Spinner /> : <span>Save changes</span>}
             </Button>
           </DialogFooter>

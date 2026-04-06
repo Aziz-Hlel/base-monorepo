@@ -10,34 +10,34 @@ const Profile = () => {
 
   return (
     <>
-      <div className="flex justify-center items-center min-h-screen">
-        <Card className="w-full max-w-xl">
+      <div className='flex min-h-screen items-center justify-center'>
+        <Card className='w-full max-w-xl'>
           <CardHeader>
             <CardTitle>Profile</CardTitle>
             <CardDescription>View your profile information below</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className=" flex flex-col space-y-2">
-              <div className=" flex items-end space-x-2">
-                <Label className=" text-xl">ID : </Label>
+            <div className='flex flex-col space-y-2'>
+              <div className='flex items-end space-x-2'>
+                <Label className='text-xl'>ID : </Label>
                 <p>{user.id} </p>
               </div>
-              <div className=" flex items-end space-x-2">
-                <Label className=" text-xl">Email : </Label>
+              <div className='flex items-end space-x-2'>
+                <Label className='text-xl'>Email : </Label>
                 <p>{user.email}</p>
               </div>
-              <div className=" flex items-end space-x-2">
-                <Label className=" text-xl">Username : </Label>
+              <div className='flex items-end space-x-2'>
+                <Label className='text-xl'>Username : </Label>
                 <p>{user.username}</p>
               </div>
-              <div className=" flex items-end space-x-2">
-                <Label className=" text-xl">Role : </Label>
+              <div className='flex items-end space-x-2'>
+                <Label className='text-xl'>Role : </Label>
                 <p>{user.userRole}</p>
               </div>
             </div>
           </CardContent>
-          <CardFooter className=" justify-end">
-            <Button variant="outline" onClick={logout}>
+          <CardFooter className='justify-end'>
+            <Button variant='outline' onClick={logout}>
               Logout
             </Button>
           </CardFooter>

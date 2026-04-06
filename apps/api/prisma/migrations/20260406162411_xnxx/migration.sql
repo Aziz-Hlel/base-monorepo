@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "schools" ALTER COLUMN "phone" SET DATA TYPE VARCHAR(30);
+
+-- AlterTable
+ALTER TABLE "users" ALTER COLUMN "phoneNumber" SET DATA TYPE VARCHAR(30);

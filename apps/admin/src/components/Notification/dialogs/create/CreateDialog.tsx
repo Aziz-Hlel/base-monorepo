@@ -82,27 +82,24 @@ const CreateDialog = () => {
 
   return (
     <Dialog onOpenChange={onOpenChange} open={dialogIsOpen}>
-      <DialogContent className="sm:max-w-106.25 h-[calc(100dvh-4rem)] flex flex-col overflow-hidden  ">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex flex-col h-full">
+      <DialogContent className='flex h-[calc(100dvh-4rem)] flex-col overflow-hidden sm:max-w-106.25'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='flex h-full flex-col space-y-6'>
           <DialogHeader>
-            <DialogTitle className="bg-__tw_debug ">{TableData.AddDialog.title}</DialogTitle>
+            <DialogTitle className='bg-__tw_debug'>{TableData.AddDialog.title}</DialogTitle>
             <DialogDescription>{TableData.AddDialog.description}</DialogDescription>
           </DialogHeader>
-          <div
-            className=" 
-              flex-1 min-h-0 overflow-y-auto pr-2  overscroll-contain scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400"
-          >
+          <div className='scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent hover:scrollbar-thumb-neutral-400 min-h-0 flex-1 overflow-y-auto overscroll-contain pr-2'>
             <FieldGroup>
               <FormUI form={form} initMedia={null} />
             </FieldGroup>
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline" onClick={handleCancel}>
+              <Button variant='outline' onClick={handleCancel}>
                 {TableData.AddDialog.buttons.cancel}
               </Button>
             </DialogClose>
-            <Button type="submit" className=" w-28" disabled={isPending}>
+            <Button type='submit' className='w-28' disabled={isPending}>
               {isPending ? <Spinner /> : <span>{TableData.AddDialog.buttons.submit}</span>}
             </Button>
           </DialogFooter>

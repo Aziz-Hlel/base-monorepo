@@ -11,7 +11,7 @@ const Main = () => {
   return (
     <div>
       <BreadcrumbHeader breadcrumbs={[{ title: TableData.MainCard.title, href: TableData.href }]} />
-      <div className="w-full mx-auto">
+      <div className='mx-auto w-full'>
         <Card>
           <CardHeader>
             <CardTitle>{TableData.MainCard.title}</CardTitle>

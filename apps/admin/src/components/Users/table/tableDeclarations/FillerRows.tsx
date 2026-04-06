@@ -11,9 +11,9 @@ export const LoadingInRowsComp = <T,>({ table, pageSize }: LoadingInRowsCompProp
   console.log('page sie form the comitslef', pageSize);
   return (
     <>
-      <TableRow className="pointer-events-none ">
-        <TableCell className=" " colSpan={table.getAllLeafColumns().length}>
-          <RowContainer className=" w-full flex justify-center items-center space-x-2 text-black opacity-100 ">
+      <TableRow className='pointer-events-none'>
+        <TableCell className=' ' colSpan={table.getAllLeafColumns().length}>
+          <RowContainer className='flex w-full items-center justify-center space-x-2 text-black opacity-100'>
             <Spinner /> <span>Loading...</span>
           </RowContainer>
         </TableCell>
@@ -30,8 +30,8 @@ interface NoResultCompProps<T> {
 export const NoResultComp = <T,>({ table, emptyRows }: NoResultCompProps<T>) => {
   return (
     <>
-      <TableRow className="pointer-events-none opacity-50">
-        <TableCell className=" text-center text-black" colSpan={table.getAllLeafColumns().length}>
+      <TableRow className='pointer-events-none opacity-50'>
+        <TableCell className='text-center text-black' colSpan={table.getAllLeafColumns().length}>
           <RowContainer>No Results</RowContainer>
         </TableCell>
       </TableRow>
@@ -45,7 +45,7 @@ export const EmptyRows = <T,>({ emptyRows, table }: { emptyRows: number; table: 
     <>
       {emptyRows > 0 &&
         [...Array(emptyRows)].map((_, i) => (
-          <TableRow key={`empty-${i}`} className="pointer-events-none opacity-50">
+          <TableRow key={`empty-${i}`} className='pointer-events-none opacity-50'>
             <TableCell colSpan={table.getAllLeafColumns().length}>
               <RowContainer>&nbsp;</RowContainer>
             </TableCell>

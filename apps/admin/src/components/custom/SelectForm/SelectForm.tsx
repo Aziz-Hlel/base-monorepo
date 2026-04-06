@@ -19,7 +19,7 @@ type SelectFormProps = {
 const SelectForm = ({ field, options, placeholder, label }: SelectFormProps) => {
   return (
     <Select {...field} onValueChange={field.onChange}>
-      <SelectTrigger className="w-45">
+      <SelectTrigger className='w-45'>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 

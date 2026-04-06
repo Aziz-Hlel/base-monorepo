@@ -23,13 +23,13 @@ export default function ImageCropperCom({
   onCropComplete,
 }: ImageCropperComProps) {
   return (
-    <div className="relative w-full h-full flex flex-col justify-center items-center mr-auto ">
-      <div className=" text-sm text-left w-full font-semibold mb-1">Thumbnail</div>
-      <div className=" text-sm text-left w-full text-gray-600 font-light mb-4">Crop Image to 9:16</div>
+    <div className='relative mr-auto flex h-full w-full flex-col items-center justify-center'>
+      <div className='mb-1 w-full text-left text-sm font-semibold'>Thumbnail</div>
+      <div className='mb-4 w-full text-left text-sm font-light text-gray-600'>Crop Image to 9:16</div>
 
-      <div className="border border-black rounded-lg border-dashed h-full w-full p-2 ">
-        <div className=" relative w-full h-68   ">
-          <div className="bg-white">
+      <div className='h-full w-full rounded-lg border border-dashed border-black p-2'>
+        <div className='relative h-68 w-full'>
+          <div className='bg-white'>
             <Cropper
               image={imgUrl}
               crop={crop}
@@ -44,23 +44,23 @@ export default function ImageCropperCom({
           </div>
         </div>
 
-        <div className=" w-full mr-auto">
+        <div className='mr-auto w-full'>
           <input
-            type="range"
+            type='range'
             value={zoom}
             min={1}
             max={3}
             step={0.1}
-            aria-labelledby="Zoom"
+            aria-labelledby='Zoom'
             onChange={(e) => onZoomChange(e.target.valueAsNumber)}
-            className=" w-full"
+            className='w-full'
           />
         </div>
-        <div className=" w-full mr-auto flex justify-end gap-4">
-          <Button onClick={handleCancel} variant="outline" className="cursor-pointer">
+        <div className='mr-auto flex w-full justify-end gap-4'>
+          <Button onClick={handleCancel} variant='outline' className='cursor-pointer'>
             Cancel
           </Button>
-          <Button onClick={async () => await Crop_OptimizeImage()} variant="default" className="cursor-pointer">
+          <Button onClick={async () => await Crop_OptimizeImage()} variant='default' className='cursor-pointer'>
             Confirm
           </Button>
         </div>

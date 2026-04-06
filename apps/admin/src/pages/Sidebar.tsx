@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 const Sidebar = ({ dir }: { dir: 'rtl' | 'ltr' }) => {
   return (
-    <div className="flex h-screen fixed inset-0 overflow-y-hidden ">
+    <div className='fixed inset-0 flex h-screen overflow-y-hidden'>
       <SidebarProvider dir={dir} defaultOpen={false}>
         <AppSidebar dir={dir} side={dir === 'rtl' ? 'right' : 'left'} />
 
@@ -17,7 +17,7 @@ const Sidebar = ({ dir }: { dir: 'rtl' | 'ltr' }) => {
             </div>
             <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
             </div> */}
-          <main className="w-full max-h-screen overflow-y-auto">
+          <main className='max-h-screen w-full overflow-y-auto'>
             <Outlet />
           </main>
         </SidebarInset>
