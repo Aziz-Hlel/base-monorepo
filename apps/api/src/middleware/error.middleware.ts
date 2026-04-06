@@ -36,10 +36,6 @@ export const globalErrorHandler = (error: Error, req: Request, res: Response<Api
     return res.status(400).json(apiError);
   }
 
-  if (error instanceof AppError2) {
-    logger.warn({ err: error, cause: serializeUnknownError(error.cause), path }, 'Application error');
-    return res.status(error.status).json(AppError2.toApiErrorResponse(error, req));
-  }
   if (AppError.isAppError(error)) {
     const serializedCause = error.cause ? serializeUnknownError(error.cause) : undefined;
     logger.warn({ error, path, ...(error.cause && { cause: serializedCause }) }, 'Application error');
