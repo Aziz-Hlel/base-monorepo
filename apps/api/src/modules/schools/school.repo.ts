@@ -5,6 +5,7 @@ import { ConflictError } from '@/err/customErrors';
 import { isUniqueConstraintError } from '@/utils/prismaError';
 import { UpdateSchoolRequest } from '@repo/contracts/schemas/school/updateSchoolRequest';
 import { logger } from '@/bootstrap/logger.init';
+import { ConflictError2 } from '@/err/customErrors2';
 
 export class SchoolRepo {
   create = async ({
