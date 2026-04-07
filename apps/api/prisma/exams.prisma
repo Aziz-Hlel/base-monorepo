@@ -35,7 +35,7 @@ enum TermEnum {
 
 
 model Major {
-    id String @id @default(uuid())
+    id String @id @default(uuid()) @db.Uuid
     name String @unique @db.VarChar(255)
     
 
@@ -47,7 +47,7 @@ model Major {
 }
 
 model OptionalExam{
-    id String @id @default(uuid())
+    id String @id @default(uuid()) @db.Uuid
     name String @unique @db.VarChar(255)
 
     exams Exam[]
@@ -58,7 +58,7 @@ model OptionalExam{
 }
 
 model Exam {
-    id String @id @default(uuid())
+    id String @id @default(uuid()) @db.Uuid
     subject SubjectEnum 
 
     date DateTime @db.Date
@@ -66,8 +66,9 @@ model Exam {
     endTime DateTime @db.Time
     timeOfDay TimeOfDayEnum
     term TermEnum 
-
     isOptional Boolean @default(false)
+
+
     majorId String? @db.Uuid
     major Major? @relation(fields: [majorId], references: [id])
 
@@ -79,6 +80,7 @@ model Exam {
     @@index([term])
     
     @@unique([majorId, subject, term])
+    @@unique([optionalExamId, subject, term])
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -97,7 +99,7 @@ enum CityEnum {
 
 
 model SchoolMajors{
-    id String @id @default(uuid())
+    id String @id @default(uuid()) @db.Uuid
     schoolId String @db.Uuid
     school School @relation(fields: [schoolId], references: [id])
     majorId String @db.Uuid
@@ -125,7 +127,7 @@ model SchoolOptionalExam{
 }
 
 model School {
-    id String @id @default(uuid())
+    id String @id @default(uuid()) @db.Uuid
     name String @db.VarChar(255)
     publicId String // @unique
     city CityEnum 
@@ -141,7 +143,7 @@ model School {
 
 
 model Class {
-    id String @id @default(uuid())
+    id String @id @default(uuid()) @db.Uuid
     name String @db.VarChar(255)
 
     schoolId String @db.Uuid
@@ -158,7 +160,7 @@ model Class {
 
 
 model Teacher{
-  id String @id @default(uuid())
+  id String @id @default(uuid()) @db.Uuid
   publicId String @db.VarChar(255)
   lastName String @db.VarChar(255)
   firstName String @db.VarChar(255)
@@ -169,14 +171,18 @@ model Teacher{
   schoolId String @db.Uuid
   school School @relation(fields: [schoolId], references: [id])
 
+  primaryMaleTeacherExamSession TeacherExamSession[] @relation("PrimaryMaleTeacher")
+  primaryFemaleTeacherExamSession TeacherExamSession[] @relation("PrimaryFemaleTeacher")
+  secondaryTeacherExamSession TeacherExamSession[] @relation("SecondaryTeacher")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
 }
 
 
-model ExamSession {
-  id String @id @default(uuid())
+model ExamSession { 
+  id String @id @default(uuid()) @db.Uuid
   name String @db.VarChar(255)
 
   classId String @db.Uuid
@@ -184,7 +190,29 @@ model ExamSession {
   
   examId String? @db.Uuid
   exam Exam? @relation(fields: [examId], references: [id])
+
+  teacherExamSession TeacherExamSession?
   
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TeacherExamSession {
+  id String @id @default(uuid()) @db.Uuid
+
+  primaryMaleTeacherId String @db.Uuid 
+  primaryMaleTeacher Teacher @relation("PrimaryMaleTeacher", fields: [primaryMaleTeacherId], references: [id])
+
+  primaryFemaleTeacherId String @db.Uuid 
+  primaryFemaleTeacher Teacher @relation("PrimaryFemaleTeacher", fields: [primaryFemaleTeacherId], references: [id])
+
+
+  secondaryTeacherId String @db.Uuid 
+  secondaryTeacher Teacher @relation("SecondaryTeacher", fields: [secondaryTeacherId], references: [id])
+
+  examSessionId String @db.Uuid @unique
+  examSession ExamSession @relation(fields: [examSessionId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

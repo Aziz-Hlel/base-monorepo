@@ -3,17 +3,19 @@
 
 @baseUrl = http://localhost:10000/api
 
+@email = tigana137@gmail.com
+@password = 12345678
+
 ###
 # @name login
 POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
 Content-Type: application/json
 
 {
-  "email": "tigana137@gmail.com",
-  "password": "12345678",
+  "email": "{{email}}",
+  "password": "{{password}}",
   "returnSecureToken": true
 }
-
 
 
 ### 

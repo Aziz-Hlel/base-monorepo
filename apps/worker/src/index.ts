@@ -1,11 +1,9 @@
 import initEmail from './email';
-import { initNotification } from './notification';
 
 const init = async () => {
   const { workers: emailWorkers } = await initEmail();
-  const { workers: notificationWorkers } = await initNotification();
 
-  const workers = [...emailWorkers, ...notificationWorkers];
+  const workers = [...emailWorkers];
 
   process.on('SIGINT', async () => {
     await Promise.all(workers.map((w) => w.close()));

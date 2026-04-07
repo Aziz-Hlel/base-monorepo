@@ -15,10 +15,8 @@ datasource db {
 }
 
 enum Role {
-  USER
-  ADMIN
   SUPER_ADMIN
-  STAFF
+  ADMIN
 }
 
 enum Status {
@@ -35,16 +33,12 @@ model User {
   email String?  @unique
   provider String
   username String?
-  role Role @default(USER)
+  role Role @default(ADMIN)
   isEmailVerified Boolean @default(false)
   status Status @default(ACTIVE)
 
   profile Profile?
 
-  notificationTargets NotificationTargetUser[]
-
-  createdNotifications   Notification[] @relation("NotificationCreatedBy")
-  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

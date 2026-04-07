@@ -4,6 +4,7 @@ import { InternalServerError } from '../../../err/customErrors';
 import { DecodedIdTokenWithClaims } from '../../../types/auth/DecodedIdTokenWithClaims';
 import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
 import { UserInternalService } from './user.internal.service';
+import { Role } from '@/generated/prisma/enums';
 
 export interface IAuthService {
   registerUser(tokenId: string): Promise<UserProfileResponse>;
@@ -30,7 +31,7 @@ export class AuthService implements IAuthService {
       );
 
     const userToCreate = UserMapper.toUserCreateInput(decodedToken);
-    const newUser = await this.userInternalService.createUser(userToCreate);
+    const newUser = await this.userInternalService.createUser({ ...userToCreate, role: Role.ADMIN });
 
     await this.firebaseService.setCustomUserClaims({
       userId: newUser.id,
@@ -66,7 +67,7 @@ export class AuthService implements IAuthService {
 
     if (!user) {
       const userToCreate = UserMapper.toUserCreateInput(decodedToken);
-      user = await this.userInternalService.createUser(userToCreate);
+      user = await this.userInternalService.createUser({ ...userToCreate, role: Role.ADMIN });
       await this.firebaseService.setCustomUserClaims({
         userId: user.id,
         userAuthId: user.authId,

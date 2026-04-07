@@ -17,6 +17,11 @@ export type CustomErrorObj = {
 };
 
 const ERRORS = {
+  DATABASE_ERROR: {
+    status: 500,
+    message: 'Database Error',
+    name: 'DatabaseError',
+  },
   BAD_REQUEST: {
     status: 400,
     message: 'Bad Request',
@@ -62,11 +67,12 @@ const ERRORS = {
     message: 'Service Unavailable',
     name: 'ServiceUnavailableError',
   },
+  NOT_IMPLEMENTED: {
+    status: 501,
+    message: 'Not Implemented',
+    name: 'NotImplementedError',
+  },
 } as const satisfies Record<string, Err>;
-
-const a = {
-  ERRORS,
-};
 
 export type ErrKeys = keyof typeof ERRORS;
 export type ErrNames = (typeof ERRORS)[ErrKeys]['name'];

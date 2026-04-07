@@ -1,12 +1,12 @@
-import { UserInclude } from '@/generated/prisma/models';
-import { prisma } from '../../../bootstrap/db.init';
-import { DefaultArgs } from '@prisma/client/runtime/client';
-import { UserWithProfile } from '../types';
-import { CreateUserProfileRequest } from '@repo/contracts/schemas/profile/createUserProfileRequest';
-import { StrictDecodedIdToken } from '@/types/auth/StrictDecodedIdToken';
-import UserMapper, { UserCreateInputCustom } from '../mapper/user.mapper';
 import { Role, Status } from '@/generated/prisma/enums';
+import { UserInclude } from '@/generated/prisma/models';
+import { DefaultArgs } from '@prisma/client/runtime/client';
+import { CreateUserProfileRequest } from '@repo/contracts/schemas/profile/createUserProfileRequest';
 import { UpdateUserProfileRequest } from '@repo/contracts/schemas/profile/updateUserProfileRequest';
+import { prisma } from '../../../bootstrap/db.init';
+import { UserCreateInputCustom } from '../mapper/user.mapper';
+import { UserWithProfile } from '../types';
+import { ConflictError } from '@/err/customErrors';
 
 export class UserRepo {
   private includeProfile() {
@@ -36,14 +36,23 @@ export class UserRepo {
 
   async isUserEmailExists(email: string): Promise<boolean> {
     const user = await prisma.user.findUnique({ where: { email } });
+    console.log('dirrab l user : ', user);
     return !!user;
   }
 
   async createUser(user: UserCreateInputCustom) {
-    return await prisma.user.create({
-      data: user,
-      include: { profile: true },
-    });
+    try {
+      return await prisma.user.create({
+        data: user,
+        include: { profile: true },
+      });
+    } catch (error) {
+      if (!(error instanceof Error)) throw error;
+      if (error.message.includes('Unique constraint failed')) {
+        throw new ConflictError('User already exists');
+      }
+      throw error;
+    }
   }
 
   async getUserByAuthId(authId: string): Promise<UserWithProfile | null> {

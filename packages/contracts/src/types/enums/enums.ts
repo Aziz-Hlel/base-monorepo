@@ -8,45 +8,62 @@
  * 🟢 You can import this file directly.
  */
 
-export const NotificationRecipientType = {
-  ALL: 'ALL',
-  COUNTRY: 'COUNTRY',
-  ROLE: 'ROLE',
-  USER: 'USER',
+export const TimeOfDayEnum = {
+  MORNING: 'MORNING',
+  EVENING: 'EVENING',
 } as const;
 
-export type NotificationRecipientType = (typeof NotificationRecipientType)[keyof typeof NotificationRecipientType];
+export type TimeOfDayEnum = (typeof TimeOfDayEnum)[keyof typeof TimeOfDayEnum];
 
-export const NotificationScheduleType = {
-  SCHEDULED: 'SCHEDULED',
-  DELAYED: 'DELAYED',
+export const SubjectEnum = {
+  FRENCH: 'FRENCH',
+  ENGLISH: 'ENGLISH',
+  MATH: 'MATH',
+  PHYSICS: 'PHYSICS',
+  CHEMISTRY: 'CHEMISTRY',
+  BIOLOGY: 'BIOLOGY',
+  HISTORY: 'HISTORY',
+  GEOGRAPHY: 'GEOGRAPHY',
+  ECONOMICS: 'ECONOMICS',
+  COMPUTER_SCIENCE: 'COMPUTER_SCIENCE',
+  SPORT: 'SPORT',
 } as const;
 
-export type NotificationScheduleType = (typeof NotificationScheduleType)[keyof typeof NotificationScheduleType];
+export type SubjectEnum = (typeof SubjectEnum)[keyof typeof SubjectEnum];
 
-export const NotificationLanguage = {
-  en: 'en',
-  ar: 'ar',
-  fr: 'fr',
+export const MajorEnum = {
+  MATH: 'MATH',
+  SCIENCE: 'SCIENCE',
+  LETTRE: 'LETTRE',
+  TECHNIQUE: 'TECHNIQUE',
+  ECO: 'ECO',
+  INFORMATIQUE: 'INFORMATIQUE',
+  SPORT: 'SPORT',
 } as const;
 
-export type NotificationLanguage = (typeof NotificationLanguage)[keyof typeof NotificationLanguage];
+export type MajorEnum = (typeof MajorEnum)[keyof typeof MajorEnum];
 
-export const DeliveryStatus = {
-  PENDING: 'PENDING',
-  SENT: 'SENT',
-  DELIVERED: 'DELIVERED',
-  READ: 'READ',
-  FAILED: 'FAILED',
+export const TermEnum = {
+  PRINCIPAL: 'PRINCIPAL',
+  RETAKE: 'RETAKE',
 } as const;
 
-export type DeliveryStatus = (typeof DeliveryStatus)[keyof typeof DeliveryStatus];
+export type TermEnum = (typeof TermEnum)[keyof typeof TermEnum];
+
+export const CityEnum = {
+  YAOUNDE: 'YAOUNDE',
+  DOUALA: 'DOUALA',
+  BAMENDA: 'BAMENDA',
+  MAROUA: 'MAROUA',
+  GAROUA: 'GAROUA',
+  KUMBO: 'KUMBO',
+} as const;
+
+export type CityEnum = (typeof CityEnum)[keyof typeof CityEnum];
 
 export const Role = {
-  USER: 'USER',
-  ADMIN: 'ADMIN',
   SUPER_ADMIN: 'SUPER_ADMIN',
-  STAFF: 'STAFF',
+  ADMIN: 'ADMIN',
 } as const;
 
 export type Role = (typeof Role)[keyof typeof Role];
