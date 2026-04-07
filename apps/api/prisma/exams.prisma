@@ -4,6 +4,19 @@ enum TimeOfDayEnum {
   EVENING
 }
 
+enum SubjectEnum {
+  FRENCH
+  ENGLISH
+  MATH
+  PHYSICS
+  CHEMISTRY
+  BIOLOGY
+  HISTORY
+  GEOGRAPHY
+  ECONOMICS
+  COMPUTER_SCIENCE
+  SPORT
+}
 
 enum MajorEnum {
   MATH
@@ -26,16 +39,16 @@ model Major {
     name String @unique @db.VarChar(255)
     
 
-    exams MajorExams[]
+    exams MajorExam[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
 
 
-model MajorExams {
+model MajorExam {
     id String @id @default(uuid())
-    name String 
+    subject SubjectEnum 
 
     date DateTime @db.Date
     startTime DateTime @db.Time
@@ -46,26 +59,22 @@ model MajorExams {
 
     majorId String @db.Uuid
     major Major @relation(fields: [majorId], references: [id])
+
+    examSessions ExamSession[]
     
     @@index([term])
     
-    @@unique([majorId, name, term])
+    @@unique([majorId, subject, term])
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+	@@map("MajorExams")
 }
+ 
 
-
-enum OptionalSubjectEnum {
-  SPANISH
-  ITALIAN
-  GERMAN
-}
-
-
-model OptionalSubject {
+model OptionalExam {
     id String @id @default(uuid())
-    name OptionalSubjectEnum @unique 
+    subject SubjectEnum @unique 
 
     date DateTime @db.Date
     startTime DateTime @db.Time
@@ -73,12 +82,15 @@ model OptionalSubject {
     timeOfDay TimeOfDayEnum
     term TermEnum
 
+    examSessions ExamSession[]
+
     @@index([term])
 
-    @@unique([name, term])
+    @@unique([subject, term])
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+	@@map("OptionalSubject")
 }
 
 enum CityEnum {
@@ -98,6 +110,7 @@ model School {
     city CityEnum 
 
     classes Class[]
+    teachers Teacher[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -111,8 +124,47 @@ model Class {
     schoolId String @db.Uuid
     school School @relation(fields: [schoolId], references: [id])
 
+    examSessions ExamSession[]
+
     @@unique([schoolId, name])
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+
+
+model Teacher{
+  id String @id @default(uuid())
+  publicId String @db.VarChar(255)
+  lastName String @db.VarChar(255)
+  firstName String @db.VarChar(255)
+  
+  isTeacher Boolean
+  subject SubjectEnum
+
+  schoolId String @db.Uuid
+  school School @relation(fields: [schoolId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+}
+
+
+model ExamSession {
+  id String @id @default(uuid())
+  name String @db.VarChar(255)
+
+  classId String @db.Uuid
+  class Class @relation(fields: [classId], references: [id])
+  
+  majorExamId String? @db.Uuid
+  majorExam MajorExam? @relation(fields: [majorExamId], references: [id])
+
+  optionalExamId String? @db.Uuid
+  optionalExam OptionalExam? @relation(fields: [optionalExamId], references: [id])
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
