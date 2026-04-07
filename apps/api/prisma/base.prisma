@@ -168,7 +168,6 @@ model User {
 
   dateOfBirth DateTime? @db.Date
   phone String? @db.VarChar(30)
-  email String? @db.VarChar(255)
   address        String? @db.VarChar(255)
   cin            String? @db.VarChar(50)
 
@@ -188,7 +187,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([accountId, schoolId])
+  @@unique([accountId, schoolId])
   @@map("users")
 }
 

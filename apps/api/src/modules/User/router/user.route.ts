@@ -1,21 +1,19 @@
+import { asyncHandler } from '@/core/async-handler';
+import { requireAuth } from '@/middleware/requireAuth.middleware';
 import { Router } from 'express';
 import { UserController } from '../Controller/user.controller';
-import { asyncHandler } from '../../../core/async-handler';
-import { requireAuth } from '@/middleware/requireAuth.middleware';
-import requireRole from '@/middleware/requireRole.middleware';
-import { UserRepo } from '../repo/user.repo';
-import { UserService } from '../Service/user.service';
-import { AccountRole } from '@/generated/prisma/enums';
+import { UserRole } from '@/generated/prisma/enums';
+import requireUserPermission from '@/middleware/requirePermission.middleware';
 
 const createUserRouter = (controller: UserController) => {
-  const router = Router();
+  const router = Router({ mergeParams: true });
 
-  router.post('/', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.createUserProfile));
-  router.get('/', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.getUserPage));
-  router.delete('/:id', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.deleteUserProfile));
-  router.post('/:id/enable', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.enableUser));
-  router.post('/:id/disable', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.disableUser));
-  router.put('/:id', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.updateUserProfile));
+  router.post(
+    '/',
+    requireAuth,
+    requireUserPermission({ requiredRoles: [UserRole.DIRECTOR, UserRole.MANAGER] }),
+    asyncHandler(controller.create),
+  );
 
   return router;
 };

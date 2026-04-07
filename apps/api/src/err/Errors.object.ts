@@ -17,6 +17,11 @@ export type CustomErrorObj = {
 };
 
 const ERRORS = {
+  DATABASE_ERROR: {
+    status: 500,
+    message: 'Database Error',
+    name: 'DatabaseError',
+  },
   BAD_REQUEST: {
     status: 400,
     message: 'Bad Request',

@@ -1,28 +1,27 @@
-import { AuthController } from './Controller/auth.controller';
+import { AccountHelper } from '../accounts/account.helper';
 import { UserController } from './Controller/user.controller';
 import { UserRepo } from './repo/user.repo';
 import createUserRouter from './router/user.route';
-import { AuthService } from './Service/auth.service';
-import { UserInternalService } from './Service/user.internal.service';
 import { UserService } from './Service/user.service';
-import createAuthRouter from './router/auth.route';
+import { UserAppService } from './Service/user.app.service';
+import { AccountService } from '../accounts/account.serivce';
 
-const createAuthModule = (userInternalService: UserInternalService) => {
-  const service = new AuthService(userInternalService);
-  const controller = new AuthController(service);
-  const authRouter = createAuthRouter(controller);
+// const createAuthModule = (userInternalService: UserInternalService) => {
+//   const service = new AuthService(userInternalService);
+//   const controller = new AuthController(service);
+//   const authRouter = createAuthRouter(controller);
 
-  return { authRouter };
-};
+//   return { authRouter };
+// };
 
-const createUserModule = () => {
+const createUserModule = ({ accountService }: { accountService: AccountService }) => {
   const repo = new UserRepo();
-  const userInternalService = new UserInternalService(repo);
   const service = new UserService(repo);
-  const controller = new UserController(service);
+  const appService = new UserAppService(repo, accountService, service);
+  const controller = new UserController(appService);
   const userRouter = createUserRouter(controller);
 
-  return { userRouter, userInternalService, userRepo: repo };
+  return { userRouter, userService: service, userRepo: repo };
 };
 
-export { createAuthModule, createUserModule };
+export { createUserModule };

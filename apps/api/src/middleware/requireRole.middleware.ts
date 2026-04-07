@@ -1,6 +1,6 @@
 import { PermissionDeniedError, UnauthorizedError } from '@/err/customErrors';
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
-import PERMISSION_SCORE from '@repo/contracts/utils/PermissionScore';
+import { APP_PERMISSION_SCORE } from '@repo/contracts/utils/PermissionScore';
 import { NextFunction, Response, Request } from 'express';
 import { AccountRole } from '@/generated/prisma/enums';
 
@@ -23,7 +23,7 @@ const requireRole = (role: AccountRole) => {
       });
     }
 
-    if (PERMISSION_SCORE[userRole] < PERMISSION_SCORE[role]) {
+    if (APP_PERMISSION_SCORE[userRole] < APP_PERMISSION_SCORE[role]) {
       throw new PermissionDeniedError({
         message: 'Insufficient permissions',
         internalLog: `Insufficient permissions: required role ${role}, but user has role ${userRole}`,

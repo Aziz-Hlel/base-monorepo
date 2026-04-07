@@ -6,7 +6,7 @@
 
 @baseUrl = http://localhost:10000/api
 
-@email = tigana137@gmail.com
+@email = tigana138@gmail.com
 @password = 12345678
 
 ### 
@@ -63,7 +63,7 @@ Authorization: Bearer {{firebase_token_refresh.response.body.id_token}}
 # @name createSchool
 POST {{baseUrl}}/schools
 Content-Type: application/json
-Authorization: Bearer {{firebase_login.response.body.idToken}}
+Authorization: Bearer {{firebase_token_refresh.response.body.id_token}}
 
 {
     "nameEn": "RestClient School",
@@ -131,3 +131,25 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
     "website": "https://www.google.com"
     
 }
+
+
+
+###
+# @name createUserWithSimpleRole
+POST {{baseUrl}}/schools/{{getMySchool.response.body.id}}/users
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "gender": "MALE",
+  "dateOfBirth": "1995-05-15",
+  "phone": "5551234567",
+  "cin": "12345678",
+  "address": "123 Main Street, Springfield",
+  "email": "john.doe01@example.com",
+  "role": "DIRECTOR",
+  "password": "12345678"
+}
+

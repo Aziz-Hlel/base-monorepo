@@ -10,31 +10,29 @@ import { AuthResponse } from '@repo/contracts/schemas/auth/authResponse';
 import { AccountHelper } from './account.helper';
 import { AccountMapper } from './account.mapper';
 import { AccountRepo } from './account.repo';
+import { AccountService } from './account.serivce';
 
-export class AccountService {
+export class AccountAppService {
   constructor(
     private readonly accountRepo: AccountRepo,
-    private readonly accountHelper: AccountHelper,
+    private readonly accountService: AccountService,
   ) {}
 
   async createAdminAccountWithPassword(token: string): Promise<AuthResponse> {
     const decodedToken = await firebaseAuthService.verifyToken(token);
 
-    const userAuthId = decodedToken.uid;
+    const { account, type } = await this.accountService.findOrCreateAccount({
+      accountDetails: {
+        email: decodedToken.email!,
+        role: AccountRole.ADMIN,
+      },
+    });
 
-    const account = await this.accountRepo.isAccountExists({ authId: userAuthId });
-
-    if (account) {
+    if (type === 'EXISTING') {
       throw new ConflictError({ message: 'Account already exists', clientMessage: 'Account already exists' });
     }
 
-    const newAccount = await this.accountHelper.createAdminAccount(decodedToken);
-
-    const partialClaims = FirebaseMapper.toNewAccountClaims({ account: newAccount });
-
-    firebaseAuthService.setNewAdminCustomClaims({ authId: userAuthId, partialClaims });
-
-    const accountResponse = AccountMapper.toNewAccountResponse({ account: newAccount });
+    const accountResponse = AccountMapper.toNewAccountResponse({ account });
 
     return accountResponse;
   }
@@ -50,7 +48,7 @@ export class AccountService {
     });
 
     if (!account) {
-      const newAccount = await this.accountHelper.createEmergencyAccount(decodedToken);
+      const newAccount = await this.accountService.createEmergencyAccount(decodedToken);
       logger.fatal(newAccount, 'Account exists in the auth provider but not in the database is just been created');
       throw new NotFoundError(`Account Not found`);
     }
@@ -80,7 +78,7 @@ export class AccountService {
     });
 
     if (!account) {
-      const newAccount = await this.accountHelper.createEmergencyAccount(decodedToken);
+      const newAccount = await this.accountService.createEmergencyAccount(decodedToken);
       const partialClaims = FirebaseMapper.toNewAccountClaims({ account: newAccount });
 
       firebaseAuthService.setNewAdminCustomClaims({ authId: userAuthId, partialClaims });

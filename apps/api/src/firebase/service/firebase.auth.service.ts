@@ -74,16 +74,7 @@ class FirebaseAuthService {
     }
   };
 
-  setNewAdminCustomClaims = async ({
-    authId,
-    partialClaims,
-  }: {
-    authId: string;
-    partialClaims: NewAdminCustomClaims;
-  }) => {
-    const claims: Claims = {
-      ...partialClaims,
-    };
+  setNewAdminCustomClaims = async ({ authId, partialClaims: claims }: { authId: string; partialClaims: Claims }) => {
     this.setClaims({ authId, claims });
   };
 

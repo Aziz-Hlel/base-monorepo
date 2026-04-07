@@ -1,128 +1,65 @@
-import { UserInclude } from '@/generated/prisma/models';
-import { prisma } from '../../../bootstrap/db.init';
+import { UserGetPayload, UserInclude } from '@/generated/prisma/models';
 import { DefaultArgs } from '@prisma/client/runtime/client';
-import { UserWithProfile } from '../types';
-import { CreateUserProfileRequest } from '@repo/contracts/schemas/profile/createUserProfileRequest';
-import { StrictDecodedIdToken } from '@/types/auth/StrictDecodedIdToken';
-import UserMapper, { UserCreateInputCustom } from '../mapper/user.mapper';
-import { Role, Status } from '@/generated/prisma/enums';
-import { UpdateUserProfileRequest } from '@repo/contracts/schemas/profile/updateUserProfileRequest';
+import { prisma } from '../../../bootstrap/db.init';
+import { CreateUserRequest } from '@repo/contracts/schemas/user2/createUserRequest';
 
 export class UserRepo {
-  private includeProfile() {
-    return {
-      profile: true,
-    } as const satisfies UserInclude<DefaultArgs>;
-  }
-
-  async isUserExists(id: string): Promise<boolean> {
-    const user = await prisma.user.findUnique({ where: { id } });
-    return !!user;
-  }
-
-  async isUserHasProfile(id: string): Promise<boolean | Error> {
-    const user = await prisma.user.findUnique({
-      where: { id },
-      include: { profile: true },
-    });
-    if (!user) return new Error('User not found');
-    return !!user?.profile;
-  }
-
-  async isUserAuthIdExists(authId: string): Promise<boolean> {
-    const user = await prisma.user.findUnique({ where: { authId } });
-    return !!user;
-  }
-
-  async isUserEmailExists(email: string): Promise<boolean> {
-    const user = await prisma.user.findUnique({ where: { email } });
-    return !!user;
-  }
-
-  async createUser(user: UserCreateInputCustom) {
-    return await prisma.user.create({
-      data: user,
-      include: { profile: true },
-    });
-  }
-
-  async getUserByAuthId(authId: string): Promise<UserWithProfile | null> {
-    return await prisma.$transaction(async (tx) => {
-      const user = await tx.user.findUnique({ where: { authId }, include: this.includeProfile() });
-
-      return await prisma.user.findUnique({ where: { authId }, include: this.includeProfile() });
-    });
-  }
-  async getUserByEmail(email: string): Promise<UserWithProfile | null> {
-    return await prisma.user.findUnique({ where: { email }, include: this.includeProfile() });
-  }
-
-  async getUserById(id: string): Promise<UserWithProfile | null> {
-    return await prisma.user.findUnique({ where: { id }, include: this.includeProfile() });
-  }
-
-  async createUserProfile(schema: CreateUserProfileRequest, authId: string): Promise<UserWithProfile> {
-    const user = await prisma.user.create({
-      data: {
-        username: schema.username,
-        email: schema.email,
-        provider: 'manual',
-        role: schema.role,
-        status: Status.ACTIVE,
-
-        authId,
-        profile: {
-          create: {
-            ...schema.profile,
+  getUserByAccountIdSchoolId = async <T extends UserInclude<DefaultArgs>>({
+    accountId,
+    schoolId,
+    include,
+  }: {
+    accountId: string;
+    schoolId: string;
+    include?: T;
+  }) => {
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          accountId_schoolId: {
+            accountId,
+            schoolId,
           },
         },
-      },
-      include: this.includeProfile(),
-    });
-    return user;
-  }
+        include,
+      });
+      return user as UserGetPayload<{ include: T }> | null;
+    } catch (error) {
+      throw error;
+    }
+  };
 
-  async getUsersByRole(roles: Exclude<Role, 'USER'>[]): Promise<UserWithProfile[]> {
-    return await prisma.user.findMany({ where: { role: { in: roles } }, include: this.includeProfile() });
-  }
-
-  async updateUserProfile(id: string, data: UpdateUserProfileRequest): Promise<UserWithProfile> {
-    const updatedUser = await prisma.user.update({
-      where: { id },
-      data: {
-        username: data.username ?? undefined,
-        email: data.email,
-        role: data.role,
-        status: data.status,
-        profile: {
-          update: {
-            ...data.profile,
+  createUserWithSimpleRole = async ({
+    schema,
+    schoolId,
+    accountId,
+  }: {
+    schema: CreateUserRequest;
+    schoolId: string;
+    accountId: string;
+  }) => {
+    try {
+      const user = await prisma.user.create({
+        data: {
+          firstName: schema.firstName,
+          lastName: schema.lastName,
+          gender: schema.gender,
+          dateOfBirth: schema.dateOfBirth ? new Date(schema.dateOfBirth) : null,
+          phone: schema.phone,
+          cin: schema.cin,
+          address: schema.address,
+          roles: {
+            create: {
+              role: schema.role,
+            },
           },
+          accountId,
+          schoolId,
         },
-      },
-      include: this.includeProfile(),
-    });
-    return updatedUser;
-  }
-
-  async deleteUser(id: string): Promise<void> {
-    await prisma.user.update({
-      where: { id },
-      data: { status: Status.DELETED, email: null },
-    });
-  }
-
-  async disableUser(id: string): Promise<void> {
-    await prisma.user.update({
-      where: { id },
-      data: { status: Status.DISABLED },
-    });
-  }
-
-  async enableUser(id: string): Promise<void> {
-    await prisma.user.update({
-      where: { id },
-      data: { status: Status.ACTIVE },
-    });
-  }
+      });
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  };
 }

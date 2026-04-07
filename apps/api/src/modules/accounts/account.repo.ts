@@ -1,4 +1,5 @@
 import { prisma } from '@/bootstrap/db.init';
+import { Prisma } from '@/generated/prisma/client';
 import { AccountRole } from '@/generated/prisma/enums';
 import { AccountInclude } from '@/generated/prisma/models';
 import { DefaultArgs } from '@prisma/client/runtime/client';
@@ -51,6 +52,17 @@ export class AccountRepo {
         role,
         provider,
         isEmailVerified: isEmailVerified ?? false,
+      },
+    });
+
+    return account;
+  };
+
+  getAccountByEmail = async ({ email, tx }: { email: string; tx?: Prisma.TransactionClient }) => {
+    const orm = tx || prisma;
+    const account = await orm.account.findUnique({
+      where: {
+        email,
       },
     });
 

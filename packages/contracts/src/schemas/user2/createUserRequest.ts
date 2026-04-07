@@ -1,8 +1,9 @@
 import z from 'zod';
 import { Gender } from '../../types/enums/enums';
 import { dateStringSchema } from '../utils/generalZod';
+import { simpleUserRoles } from '../../types/enums/meta/userRoleMeta';
 
-const createUserRequestSchema = z.object({
+export const createUserRequestSchema = z.object({
   firstName: z
     .string()
     .trim()
@@ -28,7 +29,30 @@ const createUserRequestSchema = z.object({
     .max(30, 'Phone must be at most 30 characters long')
     .or(z.null()), // * add regex validation for phone number
 
-  email: z.email('Invalid email').max(255, 'Email must be at most 255 characters long').nullable(),
+  cin: z
+    .string()
+    .trim()
+    .min(8, 'Cin must be at least 8 characters long')
+    .max(8, 'Cin must be at most 8 characters long')
+    .or(z.null()),
+
+  address: z
+    .string()
+    .trim()
+    .min(3, 'Address must be at least 3 characters long')
+    .max(255, 'Address must be at most 255 characters long')
+    .or(z.null()),
+
+  email: z.email('Invalid email').max(255, 'Email must be at most 255 characters long'),
+
+  role: z.enum(simpleUserRoles),
+
+  password: z
+    .string()
+    .trim()
+    .min(8, 'Password must be at least 8 characters long')
+    .max(255, 'Password must be at most 255 characters long')
+    .or(z.null()),
 });
 
 export type CreateUserRequest = z.infer<typeof createUserRequestSchema>;

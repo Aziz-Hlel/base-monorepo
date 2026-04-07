@@ -27,20 +27,6 @@ const createFakeUser = (index: number) => {
   return fakeUser;
 };
 
-const seedUsers = async (nbr: number) => {
-  const fakeUsers = faker.helpers.multiple((_, index) => createFakeUser(index), {
-    count: nbr,
-  });
-
-  const dbQuery = (user: (typeof fakeUsers)[0]) => {
-    return prisma.user.upsert({
-      where: { email: user.email },
-      create: { ...user, profile: { create: user.profile } },
-      update: {},
-    });
-  };
-
-  await pMap(fakeUsers, dbQuery, { concurrency: 10 });
+const seedUser = async () => {
+  await prisma.$transaction(async (tx) => {});
 };
-
-export default seedUsers;

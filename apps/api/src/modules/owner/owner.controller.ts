@@ -1,16 +1,16 @@
 import { CreateUserSchema } from '@repo/contracts/schemas/user/CreateUserDto';
 import { Request, Response } from 'express';
-import { OwnerService } from './owner.service';
+import { OwnerAppService } from './owner.app.service';
 import { createOwnerRequestSchema } from '@repo/contracts/schemas/owner/createOwnerRequest';
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 
 export class OwnerController {
-  constructor(private readonly ownerService: OwnerService) {}
+  constructor(private readonly ownerService: OwnerAppService) {}
 
   create = async (req: AuthenticatedRequest, res: Response) => {
     const schema = createOwnerRequestSchema.parse(req.body);
     const token = req.token;
-    const user = await this.ownerService.create({ schema, token });
-    res.status(201).json(user);
+    const response = await this.ownerService.create({ schema, token });
+    res.status(201).json(response);
   };
 }

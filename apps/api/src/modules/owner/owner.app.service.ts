@@ -5,11 +5,13 @@ import { prisma } from '@/bootstrap/db.init';
 import { ConflictError } from '@/err/customErrors';
 import { OwnerRepo } from './owner.repo';
 import { UpdateOwnerRequest } from '@repo/contracts/schemas/owner/updateOwnerRequest';
+import { OwnerService } from './owner.serivce';
 
-export class OwnerService {
+export class OwnerAppService {
   constructor(
     private readonly ownerRepo: OwnerRepo,
     private readonly accountHelper: AccountHelper,
+    private readonly ownerService: OwnerService,
   ) {}
 
   create = async ({ schema, token }: { schema: CreateOwnerRequest; token: DecodedIdTokenWithClaims }) => {
@@ -18,12 +20,11 @@ export class OwnerService {
       if (accountHasOwner) {
         throw new ConflictError('Account already registered as school owner');
       }
+      await this.ownerService.create({ schema, accountId: token.claims.accountId });
 
-      await this.ownerRepo.create({
-        schema,
-        accountId: token.claims.accountId,
-        tx,
-      });
+      return {
+        message: 'Owner created successfully',
+      };
     });
   };
 

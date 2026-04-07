@@ -1,5 +1,5 @@
 import { createMediaModule } from '@/media';
-import { createAuthModule, createUserModule } from '@/modules/User';
+import { createUserModule } from '@/modules/User';
 import createAccountModule from '@/modules/accounts';
 import { createOwnerModule } from '@/modules/owner/owner.module';
 import { createRootModule } from '@/modules/root';
@@ -23,8 +23,8 @@ const { ownerRouter } = createOwnerModule({ accountHelper });
 const { schoolRouter } = createSchoolModule();
 
 // * USER
-const { userRouter, userInternalService, userRepo } = createUserModule();
-const { authRouter } = createAuthModule(userInternalService);
+const { userRouter, userInternalService, userRepo } = createUserModule({ accountHelper });
+// const { authRouter } = createAuthModule(userInternalService);
 
 // * NOTIFICATION
 const { notificationRouter } = createNotificationModule({ userRepo });
@@ -37,7 +37,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: ownerRouter, resource: 'owners' },
   { router: schoolRouter, resource: 'schools' },
 
-  { router: userRouter, resource: 'users' },
-  { router: authRouter, resource: 'auth' },
+  { router: userRouter, resource: 'schools/:schoolId/users' },
+  // { router: authRouter, resource: 'auth' },
   { router: notificationRouter, resource: 'notifications' },
 ];

@@ -1,4 +1,5 @@
 import { prisma } from '@/bootstrap/db.init';
+import { DatabaseError } from '@/err/customErrors';
 import { Prisma } from '@/generated/prisma/client';
 import { CreateOwnerRequest } from '@repo/contracts/schemas/owner/createOwnerRequest';
 import { UpdateOwnerRequest } from '@repo/contracts/schemas/owner/updateOwnerRequest';
@@ -14,13 +15,18 @@ export class OwnerRepo {
     tx?: Prisma.TransactionClient;
   }) => {
     const orm = tx ?? prisma;
-    const owner = await orm.owner.create({
-      data: {
-        ...schema,
-        accountId,
-      },
-    });
-    return owner;
+    try {
+      const owner = await orm.owner.create({
+        data: {
+          ...schema,
+          accountId,
+        },
+      });
+      return owner;
+    } catch (error: unknown) {
+      if (!(error instanceof Error)) throw error;
+      throw new DatabaseError({ message: 'Failed to create owner', cause: error });
+    }
   };
 
   update = async ({
@@ -33,14 +39,33 @@ export class OwnerRepo {
     tx?: Prisma.TransactionClient;
   }) => {
     const orm = tx ?? prisma;
-    const owner = await orm.owner.update({
-      where: {
-        accountId,
-      },
-      data: {
-        ...schema,
-      },
-    });
-    return owner;
+    try {
+      const owner = await orm.owner.update({
+        where: {
+          accountId,
+        },
+        data: {
+          ...schema,
+        },
+      });
+      return owner;
+    } catch (error: unknown) {
+      if (!(error instanceof Error)) throw error;
+      throw new DatabaseError({ message: 'Failed to update owner', cause: error });
+    }
+  };
+
+  getOwnerByAccountId = async ({ accountId }: { accountId: string }) => {
+    try {
+      const owner = await prisma.owner.findUnique({
+        where: {
+          accountId,
+        },
+      });
+      return owner;
+    } catch (error: unknown) {
+      if (!(error instanceof Error)) throw error;
+      throw new DatabaseError({ message: 'Failed to get owner', cause: error });
+    }
   };
 }

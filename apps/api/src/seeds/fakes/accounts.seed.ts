@@ -18,12 +18,10 @@ const seedAccount = async ({ email, accountRole }: { email: string; accountRole?
   if (accountExists) {
     return accountExists;
   }
-  console.log(accountRole ?? faker.helpers.arrayElement(Object.values(AccountRole)));
   const accountRecord = await firebaseUserService.createAccount({
     email: email,
     password: '12345678',
     displayName: faker.internet.username(),
-    role: accountRole ?? faker.helpers.arrayElement(Object.values(AccountRole)),
   });
 
   const seedAccount = {

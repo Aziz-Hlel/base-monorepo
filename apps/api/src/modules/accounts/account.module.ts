@@ -2,13 +2,15 @@ import { AccountController } from './account.controller';
 import { AccountHelper } from './account.helper';
 import { AccountRepo } from './account.repo';
 import createRouter from './account.route';
-import { AccountService } from './account.service';
+import { AccountAppService } from './account.app.service';
+import { AccountService } from './account.serivce';
 
 export const createAccountModule = () => {
   const repo = new AccountRepo();
   const accountHelper = new AccountHelper(repo);
-  const service = new AccountService(repo, accountHelper);
-  const controller = new AccountController(service);
+  const accountService = new AccountService(repo, accountHelper);
+  const accountAppService = new AccountAppService(repo, accountService);
+  const controller = new AccountController(accountAppService);
   const accountRouter = createRouter(controller);
   return { accountRouter };
 };

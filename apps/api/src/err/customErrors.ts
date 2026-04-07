@@ -8,7 +8,7 @@ interface IAppError {
   errorObject: ErrObject;
   clientMessage?: string;
   message?: string;
-  internalLog?: string;
+  internalLog?: string | object;
   cause?: Error;
 }
 
@@ -16,7 +16,7 @@ export class AppError extends Error {
   status: number;
   name: ErrNames;
   clientMessage?: string;
-  internalLog?: string;
+  internalLog?: string | object;
   cause?: Error;
 
   constructor({ errorObject, clientMessage, message, internalLog, cause }: IAppError) {
@@ -50,7 +50,7 @@ export class AppError extends Error {
 
 type CusmtomErrorPayload =
   | string
-  | { message: string; clientMessage?: string; internalLog?: string; stack?: string; cause?: Error };
+  | { message: string; clientMessage?: string; internalLog?: string | object; stack?: string; cause?: Error };
 
 export class BadRequestError extends AppError {
   constructor(payload: CusmtomErrorPayload) {
@@ -88,15 +88,21 @@ export class PermissionDeniedError extends AppError {
   }
 }
 
-export class NotImplementedError extends AppError {
+export class DatabaseError extends AppError {
   constructor(payload: CusmtomErrorPayload) {
-    super(toSuperPayload({ errorObject: ERRORS.NOT_IMPLEMENTED, payload }));
+    super(toSuperPayload({ errorObject: ERRORS.DATABASE_ERROR, payload }));
   }
 }
 
 export class InternalServerError extends AppError {
   constructor(payload: CusmtomErrorPayload) {
     super(toSuperPayload({ errorObject: ERRORS.INTERNAL_SERVER, payload }));
+  }
+}
+
+export class NotImplementedError extends AppError {
+  constructor(payload: CusmtomErrorPayload) {
+    super(toSuperPayload({ errorObject: ERRORS.NOT_IMPLEMENTED, payload }));
   }
 }
 

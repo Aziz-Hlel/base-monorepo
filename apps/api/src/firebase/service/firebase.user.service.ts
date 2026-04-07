@@ -36,13 +36,42 @@ class FirebaseUserService {
     email,
     password,
     displayName,
-    role,
   }: {
     email: string;
     password: string;
-    displayName: string;
-    role: AccountRole;
+    displayName?: string;
   }): Promise<UserRecord> {
+    try {
+      const userExists = await this.safeGetUserByEmail(email);
+      if (userExists.success) {
+        // ! not quite my tempo, this will return the existed user in the auth provider to continue the flow and create the user, better than throwing an erro but the password will still whatever it was set to before
+        return userExists.data;
+      }
+
+      const userRecord = await this.firebaseSession.createUser({
+        email,
+        password,
+        ...(displayName && { displayName }),
+      });
+
+      return userRecord;
+    } catch (error: unknown) {
+      if (isFirebaseError(error)) handleFirebaseError(error);
+
+      logger.error(error, 'Unexpected createUser error:');
+      throw error;
+    }
+  }
+
+  findOrCreateAccount = async ({
+    email,
+    password,
+    displayName,
+  }: {
+    email: string;
+    password: string;
+    displayName?: string;
+  }): Promise<UserRecord> => {
     try {
       const userExists = await this.safeGetUserByEmail(email);
       if (userExists.success) {
@@ -63,7 +92,7 @@ class FirebaseUserService {
       logger.error(error, 'Unexpected createUser error:');
       throw error;
     }
-  }
+  };
 
   async disableUser(authId: string): Promise<void> {
     try {
