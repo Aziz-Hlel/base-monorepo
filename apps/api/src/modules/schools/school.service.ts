@@ -1,98 +1,55 @@
-import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
+import { OwnerService } from '@/modules/owner/owner.service';
 import { SchoolRepo } from './school.repo';
-import { CreateSchoolRequest } from '@repo/contracts/schemas/school/createSchoolRequest';
 import { prisma } from '@/bootstrap/db.init';
-import { ConflictError, ForbiddenError, NotFoundError } from '@/err/customErrors';
+import { CreateSchoolRequest } from '@repo/contracts/schemas/school/createSchoolRequest';
 import { SchoolMapper } from './school.mapper';
-import { UpdateSchoolRequest } from '@repo/contracts/schemas/school/updateSchoolRequest';
-import { School } from '@/generated/prisma/client';
-import { GetMySchoolResponse } from '@repo/contracts/schemas/school/getMySchoolResponse';
 
-export interface ISchoolService {
-  create: (params: { schema: CreateSchoolRequest; token: DecodedIdTokenWithClaims }) => Promise<School>;
-  update: (params: { schema: UpdateSchoolRequest; schoolId: string; token: DecodedIdTokenWithClaims }) => Promise<void>;
-  getMySchool: (params: { token: DecodedIdTokenWithClaims }) => Promise<GetMySchoolResponse>;
-  getById: (params: { schoolId: string; token: DecodedIdTokenWithClaims }) => Promise<void>;
-  getPage: (params: { schema: any; token: DecodedIdTokenWithClaims }) => Promise<void>;
-  delete: (params: { schoolId: string; token: DecodedIdTokenWithClaims }) => Promise<void>;
-}
+export class SchoolService {
+  constructor(
+    private readonly schoolRepo: SchoolRepo,
+    private readonly ownerService: OwnerService,
+  ) {}
 
-export class SchoolService implements ISchoolService {
-  constructor(private readonly schoolRepo: SchoolRepo) {}
-
-  create = async ({ schema, token }: { schema: CreateSchoolRequest; token: DecodedIdTokenWithClaims }) => {
-    return await prisma.$transaction(async (tx) => {
-      const owner = await tx.owner.findUnique({
-        where: {
-          accountId: token.claims.accountId,
-        },
-        select: { id: true, school: { select: { id: true } } },
-      });
-      if (!owner) {
-        throw new ForbiddenError('You are not allowed to create a school');
-      }
-
-      if (owner.school) {
-        throw new ConflictError('Account already has a school');
-      }
-
-      const slug = `${schema.nameEn.toLowerCase().replace(/\s+/g, '-')}-${Math.floor(Math.random() * 10000)}`;
-      const createSchoolPayload = SchoolMapper.toCreateSchoolPayload({ schema, slug });
-      const createdSchool = await this.schoolRepo.create({ payload: createSchoolPayload, ownerId: owner.id, tx });
-      return createdSchool;
-    });
+  create = async ({ schema, ownerId }: { schema: CreateSchoolRequest; ownerId: string }) => {
+    const slug = `${schema.nameEn.toLowerCase().replace(/\s+/g, '-')}-${Math.floor(Math.random() * 10000)}`;
+    const createSchoolPayload = SchoolMapper.toCreateSchoolPayload({ schema, slug });
+    const createdSchool = await this.schoolRepo.create({ payload: createSchoolPayload, ownerId });
+    return createdSchool;
   };
 
-  update = async ({
-    schema,
-    schoolId,
-    token,
-  }: {
-    schema: UpdateSchoolRequest;
-    schoolId: string;
-    token: DecodedIdTokenWithClaims;
-  }) => {
-    await prisma.$transaction(async (tx) => {
-      const school = await tx.school.findUnique({
-        where: {
-          id: schoolId,
-          owner: {
-            accountId: token.claims.accountId,
-          },
-        },
-      });
-      if (!school) {
-        //**
-        // ✔ Covers ALL cases:
-        // School doesn’t exist
-        // Not owned by user
-        // User not allowed
-        // */
-        throw new NotFoundError('School not found');
-      }
-
-      await this.schoolRepo.update({ payload: schema, schoolId, tx });
-    });
-  };
-
-  getMySchool = async ({ token }: { token: DecodedIdTokenWithClaims }): Promise<GetMySchoolResponse> => {
-    const school = await this.schoolRepo.getByAccountId({ accountId: token.claims.accountId });
-    if (!school) {
-      throw new NotFoundError('School not found');
+  findOrCreateSchool = async ({ schema, ownerId }: { schema: CreateSchoolRequest; ownerId: string }) => {
+    const school = await this.getByOwnerIdWithLogo(ownerId);
+    if (school) {
+      return school;
     }
-    const schoolResponse = SchoolMapper.toGetMySchoolResponse(school);
-    return schoolResponse;
+    return await this.create({ schema, ownerId });
   };
 
-  getById = async ({ schoolId, token }: { schoolId: string; token: DecodedIdTokenWithClaims }) => {
-    throw new Error('Method not implemented.');
+  existByOwnerId = async (ownerId: string) => {
+    return await this.schoolRepo.existByOwnerId(ownerId);
   };
 
-  getPage = async ({ schema, token }: { schema: any; token: DecodedIdTokenWithClaims }) => {
-    throw new Error('Method not implemented.');
+  getByAccountIdWithLogo = async (accountId: string) => {
+    return await this.schoolRepo.getByAccountId({ accountId, include: { logo: true } });
   };
 
-  delete = async ({ schoolId, token }: { schoolId: string; token: DecodedIdTokenWithClaims }) => {
-    throw new Error('Method not implemented.');
+  getByOwnerIdWithLogo = async (ownerId: string) => {
+    return await this.schoolRepo.getByOwnerId({ ownerId, include: { logo: true } });
+  };
+
+  getByIdWithOwner = async (schoolId: string) => {
+    return await this.schoolRepo.getById({ schoolId, include: { owner: true } });
+  };
+
+  findByIdAndAccountId = async (schoolId: string, accountId: string) => {
+    const school = await prisma.school.findUnique({
+      where: {
+        id: schoolId,
+        owner: {
+          accountId,
+        },
+      },
+    });
+    return school;
   };
 }

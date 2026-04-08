@@ -10,7 +10,7 @@ import { AuthResponse } from '@repo/contracts/schemas/auth/authResponse';
 import { AccountHelper } from './account.helper';
 import { AccountMapper } from './account.mapper';
 import { AccountRepo } from './account.repo';
-import { AccountService } from './account.serivce';
+import { AccountService } from './account.service';
 
 export class AccountAppService {
   constructor(

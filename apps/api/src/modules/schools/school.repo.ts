@@ -62,7 +62,29 @@ export class SchoolRepo {
     }
   };
 
-  getByAccountId = async ({ accountId, tx }: { accountId: string; tx?: Prisma.TransactionClient }) => {
+  getById = async ({ schoolId, include }: { schoolId: string; include: Prisma.SchoolInclude }) => {
+    try {
+      const school = await prisma.school.findUnique({
+        where: {
+          id: schoolId,
+        },
+        include,
+      });
+      return school;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  getByAccountId = async ({
+    accountId,
+    tx,
+    include,
+  }: {
+    accountId: string;
+    tx?: Prisma.TransactionClient;
+    include: Prisma.SchoolInclude;
+  }) => {
     const orm = tx ?? prisma;
     try {
       const school = await orm.school.findFirst({
@@ -71,10 +93,34 @@ export class SchoolRepo {
             accountId: accountId,
           },
         },
+        include,
       });
       return school;
     } catch (error) {
       throw error;
     }
+  };
+
+  getByOwnerId = async ({ ownerId, include }: { ownerId: string; include: Prisma.SchoolInclude }) => {
+    try {
+      const school = await prisma.school.findUnique({
+        where: {
+          ownerId,
+        },
+        include,
+      });
+      return school;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  existByOwnerId = async (ownerId: string) => {
+    const exists = await prisma.school.findUnique({
+      where: { ownerId },
+      select: { id: true },
+    });
+
+    return !!exists;
   };
 }

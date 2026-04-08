@@ -1,8 +1,6 @@
-import { prisma } from '@/bootstrap/db.init';
 import { ConflictError } from '@/err/customErrors';
-import { AccountService } from '@/modules/accounts/account.serivce';
+import { AccountService } from '@/modules/accounts/account.service';
 import { CreateUserRequest } from '@repo/contracts/schemas/user2/createUserRequest';
-import { UserRepo } from '../repo/user.repo';
 import { UserService } from './user.service';
 
 type CreateUserParams = {
@@ -10,15 +8,10 @@ type CreateUserParams = {
   schoolId: string;
 };
 
-export interface IUserService {
-  createUser: (data: CreateUserParams) => Promise<{ message: string; accountExists: boolean }>;
-}
-
-export class UserAppService implements IUserService {
+export class UserAppService {
   constructor(
-    private readonly userRepo: UserRepo,
-    private readonly accountService: AccountService,
     private readonly userService: UserService,
+    private readonly accountService: AccountService,
   ) {}
 
   async createUser({ payload, schoolId }: CreateUserParams) {

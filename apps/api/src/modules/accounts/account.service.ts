@@ -35,6 +35,11 @@ export class AccountService {
     return account;
   };
 
+  hasOwner = async (accountId: string) => {
+    const account = await this.accountRepo.getById({ id: accountId, include: { owner: true } });
+    return !!account?.owner;
+  };
+
   findOrCreateAccount = async ({
     accountDetails,
   }: FindOrCreateAccount): Promise<{ account: Account; type: 'EXISTING' | 'NEW' }> => {

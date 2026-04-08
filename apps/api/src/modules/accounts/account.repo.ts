@@ -15,6 +15,29 @@ export class AccountRepo {
     return !!account;
   };
 
+  getById = async <T extends AccountInclude<DefaultArgs>>({ id, include }: { id: string; include: T }) => {
+    const account = await prisma.account.findUnique({
+      where: {
+        id,
+      },
+      include,
+    });
+
+    return account;
+  };
+
+  hasOwner = async ({ accountId }: { accountId: string }) => {
+    const exists = await prisma.account.findFirst({
+      where: {
+        id: accountId,
+        owner: { isNot: null },
+      },
+      select: { id: true },
+    });
+
+    return !!exists;
+  };
+
   getAccountByAuthId = async <T extends AccountInclude<DefaultArgs>>({
     authId,
     include,

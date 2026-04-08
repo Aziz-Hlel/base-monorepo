@@ -3,7 +3,7 @@ import { AccountHelper } from './account.helper';
 import { AccountRepo } from './account.repo';
 import createRouter from './account.route';
 import { AccountAppService } from './account.app.service';
-import { AccountService } from './account.serivce';
+import { AccountService } from './account.service';
 
 export const createAccountModule = () => {
   const repo = new AccountRepo();

@@ -4,7 +4,7 @@ import { UserRepo } from './repo/user.repo';
 import createUserRouter from './router/user.route';
 import { UserService } from './Service/user.service';
 import { UserAppService } from './Service/user.app.service';
-import { AccountService } from '../accounts/account.serivce';
+import { AccountService } from '../accounts/account.service';
 
 // const createAuthModule = (userInternalService: UserInternalService) => {
 //   const service = new AuthService(userInternalService);
@@ -17,7 +17,7 @@ import { AccountService } from '../accounts/account.serivce';
 const createUserModule = ({ accountService }: { accountService: AccountService }) => {
   const repo = new UserRepo();
   const service = new UserService(repo);
-  const appService = new UserAppService(repo, accountService, service);
+  const appService = new UserAppService(service, accountService);
   const controller = new UserController(appService);
   const userRouter = createUserRouter(controller);
 

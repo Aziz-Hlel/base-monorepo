@@ -31,6 +31,8 @@ const simpleUserRolesObjects = Object.values(ROLE_METADATA).filter((role) => !ro
 
 export const simpleUserRoles = simpleUserRolesObjects.map((role) => role.name);
 
+export type UserRoleSimple = (typeof simpleUserRoles)[number];
+
 export const hasExtendedTable = (role: UserRole) => {
   return ROLE_METADATA[role].hasExtendedTable;
 };

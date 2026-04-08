@@ -1,11 +1,11 @@
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import { Response } from 'express';
-import { IUserService } from '../Service/user.app.service';
 import { createUserRequestSchema } from '@repo/contracts/schemas/user2/createUserRequest';
 import getParam from '@/utils/getParam';
+import { UserAppService } from '../Service/user.app.service';
 
 export class UserController {
-  constructor(private readonly userService: IUserService) {}
+  constructor(private readonly userService: UserAppService) {}
 
   create = async (req: AuthenticatedRequest, res: Response) => {
     const schoolId = getParam(req, 'schoolId', { uuid: true });

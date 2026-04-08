@@ -1,12 +1,12 @@
 import { CreateSchoolRequestSchema } from '@repo/contracts/schemas/school/createSchoolRequest';
-import { ISchoolService, SchoolService } from './school.service';
+import { ISchoolAppService, SchoolAppService } from './school.app.service';
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import { Response } from 'express';
 import { updateSchoolRequestSchema } from '@repo/contracts/schemas/school/updateSchoolRequest';
 import getParam from '@/utils/getParam';
 
 export class SchoolController {
-  constructor(private readonly schoolService: ISchoolService) {}
+  constructor(private readonly schoolService: ISchoolAppService) {}
 
   create = async (req: AuthenticatedRequest, res: Response) => {
     const schema = CreateSchoolRequestSchema.parse(req.body);
@@ -19,7 +19,7 @@ export class SchoolController {
     const schema = updateSchoolRequestSchema.parse(req.body);
     const token = req.token;
     const schoolId = getParam(req, 'schoolId', { uuid: true });
-    await this.schoolService.update({ schema, token, schoolId });
+    await this.schoolService.update({ schema, accountId: token.claims.accountId, schoolId });
     res.status(200).json({ message: 'School updated successfully' });
   };
 

@@ -55,7 +55,7 @@ export class OwnerRepo {
     }
   };
 
-  getOwnerByAccountId = async ({ accountId }: { accountId: string }) => {
+  getByAccountId = async ({ accountId }: { accountId: string }) => {
     try {
       const owner = await prisma.owner.findUnique({
         where: {
@@ -66,6 +66,21 @@ export class OwnerRepo {
     } catch (error: unknown) {
       if (!(error instanceof Error)) throw error;
       throw new DatabaseError({ message: 'Failed to get owner', cause: error });
+    }
+  };
+
+  existsByAccountId = async ({ accountId }: { accountId: string }) => {
+    try {
+      const exists = await prisma.owner.findUnique({
+        where: {
+          accountId,
+        },
+        select: { id: true },
+      });
+      return !!exists;
+    } catch (error: unknown) {
+      if (!(error instanceof Error)) throw error;
+      throw new DatabaseError({ message: 'Failed to check if owner exists', cause: error });
     }
   };
 }

@@ -1,32 +1,63 @@
-import { faker } from '@faker-js/faker/dist/';
-import { prisma } from '../../bootstrap/db.init';
-import pMap from 'p-map';
+import { faker } from '@faker-js/faker/.';
+import { Gender, UserRole, UserStatus } from '@/generated/prisma/enums';
+import { UserCreateInput, UserUpdateArgs, UserUpdateInput } from '@/generated/prisma/models';
+import { prisma } from '@/bootstrap/db.init';
 
-faker.seed(1); // Ensure consistent fake data across runs
+export class UserSeed {
+  constructor() {}
 
-const createFakeUser = (index: number) => {
-  const fakeEmail = `fake-user-${index}@fake.com`;
-  const fakeUser = {
-    email: fakeEmail,
-    username: faker.internet.username(),
-    createdAt: faker.date.past(),
-    updatedAt: faker.date.recent(),
-    authId: faker.string.uuid(),
-    provider: faker.helpers.arrayElement(['fake', 'google.com', 'apple.com', 'password']),
-    role: faker.helpers.arrayElement(Object.values(Role)),
-    status: faker.helpers.arrayElement(Object.values(Status)),
-    isEmailVerified: faker.datatype.boolean(),
-    profile: {
-      phoneNumber: faker.phone.number(),
+  generateFakeSimpleUser = ({
+    accountId,
+    schoolId,
+    role,
+  }: {
+    accountId: string;
+    schoolId: string;
+    role?: UserRole;
+  }): UserCreateInput => {
+    return {
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      gender: faker.helpers.arrayElement(Object.values(Gender)),
+      dateOfBirth: faker.date.past(),
+      phone: faker.phone.number(),
+      cin: faker.string.numeric(8),
       address: faker.location.streetAddress(),
-      avatar: null,
+      status: faker.helpers.arrayElement(Object.values(UserStatus)),
+
+      roles: {
+        create: {
+          role: role ?? faker.helpers.arrayElement(Object.values(UserRole)),
+        },
+      },
+      account: {
+        connect: {
+          id: accountId,
+        },
+      },
+      school: {
+        connect: {
+          id: schoolId,
+        },
+      },
+
       createdAt: faker.date.past(),
       updatedAt: faker.date.recent(),
-    },
+    };
   };
-  return fakeUser;
-};
 
-const seedUser = async () => {
-  await prisma.$transaction(async (tx) => {});
-};
+  run = async ({ accountId, schoolId, role }: { accountId: string; schoolId: string; role?: UserRole }) => {
+    const user = this.generateFakeSimpleUser({ accountId, schoolId, role });
+    const createdUser = await prisma.user.upsert({
+      where: {
+        accountId_schoolId: {
+          accountId,
+          schoolId,
+        },
+      },
+      create: user,
+      update: user,
+    });
+    return createdUser;
+  };
+}

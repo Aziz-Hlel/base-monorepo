@@ -233,7 +233,7 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.962.0
         version: 3.1000.0
-      '@faker-js/faker':
+      '@faker-js/faker/.':
         specifier: ^10.1.0
         version: 10.3.0
       '@prisma/adapter-pg':

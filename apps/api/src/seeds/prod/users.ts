@@ -2,7 +2,7 @@ import { prisma } from '@/bootstrap/db.init';
 import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
 import { firebaseUserService } from '@/firebase/service/firebase.user.service';
 import { AccountRole } from '@/generated/prisma/enums';
-import { faker } from '@faker-js/faker/dist/';
+import { faker } from '@faker-js/faker/.';
 
 const prodUsers = [
   {
