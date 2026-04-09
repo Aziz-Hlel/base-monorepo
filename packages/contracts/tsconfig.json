@@ -13,5 +13,5 @@
     "moduleDetection": "force",
     "noEmit": false
   },
-  "include": ["src"]
+  "include": ["src", "../../apps/api/src/utils/dayjs.ts"]
 }

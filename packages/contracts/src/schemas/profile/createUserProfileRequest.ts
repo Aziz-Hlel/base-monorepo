@@ -6,7 +6,7 @@ export const createUserProfileRequestSchema = z.object({
   email: z.email(),
   status: z.any().transform(() => Status.ACTIVE),
   password: z.string().min(6).max(10),
-  role: z.enum(Object.values(Role)).default(Role.USER).nonoptional(),
+  role: z.enum(Object.values(Role)).default(Role.ADMIN).nonoptional(),
 
   profile: z.object({
     phoneNumber: z.string().nullable(),

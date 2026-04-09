@@ -16,6 +16,7 @@ export const TimeOfDayEnum = {
 export type TimeOfDayEnum = (typeof TimeOfDayEnum)[keyof typeof TimeOfDayEnum];
 
 export const SubjectEnum = {
+  ALGO: 'ALGO',
   FRENCH: 'FRENCH',
   ENGLISH: 'ENGLISH',
   MATH: 'MATH',
@@ -27,11 +28,29 @@ export const SubjectEnum = {
   ECONOMICS: 'ECONOMICS',
   COMPUTER_SCIENCE: 'COMPUTER_SCIENCE',
   SPORT: 'SPORT',
+  MANDARIN: 'MANDARIN',
+  MUSIC: 'MUSIC',
+  SPANISH: 'SPANISH',
+  GERMAN: 'GERMAN',
+  ITALIAN: 'ITALIAN',
+  ARABIC: 'ARABIC',
 } as const;
 
 export type SubjectEnum = (typeof SubjectEnum)[keyof typeof SubjectEnum];
 
+export const ElectiveExamEnum = {
+  SPANISH: 'SPANISH',
+  MUSIC: 'MUSIC',
+  ITALIAN: 'ITALIAN',
+  MANDARIN: 'MANDARIN',
+  MATH: 'MATH',
+  GERMAN: 'GERMAN',
+} as const;
+
+export type ElectiveExamEnum = (typeof ElectiveExamEnum)[keyof typeof ElectiveExamEnum];
+
 export const MajorEnum = {
+  COMPUTER_SCIENCE: 'COMPUTER_SCIENCE',
   MATH: 'MATH',
   SCIENCE: 'SCIENCE',
   LETTRE: 'LETTRE',

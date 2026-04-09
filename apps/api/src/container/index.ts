@@ -1,8 +1,13 @@
-import { createAuthModule, createUserModule } from '@/modules/User';
-import { createProductModule } from '@/modules/products';
-import { createRootModule } from '@/modules/root';
+import { EmailRouter } from '@/email/email.route';
 import { createMediaModule } from '@/media';
-import { createNotificationModule } from '@/notification';
+import { createExamModule } from '@/modules/Exam/exam.module';
+import { createAuthModule, createUserModule } from '@/modules/User';
+import { createMajorModule } from '@/modules/major/major.module';
+import { createRootModule } from '@/modules/root';
+import { SeedDevService } from '@/seeds/dev/seedDev.service';
+import { ExamSeedService } from '@/seeds/fakes/exam.seed.service';
+import { MajorSeedService } from '@/seeds/fakes/major.seed.service';
+import { Router } from 'express';
 
 // * ROOT
 const { rootRouter } = createRootModule();
@@ -11,13 +16,29 @@ const { rootRouter } = createRootModule();
 const { mediaRouter, mediaService } = createMediaModule();
 
 // * USER
-const { userRouter, userInternalService, userRepo } = createUserModule();
+const { userRouter, userInternalService } = createUserModule();
+
+// * AUTH
 const { authRouter } = createAuthModule(userInternalService);
 
-// * NOTIFICATION
-const { notificationRouter } = createNotificationModule({ userRepo });
+// * MAJOR
+const { majorRouter, majorService } = createMajorModule();
 
-// * PRODUCT
-const { productRouter } = createProductModule(mediaService);
+// * EXAM
+const { examRouter, examService } = createExamModule();
 
-export { rootRouter, userRouter, authRouter, productRouter, mediaRouter, mediaService, notificationRouter };
+// * SEED
+const majorSeed = new MajorSeedService(majorService);
+const examSeed = new ExamSeedService(examService);
+const devSeed = new SeedDevService(majorSeed, examSeed);
+devSeed.run();
+
+export const container: { router: Router; resource: string }[] = [
+  { router: rootRouter, resource: '' },
+  { router: mediaRouter, resource: 'media' },
+  { router: EmailRouter, resource: 'email' },
+  { router: userRouter, resource: 'users' },
+  { router: authRouter, resource: 'auth' },
+  { router: majorRouter, resource: 'majors' },
+  { router: examRouter, resource: 'exams' },
+];

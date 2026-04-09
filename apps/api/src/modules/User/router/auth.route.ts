@@ -2,10 +2,7 @@ import { Router } from 'express';
 
 import { asyncHandler } from '@/core/async-handler';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
-import { UserRepo } from '../repo/user.repo';
-import { AuthService } from '../Service/auth.service';
 import { AuthController } from '../Controller/auth.controller';
-import { UserInternalService } from '../Service/user.internal.service';
 
 const createAuthRouter = (controller: AuthController) => {
   const router = Router();

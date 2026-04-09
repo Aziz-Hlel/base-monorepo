@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "MajorEnum" ADD VALUE 'COMPUTER_SCIENCE';

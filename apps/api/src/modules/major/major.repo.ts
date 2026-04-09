@@ -3,6 +3,7 @@ import { DatabaseError } from '@/err/customErrors';
 import { MajorEnum } from '@/generated/prisma/enums';
 import { MajorGetPayload, MajorInclude } from '@/generated/prisma/models';
 import { DefaultArgs } from '@prisma/client/runtime/client';
+import { CreateMajorRequest } from '@repo/contracts/schemas/major/createMajorRequest';
 
 export class MajorRepo {
   create = async (name: MajorEnum) => {
@@ -23,12 +24,11 @@ export class MajorRepo {
     }
   };
 
-  findByName = async (name: MajorEnum) => {
+  findByName = async ({ payload, include }: { payload: CreateMajorRequest; include: MajorInclude<DefaultArgs> }) => {
     try {
       return await prisma.major.findUnique({
-        where: {
-          name,
-        },
+        where: payload,
+        include,
       });
     } catch (error) {
       if (!(error instanceof Error)) throw error;

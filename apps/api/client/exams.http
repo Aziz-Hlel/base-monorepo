@@ -1,0 +1,112 @@
+@apiKey = AIzaSyDWKplAl5Vp43pG0j5j3vnThRJIPwv1E44
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+
+@email = tigana137@gmail.com
+@password = 12345678
+
+
+# * AUTH
+
+###
+# @name firebaseLogin
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "returnSecureToken": true
+}
+
+
+###
+# @name serverLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "token": "{{firebaseLogin.response.body.idToken}}"
+}
+
+
+# * MAJORS
+
+###
+# @name createMajor
+POST {{baseUrl}}/majors
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+{
+    "name": "COMPUTER_SCIENCE"
+}
+
+###
+# @name getAllMajors
+GET {{baseUrl}}/majors
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+
+# * EXAMS
+
+###
+# @name createExam
+POST {{baseUrl}}/exams
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+{
+    "subject": "ALGO",
+    "date": "2026-04-09",
+    "startTime": "08:00",
+    "endTime": "12:00",
+    "timeOfDay": "MORNING",
+    "term": "PRINCIPAL",
+    "isOptional": false,
+    "majorId": "{{createMajor.response.body.id}}"
+}
+
+###
+# @name getExamById
+GET {{baseUrl}}/exams/{{createExam.response.body.id}}
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+
+###
+# @name createElectiveExam
+POST {{baseUrl}}/exams
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+{
+    "subject": "SPANISH",
+    "date": "2026-04-09",
+    "startTime": "08:00",
+    "endTime": "12:00",
+    "timeOfDay": "MORNING",
+    "term": "PRINCIPAL",
+    "isOptional": true
+}
+
+
+###
+# @name getElectiveExamById
+GET {{baseUrl}}/exams/{{createElectiveExam.response.body.id}}
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+
+###
+# @name getByMajorId
+GET {{baseUrl}}/exams/major/bbd80e75-774f-4e9b-9ecb-90c3bb20c56a
+
+
+
+# * ELECTIVE EXAMS
+
+###
+# @name getAllElectiveExams
+GET {{baseUrl}}/exams/elective

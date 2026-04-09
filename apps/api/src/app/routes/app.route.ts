@@ -1,15 +1,10 @@
+import { container } from '@/container';
 import { Router } from 'express';
-import { EmailRouter } from '@/email/email.route';
-import { authRouter, mediaRouter, notificationRouter, productRouter, rootRouter, userRouter } from '@/container';
 
-const router = Router();
+const appRouter = Router();
 
-router.use('/', rootRouter);
-router.use('/auth', authRouter);
-router.use('/users', userRouter);
-router.use('/media', mediaRouter);
-router.use('/products', productRouter);
-router.use('/email', EmailRouter);
-router.use('/notification', notificationRouter);
+container.forEach(({ router, resource }) => {
+  appRouter.use(`/${resource}`, router);
+});
 
-export default router;
+export default appRouter;

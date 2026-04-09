@@ -18,5 +18,5 @@
     }
   },
   "references": [{ "path": "../../packages/contracts" }],
-  "include": ["src", "../contracts/src/jobs/emailJob.ts", "../contracts/src/jobs/notificationJob.ts"]
+  "include": ["src", "../contracts/src/jobs/emailJob.ts"]
 }
