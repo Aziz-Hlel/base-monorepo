@@ -10,7 +10,7 @@ export const createSchoolRoute = (controller: SchoolController) => {
   router.post('/', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.create));
 
   router.get('/', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.getPage));
-  router.get('/my-school', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.getMySchool));
+  router.get('/me', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.getMySchool));
   router.get('/:schoolId', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.getById));
 
   router.put('/:schoolId', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.update));

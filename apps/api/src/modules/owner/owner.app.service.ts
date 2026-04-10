@@ -13,6 +13,7 @@ export class OwnerAppService {
   ) {}
 
   create = async ({ schema, token }: { schema: CreateOwnerRequest; token: DecodedIdTokenWithClaims }) => {
+    console.log('accountid ', token.claims.accountId);
     const accountHasOwner = await this.ownerService.existsByAccountId({ accountId: token.claims.accountId });
     if (accountHasOwner) {
       throw new ConflictError('Account already registered as school owner');

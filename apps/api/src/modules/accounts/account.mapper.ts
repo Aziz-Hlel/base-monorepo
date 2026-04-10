@@ -12,7 +12,7 @@ import {
 import { MediaResponse } from '@repo/contracts/schemas/media/MediaResponse';
 
 export class AccountMapper {
-  static toAccountResponse({
+  static toAccountDetails({
     account,
     avatar,
   }: {
@@ -86,7 +86,7 @@ export class AccountMapper {
     };
   }
 
-  static toAuthResponse2({
+  static toAuthResponse({
     account,
     avatar,
   }: {
@@ -182,7 +182,7 @@ export class AccountMapper {
       });
     });
 
-    const accountResponse = this.toAccountResponse({ account, avatar });
+    const accountResponse = this.toAccountDetails({ account, avatar });
     return {
       account: accountResponse,
       administration: administrationWorkspaces,

@@ -38,13 +38,7 @@ export class AccountRepo {
     return !!exists;
   };
 
-  getAccountByAuthId = async <T extends AccountInclude<DefaultArgs>>({
-    authId,
-    include,
-  }: {
-    authId: string;
-    include: T;
-  }) => {
+  findByAuthId = async <T extends AccountInclude<DefaultArgs>>({ authId, include }: { authId: string; include: T }) => {
     const account = await prisma.account.findUnique({
       where: {
         authId,
@@ -63,17 +57,17 @@ export class AccountRepo {
     isEmailVerified,
   }: {
     authId: string;
-    email?: string;
+    email: string | undefined;
     role?: AccountRole;
-    provider: string;
+    provider?: string;
     isEmailVerified?: boolean;
   }) => {
     const account = await prisma.account.create({
       data: {
         authId,
         email,
-        role,
-        provider,
+        role: role ?? AccountRole.USER,
+        provider: provider ?? 'password',
         isEmailVerified: isEmailVerified ?? false,
       },
     });

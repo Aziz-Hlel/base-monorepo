@@ -15,6 +15,8 @@ export class OwnerRepo {
     tx?: Prisma.TransactionClient;
   }) => {
     const orm = tx ?? prisma;
+    console.log(schema);
+    console.log(accountId);
     try {
       const owner = await orm.owner.create({
         data: {

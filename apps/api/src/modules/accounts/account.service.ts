@@ -6,6 +6,7 @@ import { firebaseUserService } from '@/firebase/service/firebase.user.service';
 import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
 import { isUniqueConstraintError } from '@/utils/prismaError';
 import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
+import { accountInclude } from '@/types/includes/account';
 
 type FindOrCreateAccount = {
   accountDetails: {
@@ -13,6 +14,7 @@ type FindOrCreateAccount = {
     password?: string | null;
     displayName?: string;
     role?: AccountRole;
+    provider?: string;
   };
   tx?: Prisma.TransactionClient;
 };
@@ -23,13 +25,19 @@ export class AccountService {
     private readonly accountHelper: AccountHelper,
   ) {}
 
-  createEmergencyAccount = async (token: DecodedIdTokenWithClaims) => {
+  create = async (params: {
+    uid: string;
+    email: string | undefined;
+    role?: AccountRole;
+    provider?: string;
+    isEmailVerified?: boolean;
+  }) => {
     const account = await this.accountRepo.createAccount({
-      authId: token.uid,
-      email: token.email,
-      role: token.claims.accountRole,
-      provider: token.firebase.sign_in_provider,
-      isEmailVerified: token.email_verified,
+      authId: params.uid,
+      email: params.email,
+      role: params.role,
+      provider: params.provider,
+      isEmailVerified: params.isEmailVerified,
     });
 
     return account;
@@ -58,7 +66,7 @@ export class AccountService {
         authId: authAccount.uid,
         email: accountDetails.email,
         role: accountDetails.role,
-        provider: 'password',
+        provider: accountDetails.provider ?? 'password',
         isEmailVerified: false,
       });
 
@@ -82,5 +90,15 @@ export class AccountService {
 
       throw error;
     }
+  };
+
+  findByAuthId = async (authId: string) => {
+    const account = await this.accountRepo.findByAuthId({ authId, include: accountInclude });
+    return account;
+  };
+
+  findByAuthIdWithAllGraph = async (authId: string) => {
+    const account = await this.accountRepo.findByAuthId({ authId, include: accountInclude });
+    return account;
   };
 }

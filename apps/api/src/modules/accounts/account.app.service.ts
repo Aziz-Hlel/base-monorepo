@@ -7,7 +7,6 @@ import { globalMediaService } from '@/media/media.service';
 import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
 import { accountInclude } from '@/types/includes/account';
 import { AuthResponse } from '@repo/contracts/schemas/auth/authResponse';
-import { AccountHelper } from './account.helper';
 import { AccountMapper } from './account.mapper';
 import { AccountRepo } from './account.repo';
 import { AccountService } from './account.service';
@@ -18,7 +17,7 @@ export class AccountAppService {
     private readonly accountService: AccountService,
   ) {}
 
-  async createAdminAccountWithPassword(token: string): Promise<AuthResponse> {
+  async createAdminWithPassword(token: string): Promise<AuthResponse> {
     const decodedToken = await firebaseAuthService.verifyToken(token);
 
     const { account, type } = await this.accountService.findOrCreateAccount({
@@ -42,13 +41,19 @@ export class AccountAppService {
 
     const userAuthId = decodedToken.uid;
 
-    const account = await this.accountRepo.getAccountByAuthId({
+    const account = await this.accountRepo.findByAuthId({
       authId: userAuthId,
       include: accountInclude,
     });
 
     if (!account) {
-      const newAccount = await this.accountService.createEmergencyAccount(decodedToken);
+      const newAccount = await this.accountService.create({
+        uid: decodedToken.uid,
+        email: decodedToken.email,
+        role: decodedToken.claims.accountRole,
+        provider: decodedToken.firebase.sign_in_provider,
+        isEmailVerified: decodedToken.email_verified,
+      });
       logger.fatal(newAccount, 'Account exists in the auth provider but not in the database is just been created');
       throw new NotFoundError(`Account Not found`);
     }
@@ -62,7 +67,7 @@ export class AccountAppService {
 
     const accountAvatar = globalMediaService.generateMediaResponse(account.avatar);
 
-    const accountResponse = AccountMapper.toAuthResponse2({ account, avatar: accountAvatar });
+    const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
 
     return accountResponse;
   }
@@ -72,13 +77,16 @@ export class AccountAppService {
 
     const userAuthId = decodedToken.uid;
 
-    const account = await this.accountRepo.getAccountByAuthId({
-      authId: userAuthId,
-      include: accountInclude,
-    });
+    const account = await this.accountService.findByAuthId(userAuthId);
 
     if (!account) {
-      const newAccount = await this.accountService.createEmergencyAccount(decodedToken);
+      const newAccount = await this.accountService.create({
+        uid: decodedToken.uid,
+        email: decodedToken.email,
+        role: decodedToken.claims.accountRole,
+        provider: decodedToken.firebase.sign_in_provider,
+        isEmailVerified: decodedToken.email_verified,
+      });
       const partialClaims = FirebaseMapper.toNewAccountClaims({ account: newAccount });
 
       firebaseAuthService.setNewAdminCustomClaims({ authId: userAuthId, partialClaims });
@@ -91,7 +99,7 @@ export class AccountAppService {
 
     const accountAvatar = globalMediaService.generateMediaResponse(account.avatar);
 
-    const accountResponse = AccountMapper.toAuthResponse2({ account, avatar: accountAvatar });
+    const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
 
     return accountResponse;
   }
@@ -99,23 +107,28 @@ export class AccountAppService {
   me = async (decodedToken: DecodedIdTokenWithClaims): Promise<AuthResponse> => {
     const userAuthId = decodedToken.uid;
 
-    const account = await this.accountRepo.getAccountByAuthId({
+    const account = await this.accountRepo.findByAuthId({
       authId: userAuthId,
       include: accountInclude,
     });
 
     if (!account) {
-      logger.fatal(account, 'Client send a valid token but account not found in the database');
-      throw new NotFoundError(`Account Not found`);
+      throw new NotFoundError({
+        message: `Account Not found`,
+        internalLog: 'Client send a valid token but account not found in the database',
+      });
     }
     const isValidClaims = firebaseAuthService.validateClaims({ account, token: decodedToken });
     if (!isValidClaims) {
-      throw new UnauthorizedError(`Invalid claims`);
+      throw new UnauthorizedError({
+        message: `Unauthorized`,
+        internalLog: { cause: 'Invalid claims', claims: decodedToken.claims },
+      });
     }
 
     const accountAvatar = globalMediaService.generateMediaResponse(account.avatar);
 
-    const accountResponse = AccountMapper.toAuthResponse2({ account, avatar: accountAvatar });
+    const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
 
     return accountResponse;
   };

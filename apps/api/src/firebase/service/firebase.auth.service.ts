@@ -1,13 +1,13 @@
 import { logger } from '@/bootstrap/logger.init';
+import { UnauthorizedError } from '@/err/customErrors';
+import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
 import { AccountEntityRequest } from '@/types/includes/account';
 import { Auth } from 'firebase-admin/auth';
 import { firebaseSession } from '../../bootstrap/firebase.init';
 import { StrictDecodedIdToken } from '../../types/auth/StrictDecodedIdToken';
-import { Claims, claimsSchema, NewAdminCustomClaims } from '../../types/token/Claims';
+import { Claims, claimsSchema } from '../../types/token/Claims';
 import { handleFirebaseError, isFirebaseError } from '../err/firebase.errors';
 import { FirebaseMapper } from './firebase.mapper';
-import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
-import { UnauthorizedError } from '@/err/customErrors';
 
 const MAX_CLAIMS_SIZE = 1000;
 

@@ -1,16 +1,13 @@
+import { firebaseSession } from '@/bootstrap/firebase.init';
+import { logger } from '@/bootstrap/logger.init';
+import { SafeResponse } from '@/types/in/SafeResponse';
 import { UserRecord } from 'firebase-admin/auth';
 import { handleFirebaseError, isFirebaseError } from '../err/firebase.errors';
-import { logger } from '@/bootstrap/logger.init';
-import { firebaseSession } from '@/bootstrap/firebase.init';
-import { firebaseAuthService } from './firebase.auth.service';
-import { SafeResponse } from '@/types/in/SafeResponse';
-import { BadRequestError } from '@/err/customErrors';
-import { AccountRole } from '@/generated/prisma/enums';
 
 class FirebaseUserService {
   private firebaseSession = firebaseSession;
 
-  async safeGetUserByEmail(email: string): Promise<SafeResponse<UserRecord, 'User not found'>> {
+  safeGetUserByEmail = async (email: string): Promise<SafeResponse<UserRecord, 'User not found'>> => {
     try {
       const userRecord = await this.firebaseSession.getUserByEmail(email);
       return {
@@ -30,9 +27,9 @@ class FirebaseUserService {
       logger.error(error, 'Unexpected safeGetUserByEmail error:');
       throw error;
     }
-  }
+  };
 
-  async createAccount({
+  createAccount = async ({
     email,
     password,
     displayName,
@@ -40,7 +37,7 @@ class FirebaseUserService {
     email: string;
     password: string;
     displayName?: string;
-  }): Promise<UserRecord> {
+  }): Promise<UserRecord> => {
     try {
       const userExists = await this.safeGetUserByEmail(email);
       if (userExists.success) {
@@ -61,7 +58,7 @@ class FirebaseUserService {
       logger.error(error, 'Unexpected createUser error:');
       throw error;
     }
-  }
+  };
 
   findOrCreateAccount = async ({
     email,
@@ -94,7 +91,7 @@ class FirebaseUserService {
     }
   };
 
-  async disableUser(authId: string): Promise<void> {
+  disableUser = async (authId: string): Promise<void> => {
     try {
       await this.firebaseSession.updateUser(authId, { disabled: true });
       await this.firebaseSession.revokeRefreshTokens(authId);
@@ -104,9 +101,9 @@ class FirebaseUserService {
       logger.error(error, 'Unexpected disableUser error:');
       throw error;
     }
-  }
+  };
 
-  async enableUser(authId: string): Promise<void> {
+  enableUser = async (authId: string): Promise<void> => {
     try {
       await this.firebaseSession.updateUser(authId, {
         disabled: false,
@@ -118,9 +115,9 @@ class FirebaseUserService {
       logger.error(error, 'Unexpected enableUser error:');
       throw error;
     }
-  }
+  };
 
-  async deleteUser(authId: string): Promise<void> {
+  deleteUser = async (authId: string): Promise<void> => {
     try {
       await this.firebaseSession.deleteUser(authId);
       await this.firebaseSession.revokeRefreshTokens(authId);
@@ -130,7 +127,23 @@ class FirebaseUserService {
       logger.error(error, 'Unexpected deleteUser error:');
       throw error;
     }
-  }
+  };
+
+  deleteAllUsers = async () => {
+    let nextPageToken: string | undefined = undefined;
+
+    do {
+      const result = await this.firebaseSession.listUsers(1000, nextPageToken);
+
+      const uids = result.users.map((user) => user.uid);
+
+      if (uids.length > 0) {
+        await this.firebaseSession.deleteUsers(uids);
+      }
+
+      nextPageToken = result.pageToken;
+    } while (nextPageToken);
+  };
 }
 
 export const firebaseUserService = new FirebaseUserService();

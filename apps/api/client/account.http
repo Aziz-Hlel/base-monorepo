@@ -50,7 +50,7 @@ Authorization: Bearer {{firebase_token_refresh.response.body.id_token}}
 # @name createOwner
 POST {{baseUrl}}/owners
 Content-Type: application/json
-Authorization: Bearer {{firebase_token_refresh.response.body.id_token}}
+Authorization: Bearer {{firebase_login.response.body.idToken}}
 
 {
     "firstName": "John",
@@ -96,8 +96,8 @@ Content-Type: application/json
 
 
 ###
-# @name adminLogin
-POST {{baseUrl}}/accounts/login/password
+# @name login
+POST {{baseUrl}}/auth/password
 Content-Type: application/json
 
 {
@@ -107,7 +107,7 @@ Content-Type: application/json
 
 ###
 # @name getMySchool
-GET {{baseUrl}}/schools/my-school
+GET {{baseUrl}}/schools/me
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
