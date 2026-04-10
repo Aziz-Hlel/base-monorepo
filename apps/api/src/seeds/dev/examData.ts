@@ -24,7 +24,7 @@ type ISeedData = {
   }[];
 };
 
-export const seedData: ISeedData = {
+export const examData: ISeedData = {
   majors: [
     {
       name: MajorEnum.COMPUTER_SCIENCE,

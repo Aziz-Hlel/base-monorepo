@@ -31,7 +31,7 @@ export class AuthService implements IAuthService {
       );
 
     const userToCreate = UserMapper.toUserCreateInput(decodedToken);
-    const newUser = await this.userInternalService.createUser({ ...userToCreate, role: Role.SUPER_ADMIN });
+    const newUser = await this.userInternalService.createUser({ ...userToCreate, role: Role.ADMIN });
 
     await this.firebaseService.setCustomUserClaims({
       userId: newUser.id,
@@ -67,7 +67,7 @@ export class AuthService implements IAuthService {
 
     if (!user) {
       const userToCreate = UserMapper.toUserCreateInput(decodedToken);
-      user = await this.userInternalService.createUser({ ...userToCreate, role: Role.SUPER_ADMIN });
+      user = await this.userInternalService.createUser({ ...userToCreate, role: Role.ADMIN });
       await this.firebaseService.setCustomUserClaims({
         userId: user.id,
         userAuthId: user.authId,

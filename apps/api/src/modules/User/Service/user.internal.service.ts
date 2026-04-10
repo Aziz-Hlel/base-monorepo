@@ -12,6 +12,15 @@ export class UserInternalService {
     return await this.userRepo.createUser(user);
   }
 
+  async findOrCreateUser(user: UserCreateInput) {
+    const existingUser = await this.userRepo.getUserByAuthId(user.authId);
+    if (existingUser) {
+      return { user: existingUser, type: 'EXISTING' };
+    }
+    const createdUser = await this.userRepo.createUser(user);
+    return { user: createdUser, type: 'CREATED' };
+  }
+
   async getUserById(id: string) {
     return await this.userRepo.getUserById(id);
   }

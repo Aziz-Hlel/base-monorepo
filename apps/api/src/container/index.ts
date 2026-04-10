@@ -7,6 +7,7 @@ import { createRootModule } from '@/modules/root';
 import { SeedDevService } from '@/seeds/dev/seedDev.service';
 import { ExamSeedService } from '@/seeds/fakes/exam.seed.service';
 import { MajorSeedService } from '@/seeds/fakes/major.seed.service';
+import { UserSeedService } from '@/seeds/fakes/user.seed.service';
 import { Router } from 'express';
 
 // * ROOT
@@ -16,7 +17,7 @@ const { rootRouter } = createRootModule();
 const { mediaRouter, mediaService } = createMediaModule();
 
 // * USER
-const { userRouter, userInternalService } = createUserModule();
+const { userRouter, userInternalService, userService } = createUserModule();
 
 // * AUTH
 const { authRouter } = createAuthModule(userInternalService);
@@ -30,7 +31,8 @@ const { examRouter, examService } = createExamModule();
 // * SEED
 const majorSeed = new MajorSeedService(majorService);
 const examSeed = new ExamSeedService(examService);
-const devSeed = new SeedDevService(majorSeed, examSeed);
+const userSeed = new UserSeedService(userInternalService);
+const devSeed = new SeedDevService(majorSeed, examSeed, userSeed);
 devSeed.run();
 
 export const container: { router: Router; resource: string }[] = [
