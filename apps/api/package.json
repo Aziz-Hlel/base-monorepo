@@ -9,6 +9,7 @@
     "start": "node dist/index.js",
     "lint": "eslint . --ext .ts",
     "format:fix": "prettier --write .",
+    "workflow": "tsx scripts/index.ts",
     "prebuild": "pnpm -r --parallel -F contracts -F queue build",
     "build": "tsc --noEmit && swc src -d dist --strip-leading-paths",
     "dev": "tsx watch --clear-screen=false --include src --include ../../packages/contracts/src src/index.ts"
@@ -26,6 +27,7 @@
     "@repo/contracts": "workspace:*",
     "@repo/queue": "workspace:*",
     "@swc/core": "^1.15.18",
+    "axios": "^1.13.6",
     "bullmq": "5.71.0",
     "compression": "^1.8.1",
     "cors": "^2.8.5",

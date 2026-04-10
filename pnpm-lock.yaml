@@ -248,6 +248,9 @@ importers:
       '@swc/core':
         specifier: ^1.15.18
         version: 1.15.18
+      axios:
+        specifier: ^1.13.6
+        version: 1.13.6
       bullmq:
         specifier: 5.71.0
         version: 5.71.0
