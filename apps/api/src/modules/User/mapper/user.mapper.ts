@@ -3,7 +3,6 @@ import { Role } from '../../../generated/prisma/browser';
 import { GenericEntityCreateInput } from '../../../types/prisma/GenericEntityUtilityTypes';
 import { User } from '../../../generated/prisma/client';
 import { StrictDecodedIdToken } from '../../../types/auth/StrictDecodedIdToken';
-import { DefaultSearchParams } from '../../../types/api/DefaultSearchParams';
 import { UserResponse } from '@repo/contracts/schemas/user/UserResponse';
 import {
   ProfileRowResponse,
@@ -14,6 +13,7 @@ import { UserWithProfile } from '../types';
 import { ProfileMapper } from './profile.mapper';
 import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
 import { Page } from '@repo/contracts/types/page/Page';
+import { DefaultSearchParams } from '@repo/contracts/types/api/DefaultSeachParams';
 
 export type UserCreateInputCustom = GenericEntityCreateInput<UserCreateInput>;
 
@@ -24,7 +24,7 @@ class UserMapper {
       email: decodedToken.email as string,
       username: (decodedToken as any).name,
       provider: decodedToken.firebase.sign_in_provider,
-      role: Role.USER,
+      role: Role.ADMIN,
       isEmailVerified: decodedToken.email_verified ?? false,
     };
     return user;

@@ -10,14 +10,14 @@ import { SimpleApiResponse } from '@repo/contracts/types/api/SimpleApiResponse.d
 import { Page } from '@repo/contracts/types/page/Page';
 import getParam from '@/utils/getParam';
 import { updateUserProfileRequestSchema } from '@repo/contracts/schemas/profile/updateUserProfileRequest';
-import { IUserService } from '../Service/user.service';
+import { IUserAppService } from '../Service/user.app.service';
 
 export class UserController {
-  constructor(private readonly userService: IUserService) {}
+  constructor(private readonly userAppService: IUserAppService) {}
   getUserPage = async (req: AuthenticatedRequest, res: Response<Page<UserProfileRowResponse>>) => {
     const parsedQuery = queryParamsSchema.parse(req.query);
 
-    const response = await this.userService.getUserPage(parsedQuery);
+    const response = await this.userAppService.getUserPage(parsedQuery);
     res.json(response);
   };
 
@@ -28,7 +28,7 @@ export class UserController {
     if (PERMISSION_SCORE[userRole] < PERMISSION_SCORE[parsedBody.role]) {
       throw new PermissionDeniedError(`Insufficient permissions to create a user with role ${parsedBody.role}`);
     }
-    const response = await this.userService.createUserProfile(parsedBody);
+    const response = await this.userAppService.createUserProfile(parsedBody);
     res.status(201).json(response);
   };
 
@@ -38,7 +38,7 @@ export class UserController {
 
     const userRole = req.user.claims?.role;
 
-    const response = await this.userService.updateUserProfile(userId, parsedBody, userRole);
+    const response = await this.userAppService.updateUserProfile(userId, parsedBody, userRole);
     res.status(200).json(response);
   };
 
@@ -46,7 +46,7 @@ export class UserController {
     const userToDeleteId = getParam(req, 'id');
     const userRole = req.user.claims?.role;
 
-    await this.userService.deleteUser(userToDeleteId, userRole);
+    await this.userAppService.deleteUser(userToDeleteId, userRole);
 
     res.status(204).send({ message: 'User deleted successfully' });
   };
@@ -55,7 +55,7 @@ export class UserController {
     const userId = getParam(req, 'id');
     const userRole = req.user.claims?.role;
 
-    await this.userService.enableUser(userId, userRole);
+    await this.userAppService.enableUser(userId, userRole);
 
     res.status(200).send({ message: 'User enabled successfully' });
   };
@@ -64,7 +64,7 @@ export class UserController {
     const userId = getParam(req, 'id');
     const userRole = req.user.claims?.role;
 
-    await this.userService.disableUser(userId, userRole);
+    await this.userAppService.disableUser(userId, userRole);
 
     res.status(200).send({ message: 'User disabled successfully' });
   };

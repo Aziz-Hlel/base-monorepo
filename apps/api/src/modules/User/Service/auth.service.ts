@@ -3,7 +3,7 @@ import UserMapper from '../mapper/user.mapper';
 import { InternalServerError } from '../../../err/customErrors';
 import { DecodedIdTokenWithClaims } from '../../../types/auth/DecodedIdTokenWithClaims';
 import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
-import { UserInternalService } from './user.internal.service';
+import { UserService } from './user.service';
 import { Role } from '@/generated/prisma/enums';
 
 export interface IAuthService {
@@ -14,7 +14,7 @@ export interface IAuthService {
 }
 
 export class AuthService implements IAuthService {
-  constructor(private readonly userInternalService: UserInternalService) {}
+  constructor(private readonly userInternalService: UserService) {}
   private firebaseService = firebaseAuthService;
 
   async registerUser(tokenId: string): Promise<UserProfileResponse> {

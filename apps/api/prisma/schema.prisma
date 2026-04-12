@@ -37,6 +37,7 @@ model User {
   isEmailVerified Boolean @default(false)
   status Status @default(ACTIVE)
 
+  school School?
   profile Profile?
 
   createdAt DateTime @default(now())

@@ -1,8 +1,8 @@
 import { UserCreateInput } from '@/generated/prisma/models';
-import { UserInternalService } from '@/modules/User/Service/user.internal.service';
+import { UserService } from '@/modules/User/Service/user.service';
 
 export class UserSeedService {
-  constructor(private readonly userService: UserInternalService) {}
+  constructor(private readonly userService: UserService) {}
 
   run = async (userData: UserCreateInput) => {
     const { user } = await this.userService.findOrCreateUser(userData);

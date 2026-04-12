@@ -30,9 +30,9 @@ Content-Type: application/json
 # @name serverSignup
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
-
+  
 {
-    "tokenId": "{{firebaseSignup.response.body.idToken}}"
+    "token": "{{firebaseSignup.response.body.idToken}}"
 }
 
 

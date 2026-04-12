@@ -4,6 +4,8 @@ import { createExamModule } from '@/modules/Exam/exam.module';
 import { createAuthModule, createUserModule } from '@/modules/User';
 import { createMajorModule } from '@/modules/major/major.module';
 import { createRootModule } from '@/modules/root';
+import { createSchoolModule } from '@/modules/school/school.module';
+import { createTeacherModule } from '@/modules/teacher/teacher.module';
 import { SeedDevService } from '@/seeds/dev/seedDev.service';
 import { ExamSeedService } from '@/seeds/fakes/exam.seed.service';
 import { MajorSeedService } from '@/seeds/fakes/major.seed.service';
@@ -28,6 +30,12 @@ const { majorRouter, majorService } = createMajorModule();
 // * EXAM
 const { examRouter, examService } = createExamModule();
 
+// * SCHOOL
+const { schoolRouter, schoolService } = createSchoolModule(userInternalService);
+
+// * TEACHER
+const { teacherRouter, teacherService } = createTeacherModule({ schoolService });
+
 // * SEED
 const majorSeed = new MajorSeedService(majorService);
 const examSeed = new ExamSeedService(examService);
@@ -43,4 +51,6 @@ export const container: { router: Router; resource: string }[] = [
   { router: authRouter, resource: 'auth' },
   { router: majorRouter, resource: 'majors' },
   { router: examRouter, resource: 'exams' },
+  { router: schoolRouter, resource: 'schools' },
+  { router: teacherRouter, resource: 'schools/:schoolId/teachers' },
 ];

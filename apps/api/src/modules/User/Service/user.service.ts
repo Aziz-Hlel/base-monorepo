@@ -1,176 +1,70 @@
-import { UserProfileRowResponse } from '@repo/contracts/schemas/user/UserRowResponse';
-import { UserOrderByWithRelationInput, UserWhereInput } from '../../../generated/prisma/models';
-import { prisma } from '../../../bootstrap/db.init';
-import UserMapper from '../mapper/user.mapper';
-import {
-  ProfileKeys,
-  profileLevelSortableFields,
-  RootKeys,
-  rootLevelSortableFields,
-  UserPageQuery,
-} from '@repo/contracts/schemas/user/UserPageQuery';
-import { cacheService } from '@/cache/service/cache.service';
-import { CreateUserProfileRequest } from '@repo/contracts/schemas/profile/createUserProfileRequest';
-import { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
-import { firebaseUserService } from '@/firebase/service/firebase.user.service';
-import { NotFoundError, PermissionDeniedError } from '@/err/customErrors';
-import { Role } from '@/generated/prisma/enums';
-import PERMISSION_SCORE from '@repo/contracts/utils/PermissionScore';
-import { UpdateUserProfileRequest } from '@repo/contracts/schemas/profile/updateUserProfileRequest';
-import { logger } from '@/bootstrap/logger.init';
-import { RedisKeys } from '@/cache/keys/cache.keys';
-import { Page } from '@repo/contracts/types/page/Page';
+import { UserCreateInput } from '@/generated/prisma/models';
 import { UserRepo } from '../repo/user.repo';
+import { firebaseUserService } from '@/firebase/service/firebase.user.service';
+import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
+import { User } from '@/generated/prisma/client';
 
-export interface IUserService {
-  getUserPage(queryParams: UserPageQuery): Promise<Page<UserProfileRowResponse>>;
-  createUserProfile(schema: CreateUserProfileRequest): Promise<UserProfileResponse>;
-  updateUserProfile(id: string, data: UpdateUserProfileRequest, currentUserRole: Role): Promise<UserProfileResponse>;
-  deleteUser(userToDeleteId: string, currentUserRole: Role): Promise<void>;
-  disableUser(userId: string, currentUserRole: Role): Promise<void>;
-  enableUser(userId: string, currentUserRole: Role): Promise<void>;
-}
-
-export class UserService implements IUserService {
+export class UserService {
   constructor(private readonly userRepo: UserRepo) {}
-  async getUserPage(queryParams: UserPageQuery): Promise<Page<UserProfileRowResponse>> {
-    const cachedKey = RedisKeys.usersPage.genKey(queryParams);
-    const cachedResult = await cacheService.get<Page<UserProfileRowResponse>>({ key: cachedKey });
-    if (cachedResult) {
-      logger.debug('[Cache hit:UserService] Returning cached user page');
-      return cachedResult;
-    }
-    logger.debug('[Cache miss:UserService] Returning cached user page');
-    const skip = (queryParams.page - 1) * queryParams.size;
-    const take = queryParams.size;
-    const { search } = queryParams;
-    const where: UserWhereInput = {};
 
-    if (search.length > 0) {
-      const searchValue = search.toLowerCase();
-      where.OR = [
-        { username: { contains: searchValue, mode: 'insensitive' } },
-        { email: { contains: searchValue, mode: 'insensitive' } },
-      ];
-    }
-    where.AND = [];
-    if (queryParams.status.length) {
-      where.AND.push({
-        status: { in: queryParams.status },
-      });
-    }
-    if (queryParams.role.length) {
-      where.AND.push({
-        role: { in: queryParams.role },
-      });
-    }
-
-    const orderBy: UserOrderByWithRelationInput = {};
-
-    if (rootLevelSortableFields.includes(queryParams.sort as RootKeys)) {
-      orderBy[queryParams.sort as keyof UserOrderByWithRelationInput] = queryParams.order;
-    }
-    if (profileLevelSortableFields.includes(queryParams.sort as ProfileKeys)) {
-      orderBy['profile'] = {
-        [queryParams.sort]: queryParams.order,
-      };
-    }
-
-    const usersContent = prisma.user.findMany({
-      skip,
-      take,
-      where,
-      orderBy,
-      include: { profile: true },
-    });
-
-    const usersCount = prisma.user.count({ where });
-
-    const [content, totalElements] = await Promise.all([usersContent, usersCount]);
-
-    const userPage = UserMapper.toUserPageResponse({
-      users: content,
-      totalElements,
-      pagination: queryParams,
-    });
-
-    await cacheService.set({ key: cachedKey, value: userPage, ttlSeconds: 60 }); // Cache for 60 seconds
-
-    return userPage;
+  async isUserEmailExists(email: string) {
+    return await this.userRepo.isUserEmailExists(email);
   }
 
-  async createUserProfile(schema: CreateUserProfileRequest): Promise<UserProfileResponse> {
+  async createUser(user: UserCreateInput) {
+    return await this.userRepo.createUser(user);
+  }
+
+  createAuthUserAndUser = async (params: {
+    email: string;
+    password: string;
+    username: string;
+  }): Promise<{ success: false; cause: 'EMAIL_ALREADY_EXISTS'; error: string } | { success: true; user: User }> => {
+    const existingUser = await this.findByEmail(params.email);
+    if (existingUser) {
+      return { success: false, cause: 'EMAIL_ALREADY_EXISTS', error: 'User already exists' };
+    }
+
     const userRecord = await firebaseUserService.createUser({
-      email: schema.email,
-      password: schema.password,
-      displayName: schema.username,
-      role: schema.role,
+      email: params.email,
+      password: params.password,
+      displayName: params.username,
     });
 
-    const user = await this.userRepo.createUserProfile(schema, userRecord.uid);
+    const user = await this.createUser({
+      authId: userRecord.uid,
+      email: params.email,
+      username: params.username,
+      provider: 'PASSWORD',
+    });
 
-    const userProfileResponse = UserMapper.toUserProfileResponse(user, null);
-    return userProfileResponse;
+    await firebaseAuthService.setCustomUserClaims({
+      userId: user.id,
+      userAuthId: userRecord.uid,
+      userRole: user.role,
+    });
+
+    return { success: true, user } as const;
+  };
+
+  async findOrCreateUser(user: UserCreateInput) {
+    const existingUser = await this.userRepo.getUserByAuthId(user.authId);
+    if (existingUser) {
+      return { user: existingUser, type: 'EXISTING' };
+    }
+    const createdUser = await this.userRepo.createUser(user);
+    return { user: createdUser, type: 'CREATED' };
   }
 
-  async updateUserProfile(
-    id: string,
-    data: UpdateUserProfileRequest,
-    currentUserRole: Role,
-  ): Promise<UserProfileResponse> {
-    const user = await this.userRepo.getUserById(id);
-    if (!user) {
-      throw new NotFoundError('User not found');
-    }
+  findByEmail = async (email: string) => {
+    return await this.userRepo.findByEmail(email);
+  };
 
-    const isPermitted = PERMISSION_SCORE[currentUserRole] >= PERMISSION_SCORE[user.role];
-    if (!isPermitted) {
-      throw new PermissionDeniedError('You do not have permission to update this user');
-    }
-
-    const updatedUser = await this.userRepo.updateUserProfile(id, data);
-    const userProfileResponse = UserMapper.toUserProfileResponse(updatedUser, null);
-    return userProfileResponse;
+  async getUserById(id: string) {
+    return await this.userRepo.getUserById(id);
   }
 
-  async deleteUser(userToDeleteId: string, currentUserRole: Role): Promise<void> {
-    const user = await this.userRepo.getUserById(userToDeleteId);
-    if (!user) {
-      throw new NotFoundError('User not found');
-    }
-    if (PERMISSION_SCORE[currentUserRole] < PERMISSION_SCORE[user.role]) {
-      throw new PermissionDeniedError('You do not have permission to delete this user');
-    }
-
-    await firebaseUserService.deleteUser(user.authId);
-    await this.userRepo.deleteUser(userToDeleteId);
-  }
-
-  async disableUser(userId: string, currentUserRole: Role): Promise<void> {
-    const user = await this.userRepo.getUserById(userId);
-    if (!user) {
-      throw new NotFoundError('User not found');
-    }
-
-    if (PERMISSION_SCORE[currentUserRole] < PERMISSION_SCORE[user.role]) {
-      throw new PermissionDeniedError('You do not have permission to delete this user');
-    }
-
-    await firebaseUserService.disableUser(user.authId);
-    await this.userRepo.disableUser(userId);
-  }
-
-  async enableUser(userId: string, currentUserRole: Role): Promise<void> {
-    const user = await this.userRepo.getUserById(userId);
-    if (!user) {
-      throw new NotFoundError('User not found');
-    }
-
-    if (PERMISSION_SCORE[currentUserRole] < PERMISSION_SCORE[user.role]) {
-      throw new PermissionDeniedError('You do not have permission to enable this user');
-    }
-
-    await firebaseUserService.enableUser(user.authId);
-    await this.userRepo.enableUser(userId);
+  async getUserByAuthId(authId: string) {
+    return await this.userRepo.getUserByAuthId(authId);
   }
 }

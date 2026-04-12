@@ -1,0 +1,145 @@
+@apiKey = AIzaSyDWKplAl5Vp43pG0j5j3vnThRJIPwv1E44
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+@baseUrl = http://localhost:10000/api
+
+@email = test5@gmail.com
+@password = 12345678
+
+
+
+###########################
+# 1- As School Admin
+###########################
+
+
+
+###
+# @name firebaseLogin
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "returnSecureToken": true
+}
+
+###
+# @name getMySchool
+GET {{baseUrl}}/schools/me
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+
+
+###
+# @name createTeacher
+POST {{baseUrl}}/schools/{{getMySchool.response.body.id}}/teachers
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+
+{
+  "publicId": "Tigana",
+  "lastName": "Doe",
+  "firstName": "John",
+  "isTeacher": true,
+  "subject": "MATH"
+}
+
+
+###
+# @name updateTeacher
+PUT {{baseUrl}}/schools/{{getMySchool.response.body.id}}/teachers/{{createTeacher.response.body.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+{
+  "publicId": "Tigana1 updated",
+  "lastName": "Doe1 updated",
+  "firstName": "John1 updated",
+  "isTeacher": true,
+  "subject": "MATH"
+}
+
+
+###
+# @name getTeacherById
+GET {{baseUrl}}/schools/{{getMySchool.response.body.id}}/teachers/{{updateTeacher.response.body.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+
+###
+# @name getTeacherBySchoolId
+GET {{baseUrl}}/schools/{{getMySchool.response.body.id}}/teachers
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+
+
+###########################
+# 2- As Super Admin
+###########################
+
+
+@email = tigana137@gmail.com
+@password = 12345678
+
+
+###
+# @name firebaseLogin
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "returnSecureToken": true
+}
+
+
+###
+# @name createTeacher
+POST {{baseUrl}}/schools/{{getMySchool.response.body.id}}/teachers
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+
+{
+  "publicId": "teacher by super admin",
+  "lastName": "Doe",
+  "firstName": "John",
+  "isTeacher": true,
+  "subject": "MATH"
+}
+
+
+###
+# @name updateTeacher
+PUT {{baseUrl}}/schools/{{getMySchool.response.body.id}}/teachers/{{createTeacher.response.body.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+{
+  "publicId": "teacher by super admin updated",
+  "lastName": "Doe1 updated",
+  "firstName": "John1 updated",
+  "isTeacher": true,
+  "subject": "MATH"
+}
+
+
+###
+# @name getTeacherById
+GET {{baseUrl}}/schools/{{getMySchool.response.body.id}}/teachers/{{updateTeacher.response.body.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+
+###
+# @name getTeacherBySchoolId
+GET {{baseUrl}}/schools/{{getMySchool.response.body.id}}/teachers
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}

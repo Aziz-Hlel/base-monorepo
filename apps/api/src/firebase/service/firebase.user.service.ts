@@ -39,9 +39,9 @@ class FirebaseUserService {
     role,
   }: {
     email: string;
-    password: string;
-    displayName: string;
-    role: Role;
+    password?: string;
+    displayName?: string;
+    role?: Role;
   }): Promise<UserRecord> {
     try {
       const userExists = await this.safeGetUserByEmail(email);
@@ -52,13 +52,13 @@ class FirebaseUserService {
 
       const userRecord = await this.firebaseSession.createUser({
         email,
-        password,
-        displayName,
+        password: password || '12345678',
+        displayName: displayName || 'N/A',
       });
       firebaseAuthService.setCustomUserClaims({
         userId: userRecord.uid,
         userAuthId: userRecord.uid,
-        userRole: role,
+        userRole: role || Role.ADMIN,
       });
 
       return userRecord;

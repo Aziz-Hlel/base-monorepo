@@ -5,7 +5,7 @@ import { requireAuth } from '@/middleware/requireAuth.middleware';
 import { Role } from '@/generated/prisma/enums';
 import requireRole from '@/middleware/requireRole.middleware';
 import { UserRepo } from '../repo/user.repo';
-import { UserService } from '../Service/user.service';
+import { UserAppService } from '../Service/user.app.service';
 
 const createUserRouter = (controller: UserController) => {
   const router = Router();

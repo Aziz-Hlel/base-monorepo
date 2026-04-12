@@ -70,12 +70,27 @@ export const TermEnum = {
 export type TermEnum = (typeof TermEnum)[keyof typeof TermEnum];
 
 export const CityEnum = {
-  YAOUNDE: 'YAOUNDE',
-  DOUALA: 'DOUALA',
-  BAMENDA: 'BAMENDA',
-  MAROUA: 'MAROUA',
-  GAROUA: 'GAROUA',
-  KUMBO: 'KUMBO',
+  SOUSSE: 'SOUSSE',
+  TUNIS: 'TUNIS',
+  SFAX: 'SFAX',
+  BIZERTE: 'BIZERTE',
+  KAIROUAN: 'KAIROUAN',
+  GABES: 'GABES',
+  MONASTIR: 'MONASTIR',
+  NABEUL: 'NABEUL',
+  BEJA: 'BEJA',
+  JENDOUBA: 'JENDOUBA',
+  KEF: 'KEF',
+  SILIANA: 'SILIANA',
+  KASSERINE: 'KASSERINE',
+  TOZEUR: 'TOZEUR',
+  GAFSA: 'GAFSA',
+  MEDENINE: 'MEDENINE',
+  TATAOUINE: 'TATAOUINE',
+  ZAGHOUAN: 'ZAGHOUAN',
+  MANOUBA: 'MANOUBA',
+  ARIANA: 'ARIANA',
+  BEN_AROUS: 'BEN_AROUS',
 } as const;
 
 export type CityEnum = (typeof CityEnum)[keyof typeof CityEnum];
