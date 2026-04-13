@@ -1,5 +1,6 @@
 import { Account, UserRole } from '@/generated/prisma/client';
 import { AccountGetPayload } from '@/generated/prisma/models';
+import { globalMediaService } from '@/media/media.service';
 import { AccountEntityRequest, accountInclude } from '@/types/includes/account';
 import { AccountResponse } from '@repo/contracts/schemas/account/accountResponse';
 import {
@@ -12,6 +13,19 @@ import {
 import { MediaResponse } from '@repo/contracts/schemas/media/MediaResponse';
 
 export class AccountMapper {
+  static toResponseWithAvatar(account: AccountGetPayload<{ include: { avatar: true } }>): AccountResponse {
+    const avatar = globalMediaService.generateMediaResponse(account.avatar);
+    return {
+      id: account.id,
+      authId: account.authId,
+      email: account.email,
+      avatar: avatar,
+      role: account.role,
+      createdAt: account.createdAt.toISOString(),
+      updatedAt: account.updatedAt.toISOString(),
+    };
+  }
+
   static toAccountDetails({
     account,
     avatar,

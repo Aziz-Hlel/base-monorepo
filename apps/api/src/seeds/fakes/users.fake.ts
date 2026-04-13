@@ -1,7 +1,7 @@
-import { faker } from '@faker-js/faker/.';
-import { Gender, UserRole, UserStatus } from '@/generated/prisma/enums';
-import { UserCreateInput, UserUpdateArgs, UserUpdateInput } from '@/generated/prisma/models';
 import { prisma } from '@/bootstrap/db.init';
+import { Gender, UserRole, UserStatus } from '@/generated/prisma/enums';
+import { UserCreateInput } from '@/generated/prisma/models';
+import { faker } from '@faker-js/faker/.';
 
 export class UserSeed {
   constructor() {}
@@ -56,7 +56,7 @@ export class UserSeed {
         },
       },
       create: user,
-      update: user,
+      update: {},
     });
     return createdUser;
   };

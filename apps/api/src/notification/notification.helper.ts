@@ -1,8 +1,6 @@
-import { NotificationTargetingCreateWithoutNotificationInput } from '@/generated/prisma/models';
 import { CreateNotificationRequest } from '@repo/contracts/schemas/notification/createNotification';
-import { NotificationMapper } from './notification.mapper';
-import { UserRepo } from '@/modules/User/repo/user.repo';
 import { NotificationJob } from '@repo/contracts/jobs/notificationJob';
+import { UserRepo } from '@/modules/User/user.repo';
 
 export class NotificationHelper {
   constructor(private readonly userRepo: UserRepo) {}

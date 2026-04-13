@@ -1,4 +1,3 @@
-import { CreateUserSchema } from '@repo/contracts/schemas/user/CreateUserDto';
 import { Request, Response } from 'express';
 import { OwnerAppService } from './owner.app.service';
 import { createOwnerRequestSchema } from '@repo/contracts/schemas/owner/createOwnerRequest';

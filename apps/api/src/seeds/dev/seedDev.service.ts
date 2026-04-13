@@ -5,7 +5,9 @@ import { SchoolSeed } from '../fakes/school.seed';
 import { UserSeed } from '../fakes/users.fake';
 import ISeed from '../ISeed';
 import { data } from './data';
+import { faker } from '@faker-js/faker/.';
 
+faker.seed(1); // Ensure consistent fake data across runs
 export class SeedDevService implements ISeed {
   constructor(
     private readonly accountSeed: AccountSeed,

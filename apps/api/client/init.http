@@ -1,0 +1,159 @@
+@apiKey = AIzaSyBoFeoCUvczJXVp2FhWYm26UiSGjmYLqOo
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+@AdminEmail = tigana11@gmail.com
+@AdminPassword = 12345678
+
+
+
+
+########################################
+# CREATE : ACCOUNT, OWNER, SCHOOL, USER 
+########################################
+
+### 
+# @name firebaseSignup
+POST {{firebaseUrl}}/accounts:signUp?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{AdminEmail}}",
+  "password": "{{AdminPassword}}",
+  "returnSecureToken": true
+}
+
+
+### 
+# @name createAccount
+POST {{baseUrl}}/accounts/admin
+Content-Type: application/json
+
+{
+    "token": "{{firebaseSignup.response.body.idToken}}"
+}
+
+
+### 
+# @name firebaseTokenRefresh
+POST {{firebaseUrl}}/token?key={{apiKey}}
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&refresh_token={{firebaseSignup.response.body.refreshToken}}
+
+
+###
+# @name createOwner
+POST {{baseUrl}}/owners
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "phone": "+212612345678"
+}
+
+
+###
+# @name createSchool
+POST {{baseUrl}}/schools
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+    "nameEn": "RestClient School",
+    "nameFr": "RestClient School",
+    "nameAr": "RestClient School",
+    "description": "RestClient School description",
+    "address": "RestClient School address",
+    "phone": "+212612345678",
+    "email": "restclientschool@test.com",
+    "logoId": null,
+    "website": "https://www.google.com"
+    
+}
+
+
+###
+# @name createUserWithSimpleRole
+
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "gender": "MALE",
+  "dateOfBirth": "1995-05-15",
+  "phone": "5551234567",
+  "cin": "12345678",
+  "address": "123 Main Street, Springfield",
+  "email": "john.doe01@example.com",
+  "role": "MANAGER",
+  "password": "12345678"
+}
+
+
+
+###
+# @name grantUserRole
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createUserWithSimpleRole.response.body.user.id}}/roles
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+    "role": "DIRECTOR"
+}
+
+
+###
+# @name revokeUserRole
+DELETE {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createUserWithSimpleRole.response.body.user.id}}/roles
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+    "role": "MANAGER"
+}
+
+
+###
+# @name getUserById
+GET {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createUserWithSimpleRole.response.body.user.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+
+########################################
+# AUTH FLOW: ADMIN LOGIN
+########################################
+
+### 
+# @name firebase_login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{AdminEmail}}",
+  "password": "{{AdminPassword}}",
+  "returnSecureToken": true
+}
+
+
+
+###
+# @name serverLogin
+POST {{baseUrl}}/auth/password
+Content-Type: application/json
+
+{
+    "token": "{{firebase_login.response.body.idToken}}"
+}
+
+
+
+

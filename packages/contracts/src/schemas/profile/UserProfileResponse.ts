@@ -1,4 +1,4 @@
-import type { UserResponse } from '../user/UserResponse';
+import type { UserFullResponse } from '../user/UserFullResponse';
 import type { ProfileResponse } from './ProfileResponse';
 
-export type UserProfileResponse = UserResponse & { profile: ProfileResponse | null };
+export type UserProfileResponse = UserFullResponse & { profile: ProfileResponse | null };

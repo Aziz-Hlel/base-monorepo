@@ -1,7 +1,7 @@
-import { ConflictError } from '@/err/customErrors';
+import { ConflictError, NotFoundError } from '@/err/customErrors';
 import { AccountService } from '@/modules/accounts/account.service';
-import { CreateUserRequest } from '@repo/contracts/schemas/user2/createUserRequest';
 import { UserService } from './user.service';
+import { CreateUserRequest } from '@repo/contracts/schemas/user/createUserRequest';
 
 type CreateUserParams = {
   payload: CreateUserRequest;
@@ -14,7 +14,7 @@ export class UserAppService {
     private readonly accountService: AccountService,
   ) {}
 
-  async createUser({ payload, schoolId }: CreateUserParams) {
+  createUser = async ({ payload, schoolId }: CreateUserParams) => {
     const { account, type: accountType } = await this.accountService.findOrCreateAccount({
       accountDetails: {
         email: payload.email,
@@ -34,10 +34,25 @@ export class UserAppService {
         internalLog: `User with email ${payload.email} already exists in school ${schoolId}`,
       });
     }
+
     return {
       message: 'User created successfully',
       user: { id: user.id },
       accountExists: accountType === 'EXISTING',
     };
-  }
+  };
+
+  getById = async ({ userId, schoolId }: { userId: string; schoolId: string }) => {
+    const user = await this.userService.getById(userId);
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+    if (user.schoolId !== schoolId) {
+      throw new NotFoundError({
+        message: 'User not found',
+        internalLog: `User with id ${userId} exists but not in school ${schoolId}`,
+      });
+    }
+    return user;
+  };
 }

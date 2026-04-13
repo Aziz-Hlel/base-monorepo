@@ -154,7 +154,7 @@ model UserRoles {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId, role])
+  @@unique([userId, role])
   @@map("user_roles")
 }
 

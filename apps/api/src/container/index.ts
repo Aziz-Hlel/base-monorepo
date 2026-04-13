@@ -5,6 +5,7 @@ import { authModule } from '@/modules/auth/auth.module';
 import { createOwnerModule as ownerModule } from '@/modules/owner/owner.module';
 import { createRootModule as rootModule } from '@/modules/root';
 import { createSchoolModule as schoolModule } from '@/modules/schools/school.module';
+import { createUserRoleModule } from '@/modules/userRoles/userRole.module';
 import { createNotificationModule as notificationModule } from '@/notification';
 import { SeedDevService } from '@/seeds/dev/seedDev.service';
 import { AccountSeed } from '@/seeds/fakes/account.seed';
@@ -22,9 +23,6 @@ const { mediaRouter } = mediaModule();
 // * ACCOUNT
 const { accountRouter, accountService } = accountModule();
 
-// * AUTH
-const { authRouter } = authModule(accountService);
-
 // * OWNER
 const { ownerRouter, ownerService } = ownerModule();
 
@@ -33,7 +31,12 @@ const { schoolRouter, schoolService } = schoolModule({ ownerService });
 
 // * USER
 const { userRouter, userRepo } = userModule({ accountService });
-// const { authRouter } = createAuthModule(userInternalService);
+
+// * USER ROLE
+const { userRoleRouter, userRoleService } = createUserRoleModule();
+
+// * AUTH
+const { authRouter } = authModule(accountService);
 
 // * NOTIFICATION
 const { notificationRouter } = notificationModule({ userRepo });
@@ -55,5 +58,6 @@ export const container: { router: Router; resource: string }[] = [
   { router: schoolRouter, resource: 'schools' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
+  { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },
   { router: notificationRouter, resource: 'notifications' },
 ];

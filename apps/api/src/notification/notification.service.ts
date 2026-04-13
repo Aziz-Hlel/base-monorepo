@@ -4,7 +4,6 @@ import {
   NotificationOrderByWithRelationInput,
   NotificationWhereInput,
 } from '@/generated/prisma/models';
-import UserMapper from '@/modules/User/mapper/user.mapper';
 import { INotificationQueue } from '@/mq/notification.queue';
 import { CreateNotificationRequest } from '@repo/contracts/schemas/notification/createNotification';
 import { NotificationPageQuery } from '@repo/contracts/schemas/notification/notificationPageQuery';
@@ -14,6 +13,7 @@ import { Page } from '@repo/contracts/types/page/Page';
 import { NotificationHelper } from './notification.helper';
 import { NotificationMapper } from './notification.mapper';
 import { NotificationRepo } from './notification.repo';
+import { UserMapper } from '@/modules/User/user.mapper';
 
 export interface INotificationService {
   create: (payload: CreateNotificationRequest) => Promise<void>;
@@ -74,7 +74,7 @@ export class NotificationService implements INotificationService {
         schedule: this.toScheduleResponse(notification),
         recipients: this.toRecipientResponse(notification),
 
-        createdBy: UserMapper.toUserResponse(notification.createdBy),
+        createdBy: UserMapper.toFullUserResponse(notification.createdBy),
         sentAt: notification.sentAt?.toISOString() ?? null,
         isSuccessful: null,
         createdAt: notification.createdAt.toISOString(),

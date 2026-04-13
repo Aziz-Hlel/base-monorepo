@@ -1,10 +1,12 @@
+import { prisma } from '@/bootstrap/db.init';
+import { DatabaseError } from '@/err/customErrors';
+import { Prisma } from '@/generated/prisma/client';
 import { UserGetPayload, UserInclude } from '@/generated/prisma/models';
 import { DefaultArgs } from '@prisma/client/runtime/client';
-import { prisma } from '../../../bootstrap/db.init';
-import { CreateUserRequest } from '@repo/contracts/schemas/user2/createUserRequest';
+import { CreateUserRequest } from '@repo/contracts/schemas/user/createUserRequest';
 
 export class UserRepo {
-  getUserByAccountIdSchoolId = async <T extends UserInclude<DefaultArgs>>({
+  findByAccountIdSchoolId = async <T extends UserInclude<DefaultArgs>>({
     accountId,
     schoolId,
     include,
@@ -25,6 +27,10 @@ export class UserRepo {
       });
       return user as UserGetPayload<{ include: T }> | null;
     } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (!(error instanceof Error)) throw error;
+        throw new DatabaseError({ message: 'Failed to find user', cause: error });
+      }
       throw error;
     }
   };
@@ -59,6 +65,28 @@ export class UserRepo {
       });
       return user;
     } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (!(error instanceof Error)) throw error;
+        throw new DatabaseError({ message: 'Failed to create user', cause: error });
+      }
+      throw error;
+    }
+  };
+
+  findById = async <T extends UserInclude<DefaultArgs>>(userId: string, { include }: { include: T }) => {
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        include,
+      });
+      return user;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (!(error instanceof Error)) throw error;
+        throw new DatabaseError({ message: 'Failed to find user', cause: error });
+      }
       throw error;
     }
   };

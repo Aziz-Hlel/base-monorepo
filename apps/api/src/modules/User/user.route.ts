@@ -1,7 +1,7 @@
 import { asyncHandler } from '@/core/async-handler';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
 import { Router } from 'express';
-import { UserController } from '../Controller/user.controller';
+import { UserController } from './user.controller';
 import { UserRole } from '@/generated/prisma/enums';
 import requireUserPermission from '@/middleware/requirePermission.middleware';
 
@@ -11,8 +11,14 @@ const createUserRouter = (controller: UserController) => {
   router.post(
     '/',
     requireAuth,
-    requireUserPermission({ requiredRoles: [UserRole.DIRECTOR, UserRole.MANAGER] }),
+    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(controller.create),
+  );
+  router.get(
+    '/:userId',
+    requireAuth,
+    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER]),
+    asyncHandler(controller.getById),
   );
 
   return router;
