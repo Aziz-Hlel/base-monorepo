@@ -227,8 +227,8 @@ model ExamSession {
   classId String @db.Uuid
   class Class @relation(fields: [classId], references: [id])
   
-  examId String? @db.Uuid
-  exam Exam? @relation(fields: [examId], references: [id])
+  examId String @db.Uuid
+  exam Exam @relation(fields: [examId], references: [id])
 
   teacherExamSession TeacherExamSession?
   
