@@ -2,6 +2,7 @@ import { EmailRouter } from '@/email/email.route';
 import { createMediaModule } from '@/media';
 import { createExamModule } from '@/modules/Exam/exam.module';
 import { createAuthModule, createUserModule } from '@/modules/User';
+import { ClassModule } from '@/modules/class/class.module';
 import { createMajorModule } from '@/modules/major/major.module';
 import { createRootModule } from '@/modules/root';
 import { createSchoolModule } from '@/modules/school/school.module';
@@ -36,6 +37,9 @@ const { schoolRouter, schoolService } = createSchoolModule(userInternalService);
 // * TEACHER
 const { teacherRouter, teacherService } = createTeacherModule({ schoolService });
 
+// * CLASS
+const { classRouter } = ClassModule();
+
 // * SEED
 const majorSeed = new MajorSeedService(majorService);
 const examSeed = new ExamSeedService(examService);
@@ -53,4 +57,5 @@ export const container: { router: Router; resource: string }[] = [
   { router: examRouter, resource: 'exams' },
   { router: schoolRouter, resource: 'schools' },
   { router: teacherRouter, resource: 'schools/:schoolId/teachers' },
+  { router: classRouter, resource: 'schools/:schoolId/classes' },
 ];

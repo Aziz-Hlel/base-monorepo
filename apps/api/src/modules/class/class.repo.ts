@@ -1,4 +1,5 @@
 import { prisma } from '@/bootstrap/db.init';
+import { Prisma } from '@/generated/prisma/client';
 import { CreateClassRequest } from '@repo/contracts/schemas/class/createClassRequest';
 import { UpdateClassRequest } from '@repo/contracts/schemas/class/updateClassRequest';
 

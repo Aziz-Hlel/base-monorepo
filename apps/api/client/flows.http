@@ -3,32 +3,36 @@
 
 @baseUrl = http://localhost:10000/api
 
-@email = tigana137@gmail.com
-@password = 12345678
-@schoolOwnerEmail = test5@gmail.com
+@superAdminEmail = tigana137@gmail.com
+@superAdminPassword = 12345678
+
+@schoolOwnerEmail = test6@gmail.com
 @schoolOwnerPassword = 12345678
+
 
 ###########################
 # 1- create school with user as super admin
 ###########################
 
+
 ###
-# @name firebaseLogin
+# @name firebaseLoginSuperAdmin
 POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
 Content-Type: application/json
 
 {
-  "email": "{{email}}",
-  "password": "{{password}}",
+  "email": "{{superAdminEmail}}",
+  "password": "{{superAdminPassword}}",
   "returnSecureToken": true
 }
+
 
 
 ###
 # @name createSchoolWithUser
 POST {{baseUrl}}/schools/with-user
 Content-Type: application/json
-Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+Authorization: Bearer {{firebaseLoginSuperAdmin.response.body.idToken}}
 
 {
   "user": {
@@ -42,6 +46,7 @@ Authorization: Bearer {{firebaseLogin.response.body.idToken}}
     "city": "SOUSSE"
   }
 }
+
 
 
 ###########################
@@ -77,68 +82,3 @@ Authorization: Bearer {{firebaseLogin.response.body.idToken}}
   "publicId": "school1-public-id-updated",
   "city": "MONASTIR"
 }
-
-
-###########################
-# 3- create school with user as school admin
-###########################
-@email01 = test02@gmail.com
-@password01 = 12345678
-
-
-### 
-# @name firebase_signup
-POST {{firebaseUrl}}/accounts:signUp?key={{apiKey}}
-Content-Type: application/json
-
-{
-  "email": "{{email01}}",
-  "password": "{{password01}}",
-  "returnSecureToken": true
-}
-
-
-###
-# @name firebaseLogin
-POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
-Content-Type: application/json
-
-{
-  "email": "{{email01}}",
-  "password": "{{password01}}",
-  "returnSecureToken": true
-}
-
-### 
-# @name serverSignup
-POST {{baseUrl}}/auth/register
-Content-Type: application/json
-
-{
-    "token": "{{firebaseLogin.response.body.idToken}}"
-}
-
-
-###
-# @name serverLogin
-POST {{baseUrl}}/auth/login
-Content-Type: application/json
-
-{
-  "token": "{{firebaseLogin.response.body.idToken}}"
-}
-
-
-###
-# @name createMySchool
-POST {{baseUrl}}/schools
-Content-Type: application/json
-Authorization: Bearer {{firebaseLogin.response.body.idToken}}
-
-{
-  "name": "School 2",
-  "publicId": "school2-public-id",
-  "city": "SOUSSE"
-}
-
-

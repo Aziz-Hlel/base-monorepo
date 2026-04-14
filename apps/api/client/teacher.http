@@ -3,8 +3,8 @@
 
 @baseUrl = http://localhost:10000/api
 
-@email = test5@gmail.com
-@password = 12345678
+@AdminEmail = test5@gmail.com
+@AdminPassword = 12345678
 
 
 
@@ -20,8 +20,8 @@ POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
 Content-Type: application/json
 
 {
-  "email": "{{email}}",
-  "password": "{{password}}",
+  "email": "{{AdminEmail}}",
+  "password": "{{AdminPassword}}",
   "returnSecureToken": true
 }
 
@@ -72,7 +72,7 @@ Authorization: Bearer {{firebaseLogin.response.body.idToken}}
 
 
 ###
-# @name getTeacherBySchoolId
+# @name getTeachersBySchoolId
 GET {{baseUrl}}/schools/{{getMySchool.response.body.id}}/teachers
 Content-Type: application/json
 Authorization: Bearer {{firebaseLogin.response.body.idToken}}
@@ -84,8 +84,8 @@ Authorization: Bearer {{firebaseLogin.response.body.idToken}}
 ###########################
 
 
-@email = tigana137@gmail.com
-@password = 12345678
+@superAdminEmail = tigana137@gmail.com
+@superAdminPassword = 12345678
 
 
 ###
@@ -94,8 +94,8 @@ POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
 Content-Type: application/json
 
 {
-  "email": "{{email}}",
-  "password": "{{password}}",
+  "email": "{{superAdminEmail}}",
+  "password": "{{superAdminPassword}}",
   "returnSecureToken": true
 }
 
@@ -139,7 +139,7 @@ Authorization: Bearer {{firebaseLogin.response.body.idToken}}
 
 
 ###
-# @name getTeacherBySchoolId
+# @name getTeachersBySchoolId
 GET {{baseUrl}}/schools/{{getMySchool.response.body.id}}/teachers
 Content-Type: application/json
 Authorization: Bearer {{firebaseLogin.response.body.idToken}}

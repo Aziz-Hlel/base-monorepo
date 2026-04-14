@@ -1,0 +1,64 @@
+@apiKey = AIzaSyDWKplAl5Vp43pG0j5j3vnThRJIPwv1E44
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+@baseUrl = http://localhost:10000/api
+
+@AdminEmail = test5@gmail.com
+@AdminPassword = 12345678
+
+
+###########################
+# 1- As School Admin
+###########################
+
+###
+# @name firebaseLogin
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{AdminEmail}}",
+  "password": "{{AdminPassword}}",
+  "returnSecureToken": true
+}
+
+###
+# @name getMySchool
+GET {{baseUrl}}/schools/me
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+
+###
+# @name createClass
+POST {{baseUrl}}/schools/{{getMySchool.response.body.id}}/classes
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+{
+  "name": "Class 1"
+}
+
+###
+# @name getClassById
+GET {{baseUrl}}/schools/{{getMySchool.response.body.id}}/classes/{{createClass.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+
+###
+# @name updateClass
+PUT {{baseUrl}}/schools/{{getMySchool.response.body.id}}/classes/{{createClass.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}
+
+{
+  "name": "Class 1 Updated"
+}
+
+
+###
+# @name getSchoolClasses
+GET {{baseUrl}}/schools/{{getMySchool.response.body.id}}/classes/
+Content-Type: application/json
+Authorization: Bearer {{firebaseLogin.response.body.idToken}}

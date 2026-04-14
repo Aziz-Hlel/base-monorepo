@@ -20,6 +20,7 @@ export class TeacherAppService {
     }
     const isAllowToCreate = claims.role === Role.SUPER_ADMIN || school.userId === claims.id;
     if (!isAllowToCreate) {
+      // ! permession should be checked in the middleware
       throw new PermissionDeniedError({
         message: 'You are not authorized to perform this action',
         internalLog: { claims, school },
