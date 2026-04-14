@@ -1,12 +1,12 @@
+import { prisma } from '@/bootstrap/db.init';
+import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
+import { firebaseUserService } from '@/firebase/service/firebase.user.service';
 import { Account, AccountRole, Prisma } from '@/generated/prisma/client';
+import { accountInclude } from '@/types/includes/account';
+import { isUniqueConstraintError } from '@/utils/prismaError';
 import { AccountHelper } from './account.helper';
 import { AccountRepo } from './account.repo';
-import { prisma } from '@/bootstrap/db.init';
-import { firebaseUserService } from '@/firebase/service/firebase.user.service';
-import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
-import { isUniqueConstraintError } from '@/utils/prismaError';
-import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
-import { accountInclude } from '@/types/includes/account';
+import { DatabaseError } from '@/err/customErrors';
 
 type FindOrCreateAccount = {
   accountDetails: {
@@ -19,6 +19,15 @@ type FindOrCreateAccount = {
   tx?: Prisma.TransactionClient;
 };
 
+type FindOrCreateAccount_V2 = {
+  accountDetails: {
+    email: string;
+    authId: string;
+    role?: AccountRole;
+    provider?: string;
+  };
+  tx?: Prisma.TransactionClient;
+};
 export class AccountService {
   constructor(
     private readonly accountRepo: AccountRepo,
@@ -55,7 +64,7 @@ export class AccountService {
 
     if (existingAccount) return { account: existingAccount, type: 'EXISTING' };
 
-    const authAccount = await firebaseUserService.findOrCreateAccount({
+    const { userRecord, type } = await firebaseUserService.findOrCreateAccount({
       email: accountDetails.email,
       password: accountDetails.password ?? '12345678',
       displayName: accountDetails.displayName,
@@ -63,7 +72,7 @@ export class AccountService {
 
     try {
       const account = await this.accountRepo.createAccount({
-        authId: authAccount.uid,
+        authId: userRecord.uid,
         email: accountDetails.email,
         role: accountDetails.role,
         provider: accountDetails.provider ?? 'password',
@@ -72,7 +81,7 @@ export class AccountService {
 
       // * it might throw errors and fuck up the flow
       await firebaseAuthService.setAccountClaims({
-        authId: authAccount.uid,
+        authId: userRecord.uid,
         claims: {
           accountId: account.id,
           accountRole: account.role,
@@ -89,6 +98,35 @@ export class AccountService {
       }
 
       throw error;
+    }
+  };
+
+  findOrCreateAccount_V2 = async (
+    { accountDetails }: FindOrCreateAccount_V2,
+    tx?: Prisma.TransactionClient,
+  ): Promise<{ account: Account; type: 'EXISTING' | 'NEW' }> => {
+    const client = tx ?? prisma;
+
+    const existingAccount = await client.account.findUnique({ where: { email: accountDetails.email } });
+
+    if (existingAccount) return { account: existingAccount, type: 'EXISTING' };
+
+    try {
+      const account = await this.accountRepo.createAccount(
+        {
+          authId: accountDetails.authId,
+          email: accountDetails.email,
+          role: accountDetails.role,
+          provider: accountDetails.provider,
+          isEmailVerified: false,
+        },
+        tx,
+      );
+
+      return { account, type: 'NEW' };
+    } catch (error: any) {
+      if (!(error instanceof Error)) throw error;
+      throw new DatabaseError({ message: 'Failed to create account', cause: error });
     }
   };
 

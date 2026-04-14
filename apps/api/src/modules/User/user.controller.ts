@@ -2,15 +2,16 @@ import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import { Response } from 'express';
 import getParam from '@/utils/getParam';
 import { UserAppService } from './user.app.service';
-import { createUserRequestSchema } from '@repo/contracts/schemas/user/createUserRequest';
+import { createSimpleUserRequestSchema } from '@repo/contracts/schemas/user/createUserRequest';
 
 export class UserController {
   constructor(private readonly userService: UserAppService) {}
 
   create = async (req: AuthenticatedRequest, res: Response) => {
+    // * most likely to be disposed (reason 1 : it's already bein replaced with the use case, reason 2 : you need to create the user based on it prespective place like staff parent or teacher)
     const schoolId = getParam(req, 'schoolId', { uuid: true });
-    const schema = createUserRequestSchema.parse(req.body);
-    const result = await this.userService.createUser({ payload: schema, schoolId });
+    const schema = createSimpleUserRequestSchema.parse(req.body);
+    const result = await this.userService.createSimpleUser({ payload: schema, schoolId });
     res.status(201).json(result);
   };
 

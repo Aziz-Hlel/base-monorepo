@@ -24,17 +24,17 @@ export const profileLevelSortableFields: ProfileKeys[] = ['phoneNumber', 'addres
 
 export const sortableColumnKeys: TableRowKeys[] = rootLevelSortableFields.concat(profileLevelSortableFields as any);
 
-const csvEnumArray = <T extends string[]>(values: T) =>
-  z
-    .string()
-    .transform((value) =>
-      value
-        .split(',')
-        .map((v) => v.trim())
-        .filter(Boolean)
-        .sort(),
-    )
-    .pipe(z.array(z.enum(values)));
+// const csvEnumArray = <T extends string[]>(values: T) =>
+//   z
+//     .string()
+//     .transform((value) =>
+//       value
+//         .split(',')
+//         .map((v) => v.trim())
+//         .filter(Boolean)
+//         .sort(),
+//     )
+//     .pipe(z.array(z.enum(values)));
 
 export const queryParamsSchema = z.object({
   page: z.coerce.number().int().positive().catch(1),

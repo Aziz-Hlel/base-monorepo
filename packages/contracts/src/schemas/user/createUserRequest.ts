@@ -1,9 +1,9 @@
 import z from 'zod';
 import { Gender } from '../../types/enums/enums';
 import { dateStringSchema } from '../utils/generalZod';
-import { simpleUserRoles } from '../../types/enums/meta/userRoleMeta';
+import { userRolesSimple } from '../../types/enums/meta/userRoleMeta';
 
-export const createUserRequestSchema = z.object({
+export const createSimpleUserRequestSchema = z.object({
   firstName: z
     .string()
     .trim()
@@ -45,7 +45,7 @@ export const createUserRequestSchema = z.object({
 
   email: z.email('Invalid email').max(255, 'Email must be at most 255 characters long'),
 
-  role: z.enum(simpleUserRoles),
+  role: z.enum(userRolesSimple),
 
   password: z
     .string()
@@ -55,4 +55,4 @@ export const createUserRequestSchema = z.object({
     .or(z.null()),
 });
 
-export type CreateUserRequest = z.infer<typeof createUserRequestSchema>;
+export type CreateSimpleUserRequest = z.infer<typeof createSimpleUserRequestSchema>;

@@ -1,7 +1,7 @@
 import { prisma } from '@/bootstrap/db.init';
-import { Prisma } from '@/generated/prisma/client';
 import { AccountRole } from '@/generated/prisma/enums';
 import { AccountInclude } from '@/generated/prisma/models';
+import { TX } from '@/types/prisma/PrismaTransaction';
 import { DefaultArgs } from '@prisma/client/runtime/client';
 
 export class AccountRepo {
@@ -49,20 +49,24 @@ export class AccountRepo {
     return account;
   };
 
-  createAccount = async ({
-    authId,
-    email,
-    role = AccountRole.USER,
-    provider,
-    isEmailVerified,
-  }: {
-    authId: string;
-    email: string | undefined;
-    role?: AccountRole;
-    provider?: string;
-    isEmailVerified?: boolean;
-  }) => {
-    const account = await prisma.account.create({
+  createAccount = async (
+    {
+      authId,
+      email,
+      role = AccountRole.USER,
+      provider,
+      isEmailVerified,
+    }: {
+      authId: string;
+      email: string | undefined;
+      role?: AccountRole;
+      provider?: string;
+      isEmailVerified?: boolean;
+    },
+    tx?: TX,
+  ) => {
+    const client = tx || prisma;
+    const account = await client.account.create({
       data: {
         authId,
         email,
@@ -75,9 +79,9 @@ export class AccountRepo {
     return account;
   };
 
-  getAccountByEmail = async ({ email, tx }: { email: string; tx?: Prisma.TransactionClient }) => {
-    const orm = tx || prisma;
-    const account = await orm.account.findUnique({
+  getAccountByEmail = async ({ email, tx }: { email: string; tx?: TX }) => {
+    const client = tx || prisma;
+    const account = await client.account.findUnique({
       where: {
         email,
       },

@@ -1,4 +1,5 @@
 import { AccountService } from '../accounts/account.service';
+import { CreateSimpleUserUseCase } from './use-cases/createSimpleUser.use-case';
 import { UserAppService } from './user.app.service';
 import { UserController } from './user.controller';
 import { UserRepo } from './user.repo';
@@ -16,10 +17,11 @@ import { UserService } from './user.service';
 const createUserModule = ({ accountService }: { accountService: AccountService }) => {
   const repo = new UserRepo();
   const service = new UserService(repo);
+  const createSimpleUserUseCase = new CreateSimpleUserUseCase(service, accountService);
   const appService = new UserAppService(service, accountService);
   const controller = new UserController(appService);
   const userRouter = createUserRouter(controller);
-  return { userRouter, userService: service, userRepo: repo };
+  return { userRouter, userService: service, userRepo: repo, createSimpleUserUseCase };
 };
 
 export { createUserModule };

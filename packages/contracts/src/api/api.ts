@@ -1,6 +1,10 @@
-import { createProductRequestSchema } from '../schemas/product/createProductRequest';
-import { productResponseSchema } from '../schemas/product/productResponse';
-import { updateProductRequestSchema } from '../schemas/product/updateProductRequest';
+// import { createProductRequestSchema } from '../schemas/product/createProductRequest';
+// import { productResponseSchema } from '../schemas/product/productResponse';
+// import { updateProductRequestSchema } from '../schemas/product/updateProductRequest';
+
+const createProductRequestSchema = '';
+const productResponseSchema = '';
+const updateProductRequestSchema = '';
 
 const routeVersion = 'v1';
 

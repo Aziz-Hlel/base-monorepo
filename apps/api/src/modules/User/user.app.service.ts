@@ -1,10 +1,10 @@
 import { ConflictError, NotFoundError } from '@/err/customErrors';
 import { AccountService } from '@/modules/accounts/account.service';
 import { UserService } from './user.service';
-import { CreateUserRequest } from '@repo/contracts/schemas/user/createUserRequest';
+import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createUserRequest';
 
 type CreateUserParams = {
-  payload: CreateUserRequest;
+  payload: CreateSimpleUserRequest;
   schoolId: string;
 };
 
@@ -14,7 +14,7 @@ export class UserAppService {
     private readonly accountService: AccountService,
   ) {}
 
-  createUser = async ({ payload, schoolId }: CreateUserParams) => {
+  createSimpleUser = async ({ payload, schoolId }: CreateUserParams) => {
     const { account, type: accountType } = await this.accountService.findOrCreateAccount({
       accountDetails: {
         email: payload.email,

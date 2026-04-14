@@ -3,7 +3,7 @@ import { DatabaseError } from '@/err/customErrors';
 import { Prisma } from '@/generated/prisma/client';
 import { UserGetPayload, UserInclude } from '@/generated/prisma/models';
 import { DefaultArgs } from '@prisma/client/runtime/client';
-import { CreateUserRequest } from '@repo/contracts/schemas/user/createUserRequest';
+import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createUserRequest';
 
 export class UserRepo {
   findByAccountIdSchoolId = async <T extends UserInclude<DefaultArgs>>({
@@ -35,17 +35,21 @@ export class UserRepo {
     }
   };
 
-  createUserWithSimpleRole = async ({
-    schema,
-    schoolId,
-    accountId,
-  }: {
-    schema: CreateUserRequest;
-    schoolId: string;
-    accountId: string;
-  }) => {
+  createUserWithSimpleRole = async (
+    {
+      schema,
+      schoolId,
+      accountId,
+    }: {
+      schema: CreateSimpleUserRequest;
+      schoolId: string;
+      accountId: string;
+    },
+    tx?: Prisma.TransactionClient,
+  ) => {
     try {
-      const user = await prisma.user.create({
+      const client = tx || prisma;
+      const user = await client.user.create({
         data: {
           firstName: schema.firstName,
           lastName: schema.lastName,

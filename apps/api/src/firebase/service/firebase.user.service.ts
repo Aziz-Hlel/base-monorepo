@@ -66,23 +66,20 @@ class FirebaseUserService {
     displayName,
   }: {
     email: string;
-    password: string;
+    password: string | null;
     displayName?: string;
-  }): Promise<UserRecord> => {
+  }): Promise<{ userRecord: UserRecord; type: 'EXISTING' | 'CREATED' }> => {
     try {
       const userExists = await this.safeGetUserByEmail(email);
-      if (userExists.success) {
-        // ! not quite my tempo, this will return the existed user in the auth provider to continue the flow and create the user, better than throwing an erro but the password will still whatever it was set to before
-        return userExists.data;
-      }
+      if (userExists.success) return { userRecord: userExists.data, type: 'EXISTING' } as const;
 
       const userRecord = await this.firebaseSession.createUser({
         email,
-        password,
+        password: password ?? '12345678',
         displayName,
       });
 
-      return userRecord;
+      return { userRecord, type: 'CREATED' } as const;
     } catch (error: unknown) {
       if (isFirebaseError(error)) handleFirebaseError(error);
 

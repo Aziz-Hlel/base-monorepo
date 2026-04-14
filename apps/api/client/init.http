@@ -4,7 +4,7 @@
 
 @baseUrl = http://localhost:10000/api
 
-@AdminEmail = tigana11@gmail.com
+@AdminEmail = tigana12@gmail.com
 @AdminPassword = 12345678
 
 
@@ -78,9 +78,8 @@ Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 
 ###
-# @name createUserWithSimpleRole
-
-POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users
+# @name createStaff
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/staff
 Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
@@ -92,16 +91,15 @@ Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
   "phone": "5551234567",
   "cin": "12345678",
   "address": "123 Main Street, Springfield",
-  "email": "john.doe01@example.com",
+  "email": "john.doe02@example.com",
   "role": "MANAGER",
   "password": "12345678"
 }
 
 
-
 ###
 # @name grantUserRole
-POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createUserWithSimpleRole.response.body.user.id}}/roles
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createStaff.response.body.staff.id}}/roles
 Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
@@ -112,7 +110,7 @@ Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 ###
 # @name revokeUserRole
-DELETE {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createUserWithSimpleRole.response.body.user.id}}/roles
+DELETE {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createStaff.response.body.staff.id}}/roles
 Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
@@ -123,9 +121,12 @@ Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 ###
 # @name getUserById
-GET {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createUserWithSimpleRole.response.body.user.id}}
+GET {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createStaff.response.body.staff.id}}
 Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+
+
 
 
 ########################################

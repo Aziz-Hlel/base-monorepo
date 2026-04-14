@@ -1,4 +1,4 @@
-import { Role, Status } from '../../types/enums/enums';
+import { UserRole, UserStatus } from '../../types/enums/enums';
 import type { Prettify } from '../../utils/Prettify';
 
 export type UserRowResponse = {
@@ -8,9 +8,9 @@ export type UserRowResponse = {
   email: string | null;
   provider: string;
   username: string | null;
-  role: Role;
+  role: UserRole;
   isEmailVerified: boolean;
-  status: Status;
+  status: UserStatus;
 };
 
 export type ProfileRowResponse = {
