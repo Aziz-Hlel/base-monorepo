@@ -1,5 +1,10 @@
 
-
+enum StudentStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  EXPELLED
+}
 
 
 model Student {
@@ -8,12 +13,16 @@ model Student {
   lastName String @db.VarChar(255)
   dateOfBirth DateTime @db.Date
   gender Gender
+  status StudentStatus
 
   parents ParentStudent[]
 
 
   schoolId String @db.Uuid
   school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  classId String? @db.Uuid
+  class Class? @relation(fields: [classId], references: [id], onDelete: Restrict)
 
   avatarId String? @db.Uuid
   avatar Media? @relation(fields: [avatarId], references: [id], onDelete: SetNull)

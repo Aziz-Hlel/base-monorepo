@@ -39,6 +39,7 @@ export type AdministrationRole = (typeof administrationRoles)[number];
 export type AdministrationWorkspace =
   | {
       id: string;
+      userId: string;
       firstName: string;
       lastName: string;
       school: SchoolResponse & {
@@ -58,6 +59,7 @@ export type AdministrationWorkspace =
 
 export type TeacherWorkspace = {
   id: string;
+  userId: string;
   firstName: string;
   lastName: string;
   school: SchoolResponse;
@@ -65,6 +67,7 @@ export type TeacherWorkspace = {
 
 export type ParentWorkspace = {
   id: string;
+  userId: string;
   firstName: string;
   lastName: string;
   student: StudentResponse;

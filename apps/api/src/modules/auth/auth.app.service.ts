@@ -11,7 +11,6 @@ export class AuthAppService {
   constructor(private readonly accountService: AccountService) {}
 
   async authWithPassword(token: string) {
-    console.log('toekn', token);
     const decodedToken = await firebaseAuthService.verifyTokenWithClaims(token);
 
     const userAuthId = decodedToken.uid;

@@ -93,7 +93,8 @@ export class AccountMapper {
     student: ParentWorkspace['student'];
   }): ParentWorkspace {
     return {
-      id: user.id,
+      id: user.parent?.id,
+      userId: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
       student,
@@ -146,7 +147,8 @@ export class AccountMapper {
             break;
           case UserRole.TEACHER:
             teacherWorkspaces.push({
-              id: user.id,
+              id: user.teacher?.id,
+              userId: user.id,
               firstName: user.firstName,
               lastName: user.lastName,
               school: {
@@ -179,6 +181,7 @@ export class AccountMapper {
         if (administrationRolesSet.has(role.role as AdministrationRole)) {
           administrationWorkspaces.push({
             id: user.id,
+            userId: user.id,
             firstName: user.firstName,
             lastName: user.lastName,
             school: {

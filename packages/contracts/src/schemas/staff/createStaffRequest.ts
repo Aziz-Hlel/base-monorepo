@@ -1,5 +1,5 @@
 import z from 'zod';
-import { createSimpleUserRequestSchema } from '../user/createUserRequest';
+import { createSimpleUserRequestSchema } from '../user/createSimpleUserRequest';
 import { userRolesStaff } from '../../types/enums/meta/userRoleMeta';
 
 export const createStaffRequestSchema = createSimpleUserRequestSchema.extend({

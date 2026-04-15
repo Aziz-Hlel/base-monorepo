@@ -3,7 +3,9 @@ import { DatabaseError } from '@/err/customErrors';
 import { Prisma } from '@/generated/prisma/client';
 import { UserGetPayload, UserInclude } from '@/generated/prisma/models';
 import { DefaultArgs } from '@prisma/client/runtime/client';
-import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createUserRequest';
+import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createSimpleUserRequest';
+import { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
+import { CreateUserInput } from './types/createUserInput';
 
 export class UserRepo {
   findByAccountIdSchoolId = async <T extends UserInclude<DefaultArgs>>({
@@ -41,7 +43,7 @@ export class UserRepo {
       schoolId,
       accountId,
     }: {
-      schema: CreateSimpleUserRequest;
+      schema: CreateUserInput;
       schoolId: string;
       accountId: string;
     },
@@ -72,6 +74,31 @@ export class UserRepo {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (!(error instanceof Error)) throw error;
         throw new DatabaseError({ message: 'Failed to create user', cause: error });
+      }
+      throw error;
+    }
+  };
+
+  updateSimpleUser = async (
+    { input, userId }: { input: UpdateSimpleUserRequest; userId: string },
+    tx?: Prisma.TransactionClient,
+  ) => {
+    try {
+      const client = tx || prisma;
+      const user = await client.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          ...input,
+          dateOfBirth: input.dateOfBirth ? new Date(input.dateOfBirth) : null,
+        },
+      });
+      return user;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (!(error instanceof Error)) throw error;
+        throw new DatabaseError({ message: 'Failed to update user', cause: error });
       }
       throw error;
     }

@@ -3,9 +3,10 @@ import { createUserModule as userModule } from '@/modules/User';
 import accountModule from '@/modules/accounts';
 import { authModule } from '@/modules/auth/auth.module';
 import { createOwnerModule as ownerModule } from '@/modules/owner/owner.module';
-import { createRootModule as rootModule } from '@/modules/root';
+import { createRootModule as rootModule } from '@/modules/root/root.module';
 import { createSchoolModule as schoolModule } from '@/modules/schools/school.module';
 import { StaffModule } from '@/modules/staff/staff.module';
+import { TeacherModule } from '@/modules/teacher/teacher.module';
 import { createUserRoleModule } from '@/modules/userRoles/userRole.module';
 import { createNotificationModule as notificationModule } from '@/notification';
 import { SeedDevService } from '@/seeds/dev/seedDev.service';
@@ -31,13 +32,16 @@ const { ownerRouter, ownerService } = ownerModule();
 const { schoolRouter, schoolService } = schoolModule({ ownerService });
 
 // * USER
-const { userRouter, userRepo, createSimpleUserUseCase } = userModule({ accountService });
+const { userRouter, userRepo, createSimpleUserUseCase, userService } = userModule({ accountService });
 
 // * USER ROLE
 const { userRoleRouter, userRoleService } = createUserRoleModule();
 
 // * STAFF
-const { staffRouter } = StaffModule({ createSimpleUserUseCase });
+const { staffRouter } = StaffModule({ createSimpleUserUseCase, userService });
+
+// * TEACHER
+const { teacherRouter } = TeacherModule({ createSimpleUserUseCase, userService });
 
 // *
 // * AUTH
@@ -62,6 +66,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: ownerRouter, resource: 'owners' },
   { router: schoolRouter, resource: 'schools' },
   { router: staffRouter, resource: 'schools/:schoolId/staff' },
+  { router: teacherRouter, resource: 'schools/:schoolId/teachers' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
   { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },

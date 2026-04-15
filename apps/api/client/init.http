@@ -4,14 +4,37 @@
 
 @baseUrl = http://localhost:10000/api
 
-@AdminEmail = tigana12@gmail.com
+@AdminEmail = admin1@gmail.com
 @AdminPassword = 12345678
 
+@DirectorEmail = director1@gmail.com
+@DirectorPassword = 12345678
+
+@ManagerEmail = manager1@gmail.com
+@ManagerPassword = 12345678
+
+@TeacherEmail = teacher1@gmail.com
+@TeacherPassword = 12345678
+
+###
+# @name health
+GET {{baseUrl}}/root/health
+Content-Type: application/json
+
+###
+# @name healthz
+GET {{baseUrl}}/root/healthz
+Content-Type: application/json
+
+###
+# @name hardReset
+DELETE {{baseUrl}}/root/hard-reset
+Content-Type: application/json
 
 
 
 ########################################
-# CREATE : ACCOUNT, OWNER, SCHOOL, USER 
+# ADMIN POV: CREATE : ACCOUNT, OWNER, SCHOOL, USER 
 ########################################
 
 ### 
@@ -78,7 +101,7 @@ Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 
 ###
-# @name createStaff
+# @name createDirector
 POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/staff
 Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
@@ -91,15 +114,15 @@ Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
   "phone": "5551234567",
   "cin": "12345678",
   "address": "123 Main Street, Springfield",
-  "email": "john.doe02@example.com",
+  "email": "{{DirectorEmail}}",
   "role": "MANAGER",
-  "password": "12345678"
+  "password": "{{DirectorPassword}}"
 }
 
 
 ###
 # @name grantUserRole
-POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createStaff.response.body.staff.id}}/roles
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createDirector.response.body.staff.id}}/roles
 Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
@@ -110,7 +133,7 @@ Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 ###
 # @name revokeUserRole
-DELETE {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createStaff.response.body.staff.id}}/roles
+DELETE {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createDirector.response.body.staff.id}}/roles
 Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
@@ -121,12 +144,72 @@ Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 ###
 # @name getUserById
-GET {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createStaff.response.body.staff.id}}
+GET {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createDirector.response.body.staff.id}}
 Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 
+###
+# @name createManager
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/staff
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "gender": "MALE",
+  "dateOfBirth": "1995-05-15",
+  "phone": "5551234567",
+  "cin": "12345678",
+  "address": "123 Main Street, Springfield",
+  "email": "{{ManagerEmail}}",
+  "role": "MANAGER",
+  "password": "{{ManagerPassword}}"
+}
+
+
+###
+# @name createTeacher
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/teachers
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "gender": "MALE",
+  "dateOfBirth": "1995-05-15",
+  "phone": "5551234567",
+  "cin": "12345678",
+  "address": "123 Main Street, Springfield",
+  "email": "{{TeacherEmail}}",
+  "password": "{{TeacherPassword}}"
+}
+
+
+###
+# @name updateTeacher
+PUT {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/teachers/{{createTeacher.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "firstName": "John Updated",
+  "lastName": "Doe Updated",
+  "gender": "FEMALE",
+  "dateOfBirth": "1995-05-15",
+  "phone": "5551234568",
+  "cin": "12345679",
+  "address": "123 Main Street, Springfield"
+}
+
+
+###
+# @name getTeacherById
+GET {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/teachers/{{updateTeacher.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 
 ########################################

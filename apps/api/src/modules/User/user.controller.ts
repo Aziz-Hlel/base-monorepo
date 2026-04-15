@@ -2,7 +2,7 @@ import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import { Response } from 'express';
 import getParam from '@/utils/getParam';
 import { UserAppService } from './user.app.service';
-import { createSimpleUserRequestSchema } from '@repo/contracts/schemas/user/createUserRequest';
+import { createSimpleUserRequestSchema } from '@repo/contracts/schemas/user/createSimpleUserRequest';
 
 export class UserController {
   constructor(private readonly userService: UserAppService) {}

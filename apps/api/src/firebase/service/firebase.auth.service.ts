@@ -50,7 +50,6 @@ class FirebaseAuthService {
       }
       const firebaseToken = await this.firebaseSession.verifyIdToken(token);
       this.validateClaimsSchema(firebaseToken.claims);
-      console.log(firebaseToken.claims);
       return firebaseToken as DecodedIdTokenWithClaims;
     } catch (error: unknown) {
       if (isFirebaseError(error)) handleFirebaseError(error);

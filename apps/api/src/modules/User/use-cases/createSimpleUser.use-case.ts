@@ -1,10 +1,10 @@
 import { prisma } from '@/bootstrap/db.init';
+import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
 import { firebaseUserService } from '@/firebase/service/firebase.user.service';
 import { AccountRole, Prisma } from '@/generated/prisma/client';
 import { AccountService } from '@/modules/accounts/account.service';
-import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createUserRequest';
+import { CreateUserInput } from '../types/createUserInput';
 import { UserService } from '../user.service';
-import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
 
 export class CreateSimpleUserUseCase {
   constructor(
@@ -12,8 +12,7 @@ export class CreateSimpleUserUseCase {
     private readonly accountService: AccountService,
   ) {}
 
-  execute = async (params: { input: CreateSimpleUserRequest; schoolId: string }, tx?: Prisma.TransactionClient) => {
-    const client = tx || prisma;
+  private run = async (params: { input: CreateUserInput; schoolId: string }, tx: Prisma.TransactionClient) => {
     const { userRecord, type: authType } = await firebaseUserService.findOrCreateAccount({
       email: params.input.email,
       password: params.input.password,
@@ -28,7 +27,7 @@ export class CreateSimpleUserUseCase {
           role: AccountRole.USER,
         },
       },
-      client,
+      tx,
     );
 
     const user = await this.userService.createSimpleUser(
@@ -37,7 +36,7 @@ export class CreateSimpleUserUseCase {
         schoolId: params.schoolId,
         accountId: account.id,
       },
-      client,
+      tx,
     );
 
     await firebaseAuthService.setAccountClaims({
@@ -46,5 +45,13 @@ export class CreateSimpleUserUseCase {
     });
     // ! missing the case where the firebase throw an error in either create or setting claims phase , you d need a rollback mechanism and see if the auth account is new then you delete it otherwise keep it
     return { user, account, userRecord, isAccountExist: authType === 'EXISTING' };
+  };
+
+  execute = async (params: { input: CreateUserInput; schoolId: string }, tx?: Prisma.TransactionClient) => {
+    if (tx) return await this.run(params, tx);
+
+    return await prisma.$transaction((tx) => {
+      return this.run(params, tx);
+    });
   };
 }

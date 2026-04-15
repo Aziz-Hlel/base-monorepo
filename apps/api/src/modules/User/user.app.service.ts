@@ -1,7 +1,7 @@
 import { ConflictError, NotFoundError } from '@/err/customErrors';
 import { AccountService } from '@/modules/accounts/account.service';
+import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createSimpleUserRequest';
 import { UserService } from './user.service';
-import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createUserRequest';
 
 type CreateUserParams = {
   payload: CreateSimpleUserRequest;
@@ -43,7 +43,9 @@ export class UserAppService {
   };
 
   getById = async ({ userId, schoolId }: { userId: string; schoolId: string }) => {
-    const user = await this.userService.getById(userId);
+    const user = await this.userService.findById(userId, {
+      include: { roles: true, account: true, parent: true, teacher: true },
+    });
     if (!user) {
       throw new NotFoundError('User not found');
     }

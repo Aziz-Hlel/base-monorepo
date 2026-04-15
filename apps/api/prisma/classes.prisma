@@ -16,9 +16,10 @@ model Class{
   id String @id @default(uuid()) @db.Uuid
 
   name String @db.VarChar(255) 
-  description String @db.Text
+  description String? @db.Text
   grade ClassGrade
 
+  students Student[]
   sessions ClassSessions[]
   examSessions ExamSessions[]
 
