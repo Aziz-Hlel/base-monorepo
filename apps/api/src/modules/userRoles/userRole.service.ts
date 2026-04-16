@@ -1,7 +1,7 @@
 import { UserRoleSimple } from '@repo/contracts/types/enums/meta/userRoleMeta';
 import { UserRoleRepo } from './userRole.repo';
 import { prisma } from '@/bootstrap/db.init';
-import { ConflictError } from '@/err/customErrors';
+import { ConflictError } from '@/err/service/customErrors';
 
 export class UserRoleService {
   constructor(private readonly userRoleRepo: UserRoleRepo) {}

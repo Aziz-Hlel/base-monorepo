@@ -1,5 +1,5 @@
 import { prisma } from '@/bootstrap/db.init';
-import { DatabaseError } from '@/err/customErrors';
+import { DatabaseError } from '@/err/service/customErrors';
 import { Prisma } from '@/generated/prisma/client';
 import { CreateOwnerRequest } from '@repo/contracts/schemas/owner/createOwnerRequest';
 import { UpdateOwnerRequest } from '@repo/contracts/schemas/owner/updateOwnerRequest';

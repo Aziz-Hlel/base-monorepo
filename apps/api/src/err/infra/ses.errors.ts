@@ -1,5 +1,5 @@
 import ErrorNames, { ErrorNameKeys } from '../errors.names';
-import ERRORS, { Err } from '../Errors.object';
+import ERRORS, { Err } from '../service/Errors.object';
 
 export type SES_ErrorCode =
   | 'MessageRejected'

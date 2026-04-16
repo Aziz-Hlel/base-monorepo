@@ -1,7 +1,7 @@
 import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
 import { CreateOwnerRequest } from '@repo/contracts/schemas/owner/createOwnerRequest';
 import { prisma } from '@/bootstrap/db.init';
-import { ConflictError } from '@/err/customErrors';
+import { ConflictError } from '@/err/service/customErrors';
 import { OwnerRepo } from './owner.repo';
 import { UpdateOwnerRequest } from '@repo/contracts/schemas/owner/updateOwnerRequest';
 import { OwnerService } from './owner.service';

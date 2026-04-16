@@ -1,5 +1,5 @@
 import { FirebaseError } from 'firebase-admin/lib/utils/error';
-import { ConflictError, InternalServerError, UnauthorizedError } from '../../err/customErrors';
+import { ConflictError, InternalServerError, UnauthorizedError } from '../../err/service/customErrors';
 import { logger } from '@/bootstrap/logger.init';
 
 export const isFirebaseError = (err: unknown): err is FirebaseError => {

@@ -1,5 +1,5 @@
 import { prisma } from '@/bootstrap/db.init';
-import { ConflictError } from '@/err/customErrors';
+import { ConflictError } from '@/err/service/customErrors';
 import { Prisma } from '@/generated/prisma/client';
 import { isUniqueConstraintError } from '@/utils/prismaError';
 import { UpdateSchoolRequest } from '@repo/contracts/schemas/school/updateSchoolRequest';

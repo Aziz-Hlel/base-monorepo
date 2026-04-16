@@ -1,5 +1,5 @@
 import { logger } from '@/bootstrap/logger.init';
-import { UnauthorizedError } from '@/err/customErrors';
+import { UnauthorizedError } from '@/err/service/customErrors';
 import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
 import { AccountEntityRequest } from '@/types/includes/account';
 import { Auth } from 'firebase-admin/auth';

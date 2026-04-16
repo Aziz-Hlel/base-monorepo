@@ -2,7 +2,7 @@ import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
 import { SchoolRepo } from './school.repo';
 import { CreateSchoolRequest } from '@repo/contracts/schemas/school/createSchoolRequest';
 import { prisma } from '@/bootstrap/db.init';
-import { ConflictError, ForbiddenError, NotFoundError } from '@/err/customErrors';
+import { ConflictError, ForbiddenError, NotFoundError } from '@/err/service/customErrors';
 import { SchoolMapper } from './school.mapper';
 import { UpdateSchoolRequest } from '@repo/contracts/schemas/school/updateSchoolRequest';
 import { School } from '@/generated/prisma/client';

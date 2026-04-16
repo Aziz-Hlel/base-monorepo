@@ -4,16 +4,16 @@
 
 @baseUrl = http://localhost:10000/api
 
-@AdminEmail = admin1@gmail.com
+@AdminEmail = admin1@restclient.com
 @AdminPassword = 12345678
 
-@DirectorEmail = director1@gmail.com
+@DirectorEmail = director1@restclient.com
 @DirectorPassword = 12345678
 
-@ManagerEmail = manager1@gmail.com
+@ManagerEmail = manager1@restclient.com
 @ManagerPassword = 12345678
 
-@TeacherEmail = teacher1@gmail.com
+@TeacherEmail = teacher1@restclient.com
 @TeacherPassword = 12345678
 
 ###
@@ -74,8 +74,8 @@ Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 {
-    "firstName": "John",
-    "lastName": "Doe",
+    "firstName": "owner",
+    "lastName": "restclient",
     "phone": "+212612345678"
 }
 
@@ -107,8 +107,8 @@ Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 {
-  "firstName": "John",
-  "lastName": "Doe",
+  "firstName": "director",
+  "lastName": "restclient",
   "gender": "MALE",
   "dateOfBirth": "1995-05-15",
   "phone": "5551234567",
@@ -156,8 +156,8 @@ Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 {
-  "firstName": "John",
-  "lastName": "Doe",
+  "firstName": "manager",
+  "lastName": "restclient",
   "gender": "MALE",
   "dateOfBirth": "1995-05-15",
   "phone": "5551234567",
@@ -176,8 +176,8 @@ Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 {
-  "firstName": "John",
-  "lastName": "Doe",
+  "firstName": "teacher",
+  "lastName": "restclient",
   "gender": "MALE",
   "dateOfBirth": "1995-05-15",
   "phone": "5551234567",
@@ -195,8 +195,8 @@ Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 {
-  "firstName": "John Updated",
-  "lastName": "Doe Updated",
+  "firstName": "teacher updated",
+  "lastName": "restclient updated",
   "gender": "FEMALE",
   "dateOfBirth": "1995-05-15",
   "phone": "5551234568",

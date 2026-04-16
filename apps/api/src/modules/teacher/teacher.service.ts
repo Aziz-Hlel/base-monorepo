@@ -1,4 +1,4 @@
-import { ConflictError, NotFoundError } from '@/err/customErrors';
+import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { Prisma } from '@/generated/prisma/client';
 import { UpdateTeacherRequest } from '@repo/contracts/schemas/teacher/updateTeacherRequest';
 import { UserService } from '../User/user.service';

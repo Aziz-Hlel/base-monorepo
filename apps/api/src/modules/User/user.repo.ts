@@ -1,5 +1,5 @@
 import { prisma } from '@/bootstrap/db.init';
-import { DatabaseError } from '@/err/customErrors';
+import { DatabaseError } from '@/err/service/customErrors';
 import { Prisma } from '@/generated/prisma/client';
 import { UserGetPayload, UserInclude } from '@/generated/prisma/models';
 import { DefaultArgs } from '@prisma/client/runtime/client';

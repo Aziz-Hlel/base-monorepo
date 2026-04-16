@@ -1,5 +1,5 @@
 import { UserRepo } from './user.repo';
-import { ConflictError, NotFoundError } from '@/err/customErrors';
+import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
 import { UserInclude } from '@/generated/prisma/models';

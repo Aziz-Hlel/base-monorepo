@@ -1,7 +1,7 @@
-import ENV from '../config/env';
-import { ApiError } from './apiError.type';
+import ENV from '../../config/env';
+import { ApiError } from '../apiError.type';
 import ERRORS, { ErrNames, ErrObject } from './Errors.object';
-import ErrorNames, { ErrorNameKeys } from './errors.names';
+import ErrorNames, { ErrorNameKeys } from '../errors.names';
 import { Request } from 'express';
 
 interface IAppError {

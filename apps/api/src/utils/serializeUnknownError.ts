@@ -1,5 +1,5 @@
-export function serializeUnknownError(error: unknown): Record<string, unknown> {
-  if (error === null || error === undefined) return { raw: String(error) };
+export function serializeUnknownError(error: unknown): Record<string, unknown> | null {
+  if (error === null || error === undefined) return null;
 
   if (error instanceof Error) {
     return {
@@ -18,5 +18,5 @@ export function serializeUnknownError(error: unknown): Record<string, unknown> {
     return { ...(error as Record<string, unknown>) };
   }
 
-  return { raw: String(error) };
+  return null;
 }

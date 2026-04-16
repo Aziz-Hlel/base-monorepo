@@ -7,14 +7,45 @@ enum StudentStatus {
 }
 
 
+model StudentProfile {
+  id String @id @db.Uuid 
+  student Student @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  healthInfo String?
+  vaccine    String?
+  cpr        String?
+  allergies  String?
+  notes      String?
+
+  emergencyContactName1 String?
+  emergencyContactPhone1 String?
+  emergencyContactRelation1 String?
+
+  emergencyContactName2 String?
+  emergencyContactPhone2 String?
+  emergencyContactRelation2 String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("student_profiles")
+}
+
+
 model Student {
   id String @id @default(uuid()) @db.Uuid
-  firstName String @db.VarChar(255)
-  lastName String @db.VarChar(255)
-  dateOfBirth DateTime @db.Date
+  uid String? @db.VarChar(50)
+
+  firstName_ar String? @db.VarChar(255)
+  lastName_ar String? @db.VarChar(255)
+  firstName_en String? @db.VarChar(255)
+  lastName_en String? @db.VarChar(255)
+
+  dateOfBirth DateTime? @db.Date
   gender Gender
   status StudentStatus
 
+  profile StudentProfile?
   parents ParentStudent[]
 
 
@@ -22,7 +53,7 @@ model Student {
   school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
   classId String? @db.Uuid
-  class Class? @relation(fields: [classId], references: [id], onDelete: Restrict)
+  class Classroom? @relation(fields: [classId], references: [id], onDelete: Restrict)
 
   avatarId String? @db.Uuid
   avatar Media? @relation(fields: [avatarId], references: [id], onDelete: SetNull)
@@ -33,7 +64,6 @@ model Student {
   updatedAt DateTime @updatedAt
 
   @@unique([avatarId])
-  @@unique([schoolId,id])
 
   @@map("students")
 }

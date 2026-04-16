@@ -1,7 +1,7 @@
 import { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
 import { UserService } from '../User/user.service';
 import { StaffMapper } from './staff.mapper';
-import { NotFoundError } from '@/err/customErrors';
+import { NotFoundError } from '@/err/service/customErrors';
 import { StaffHelper } from './staff.helper';
 
 export class StaffService {

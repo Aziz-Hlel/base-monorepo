@@ -5,12 +5,12 @@ import createRouter from './account.route';
 import { AccountAppService } from './account.app.service';
 import { AccountService } from './account.service';
 
-export const createAccountModule = () => {
+export const AccountModule = () => {
   const repo = new AccountRepo();
   const accountHelper = new AccountHelper(repo);
   const accountService = new AccountService(repo, accountHelper);
   const accountAppService = new AccountAppService(repo, accountService);
   const controller = new AccountController(accountAppService);
   const accountRouter = createRouter(controller);
-  return { accountRouter };
+  return { accountRouter, accountService };
 };

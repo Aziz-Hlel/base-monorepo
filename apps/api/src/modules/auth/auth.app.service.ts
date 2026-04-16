@@ -1,4 +1,4 @@
-import { NotFoundError, UnauthorizedError } from '@/err/customErrors';
+import { NotFoundError, UnauthorizedError } from '@/err/service/customErrors';
 import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
 import { AccountRole } from '@/generated/prisma/enums';
 import { globalMediaService } from '@/media/media.service';

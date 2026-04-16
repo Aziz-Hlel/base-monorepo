@@ -1,7 +1,7 @@
 import { storageService } from '@/storage/storage.service';
 import { PresignedUrlRequest } from '@repo/contracts/schemas/media/PresignedUrlRequest';
 import { MediaRepo, singletonMediaRepo } from './media.repo';
-import { NotFoundError } from '@/err/customErrors';
+import { NotFoundError } from '@/err/service/customErrors';
 import { MediaStatus } from '@/generated/prisma/enums';
 import { PresignedUrlResponse } from '@repo/contracts/schemas/media/PresignedUrlResponse';
 import { Media } from '@/generated/prisma/client';

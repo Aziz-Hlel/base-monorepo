@@ -1,5 +1,5 @@
 import { prisma } from '@/bootstrap/db.init';
-import { ConflictError } from '@/err/customErrors';
+import { ConflictError } from '@/err/service/customErrors';
 import { AccountRole, UserRole } from '@/generated/prisma/enums';
 import { UserGetPayload, UserInclude } from '@/generated/prisma/models';
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';

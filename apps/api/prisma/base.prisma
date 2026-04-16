@@ -108,7 +108,7 @@ model School {
 
   users User[]
   students Student[]
-  classes Class[]
+  classes Classroom[]
   studentFees Fees[]
 
 

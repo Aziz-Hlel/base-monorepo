@@ -1,4 +1,4 @@
-import { BadRequestError } from '@/err/customErrors';
+import { BadRequestError } from '@/err/service/customErrors';
 import { Request } from 'express';
 import capitalize from './capitalize';
 import z from 'zod';

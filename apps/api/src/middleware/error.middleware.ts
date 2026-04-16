@@ -1,31 +1,11 @@
-// src/middleware/error.middleware.ts
 import { Request, Response, NextFunction } from 'express';
-import { prettifyError, ZodError } from 'zod';
-import ENV from '../config/env';
-import { AppError } from '../err/customErrors';
+import { ZodError } from 'zod';
+import { AppError } from '../err/service/customErrors';
 import { ApiError } from '../err/apiError.type';
 import { logger } from '../bootstrap/logger.init';
 import { serializeUnknownError } from '@/utils/serializeUnknownError';
-
-const handleZodError = (error: ZodError<unknown>, req: Request): ApiError => {
-  const formatted: Record<string, string> = {};
-
-  for (const issue of error.issues) {
-    const path = issue.path.join('.');
-    formatted[path] = issue.message;
-  }
-  // prettifyError(error);
-
-  const apiResponse: ApiError = {
-    success: false,
-    message: 'Validation failed',
-    details: { 'Zod Error': prettifyError(error) },
-    timestamp: new Date(),
-    path: req.originalUrl,
-  };
-  ENV.NODE_ENV !== 'production' && error.stack && (apiResponse.stack = error.stack);
-  return apiResponse;
-};
+import { handleZodError } from '@/err/validator/handleZodError';
+import { RepoError } from '@/err/repo/DbError';
 
 export const globalErrorHandler = (error: Error, req: Request, res: Response<ApiError>, next: NextFunction) => {
   const path = req.originalUrl;
@@ -36,15 +16,29 @@ export const globalErrorHandler = (error: Error, req: Request, res: Response<Api
     return res.status(400).json(apiError);
   }
 
+  // Business logic errors
   if (error instanceof AppError) {
     const serializedCause = error.cause ? serializeUnknownError(error.cause) : undefined;
     logger.warn({ error, path, cause: serializedCause }, 'Application error');
     return res.status(error.status).json(AppError.toApiErrorResponse(error, req));
   }
 
+  // Repo errors
+  if (error instanceof RepoError) {
+    const serializedCause = error.cause ? serializeUnknownError(error.cause) : undefined;
+    logger.warn(
+      { error, path, cause: serializedCause },
+      'Repo error : This type of error should not transform to ApiError',
+    );
+    return res.status(error.type.status).json(RepoError.toApiErrorResponse(error, req));
+  }
+
   // Database errors
   if (error.constructor.name.includes('Prisma')) {
-    logger.error({ err: error, path }, 'Database error');
+    logger.error(
+      { err: error, path },
+      'Database error : If you see this, it means that the error was not caught by the repo layer',
+    );
     return res.status(400).json({
       success: false,
       message: 'Database operation failed',

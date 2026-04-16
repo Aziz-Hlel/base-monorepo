@@ -152,3 +152,12 @@ export const DeliveryStatus = {
 } as const;
 
 export type DeliveryStatus = (typeof DeliveryStatus)[keyof typeof DeliveryStatus];
+
+export const StudentStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  SUSPENDED: 'SUSPENDED',
+  EXPELLED: 'EXPELLED',
+} as const;
+
+export type StudentStatus = (typeof StudentStatus)[keyof typeof StudentStatus];

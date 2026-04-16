@@ -1,4 +1,4 @@
-import { PermissionDeniedError, UnauthorizedError } from '@/err/customErrors';
+import { PermissionDeniedError, UnauthorizedError } from '@/err/service/customErrors';
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import { APP_PERMISSION_SCORE } from '@repo/contracts/utils/PermissionScore';
 import { NextFunction, Response, Request } from 'express';

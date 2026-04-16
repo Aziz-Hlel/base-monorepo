@@ -5,7 +5,7 @@ model ClassSessions{
   id String @id @default(uuid()) @db.Uuid
 
   classId String @db.Uuid
-  class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+  class Classroom @relation(fields: [classId], references: [id], onDelete: Cascade)
 
 
   title String @db.VarChar(255)
@@ -30,7 +30,7 @@ model ExamSessions{
   id String @id @default(uuid()) @db.Uuid
 
   classId String @db.Uuid
-  class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+  class Classroom @relation(fields: [classId], references: [id], onDelete: Cascade)
 
 
   title String @db.VarChar(255)

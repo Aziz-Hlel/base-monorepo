@@ -1,7 +1,8 @@
 import { createMediaModule as mediaModule } from '@/media';
 import { createUserModule as userModule } from '@/modules/User';
-import accountModule from '@/modules/accounts';
+import { AccountModule } from '@/modules/accounts/account.module';
 import { authModule } from '@/modules/auth/auth.module';
+import { ClassroomModule } from '@/modules/classroom/classroom.module';
 import { createOwnerModule as ownerModule } from '@/modules/owner/owner.module';
 import { createRootModule as rootModule } from '@/modules/root/root.module';
 import { createSchoolModule as schoolModule } from '@/modules/schools/school.module';
@@ -23,7 +24,7 @@ const { rootRouter } = rootModule();
 const { mediaRouter } = mediaModule();
 
 // * ACCOUNT
-const { accountRouter, accountService } = accountModule();
+const { accountRouter, accountService } = AccountModule();
 
 // * OWNER
 const { ownerRouter, ownerService } = ownerModule();
@@ -42,6 +43,9 @@ const { staffRouter } = StaffModule({ createSimpleUserUseCase, userService });
 
 // * TEACHER
 const { teacherRouter } = TeacherModule({ createSimpleUserUseCase, userService });
+
+// * CLASS
+const { classRouter } = ClassroomModule();
 
 // *
 // * AUTH
@@ -67,6 +71,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: schoolRouter, resource: 'schools' },
   { router: staffRouter, resource: 'schools/:schoolId/staff' },
   { router: teacherRouter, resource: 'schools/:schoolId/teachers' },
+  { router: classRouter, resource: 'schools/:schoolId/classrooms' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
   { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },

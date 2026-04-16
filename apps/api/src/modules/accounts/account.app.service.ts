@@ -1,5 +1,5 @@
 import { logger } from '@/bootstrap/logger.init';
-import { ConflictError, NotFoundError, UnauthorizedError } from '@/err/customErrors';
+import { ConflictError, NotFoundError, UnauthorizedError } from '@/err/service/customErrors';
 import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
 import { FirebaseMapper } from '@/firebase/service/firebase.mapper';
 import { AccountRole } from '@/generated/prisma/enums';

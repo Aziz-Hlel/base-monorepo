@@ -1,4 +1,4 @@
-import { ConflictError, NotFoundError } from '@/err/customErrors';
+import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { AccountService } from '@/modules/accounts/account.service';
 import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createSimpleUserRequest';
 import { UserService } from './user.service';

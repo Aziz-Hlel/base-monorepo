@@ -6,7 +6,7 @@ import { accountInclude } from '@/types/includes/account';
 import { isUniqueConstraintError } from '@/utils/prismaError';
 import { AccountHelper } from './account.helper';
 import { AccountRepo } from './account.repo';
-import { DatabaseError } from '@/err/customErrors';
+import { DatabaseError } from '@/err/service/customErrors';
 
 type FindOrCreateAccount = {
   accountDetails: {
