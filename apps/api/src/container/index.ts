@@ -7,6 +7,7 @@ import { createOwnerModule as ownerModule } from '@/modules/owner/owner.module';
 import { createRootModule as rootModule } from '@/modules/root/root.module';
 import { createSchoolModule as schoolModule } from '@/modules/schools/school.module';
 import { StaffModule } from '@/modules/staff/staff.module';
+import { StudentModule } from '@/modules/student/student.module';
 import { TeacherModule } from '@/modules/teacher/teacher.module';
 import { createUserRoleModule } from '@/modules/userRoles/userRole.module';
 import { createNotificationModule as notificationModule } from '@/notification';
@@ -47,6 +48,9 @@ const { teacherRouter } = TeacherModule({ createSimpleUserUseCase, userService }
 // * CLASS
 const { classRouter } = ClassroomModule();
 
+// * STUDENT
+const { studentRouter, studentService } = StudentModule();
+
 // *
 // * AUTH
 const { authRouter } = authModule(accountService);
@@ -72,6 +76,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: staffRouter, resource: 'schools/:schoolId/staff' },
   { router: teacherRouter, resource: 'schools/:schoolId/teachers' },
   { router: classRouter, resource: 'schools/:schoolId/classrooms' },
+  { router: studentRouter, resource: 'schools/:schoolId/students' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
   { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },

@@ -212,6 +212,60 @@ Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 
+###
+# @name createStudent
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/students
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "uid": "1234567890",
+  "firstName": {
+    "en": "student",
+    "ar": "طالب"
+  },
+  "lastName": {
+    "en": "restclient",
+    "ar": "ريست كلاينت"
+  },
+  "gender": "MALE",
+  "dateOfBirth": "2010-05-15",
+  "avatarId": null,
+  "status": "ACTIVE"
+}
+
+
+###
+# @name updateStudent
+PUT {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/students/{{createStudent.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "uid": "1234567890",
+  "firstName": {
+    "en": "student updated",
+    "ar": "طالب محدث"
+  },
+  "lastName": {
+    "en": "restclient updated",
+    "ar": "ريست كلاينت محدث"
+  },
+  "gender": "FEMALE",
+  "dateOfBirth": "1995-05-15",
+  "avatarId": null,
+  "status": "ACTIVE"
+}
+
+
+###
+# @name getStudentById
+GET {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/students/{{updateStudent.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+
+
 ########################################
 # AUTH FLOW: ADMIN LOGIN
 ########################################

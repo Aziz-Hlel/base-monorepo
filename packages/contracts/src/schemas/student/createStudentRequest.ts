@@ -29,26 +29,26 @@ const baseSchema = z.object({
   status: z.enum(StudentStatus),
 });
 
-const ar_schema = z.object({
-  firstName_ar: z.string().trim().nonempty('First name is required').max(255, 'First name is too long').or(z.null()),
-  lastName_ar: z.string().trim().nonempty('Last name is required').max(255, 'Last name is too long').or(z.null()),
+const firstNameSchema = z.object({
+  en: z.string().trim().nonempty('First name is required').max(255, 'First name is too long').or(z.null()),
+  ar: z.string().trim().nonempty('First name is required').max(255, 'First name is too long').or(z.null()),
 });
 
-const en_schema = z.object({
-  firstName_en: z.string().trim().nonempty('First name is required').max(255, 'First name is too long').or(z.null()),
-  lastName_en: z.string().trim().nonempty('Last name is required').max(255, 'Last name is too long').or(z.null()),
+const lastNameSchema = z.object({
+  en: z.string().trim().nonempty('Last name is required').max(255, 'Last name is too long').or(z.null()),
+  ar: z.string().trim().nonempty('Last name is required').max(255, 'Last name is too long').or(z.null()),
 });
 
 export const createStudentRequestSchema = baseSchema
-  .and(ar_schema)
-  .and(en_schema)
+  .and(z.object({ firstName: firstNameSchema }))
+  .and(z.object({ lastName: lastNameSchema }))
   .refine(
     (data) => {
-      return (data.lastName_ar && data.firstName_ar) || (data.lastName_en && data.firstName_en);
+      return (data.lastName.ar && data.firstName.ar) || (data.lastName.en && data.firstName.en);
     },
     {
       message: 'At least one language name is required',
-      path: ['firstName_ar', 'lastName_ar', 'firstName_en', 'lastName_en'],
+      path: ['firstName.ar', 'lastName.ar', 'firstName.en', 'lastName.en'],
     },
   );
 

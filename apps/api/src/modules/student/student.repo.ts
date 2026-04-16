@@ -16,16 +16,17 @@ export class StudentRepo {
       const createdStudent = await client.student.create({
         data: {
           uid: input.uid,
-          firstName_en: input.firstName_en,
-          lastName_en: input.lastName_en,
-          firstName_ar: input.firstName_ar,
-          lastName_ar: input.lastName_ar,
+          firstName_en: input.firstName.en,
+          lastName_en: input.lastName.en,
+          firstName_ar: input.firstName.ar,
+          lastName_ar: input.lastName.ar,
           gender: input.gender,
           dateOfBirth: toDate(input.dateOfBirth),
           avatarId: input.avatarId,
           status: input.status,
           schoolId,
         },
+        include: { avatar: true, profile: true },
       });
       return createdStudent;
     } catch (error) {
@@ -44,16 +45,17 @@ export class StudentRepo {
         where: { id: studentId, schoolId },
         data: {
           uid: input.uid,
-          firstName_en: input.firstName_en,
-          lastName_en: input.lastName_en,
-          firstName_ar: input.firstName_ar,
-          lastName_ar: input.lastName_ar,
+          firstName_en: input.firstName.en,
+          lastName_en: input.lastName.en,
+          firstName_ar: input.firstName.ar,
+          lastName_ar: input.lastName.ar,
           gender: input.gender,
           dateOfBirth: toDate(input.dateOfBirth),
           avatarId: input.avatarId,
           status: input.status,
           schoolId,
         },
+        include: { avatar: true, profile: true },
       });
       return updatedStudent;
     } catch (error) {
@@ -71,10 +73,10 @@ export class StudentRepo {
       const createdStudent = await client.student.create({
         data: {
           uid: input.uid,
-          firstName_en: input.firstName_en,
-          lastName_en: input.lastName_en,
-          firstName_ar: input.firstName_ar,
-          lastName_ar: input.lastName_ar,
+          firstName_en: input.firstName.en,
+          lastName_en: input.lastName.en,
+          firstName_ar: input.firstName.ar,
+          lastName_ar: input.lastName.ar,
           gender: input.gender,
           dateOfBirth: toDate(input.dateOfBirth),
           avatarId: input.avatarId,
@@ -86,8 +88,9 @@ export class StudentRepo {
                   create: input.profile,
                 },
               }
-            : {}),
+            : undefined),
         },
+        include: { avatar: true, profile: true },
       });
       return createdStudent;
     } catch (error) {
@@ -106,10 +109,10 @@ export class StudentRepo {
         where: { id: studentId, schoolId },
         data: {
           uid: input.uid,
-          firstName_en: input.firstName_en,
-          lastName_en: input.lastName_en,
-          firstName_ar: input.firstName_ar,
-          lastName_ar: input.lastName_ar,
+          firstName_en: input.firstName.en,
+          lastName_en: input.lastName.en,
+          firstName_ar: input.firstName.ar,
+          lastName_ar: input.lastName.ar,
           gender: input.gender,
           dateOfBirth: toDate(input.dateOfBirth),
           avatarId: input.avatarId,
@@ -151,8 +154,9 @@ export class StudentRepo {
                   },
                 },
               }
-            : {}),
+            : undefined),
         },
+        include: { avatar: true, profile: true },
       });
       return updatedStudent;
     } catch (error) {
