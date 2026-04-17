@@ -1,8 +1,8 @@
 import { Classroom } from '@/generated/prisma/client';
-import { ClassResponse } from '@repo/contracts/schemas/class/classResponse';
+import { ClassroomResponse } from '@repo/contracts/schemas/classroom/classResponse';
 
 export class ClassroomMapper {
-  static toResponse = (classroom: Classroom): ClassResponse => {
+  static toResponse = (classroom: Classroom): ClassroomResponse => {
     return {
       id: classroom.id,
       name: classroom.name,

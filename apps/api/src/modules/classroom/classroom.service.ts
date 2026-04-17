@@ -1,14 +1,14 @@
-import { CreateClassRequest } from '@repo/contracts/schemas/class/createClassRequest';
 import { ClassroomRepo } from './classroom.repo';
 import { ConflictError, NotFoundError } from '@/err/service/customErrors';
-import { UpdateClassRequest } from '@repo/contracts/schemas/class/updateClassRequest';
 import { ClassroomMapper } from './classroom.mapper';
 import { RepoKnownErrors } from '@/err/repo/DbError';
+import { CreateClassroomRequest } from '@repo/contracts/schemas/classroom/createClassRequest';
+import { UpdateClassroomRequest } from '@repo/contracts/schemas/classroom/updateClassRequest';
 
 export class ClassroomService {
   constructor(private readonly classesRepo: ClassroomRepo) {}
 
-  create = async (params: { input: CreateClassRequest; schoolId: string }) => {
+  create = async (params: { input: CreateClassroomRequest; schoolId: string }) => {
     const { input, schoolId } = params;
     try {
       const createdClass = await this.classesRepo.create({ input, schoolId });
@@ -23,7 +23,7 @@ export class ClassroomService {
     }
   };
 
-  update = async (params: { input: UpdateClassRequest; classroomId: string; schoolId: string }) => {
+  update = async (params: { input: UpdateClassroomRequest; classroomId: string; schoolId: string }) => {
     const { input, classroomId, schoolId } = params;
     try {
       const updatedClass = await this.classesRepo.update({ input, classroomId, schoolId });

@@ -1,11 +1,11 @@
 import { prisma } from '@/bootstrap/db.init';
 import { RepoError } from '@/err/repo/DbError';
 import { TX } from '@/types/prisma/PrismaTransaction';
-import { CreateClassRequest } from '@repo/contracts/schemas/class/createClassRequest';
-import { UpdateClassRequest } from '@repo/contracts/schemas/class/updateClassRequest';
+import { CreateClassroomRequest } from '@repo/contracts/schemas/classroom/createClassRequest';
+import { UpdateClassroomRequest } from '@repo/contracts/schemas/classroom/updateClassRequest';
 
 export class ClassroomRepo {
-  create = async (params: { input: CreateClassRequest; schoolId: string }, tx?: TX) => {
+  create = async (params: { input: CreateClassroomRequest; schoolId: string }, tx?: TX) => {
     try {
       const { input, schoolId } = params;
       const client = tx ?? prisma;
@@ -21,7 +21,7 @@ export class ClassroomRepo {
     }
   };
 
-  update = async (params: { input: UpdateClassRequest; classroomId: string; schoolId: string }, tx?: TX) => {
+  update = async (params: { input: UpdateClassroomRequest; classroomId: string; schoolId: string }, tx?: TX) => {
     const { input, classroomId, schoolId } = params;
     try {
       const client = tx ?? prisma;
