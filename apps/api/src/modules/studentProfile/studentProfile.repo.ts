@@ -32,7 +32,7 @@ export class StudentProfileRepo {
       });
       return createdStudentProfile;
     } catch (error) {
-      RepoError.toRepoError(error);
+      RepoError.throwRepoError(error);
     }
   };
 
@@ -63,7 +63,7 @@ export class StudentProfileRepo {
       });
       return updatedStudentProfile;
     } catch (error) {
-      RepoError.toRepoError(error);
+      RepoError.throwRepoError(error);
     }
   };
 
@@ -81,7 +81,7 @@ export class StudentProfileRepo {
       });
       return studentProfile;
     } catch (error) {
-      RepoError.toRepoError(error);
+      RepoError.throwRepoError(error);
     }
   };
 }

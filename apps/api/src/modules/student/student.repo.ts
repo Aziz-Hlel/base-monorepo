@@ -30,7 +30,7 @@ export class StudentRepo {
       });
       return createdStudent;
     } catch (error) {
-      RepoError.toRepoError(error);
+      RepoError.throwRepoError(error);
     }
   };
 
@@ -59,7 +59,7 @@ export class StudentRepo {
       });
       return updatedStudent;
     } catch (error) {
-      RepoError.toRepoError(error);
+      RepoError.throwRepoError(error);
     }
   };
 
@@ -106,7 +106,7 @@ export class StudentRepo {
       });
       return createdStudent;
     } catch (error) {
-      RepoError.toRepoError(error);
+      RepoError.throwRepoError(error);
     }
   };
 
@@ -172,7 +172,7 @@ export class StudentRepo {
       });
       return updatedStudent;
     } catch (error) {
-      RepoError.toRepoError(error);
+      RepoError.throwRepoError(error);
     }
   };
 
@@ -186,7 +186,7 @@ export class StudentRepo {
       });
       return student;
     } catch (error) {
-      RepoError.toRepoError(error);
+      RepoError.throwRepoError(error);
     }
   };
 }

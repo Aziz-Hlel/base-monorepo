@@ -1,6 +1,7 @@
 import { prisma } from '@/bootstrap/db.init';
-import { DatabaseError } from '@/err/service/customErrors';
-import { Prisma } from '@/generated/prisma/client';
+import { RepoError } from '@/err/repo/DbError';
+import { UserRole } from '@/generated/prisma/client';
+import { TX } from '@/types/prisma/PrismaTransaction';
 import { UserRoleSimple } from '@repo/contracts/types/enums/meta/userRoleMeta';
 
 export class UserRoleRepo {
@@ -14,11 +15,7 @@ export class UserRoleRepo {
       });
       return userRole;
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (!(error instanceof Error)) throw error;
-        throw new DatabaseError({ message: 'Failed to grant role', cause: error });
-      }
-      throw error;
+      RepoError.throwRepoError(error);
     }
   };
 
@@ -34,11 +31,46 @@ export class UserRoleRepo {
       });
       return userRole;
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (!(error instanceof Error)) throw error;
-        throw new DatabaseError({ message: 'Failed to revoke role', cause: error });
-      }
-      throw error;
+      RepoError.throwRepoError(error);
+    }
+  };
+
+  grantRole_V2 = async ({ userId, role }: { userId: string; role: UserRole }, tx?: TX) => {
+    try {
+      const client = tx || prisma;
+      const userRole = await client.userRoles.upsert({
+        where: {
+          userId_role: {
+            userId,
+            role,
+          },
+        },
+        update: {},
+        create: {
+          userId,
+          role,
+        },
+      });
+      return userRole;
+    } catch (error) {
+      RepoError.throwRepoError(error);
+    }
+  };
+
+  revokeRole_V2 = async ({ userId, role }: { userId: string; role: UserRole }, tx?: TX) => {
+    const client = tx || prisma;
+    try {
+      const userRole = await client.userRoles.delete({
+        where: {
+          userId_role: {
+            userId,
+            role,
+          },
+        },
+      });
+      return userRole;
+    } catch (error) {
+      RepoError.throwRepoError(error);
     }
   };
 
@@ -54,11 +86,7 @@ export class UserRoleRepo {
       });
       return userRole;
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (!(error instanceof Error)) throw error;
-        throw new DatabaseError({ message: 'Failed to find user role', cause: error });
-      }
-      throw error;
+      RepoError.throwRepoError(error);
     }
   };
 
@@ -70,11 +98,7 @@ export class UserRoleRepo {
         },
       });
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (!(error instanceof Error)) throw error;
-        throw new DatabaseError({ message: 'Failed to find user role', cause: error });
-      }
-      throw error;
+      RepoError.throwRepoError(error);
     }
   };
 }

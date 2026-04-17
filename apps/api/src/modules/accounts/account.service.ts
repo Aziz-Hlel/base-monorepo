@@ -1,4 +1,5 @@
 import { prisma } from '@/bootstrap/db.init';
+import { RepoError } from '@/err/repo/DbError';
 import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
 import { firebaseUserService } from '@/firebase/service/firebase.user.service';
 import { Account, AccountRole, Prisma } from '@/generated/prisma/client';
@@ -6,7 +7,6 @@ import { accountInclude } from '@/types/includes/account';
 import { isUniqueConstraintError } from '@/utils/prismaError';
 import { AccountHelper } from './account.helper';
 import { AccountRepo } from './account.repo';
-import { DatabaseError } from '@/err/service/customErrors';
 
 type FindOrCreateAccount = {
   accountDetails: {
@@ -125,8 +125,14 @@ export class AccountService {
 
       return { account, type: 'NEW' };
     } catch (error: any) {
-      if (!(error instanceof Error)) throw error;
-      throw new DatabaseError({ message: 'Failed to create account', cause: error });
+      if (isUniqueConstraintError(error)) {
+        const existingAccount = await this.accountRepo.getAccountByEmail({
+          email: accountDetails.email,
+        });
+        if (!existingAccount) throw error;
+        return { account: existingAccount, type: 'EXISTING' };
+      }
+      throw error;
     }
   };
 

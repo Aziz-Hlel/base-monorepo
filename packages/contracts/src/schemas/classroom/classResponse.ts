@@ -1,6 +1,6 @@
 import type { ClassGrade } from '../../types/enums/enums';
 
-export type ClassResponse = {
+export type ClassroomResponse = {
   id: string;
   name: string;
   description: string | null;

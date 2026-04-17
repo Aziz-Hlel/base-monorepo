@@ -2,6 +2,8 @@ import { UserRoleSimple } from '@repo/contracts/types/enums/meta/userRoleMeta';
 import { UserRoleRepo } from './userRole.repo';
 import { prisma } from '@/bootstrap/db.init';
 import { ConflictError } from '@/err/service/customErrors';
+import { UserRole } from '@/generated/prisma/enums';
+import { RepoKnownErrors } from '@/err/repo/DbError';
 
 export class UserRoleService {
   constructor(private readonly userRoleRepo: UserRoleRepo) {}
@@ -30,6 +32,34 @@ export class UserRoleService {
     }
     const deletedUserRole = await this.userRoleRepo.revokeSimpleRole({ userId, role });
     return { role: deletedUserRole, type: 'DELETED' } as const;
+  };
+
+  grantRole_V2 = async ({ userId, role }: { userId: string; role: UserRole }) => {
+    try {
+      const createdUserRole = await this.userRoleRepo.grantRole_V2({ userId, role });
+      return { role: createdUserRole, type: 'NEW' } as const;
+    } catch (error) {
+      if (error instanceof RepoKnownErrors.ConflictError) {
+        // * this is to make the api idempotent , so if the user already has the role , it will return the existing role
+        // * but at the same type if i m going to do the "GO fail" strategy , i should do it accross all the project
+        // * so do i just throw the error, and based on what i want to do , if it s an api i would catch it and send a 200
+        // * or if it s a worker , i would let it fail and retry
+        return { role: null, type: 'EXISTING' } as const;
+      }
+      throw error;
+    }
+  };
+
+  revokeRole_V2 = async ({ userId, role }: { userId: string; role: UserRole }) => {
+    try {
+      const deletedUserRole = await this.userRoleRepo.revokeRole_V2({ userId, role });
+      return { role: deletedUserRole, type: 'DELETED' } as const;
+    } catch (error) {
+      if (error instanceof RepoKnownErrors.NotFoundError) {
+        return { role: null, type: 'NOT_FOUND' } as const;
+      }
+      throw error;
+    }
   };
 
   findByUserIdAndRole = async ({ userId, role }: { userId: string; role: UserRoleSimple }) => {

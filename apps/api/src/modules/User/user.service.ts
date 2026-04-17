@@ -6,9 +6,34 @@ import { UserInclude } from '@/generated/prisma/models';
 import { DefaultArgs } from '@prisma/client/runtime/client';
 import { CreateUserInput } from './types/createUserInput';
 import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createSimpleUserRequest';
+import { RepoKnownErrors } from '@/err/repo/DbError';
 
 export class UserService {
   constructor(private readonly userRepo: UserRepo) {}
+
+  create_V2 = async (
+    params: { input: Omit<CreateUserInput, 'role'>; schoolId: string; accountId: string },
+    tx?: TX,
+  ) => {
+    const { input, schoolId, accountId } = params;
+    try {
+      return await this.userRepo.create_V2({ input, schoolId, accountId }, tx);
+    } catch (error) {
+      if (error instanceof RepoKnownErrors.ConflictError) {
+        throw new ConflictError({
+          message: 'User already exists',
+          internalLog: `User with email ${input.email} already exists in school ${schoolId}`,
+        });
+      }
+      if (error instanceof RepoKnownErrors.NotFoundError) {
+        throw new NotFoundError({
+          message: 'Failed to create user',
+          internalLog: `account with id ${accountId} or school with id ${schoolId} not found`,
+        });
+      }
+      throw error;
+    }
+  };
 
   createSimpleUser = async (params: { payload: CreateUserInput; accountId: string; schoolId: string }, tx?: TX) => {
     const { payload, accountId, schoolId } = params;

@@ -1,7 +1,7 @@
 import z from 'zod';
 import { ClassGrade } from '../../types/enums/enums';
 
-export const createClassRequestSchema = z.object({
+export const createClassroomRequestSchema = z.object({
   name: z
     .string()
     .trim()
@@ -18,4 +18,4 @@ export const createClassRequestSchema = z.object({
   grade: z.enum(ClassGrade),
 });
 
-export type CreateClassRequest = z.infer<typeof createClassRequestSchema>;
+export type CreateClassroomRequest = z.infer<typeof createClassroomRequestSchema>;

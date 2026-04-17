@@ -1,4 +1,5 @@
 import { prisma } from '@/bootstrap/db.init';
+import { RepoError } from '@/err/repo/DbError';
 import { AccountRole } from '@/generated/prisma/enums';
 import { AccountInclude } from '@/generated/prisma/models';
 import { TX } from '@/types/prisma/PrismaTransaction';
@@ -66,17 +67,21 @@ export class AccountRepo {
     tx?: TX,
   ) => {
     const client = tx || prisma;
-    const account = await client.account.create({
-      data: {
-        authId,
-        email,
-        role: role ?? AccountRole.USER,
-        provider: provider ?? 'password',
-        isEmailVerified: isEmailVerified ?? false,
-      },
-    });
+    try {
+      const account = await client.account.create({
+        data: {
+          authId,
+          email,
+          role: role ?? AccountRole.USER,
+          provider: provider ?? 'password',
+          isEmailVerified: isEmailVerified ?? false,
+        },
+      });
 
-    return account;
+      return account;
+    } catch (error) {
+      RepoError.throwRepoError(error);
+    }
   };
 
   getAccountByEmail = async ({ email, tx }: { email: string; tx?: TX }) => {

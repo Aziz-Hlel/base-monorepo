@@ -15,7 +15,7 @@ export class RepoError extends Error {
     this.type = type;
   }
 
-  static toRepoError(error: unknown): never {
+  static throwRepoError(error: unknown): never {
     if (!(error instanceof Prisma.PrismaClientKnownRequestError)) throw error;
     if (error.code === PrismaErrorCode.CONFLICT) throw new RepoKnownErrors.ConflictError({ cause: error });
     if (error.code === PrismaErrorCode.NOT_FOUND) throw new RepoKnownErrors.NotFoundError({ cause: error });

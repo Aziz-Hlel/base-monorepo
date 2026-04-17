@@ -5,8 +5,38 @@ import { UserGetPayload, UserInclude } from '@/generated/prisma/models';
 import { DefaultArgs } from '@prisma/client/runtime/client';
 import { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
 import { CreateUserInput } from './types/createUserInput';
+import { parseCalendarDate } from '@/utils/dayjs';
 
 export class UserRepo {
+  create_V2 = async (
+    params: { input: Omit<CreateUserInput, 'role'>; schoolId: string; accountId: string },
+    tx?: Prisma.TransactionClient,
+  ) => {
+    try {
+      const { input, schoolId, accountId } = params;
+      const client = tx || prisma;
+      return await client.user.create({
+        data: {
+          firstName: input.firstName,
+          lastName: input.lastName,
+          gender: input.gender,
+          dateOfBirth: parseCalendarDate(input.dateOfBirth),
+          phone: input.phone,
+          cin: input.cin,
+          address: input.address,
+
+          accountId,
+          schoolId,
+        },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (!(error instanceof Error)) throw error;
+        throw new DatabaseError({ message: 'Failed to create user', cause: error });
+      }
+      throw error;
+    }
+  };
   findByAccountIdSchoolId = async <T extends UserInclude<DefaultArgs>>({
     accountId,
     schoolId,

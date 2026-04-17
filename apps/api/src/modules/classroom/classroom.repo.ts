@@ -17,7 +17,7 @@ export class ClassroomRepo {
       });
       return createdClass;
     } catch (error) {
-      RepoError.toRepoError(error);
+      RepoError.throwRepoError(error);
     }
   };
 
@@ -31,7 +31,7 @@ export class ClassroomRepo {
       });
       return updatedClass;
     } catch (error) {
-      RepoError.toRepoError(error);
+      RepoError.throwRepoError(error);
     }
   };
 
@@ -48,7 +48,7 @@ export class ClassroomRepo {
         },
       });
     } catch (error) {
-      RepoError.toRepoError(error);
+      RepoError.throwRepoError(error);
     }
   };
 
@@ -60,7 +60,7 @@ export class ClassroomRepo {
         where: { id: classroomId, schoolId },
       });
     } catch (error) {
-      RepoError.toRepoError(error);
+      RepoError.throwRepoError(error);
     }
   };
 
@@ -72,7 +72,7 @@ export class ClassroomRepo {
         where: { id: classroomId },
       });
     } catch (error) {
-      RepoError.toRepoError(error);
+      RepoError.throwRepoError(error);
     }
   };
 }
