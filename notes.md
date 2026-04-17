@@ -1,1 +1,1 @@
-- you need to add requireUserPermissionOrParentChile middleware to update student by the parent and get it ( and create it ?)
+- you need to add requireUserPermissionOrParentChild middleware to update student by the parent and get it ( and create it ?)

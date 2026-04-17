@@ -1,5 +1,28 @@
 import z from 'zod';
 
+export const createEmergencyContactRequestSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .nonempty('Emergency contact name is required')
+    .max(255, 'Emergency contact name must be at most 255 characters'),
+
+  phone: z
+    .string()
+    .trim()
+    .nonempty('Emergency contact phone is required')
+    .max(20, 'Emergency contact phone must be at most 20 characters'), // *
+
+  relation: z
+    .string()
+    .trim()
+    .nonempty('Emergency contact relation is required')
+    .max(255, 'Emergency contact relation must be at most 255 characters')
+    .or(z.null()),
+});
+
+export type CreateEmergencyContactRequest = z.infer<typeof createEmergencyContactRequestSchema>;
+
 export const createStudentProfileRequestSchema = z.object({
   healthInfo: z
     .string()
@@ -31,47 +54,10 @@ export const createStudentProfileRequestSchema = z.object({
     .max(1000, 'Notes must be at most 1000 characters')
     .or(z.null()),
 
-  emergencyContactName1: z
-    .string()
-    .trim()
-    .nonempty('Emergency contact name is required')
-    .max(255, 'Emergency contact name must be at most 255 characters')
-    .or(z.null()),
-
-  emergencyContactPhone1: z
-    .string()
-    .trim()
-    .nonempty('Emergency contact phone is required')
-    .max(20, 'Emergency contact phone must be at most 20 characters')
-    .or(z.null()),
-
-  emergencyContactRelation1: z
-    .string()
-    .trim()
-    .nonempty('Emergency contact relation is required')
-    .max(255, 'Emergency contact relation must be at most 255 characters')
-    .or(z.null()),
-
-  emergencyContactName2: z
-    .string()
-    .trim()
-    .nonempty('Emergency contact name is required')
-    .max(255, 'Emergency contact name must be at most 255 characters')
-    .or(z.null()),
-
-  emergencyContactPhone2: z
-    .string()
-    .trim()
-    .nonempty('Emergency contact phone is required')
-    .max(20, 'Emergency contact phone must be at most 20 characters')
-    .or(z.null()),
-
-  emergencyContactRelation2: z
-    .string()
-    .trim()
-    .nonempty('Emergency contact relation is required')
-    .max(255, 'Emergency contact relation must be at most 255 characters')
-    .or(z.null()),
+  emergencyContacts: z
+    .array(createEmergencyContactRequestSchema)
+    .max(2, 'Emergency contacts must be at most 2')
+    .nullable(),
 });
 
 export type CreateStudentProfileRequest = z.infer<typeof createStudentProfileRequestSchema>;

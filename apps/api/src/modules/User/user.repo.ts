@@ -3,7 +3,6 @@ import { DatabaseError } from '@/err/service/customErrors';
 import { Prisma } from '@/generated/prisma/client';
 import { UserGetPayload, UserInclude } from '@/generated/prisma/models';
 import { DefaultArgs } from '@prisma/client/runtime/client';
-import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createSimpleUserRequest';
 import { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
 import { CreateUserInput } from './types/createUserInput';
 

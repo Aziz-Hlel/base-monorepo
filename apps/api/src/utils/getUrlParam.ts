@@ -7,7 +7,7 @@ const isUUID = (value: string) => {
   return z.uuid().safeParse(value).success;
 };
 
-const getParam = (req: Request, param: string, { uuid = false }: { uuid?: boolean }): string => {
+const getUrlParam = (req: Request, param: string, { uuid }: { uuid?: boolean } = { uuid: false }): string => {
   const paramValue = req.params[param];
   if (paramValue === undefined) throw new BadRequestError(`${capitalize(param)} is required in params`);
   if (typeof paramValue !== 'string') throw new BadRequestError(`${capitalize(param)} must be a string`);
@@ -16,4 +16,4 @@ const getParam = (req: Request, param: string, { uuid = false }: { uuid?: boolea
   return paramValue;
 };
 
-export default getParam;
+export default getUrlParam;

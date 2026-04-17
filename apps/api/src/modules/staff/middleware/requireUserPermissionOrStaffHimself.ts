@@ -2,7 +2,7 @@ import { prisma } from '@/bootstrap/db.init';
 import { ConflictError } from '@/err/service/customErrors';
 import { AccountRole, UserRole } from '@/generated/prisma/enums';
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
-import getParam from '@/utils/getParam';
+import getUrlParam from '@/utils/getUrlParam';
 import { NextFunction, Request, Response } from 'express';
 
 export const requireUserPermissionOrStaffHimself = (requiredRoles: UserRole[]) => {
@@ -12,7 +12,7 @@ export const requireUserPermissionOrStaffHimself = (requiredRoles: UserRole[]) =
       return next();
     }
 
-    const schoolId = getParam(req, 'schoolId', { uuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const accountId = token.claims.accountId;
 
     const school = await prisma.school.findFirst({
@@ -45,7 +45,7 @@ export const requireUserPermissionOrStaffHimself = (requiredRoles: UserRole[]) =
       },
     });
 
-    if (staff && staff.id === getParam(req, 'staffId', { uuid: true })) return next();
+    if (staff && staff.id === getUrlParam(req, 'staffId', { uuid: true })) return next();
 
     throw new ConflictError({
       message: 'User not authorized',

@@ -1,5 +1,5 @@
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
-import getParam from '@/utils/getParam';
+import getUrlParam from '@/utils/getUrlParam';
 import { CreateSchoolRequestSchema } from '@repo/contracts/schemas/school/createSchoolRequest';
 import { updateSchoolRequestSchema } from '@repo/contracts/schemas/school/updateSchoolRequest';
 import { Response } from 'express';
@@ -18,7 +18,7 @@ export class SchoolController {
   update = async (req: AuthenticatedRequest, res: Response) => {
     const schema = updateSchoolRequestSchema.parse(req.body);
     const token = req.token;
-    const schoolId = getParam(req, 'schoolId', { uuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     await this.schoolService.update({ schema, accountId: token.claims.accountId, schoolId });
     res.status(200).json({ message: 'School updated successfully' });
   };
@@ -29,7 +29,7 @@ export class SchoolController {
   };
 
   getById = async (req: AuthenticatedRequest, res: Response) => {
-    const schoolId = getParam(req, 'schoolId', { uuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const school = await this.schoolService.getById({ schoolId, token: req.token });
     res.status(200).json(school);
   };
