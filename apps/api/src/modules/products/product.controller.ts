@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { ProductResponse } from '@repo/contracts/schemas/product/productResponse';
 import { updateProductRequestSchema } from '@repo/contracts/schemas/product/updateProductRequest';
 import { productsQueryParamsSchema } from '@repo/contracts/schemas/product/ProductPageQuery';
-import getParam from '@/utils/getParam';
+import getUrlParam from '@/utils/getUrlParam';
 import { IProductService } from './product.service';
 
 export class ProductController {
@@ -17,14 +17,14 @@ export class ProductController {
   };
 
   getById = async (req: Request, res: Response<ProductResponse>) => {
-    const productId = getParam(req, 'id');
+    const productId = getUrlParam(req, 'id');
 
     const productResponse = await this.productService.getById(productId);
     res.status(200).json(productResponse);
   };
 
   update = async (req: Request, res: Response<ProductResponse>) => {
-    const productId = getParam(req, 'id');
+    const productId = getUrlParam(req, 'id');
     const parsedSchema = updateProductRequestSchema.parse(req.body);
     const productResponse = await this.productService.update(productId, parsedSchema);
 
@@ -39,7 +39,7 @@ export class ProductController {
   };
 
   delete = async (req: Request, res: Response) => {
-    const productId = getParam(req, 'id');
+    const productId = getUrlParam(req, 'id');
 
     await this.productService.delete(productId);
 

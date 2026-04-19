@@ -34,4 +34,10 @@ export class ClassRepo {
       where: { id },
     });
   };
+
+  findMany = async (ids: string[]) => {
+    return await prisma.class.findMany({
+      where: { id: { in: ids } },
+    });
+  };
 }

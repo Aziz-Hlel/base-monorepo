@@ -3,7 +3,7 @@ import { UpdateTeacherRequest } from '@repo/contracts/schemas/teacher/updateTeac
 import { TeacherService } from './teacher.service';
 import { SchoolService } from '../school/school.service';
 import { NotFoundError, PermissionDeniedError } from '@/err/customErrors';
-import { CustomClaims as Claims } from '@/types/auth/CustomClaims';
+import { CustomClaims as Claims } from '@/types/auth/Claims';
 import { Role } from '@/generated/prisma/enums';
 import { TeacherMapper } from './teacher.mapper';
 

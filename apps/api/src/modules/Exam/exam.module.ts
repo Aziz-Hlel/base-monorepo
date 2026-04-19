@@ -10,5 +10,5 @@ export const createExamModule = () => {
   const examAppService = new ExamAppService(examService);
   const examController = new ExamController(examAppService);
   const examRouter = createExamRouter(examController);
-  return { examRouter, examService };
+  return { examRouter, examService, examRepo };
 };

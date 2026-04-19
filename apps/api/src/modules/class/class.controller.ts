@@ -1,4 +1,4 @@
-import getParam from '@/utils/getParam';
+import getUrlParam from '@/utils/getUrlParam';
 import { createClassRequestSchema } from '@repo/contracts/schemas/class/createClassRequest';
 import { updateClassRequestSchema } from '@repo/contracts/schemas/class/updateClassRequest';
 import { Request, Response } from 'express';
@@ -9,7 +9,7 @@ export class ClassController {
 
   create = async (req: Request, res: Response) => {
     const data = createClassRequestSchema.parse(req.body);
-    const schoolId = getParam(req, 'schoolId', { isUuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { isUuid: true });
     const result = await this.classService.create(data, schoolId);
     res.status(201).json({
       message: 'Class created successfully',
@@ -18,7 +18,7 @@ export class ClassController {
   };
 
   getAllBySchoolId = async (req: Request, res: Response) => {
-    const schoolId = getParam(req, 'schoolId', { isUuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { isUuid: true });
     const result = await this.classService.getBySchoolId(schoolId);
     res.status(200).json({
       message: 'Classes fetched successfully',
@@ -27,7 +27,7 @@ export class ClassController {
   };
 
   getById = async (req: Request, res: Response) => {
-    const id = getParam(req, 'id', { isUuid: true });
+    const id = getUrlParam(req, 'id', { isUuid: true });
     const result = await this.classService.getById(id);
     res.status(200).json({
       message: 'Class fetched successfully',
@@ -37,8 +37,8 @@ export class ClassController {
 
   update = async (req: Request, res: Response) => {
     const data = updateClassRequestSchema.parse(req.body);
-    const id = getParam(req, 'id', { isUuid: true });
-    const schoolId = getParam(req, 'schoolId', { isUuid: true });
+    const id = getUrlParam(req, 'id', { isUuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { isUuid: true });
     const result = await this.classService.update(data, schoolId, id);
     res.status(200).json({
       message: 'Class updated successfully',
@@ -47,7 +47,7 @@ export class ClassController {
   };
 
   delete = async (req: Request, res: Response) => {
-    const id = getParam(req, 'id', { isUuid: true });
+    const id = getUrlParam(req, 'id', { isUuid: true });
     const result = await this.classService.delete(id);
     res.status(200).json(result);
   };

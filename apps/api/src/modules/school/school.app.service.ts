@@ -1,5 +1,5 @@
 import { ConflictError, InternalServerError, NotFoundError } from '@/err/customErrors';
-import { CustomClaims } from '@/types/auth/CustomClaims';
+import { CustomClaims as Claims } from '@/types/auth/Claims';
 import { CreateSchoolRequest } from '@repo/contracts/schemas/school/createSchoolRequest';
 import { CreateSchoolWithUserRequest } from '@repo/contracts/schemas/school/createWithUser';
 import { UpdateSchoolRequest } from '@repo/contracts/schemas/school/updateSchoolRequest';
@@ -7,10 +7,12 @@ import { UserService } from '../User/Service/user.service';
 import { SchoolMapper } from './school.mapper';
 import { SchoolService } from './school.service';
 import { Role } from '@/generated/prisma/enums';
+import { SchoolRepo } from './school.repo';
 
 export class SchoolAppService {
   constructor(
     private readonly schoolService: SchoolService,
+    private readonly schoolRepo: SchoolRepo,
     private readonly userService: UserService,
   ) {}
 
@@ -56,7 +58,7 @@ export class SchoolAppService {
     return schoolWithUserResponse;
   };
 
-  updateMySchool = async (data: UpdateSchoolRequest, schoolId: string, claims: CustomClaims) => {
+  updateMySchool = async (data: UpdateSchoolRequest, schoolId: string, claims: Claims) => {
     const existingSchool = await this.schoolService.findByUserId(claims.id);
     if (!existingSchool) {
       throw new ConflictError({
@@ -85,13 +87,15 @@ export class SchoolAppService {
     return schoolResponse;
   };
 
-  getMySchool = async (claims: CustomClaims) => {
-    console.log('rab om l claims', claims);
-    const school = await this.schoolService.findByUserId(claims.id);
+  getMySchool_V2 = async (claims: Claims) => {
+    const school = await this.schoolRepo.getById(claims.id, {
+      electiveExams: { include: { exam: true } },
+      majors: { include: { major: true } },
+    });
     if (!school) {
       throw new NotFoundError({ message: 'School not found' });
     }
-    const schoolResponse = SchoolMapper.toResponse(school);
+    const schoolResponse = SchoolMapper.toWithDetails(school);
     return schoolResponse;
   };
 }

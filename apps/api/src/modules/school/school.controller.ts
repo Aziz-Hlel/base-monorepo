@@ -4,7 +4,7 @@ import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import { Response } from 'express';
 import { createSchoolWithUserRequestSchema } from '@repo/contracts/schemas/school/createWithUser';
 import { updateSchoolRequestSchema } from '@repo/contracts/schemas/school/updateSchoolRequest';
-import getParam from '@/utils/getParam';
+import getUrlParam from '@/utils/getUrlParam';
 export class SchoolController {
   constructor(private readonly schoolAppService: SchoolAppService) {}
 
@@ -23,21 +23,21 @@ export class SchoolController {
 
   updateMySchool = async (req: AuthenticatedRequest, res: Response) => {
     const data = updateSchoolRequestSchema.parse(req.body);
-    const schoolId = getParam(req, 'id', { isUuid: true });
+    const schoolId = getUrlParam(req, 'id', { isUuid: true });
     const claims = req.user.claims;
     const school = await this.schoolAppService.updateMySchool(data, schoolId, claims);
     res.status(200).json(school);
   };
 
   getByUserId = async (req: AuthenticatedRequest, res: Response) => {
-    const userId = getParam(req, 'id', { isUuid: true });
+    const userId = getUrlParam(req, 'id', { isUuid: true });
     const school = await this.schoolAppService.getByUserId(userId);
     res.status(200).json(school);
   };
 
   getMySchool = async (req: AuthenticatedRequest, res: Response) => {
     const claims = req.user.claims;
-    const school = await this.schoolAppService.getMySchool(claims);
+    const school = await this.schoolAppService.getMySchool_V2(claims);
     res.status(200).json(school);
   };
 }

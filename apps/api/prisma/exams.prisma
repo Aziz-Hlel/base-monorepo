@@ -5,7 +5,6 @@ enum TimeOfDayEnum {
 }
 
 enum SubjectEnum {
-  
   ALGO
   FRENCH
   ENGLISH
@@ -59,6 +58,7 @@ model Major {
 
     exams Exam[]
     schools SchoolMajors[]
+    schoolsCapacities SchoolCapacityStats[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -73,6 +73,8 @@ model ElectiveExam{
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
+
+
 
 model Exam {
     id String @id @default(uuid()) @db.Uuid
@@ -94,6 +96,7 @@ model Exam {
 
     examSessions ExamSession[]
     schoolsElectiveExams SchoolElectiveExam[]
+    schoolCapacities SchoolCapacityStats[]
     
     @@index([term,subject,isOptional])
     
@@ -151,11 +154,36 @@ model SchoolElectiveExam{
     
     schoolId String @db.Uuid
     school School @relation(fields: [schoolId], references: [id],onDelete: Cascade)
-
-    examId String @db.Uuid
-    exam Exam @relation(fields: [examId], references: [id],onDelete: Cascade)
+ 
+    examId String? @db.Uuid
+    exam Exam? @relation(fields: [examId], references: [id],onDelete: Cascade)
     
     nbrClasses Int
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+enum CapacityTypeEnum {
+  MAJOR
+  ELECTIVE
+}
+
+model SchoolCapacityStats {
+    id String @id @default(uuid())
+    
+    schoolId String @db.Uuid
+    school School @relation(fields: [schoolId], references: [id],onDelete: Cascade)
+
+    majorId String? @db.Uuid
+    major Major? @relation(fields: [majorId], references: [id],onDelete: Cascade)
+
+    examId String? @db.Uuid
+    exam Exam? @relation(fields: [examId], references: [id],onDelete: Cascade)
+    
+    nbrClasses Int
+
+    type CapacityTypeEnum
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -172,6 +200,7 @@ model School {
 
     majors SchoolMajors[]
     electiveExams SchoolElectiveExam[]
+    capacities SchoolCapacityStats[]
 
     classes Class[]
     teachers Teacher[]
@@ -222,15 +251,16 @@ model Teacher{
 
 model ExamSession { 
   id String @id @default(uuid()) @db.Uuid
-  name String @db.VarChar(255)
 
   classId String @db.Uuid
-  class Class @relation(fields: [classId], references: [id])
+  class Class @relation(fields: [classId], references: [id],onDelete: Cascade)
   
   examId String @db.Uuid
-  exam Exam @relation(fields: [examId], references: [id])
+  exam Exam @relation(fields: [examId], references: [id],onDelete: Cascade)
 
   teacherExamSession TeacherExamSession?
+
+  @@unique([classId, examId])
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -250,7 +280,7 @@ model TeacherExamSession {
   secondaryTeacher Teacher @relation("SecondaryTeacher", fields: [secondaryTeacherId], references: [id])
 
   examSessionId String @db.Uuid @unique
-  examSession ExamSession @relation(fields: [examSessionId], references: [id])
+  examSession ExamSession @relation(fields: [examSessionId], references: [id],onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

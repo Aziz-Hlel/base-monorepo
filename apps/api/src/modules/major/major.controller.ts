@@ -1,7 +1,7 @@
 import { MajorAppService } from './major.app.service';
 import { Request, Response } from 'express';
 import { createMajorRequestSchema } from '@repo/contracts/schemas/major/createMajorRequest';
-import getParam from '@/utils/getParam';
+import getUrlParam from '@/utils/getUrlParam';
 import { isMajorEnum } from '@repo/contracts/schemas/major/utils';
 import { BadRequestError } from '@/err/customErrors';
 
@@ -21,7 +21,7 @@ export class MajorController {
   };
 
   findByName = async (req: Request, res: Response) => {
-    const majorName = getParam(req, 'name');
+    const majorName = getUrlParam(req, 'name');
     if (!isMajorEnum(majorName)) throw new BadRequestError('Invalid major name');
     const major = await this.majorAppService.findByName(majorName);
     res.json(major);

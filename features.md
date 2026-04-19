@@ -1,0 +1,6 @@
+- api to create an exam sessions for a specifiq class based on Major (assign major to class)
+- another api to create an exam sessions for mutiple classes based on specifiq elective exam (assign elective exam to classes)
+- api to check if some exams in a class are in conflict (same time or (same teacher?))
+- api to check if all exams in a major have the same amount of classes (yes this should be uselefull because in each major they should be the same number of classes hosting the exams)
+- api to get all exams for a school (elective with the number inserted beforehand , and major)
+- an interface of a calendar to display exams hosted in a certain exam and another to display classes hosting exams of a certain major

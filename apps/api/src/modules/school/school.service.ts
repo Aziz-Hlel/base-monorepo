@@ -13,7 +13,7 @@ export class SchoolService {
   };
 
   findById = async (schoolId: string) => {
-    const school = await this.schoolRepo.getById(schoolId);
+    const school = await this.schoolRepo.getById(schoolId, {});
 
     return school;
   };

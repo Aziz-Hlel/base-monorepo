@@ -1,7 +1,7 @@
 import { createExamRequestSchema } from '@repo/contracts/schemas/exam/creatExamRequest';
 import { ExamAppService } from './exam.app.service';
 import { Request, Response } from 'express';
-import getParam from '@/utils/getParam';
+import getUrlParam from '@/utils/getUrlParam';
 
 export class ExamController {
   constructor(private readonly examAppService: ExamAppService) {}
@@ -12,13 +12,13 @@ export class ExamController {
   };
 
   findById = async (req: Request, res: Response) => {
-    const id = getParam(req, 'id', { isUuid: true });
+    const id = getUrlParam(req, 'id', { isUuid: true });
     const exam = await this.examAppService.findById({ id });
     res.json(exam);
   };
 
   findByMajorId = async (req: Request, res: Response) => {
-    const majorId = getParam(req, 'majorId', { isUuid: true });
+    const majorId = getUrlParam(req, 'majorId', { isUuid: true });
     const exams = await this.examAppService.findByMajorId({ majorId });
     res.json(exams);
   };

@@ -1,6 +1,7 @@
 import { EmailRouter } from '@/email/email.route';
 import { createMediaModule } from '@/media';
 import { createExamModule } from '@/modules/Exam/exam.module';
+import { ExamSessionModule } from '@/modules/ExamSession/examSession.module';
 import { createAuthModule, createUserModule } from '@/modules/User';
 import { ClassModule } from '@/modules/class/class.module';
 import { createMajorModule } from '@/modules/major/major.module';
@@ -29,7 +30,7 @@ const { authRouter } = createAuthModule(userInternalService);
 const { majorRouter, majorService } = createMajorModule();
 
 // * EXAM
-const { examRouter, examService } = createExamModule();
+const { examRouter, examService, examRepo } = createExamModule();
 
 // * SCHOOL
 const { schoolRouter, schoolService } = createSchoolModule(userInternalService);
@@ -38,7 +39,10 @@ const { schoolRouter, schoolService } = createSchoolModule(userInternalService);
 const { teacherRouter, teacherService } = createTeacherModule({ schoolService });
 
 // * CLASS
-const { classRouter } = ClassModule();
+const { classRouter, classRepo } = ClassModule();
+
+// * EXAM SESSION
+const { examSessionRouter } = ExamSessionModule({ examRepo, classRepo });
 
 // * SEED
 const majorSeed = new MajorSeedService(majorService);
@@ -58,4 +62,5 @@ export const container: { router: Router; resource: string }[] = [
   { router: schoolRouter, resource: 'schools' },
   { router: teacherRouter, resource: 'schools/:schoolId/teachers' },
   { router: classRouter, resource: 'schools/:schoolId/classes' },
+  { router: examSessionRouter, resource: 'exam-sessions' },
 ];

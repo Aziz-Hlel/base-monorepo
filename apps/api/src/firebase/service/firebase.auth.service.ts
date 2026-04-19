@@ -1,5 +1,5 @@
 import { handleFirebaseError, isFirebaseError } from '../err/firebase.errors';
-import { CustomClaims } from '../../types/auth/CustomClaims';
+import { CustomClaims } from '../../types/auth/Claims';
 import { Role, User } from '../../generated/prisma/client';
 import { StrictDecodedIdToken } from '../../types/auth/StrictDecodedIdToken';
 import { Auth } from 'firebase-admin/auth';

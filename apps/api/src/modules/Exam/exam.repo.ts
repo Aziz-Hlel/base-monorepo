@@ -3,6 +3,7 @@ import { DatabaseError } from '@/err/customErrors';
 import { SubjectEnum, TermEnum } from '@/generated/prisma/enums';
 import { ExamInclude } from '@/generated/prisma/models';
 import { parseCalendarDate, parseTime } from '@/utils/dayjs';
+import { getCurrentTerm } from '@/utils/getCurrentTerm';
 import { DefaultArgs } from '@prisma/client/runtime/client';
 import { CreateExamRequest } from '@repo/contracts/schemas/exam/creatExamRequest';
 
@@ -105,6 +106,17 @@ export class ExamRepo {
     }
   };
 
+  findElectiveExamByIdAndCurrentTerm = async <T extends ExamInclude<DefaultArgs>>(
+    params: { id: string },
+    include: T,
+  ) => {
+    const { id } = params;
+    return await prisma.exam.findUnique({
+      where: { id, isOptional: true, term: getCurrentTerm() },
+      include,
+    });
+  };
+
   findByMajorId = async <T extends ExamInclude<DefaultArgs>>({ majorId, include }: { majorId: string; include: T }) => {
     try {
       return await prisma.exam.findMany({
@@ -137,5 +149,15 @@ export class ExamRepo {
         cause: error,
       });
     }
+  };
+
+  findByMajorIdAndTerm = async <T extends ExamInclude<DefaultArgs> | {}>(
+    { majorId, term }: { majorId: string; term: TermEnum },
+    include: T = {} as T,
+  ) => {
+    return await prisma.exam.findMany({
+      where: { majorId, term },
+      include,
+    });
   };
 }

@@ -8,5 +8,5 @@ export const ClassModule = () => {
   const classService = new ClassService(classRepo);
   const classController = new ClassController(classService);
   const classRouter = createRouter(classController);
-  return { classRouter };
+  return { classRouter, classRepo };
 };
