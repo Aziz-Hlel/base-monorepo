@@ -22,6 +22,7 @@ model Classroom{
   students Student[]
   sessions ClassSessions[]
   examSessions ExamSessions[]
+  examTimes ExamTime[]
 
   schoolId String @db.Uuid
   school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)

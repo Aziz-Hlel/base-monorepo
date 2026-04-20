@@ -16,8 +16,11 @@ import { createUserRoleModule } from '@/modules/userRoles/userRole.module';
 import { createNotificationModule as notificationModule } from '@/notification';
 import { SeedDevService } from '@/seeds/dev/seedDev.service';
 import { AccountSeed } from '@/seeds/fakes/account.seed';
+import { ActorSeed } from '@/seeds/fakes/actor.seed';
 import { OwnerSeed } from '@/seeds/fakes/owner.seed';
 import { SchoolSeed } from '@/seeds/fakes/school.seed';
+import { TeacherSeed } from '@/seeds/fakes/teacher.seed';
+import { UserRolesSeed } from '@/seeds/fakes/userRoles.seed';
 import { UserSeed } from '@/seeds/fakes/users.fake';
 import { Router } from 'express';
 
@@ -81,7 +84,10 @@ const accountSeed = new AccountSeed(accountService);
 const ownerSeed = new OwnerSeed(ownerService);
 const schoolSeed = new SchoolSeed();
 const userSeed = new UserSeed();
-const seedDevService = new SeedDevService(accountSeed, ownerSeed, schoolSeed, userSeed);
+const userRolesSeed = new UserRolesSeed(userRoleService);
+const teacherSeed = new TeacherSeed();
+const actorSeed = new ActorSeed(userRolesSeed, teacherSeed);
+const seedDevService = new SeedDevService(accountSeed, ownerSeed, schoolSeed, userSeed, userRolesSeed, actorSeed);
 seedDevService.run();
 
 export const container: { router: Router; resource: string }[] = [
@@ -96,7 +102,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: teacherRouter, resource: 'schools/:schoolId/teachers' },
   { router: classRouter, resource: 'schools/:schoolId/classrooms' },
   { router: studentRouter, resource: 'schools/:schoolId/students' },
-  { router: studentProfileRouter, resource: 'schools/:schoolId/students/:studentId/profile' },
+  { router: studentProfileRouter, resource: 'schools/:schoolId/students/:studentId/profiles' },
   { router: parentStudentRouter, resource: 'schools/:schoolId/students/:studentId/parents/:parentId' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },

@@ -6,15 +6,7 @@ import { faker } from '@faker-js/faker/.';
 export class UserSeed {
   constructor() {}
 
-  generateFakeSimpleUser = ({
-    accountId,
-    schoolId,
-    role,
-  }: {
-    accountId: string;
-    schoolId: string;
-    role?: UserRole;
-  }): UserCreateInput => {
+  generateFakeSimpleUser = ({ accountId, schoolId }: { accountId: string; schoolId: string }): UserCreateInput => {
     return {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
@@ -25,11 +17,6 @@ export class UserSeed {
       address: faker.location.streetAddress(),
       status: faker.helpers.arrayElement(Object.values(UserStatus)),
 
-      roles: {
-        create: {
-          role: role ?? faker.helpers.arrayElement(Object.values(UserRole)),
-        },
-      },
       account: {
         connect: {
           id: accountId,
@@ -46,8 +33,8 @@ export class UserSeed {
     };
   };
 
-  run = async ({ accountId, schoolId, role }: { accountId: string; schoolId: string; role?: UserRole }) => {
-    const user = this.generateFakeSimpleUser({ accountId, schoolId, role });
+  run = async ({ accountId, schoolId }: { accountId: string; schoolId: string }) => {
+    const user = this.generateFakeSimpleUser({ accountId, schoolId });
     const createdUser = await prisma.user.upsert({
       where: {
         accountId_schoolId: {

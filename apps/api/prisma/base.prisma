@@ -110,7 +110,7 @@ model School {
   students Student[]
   classes Classroom[]
   studentFees Fees[]
-
+  exams Exam[]
 
   status SchoolStatus @default(PENDING)
   createdAt DateTime @default(now())

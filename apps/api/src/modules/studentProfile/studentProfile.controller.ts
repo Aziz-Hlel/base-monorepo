@@ -8,6 +8,7 @@ export class StudentProfileController {
   constructor(private readonly studentProfileService: StudentProfileService) {}
 
   create = async (req: Request, res: Response, next: NextFunction) => {
+    console.log('tl');
     const input = createStudentProfileRequestSchema.parse(req.body);
     const studentId = getUrlParam(req, 'studentId', { uuid: true });
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });

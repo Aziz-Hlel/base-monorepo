@@ -11,7 +11,7 @@ export const createRouter = (studentController: StudentController) => {
 
   router.post('/', requireAuth, asyncHandler(studentController.create));
 
-  router.get(
+  router.post(
     '/with-parent',
     requireAuth,
     requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),

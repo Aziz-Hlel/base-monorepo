@@ -6,6 +6,8 @@ import { UserSeed } from '../fakes/users.fake';
 import ISeed from '../ISeed';
 import { data } from './data';
 import { faker } from '@faker-js/faker/.';
+import { UserRolesSeed } from '../fakes/userRoles.seed';
+import { ActorSeed } from '../fakes/actor.seed';
 
 faker.seed(1); // Ensure consistent fake data across runs
 export class SeedDevService implements ISeed {
@@ -14,6 +16,8 @@ export class SeedDevService implements ISeed {
     private readonly ownerSeed: OwnerSeed,
     private readonly schoolSeed: SchoolSeed,
     private readonly userSeed: UserSeed,
+    private readonly userRolesSeed: UserRolesSeed,
+    private readonly actorSeed: ActorSeed,
   ) {}
 
   generateFakeAccountWithRoleUser = (index: number) => {
@@ -41,6 +45,8 @@ export class SeedDevService implements ISeed {
           accountId: account.id,
           schoolId: school.id,
         });
+
+        await this.actorSeed.run({ role: accountInfo.role, userId: user.id });
       });
     });
   };

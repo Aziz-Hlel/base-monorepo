@@ -1,5 +1,6 @@
 import { prisma } from '@/bootstrap/db.init';
 import { RepoError } from '@/err/repo/DbError';
+import { RepoError_V2 } from '@/err/repo/DbError.v2';
 import { UserRole } from '@/generated/prisma/client';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { UserRoleSimple } from '@repo/contracts/types/enums/meta/userRoleMeta';
@@ -64,6 +65,22 @@ export class UserRoleRepo {
       },
     });
     return userRole;
+  };
+
+  findByUserIdAndRole_V2 = async ({ userId, role }: { userId: string; role: UserRole }) => {
+    try {
+      const userRole = await prisma.userRoles.findUnique({
+        where: {
+          userId_role: {
+            userId,
+            role,
+          },
+        },
+      });
+      return userRole;
+    } catch (error) {
+      RepoError_V2.throwUnknownError(error);
+    }
   };
 
   findByUserIdAndRole = async ({ userId, role }: { userId: string; role: UserRoleSimple }) => {

@@ -14,6 +14,11 @@ export const repoErrors = {
     message: 'Operation failed',
     status: 500,
   },
+  UNKNOWN: {
+    code: 'UNKNOWN_DB_ERROR',
+    message: 'Unknown error',
+    status: 500,
+  },
 } as const;
 
 export type RepoErrorDefaults = (typeof repoErrors)[keyof typeof repoErrors];

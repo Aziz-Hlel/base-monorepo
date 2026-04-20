@@ -9,7 +9,7 @@ export class StaffSeed {
     const { schema, schoolId, accountId } = params;
     const existingUser = await this.userRepo.findByAccountIdSchoolId({ accountId, schoolId, include: {} });
     if (existingUser) return existingUser;
-    const user = await this.userRepo.createUserWithSimpleRole({ schema, schoolId, accountId }, tx);
+    const user = await this.userRepo.create_V2({ input: schema, schoolId, accountId }, tx);
     return user;
   };
 }

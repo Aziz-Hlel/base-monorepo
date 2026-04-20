@@ -1,11 +1,22 @@
-export class TeacherSeed {
-  constructor(private readonly userRepo: UserRepo) {}
+import { prisma } from '@/bootstrap/db.init';
+import { TX } from '@/types/prisma/PrismaTransaction';
 
-  run = async (params: { schema: CreateUserInput; schoolId: string; accountId: string }, tx?: TX) => {
-    const { schema, schoolId, accountId } = params;
-    const existingUser = await this.userRepo.findByAccountIdSchoolId({ accountId, schoolId, include: {} });
-    if (existingUser) return existingUser;
-    const user = await this.userRepo.createUserWithSimpleRole({ schema, schoolId, accountId }, tx);
-    return user;
+export class TeacherSeed {
+  run = async (params: { userId: string }, tx?: TX) => {
+    const { userId } = params;
+
+    const client = tx ?? prisma;
+
+    const teacher = await client.teacher.upsert({
+      where: {
+        userId,
+      },
+      update: {},
+      create: {
+        userId,
+      },
+    });
+
+    return teacher;
   };
 }
