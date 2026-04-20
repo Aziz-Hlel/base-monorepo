@@ -36,42 +36,34 @@ export class UserRoleRepo {
   };
 
   grantRole_V2 = async ({ userId, role }: { userId: string; role: UserRole }, tx?: TX) => {
-    try {
-      const client = tx || prisma;
-      const userRole = await client.userRoles.upsert({
-        where: {
-          userId_role: {
-            userId,
-            role,
-          },
-        },
-        update: {},
-        create: {
+    const client = tx || prisma;
+    const userRole = await client.userRoles.upsert({
+      where: {
+        userId_role: {
           userId,
           role,
         },
-      });
-      return userRole;
-    } catch (error) {
-      RepoError.throwRepoError(error);
-    }
+      },
+      update: {},
+      create: {
+        userId,
+        role,
+      },
+    });
+    return userRole;
   };
 
   revokeRole_V2 = async ({ userId, role }: { userId: string; role: UserRole }, tx?: TX) => {
     const client = tx || prisma;
-    try {
-      const userRole = await client.userRoles.delete({
-        where: {
-          userId_role: {
-            userId,
-            role,
-          },
+    const userRole = await client.userRoles.delete({
+      where: {
+        userId_role: {
+          userId,
+          role,
         },
-      });
-      return userRole;
-    } catch (error) {
-      RepoError.throwRepoError(error);
-    }
+      },
+    });
+    return userRole;
   };
 
   findByUserIdAndRole = async ({ userId, role }: { userId: string; role: UserRoleSimple }) => {

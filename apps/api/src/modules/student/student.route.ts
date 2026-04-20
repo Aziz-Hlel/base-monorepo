@@ -1,15 +1,22 @@
-import { Router } from 'express';
-import { StudentController } from './student.controller';
 import { asyncHandler } from '@/core/async-handler';
-import { requireAuth } from '@/middleware/requireAuth.middleware';
 import { UserRole } from '@/generated/prisma/enums';
+import { requireAuth } from '@/middleware/requireAuth.middleware';
+import { Router } from 'express';
 import { requireUserPermissionOrIsParentChild } from './middleware/requireUserPermissionOrIsParentChild';
+import { StudentController } from './student.controller';
 import requireUserPermission from '@/middleware/requirePermission.middleware';
 
 export const createRouter = (studentController: StudentController) => {
   const router = Router({ mergeParams: true });
 
   router.post('/', requireAuth, asyncHandler(studentController.create));
+
+  router.get(
+    '/with-parent',
+    requireAuth,
+    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
+    asyncHandler(studentController.createWithParent),
+  );
 
   router.put(
     '/:studentId',
@@ -23,20 +30,6 @@ export const createRouter = (studentController: StudentController) => {
     requireAuth,
     requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(studentController.findById),
-  );
-
-  router.post(
-    '/:studentId/parent/:parentId',
-    requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
-    asyncHandler(studentController.assignParent),
-  );
-
-  router.delete(
-    '/:studentId/parent/:parentId',
-    requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
-    asyncHandler(studentController.unassignParent),
   );
 
   return router;

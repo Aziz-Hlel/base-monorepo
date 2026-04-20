@@ -1,15 +1,18 @@
 import { prisma } from '@/bootstrap/db.init';
 import { AccountRole, Prisma } from '@/generated/prisma/client';
 import { AccountService } from '@/modules/accounts/account.service';
-import { UserRoleRepo } from '@/modules/userRoles/userRole.repo';
+import { UserRoleService } from '@/modules/userRoles/userRole.service';
 import { CreateUserInput } from '../types/createUserInput';
 import { UserService } from '../user.service';
 
+/**
+ * @deprecated use createUserV3 instead
+ */
 export class CreateUserV2UseCase {
   constructor(
     private readonly userService: UserService,
     private readonly accountService: AccountService,
-    private readonly userRoleRepo: UserRoleRepo,
+    private readonly userRoleService: UserRoleService,
   ) {}
 
   private run = async (
@@ -31,7 +34,7 @@ export class CreateUserV2UseCase {
 
       const user = await this.userService.create_V2({ input, schoolId, accountId: account.id }, tx);
 
-      await this.userRoleRepo.grantRole_V2({ userId: user.id, role: input.role }, tx);
+      await this.userRoleService.grantRole_V2({ userId: user.id, role: input.role }, tx);
 
       return { user, account };
     } catch (error) {

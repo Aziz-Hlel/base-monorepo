@@ -1,6 +1,6 @@
 import z from 'zod';
-import { studentFirstNameSchema, studentLastNameSchema } from './createStudentRequest';
-import { Gender } from '../../types/enums/enums';
+import { studentFirstNameSchema, studentLastNameSchema } from '../createStudentRequest';
+import { Gender } from '../../../types/enums/enums';
 
 export const createMinimalWithParentSchema = z.object({
   student: z

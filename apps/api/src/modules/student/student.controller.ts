@@ -3,12 +3,13 @@ import { StudentService } from './student.service';
 import { Request, Response } from 'express';
 import getUrlParam from '@/utils/getUrlParam';
 import { updateStudentRequestSchema } from '@repo/contracts/schemas/student/updateStudentRequest';
-import { StudentParentService } from './studentParent.service';
+import { CreateStudentWithParentUseCase } from './use-case/createStudentWithParent';
+import { createStudentWithParentSchema } from '@repo/contracts/schemas/student/withParent/createWithParent';
 
 export class StudentController {
   constructor(
     private readonly studentService: StudentService,
-    private readonly studentParentService: StudentParentService,
+    private readonly createStudentWithParentUseCase: CreateStudentWithParentUseCase,
   ) {}
 
   create = async (req: Request, res: Response) => {
@@ -18,6 +19,16 @@ export class StudentController {
     res.status(201).json({
       message: 'Student created successfully',
       data: response,
+    });
+  };
+
+  createWithParent = async (req: Request, res: Response) => {
+    const input = createStudentWithParentSchema.parse(req.body);
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const { student, isAccountExist } = await this.createStudentWithParentUseCase.execute({ input, schoolId });
+    res.status(201).json({
+      message: 'Student created successfully',
+      isAccountExist,
     });
   };
 
@@ -38,28 +49,6 @@ export class StudentController {
     const response = await this.studentService.findById({ schoolId, studentId });
     res.status(200).json({
       message: 'Student found successfully',
-      data: response,
-    });
-  };
-
-  assignParent = async (req: Request, res: Response) => {
-    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
-    const studentId = getUrlParam(req, 'studentId', { uuid: true });
-    const parentId = getUrlParam(req, 'parentId', { uuid: true });
-    const response = await this.studentParentService.assignParent({ studentId, parentId, schoolId });
-    res.status(200).json({
-      message: 'Parent assigned successfully',
-      data: response,
-    });
-  };
-
-  unassignParent = async (req: Request, res: Response) => {
-    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
-    const studentId = getUrlParam(req, 'studentId', { uuid: true });
-    const parentId = getUrlParam(req, 'parentId', { uuid: true });
-    const response = await this.studentParentService.unassignParent({ studentId, parentId, schoolId });
-    res.status(200).json({
-      message: 'Parent unassigned successfully',
       data: response,
     });
   };

@@ -57,7 +57,7 @@ export class UserService {
     userId: string;
     schoolId: string;
   }) => {
-    const user = await this.userRepo.findById(userId, { include: {} });
+    const user = await this.userRepo.findById(userId, {});
     if (!user) {
       throw new NotFoundError('User not found');
     }
@@ -94,9 +94,7 @@ export class UserService {
     userId: string,
     { include }: { include: T } = { include: {} as T },
   ) => {
-    const user = await this.userRepo.findById(userId, {
-      include,
-    });
+    const user = await this.userRepo.findById(userId, include);
     return user;
   };
 }

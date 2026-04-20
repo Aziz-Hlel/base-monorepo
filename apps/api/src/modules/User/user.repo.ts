@@ -133,11 +133,35 @@ export class UserRepo {
     }
   };
 
-  findById = async <T extends UserInclude<DefaultArgs>>(userId: string, { include }: { include: T }) => {
+  findById = async <T extends UserInclude<DefaultArgs>>(userId: string, include: T) => {
     try {
       const user = await prisma.user.findUnique({
         where: {
           id: userId,
+        },
+        include,
+      });
+      return user;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (!(error instanceof Error)) throw error;
+        throw new DatabaseError({ message: 'Failed to find user', cause: error });
+      }
+      throw error;
+    }
+  };
+
+  findByEmailAndSchoolId = async <T extends UserInclude<DefaultArgs>>(
+    { email, schoolId }: { email: string; schoolId: string },
+    include: T,
+  ) => {
+    try {
+      const user = await prisma.user.findFirst({
+        where: {
+          schoolId,
+          account: {
+            email,
+          },
         },
         include,
       });

@@ -1,18 +1,16 @@
+import { prisma } from '@/bootstrap/db.init';
 import { AccountRole, UserRole } from '@/generated/prisma/enums';
 import { AccountService } from '@/modules/accounts/account.service';
 import { UserService } from '@/modules/User/user.service';
-import { UserRoleRepo } from '@/modules/userRoles/userRole.repo';
+import { UserRoleService } from '@/modules/userRoles/userRole.service';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { CreateParentRequest } from '@repo/contracts/schemas/parent/createParentRequest';
-import { ParentRepo } from '../parent.repo';
-import { prisma } from '@/bootstrap/db.init';
 
 export class CreateParentUseCase {
   constructor(
-    private readonly parentRepo: ParentRepo,
     private readonly userService: UserService,
     private readonly accountService: AccountService,
-    private readonly userRoleRepo: UserRoleRepo,
+    private readonly userRoleService: UserRoleService,
   ) {}
 
   private run = async (params: { input: CreateParentRequest; schoolId: string; authId: string }, tx: TX) => {
@@ -30,7 +28,7 @@ export class CreateParentUseCase {
 
     const user = await this.userService.create_V2({ input, schoolId, accountId: account.id }, tx);
 
-    await this.userRoleRepo.grantRole_V2({ userId: user.id, role: UserRole.PARENT }, tx);
+    await this.userRoleService.grantRole_V2({ userId: user.id, role: UserRole.PARENT }, tx);
 
     return user;
   };

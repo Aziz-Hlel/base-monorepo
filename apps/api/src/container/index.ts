@@ -1,9 +1,11 @@
 import { createMediaModule as mediaModule } from '@/media';
+import { parentStudentModule } from '@/modules/ParentStudent/parentStudent.module';
 import { createUserModule as userModule } from '@/modules/User';
 import { AccountModule } from '@/modules/accounts/account.module';
 import { authModule } from '@/modules/auth/auth.module';
 import { ClassroomModule } from '@/modules/classroom/classroom.module';
 import { createOwnerModule as ownerModule } from '@/modules/owner/owner.module';
+import { ParentModule } from '@/modules/parent/parent.module';
 import { createRootModule as rootModule } from '@/modules/root/root.module';
 import { createSchoolModule as schoolModule } from '@/modules/schools/school.module';
 import { StaffModule } from '@/modules/staff/staff.module';
@@ -49,8 +51,21 @@ const { teacherRouter } = TeacherModule({ createSimpleUserUseCase, userService }
 // * CLASS
 const { classRouter } = ClassroomModule();
 
+// * PARENT STUDENT
+const { parentStudentRouter, parentStudentService } = parentStudentModule();
+
+// * PARENT
+const { parentService, parentRepo } = ParentModule();
+
 // * STUDENT
-const { studentRouter, studentService } = StudentModule();
+const { studentRouter, studentService } = StudentModule({
+  userRepo,
+  parentStudentService,
+  userRoleService,
+  createSimpleUserUseCase,
+  parentService,
+  parentRepo,
+});
 
 // * STUDENT PROFILE
 const { studentProfileRouter, studentProfileService } = StudentProfileModule();
@@ -82,6 +97,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: classRouter, resource: 'schools/:schoolId/classrooms' },
   { router: studentRouter, resource: 'schools/:schoolId/students' },
   { router: studentProfileRouter, resource: 'schools/:schoolId/students/:studentId/profile' },
+  { router: parentStudentRouter, resource: 'schools/:schoolId/students/:studentId/parents/:parentId' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
   { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },

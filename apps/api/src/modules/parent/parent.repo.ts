@@ -3,7 +3,7 @@ import { RepoError } from '@/err/repo/DbError';
 import { TX } from '@/types/prisma/PrismaTransaction';
 
 export class ParentRepo {
-  create = async (params: { input: { emergencyPhone: string }; userId: string; schoolId: string }, tx?: TX) => {
+  create = async (params: { input: { emergencyPhone: string | null }; userId: string; schoolId: string }, tx?: TX) => {
     const { input, userId, schoolId } = params;
     const client = tx ?? prisma;
     try {
@@ -24,7 +24,10 @@ export class ParentRepo {
     }
   };
 
-  update = async (params: { input: { emergencyPhone: string }; parentId: string; schoolId: string }, tx?: TX) => {
+  update = async (
+    params: { input: { emergencyPhone: string | null }; parentId: string; schoolId: string },
+    tx?: TX,
+  ) => {
     const { input, parentId, schoolId } = params;
     const client = tx ?? prisma;
     try {
@@ -55,6 +58,21 @@ export class ParentRepo {
           user: {
             schoolId,
           },
+        },
+      });
+      return parent;
+    } catch (error) {
+      RepoError.throwRepoError(error);
+    }
+  };
+
+  findByUserId = async (params: { userId: string; schoolId: string }, tx?: TX) => {
+    const { userId, schoolId } = params;
+    const client = tx ?? prisma;
+    try {
+      const parent = await client.parent.findUnique({
+        where: {
+          id: userId,
         },
       });
       return parent;
