@@ -20,9 +20,10 @@ model Classroom{
   grade ClassGrade
 
   students Student[]
-  sessions ClassSessions[]
-  examSessions ExamSessions[]
-  examTimes ExamTime[]
+  assignments Assignment[]
+  // sessions ClassSessions[]
+  // examSessions ExamSessions[]
+  // examTimes ExamTime[]
 
   schoolId String @db.Uuid
   school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
@@ -30,7 +31,7 @@ model Classroom{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([schoolId,name])
+  @@unique([schoolId,name,grade])
 
   @@map("classrooms")
 }

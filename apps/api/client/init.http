@@ -286,7 +286,7 @@ Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 
-
+###
 @ParentEmail = parent1@restclient.com
 @ParentPassword = 12345678
 
@@ -306,7 +306,7 @@ Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
     "en": "restclient",
     "ar": "ريست كلاينت"
   },
-  "uid": "1234567890",
+  "uid": "rest-client-student-with-parent",
   "gender": "MALE",
   "dateOfBirth": "2010-05-15",
   "avatarId": null,
@@ -340,6 +340,61 @@ Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
   }
 }
 
+### createSubject
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/subjects
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "name": {
+    "en": "Math",
+    "fr": "Math",
+    "ar": "الرياضيات"
+  },
+  "hoursPerWeek": 3,
+  "domain": "SCIENCE_TECHNOLOGY",
+  "grade": "ONE"
+}
+
+
+###
+# @name createManySubjects
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/subjects/bulk
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "grade": "TWO",
+  "subjects": [
+    {
+      "name": {
+        "en": "Math",
+        "fr": "Math",
+        "ar": "الرياضيات"
+      },
+      "hoursPerWeek": 3,
+      "domain": "SCIENCE_TECHNOLOGY"
+    },
+    {   
+      "name": {
+        "en": "Physics",
+        "fr": "Physique",
+        "ar": "الفيزياء"
+      },
+      "hoursPerWeek": 3,
+      "domain": "SCIENCE_TECHNOLOGY"
+    },
+    {
+      "name": {
+        "en": "Chemistry",
+        "fr": "Chimie",
+        "ar": "الكيمياء"
+      },
+      "hoursPerWeek": 3,
+      "domain": "SCIENCE_TECHNOLOGY"
+    }
+  ]
+}
 
 
 ########################################

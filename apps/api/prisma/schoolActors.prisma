@@ -64,6 +64,7 @@ model Student {
   updatedAt DateTime @updatedAt
 
   @@unique([avatarId])
+  @@unique([schoolId, uid])
 
   @@map("students")
 }
@@ -110,9 +111,10 @@ model Teacher {
   userId String @db.Uuid
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  sessions ClassSessions[]
-  examSessions ExamSessions[]
-  extraCurricularSessions ExtraCurricularSessions[]
+  assignments Assignment[]
+  // sessions ClassSessions[] // * not so sure of
+  // examSessions ExamSessions[] // * not so sure of
+  // extraCurricularSessions ExtraCurricularSessions[] // * not so sure of
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

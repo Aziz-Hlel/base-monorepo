@@ -1,13 +1,16 @@
-import { AccountRole } from '@/generated/prisma/enums';
+import { AccountRole, UserRole } from '@/generated/prisma/enums';
+import { faker } from '@faker-js/faker/.';
 import { AccountSeed } from '../fakes/account.seed';
+import { ActorSeed } from '../fakes/actor.seed';
 import { OwnerSeed } from '../fakes/owner.seed';
 import { SchoolSeed } from '../fakes/school.seed';
 import { UserSeed } from '../fakes/users.fake';
 import ISeed from '../ISeed';
 import { data } from './data';
-import { faker } from '@faker-js/faker/.';
-import { UserRolesSeed } from '../fakes/userRoles.seed';
-import { ActorSeed } from '../fakes/actor.seed';
+import { StudentSeed } from '../fakes/student.seed';
+import { ParentStudentSeed } from '../fakes/parentStudent.seed';
+import { ClassroomSeed } from '../fakes/classroom.seed';
+import { SubjectSeed } from '../fakes/subject.seed';
 
 faker.seed(1); // Ensure consistent fake data across runs
 export class SeedDevService implements ISeed {
@@ -16,8 +19,11 @@ export class SeedDevService implements ISeed {
     private readonly ownerSeed: OwnerSeed,
     private readonly schoolSeed: SchoolSeed,
     private readonly userSeed: UserSeed,
-    private readonly userRolesSeed: UserRolesSeed,
     private readonly actorSeed: ActorSeed,
+    private readonly studentSeed: StudentSeed,
+    private readonly parentStudentSeed: ParentStudentSeed,
+    private readonly classroomSeed: ClassroomSeed,
+    private readonly subjectSeed: SubjectSeed,
   ) {}
 
   generateFakeAccountWithRoleUser = (index: number) => {
@@ -35,9 +41,11 @@ export class SeedDevService implements ISeed {
       const { owner } = await this.ownerSeed.run({ accountId: account.id });
       const school = await this.schoolSeed.run({ ownerId: owner.id });
 
-      tenant.users.simpleUsers.forEach(async (accountInfo) => {
+      await this.classroomSeed.run({ schoolId: school.id });
+      await this.subjectSeed.run({ schoolId: school.id, input: tenant.subjects });
+      tenant.users.forEach(async (userInfo) => {
         const { account } = await this.accountSeed.run({
-          email: accountInfo.email,
+          email: userInfo.email,
           accountRole: AccountRole.USER,
         });
 
@@ -46,7 +54,14 @@ export class SeedDevService implements ISeed {
           schoolId: school.id,
         });
 
-        await this.actorSeed.run({ role: accountInfo.role, userId: user.id });
+        const response = await this.actorSeed.run({ role: userInfo.role, userId: user.id });
+        if (response?.type === UserRole.PARENT && userInfo.role === UserRole.PARENT) {
+          const parent = response.data;
+          userInfo.students.forEach(async (studentInfo) => {
+            const student = await this.studentSeed.run({ schoolId: school.id, student: studentInfo });
+            await this.parentStudentSeed.run({ parentId: parent.id, studentId: student.id });
+          });
+        }
       });
     });
   };

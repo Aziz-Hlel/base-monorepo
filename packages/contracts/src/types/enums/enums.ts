@@ -161,3 +161,23 @@ export const StudentStatus = {
 } as const;
 
 export type StudentStatus = (typeof StudentStatus)[keyof typeof StudentStatus];
+
+export const Semester = {
+  FIRST: 'FIRST',
+  SECOND: 'SECOND',
+  THIRD: 'THIRD',
+} as const;
+
+export type Semester = (typeof Semester)[keyof typeof Semester];
+
+export const SubjectDomain = {
+  ARABIC_LANGUAGE: 'ARABIC_LANGUAGE',
+  SCIENCE_TECHNOLOGY: 'SCIENCE_TECHNOLOGY',
+  SOCIAL_EDUCATION: 'SOCIAL_EDUCATION',
+  ART_EDUCATION: 'ART_EDUCATION',
+  PHYSICAL_EDUCATION: 'PHYSICAL_EDUCATION',
+  FRENCH_LANGUAGE: 'FRENCH_LANGUAGE',
+  ENGLISH_LANGUAGE: 'ENGLISH_LANGUAGE',
+} as const;
+
+export type SubjectDomain = (typeof SubjectDomain)[keyof typeof SubjectDomain];

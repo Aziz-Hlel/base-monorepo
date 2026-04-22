@@ -79,7 +79,7 @@ export class UserRoleRepo {
       });
       return userRole;
     } catch (error) {
-      RepoError_V2.throwUnknownError(error);
+      RepoError_V2.handleRepoError(error);
     }
   };
 

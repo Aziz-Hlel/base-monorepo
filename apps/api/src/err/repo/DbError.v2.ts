@@ -14,7 +14,7 @@ export class RepoError_V2 extends Error {
     this.type = type;
   }
 
-  static throwUnknownError(error: unknown) {
+  static handleRepoError(error: unknown): never {
     if (!(error instanceof Error)) throw error;
     // * you can handle some unkow prisma errors afterwards like throwing a 501 error when db is not available and you can send a noti for that
     if (error instanceof Prisma.PrismaClientUnknownRequestError) throw new UnknownPrismaError({ cause: error });

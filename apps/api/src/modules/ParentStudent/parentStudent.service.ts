@@ -18,7 +18,7 @@ export class ParentStudentService {
         }
       }
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === PrismaErrorCode.CONFLICT) {
+        if (error.code === PrismaErrorCode.UNIQUE_CONSTRAINT) {
           throw new ConflictError({ message: 'Parent or student already assigned', cause: error });
         }
       }

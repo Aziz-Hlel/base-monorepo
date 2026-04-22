@@ -1,6 +1,7 @@
 import { prisma } from '@/bootstrap/db.init';
-import { Gender, UserRole, UserStatus } from '@/generated/prisma/enums';
+import { Gender, UserStatus } from '@/generated/prisma/enums';
 import { UserCreateInput } from '@/generated/prisma/models';
+import { TX } from '@/types/prisma/PrismaTransaction';
 import { faker } from '@faker-js/faker/.';
 
 export class UserSeed {
@@ -33,9 +34,11 @@ export class UserSeed {
     };
   };
 
-  run = async ({ accountId, schoolId }: { accountId: string; schoolId: string }) => {
+  run = async (params: { accountId: string; schoolId: string }, tx?: TX) => {
+    const { accountId, schoolId } = params;
+    const client = tx ?? prisma;
     const user = this.generateFakeSimpleUser({ accountId, schoolId });
-    const createdUser = await prisma.user.upsert({
+    const createdUser = await client.user.upsert({
       where: {
         accountId_schoolId: {
           accountId,

@@ -10,6 +10,3 @@ export const globalParentSchema = {
     .or(z.null())
     .transform((val) => (val === '' ? null : val)),
 };
-
-const globalParentSchemaObject = z.object(globalParentSchema);
-type GlobalParentSchema = z.infer<typeof globalParentSchemaObject>;

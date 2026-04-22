@@ -47,7 +47,7 @@ export class UserRoleService {
         // * but at the same type if i m going to do the "GO fail" strategy , i should do it accross all the project
         // * so do i just throw the error, and based on what i want to do , if it s an api i would catch it and send a 200
         // * or if it s a worker , i would let it fail and retry
-        if (error.code === PrismaErrorCode.CONFLICT) {
+        if (error.code === PrismaErrorCode.UNIQUE_CONSTRAINT) {
           return { role: null, type: 'EXISTING' } as const;
         }
       }

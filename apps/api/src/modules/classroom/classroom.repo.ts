@@ -1,5 +1,6 @@
 import { prisma } from '@/bootstrap/db.init';
 import { RepoError } from '@/err/repo/DbError';
+import { RepoError_V2 } from '@/err/repo/DbError.v2';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { CreateClassroomRequest } from '@repo/contracts/schemas/classroom/createClassRequest';
 import { UpdateClassroomRequest } from '@repo/contracts/schemas/classroom/updateClassRequest';
@@ -17,7 +18,7 @@ export class ClassroomRepo {
       });
       return createdClass;
     } catch (error) {
-      RepoError.throwRepoError(error);
+      RepoError_V2.handleRepoError(error);
     }
   };
 
@@ -35,41 +36,12 @@ export class ClassroomRepo {
     }
   };
 
-  findByNameAndSchoolId = async (params: { name: string; schoolId: string }, tx?: TX) => {
-    const { name, schoolId } = params;
-    const client = tx ?? prisma;
-    try {
-      return await client.classroom.findUnique({
-        where: {
-          schoolId_name: {
-            name,
-            schoolId,
-          },
-        },
-      });
-    } catch (error) {
-      RepoError.throwRepoError(error);
-    }
-  };
-
-  findByIdAndSchoolId = async (params: { classroomId: string; schoolId: string }, tx?: TX) => {
+  find = async (params: { classroomId: string; schoolId: string }, tx?: TX) => {
     const { classroomId, schoolId } = params;
     const client = tx ?? prisma;
     try {
       return await client.classroom.findUnique({
         where: { id: classroomId, schoolId },
-      });
-    } catch (error) {
-      RepoError.throwRepoError(error);
-    }
-  };
-
-  findById = async (params: { classroomId: string }, tx?: TX) => {
-    const { classroomId } = params;
-    const client = tx ?? prisma;
-    try {
-      return await client.classroom.findUnique({
-        where: { id: classroomId },
       });
     } catch (error) {
       RepoError.throwRepoError(error);
