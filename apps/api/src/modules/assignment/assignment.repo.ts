@@ -25,7 +25,6 @@ export class AssignmentRepo {
     try {
       const createdAssignments = await client.assignment.createMany({
         data: params,
-        skipDuplicates: true,
       });
       return createdAssignments;
     } catch (error) {
@@ -59,6 +58,25 @@ export class AssignmentRepo {
         },
       });
       return syncedAssignment;
+    } catch (error) {
+      throw RepoError_V2.handleRepoError(error);
+    }
+  };
+
+  updateTeacher = async (params: { schoolId: string; assignmentId: string; teacherId: string | null }, tx?: TX) => {
+    const { schoolId, assignmentId, teacherId } = params;
+    const client = tx ?? prisma;
+    try {
+      const updatedAssignment = await client.assignment.update({
+        where: {
+          id: assignmentId,
+          schoolId,
+        },
+        data: {
+          teacherId: teacherId,
+        },
+      });
+      return updatedAssignment;
     } catch (error) {
       throw RepoError_V2.handleRepoError(error);
     }

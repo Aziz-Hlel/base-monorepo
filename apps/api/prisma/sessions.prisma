@@ -31,6 +31,7 @@ model Subject{
   school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
   assignments Assignment[]
+  exams       Exam[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -90,27 +91,30 @@ model Timetable{
 }
 
 
-// model Exam{
-//   id String @id @default(uuid()) @db.Uuid
+model Exam{
+  id String @id @default(uuid()) @db.Uuid
 
-//   name_en String @db.VarChar(255)
-//   name_fr String @db.VarChar(255)
-//   name_ar String @db.VarChar(255)
+  name_en String @db.VarChar(255)
+  name_fr String @db.VarChar(255)
+  name_ar String @db.VarChar(255)
+
+  durationInMin Int @db.SmallInt
  
-//   grade ClassGrade
+  subjectId String @db.Uuid
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
 
-//   schoolId String @db.Uuid
-//   school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  schoolId String @db.Uuid
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
-//   examTimes ExamTime[]
+  @@unique([schoolId, subjectId, name_en])
+  @@unique([schoolId, subjectId, name_fr])
+  @@unique([schoolId, subjectId, name_ar])
 
-//   @@unique([schoolId, name_en, grade])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-
-//   @@map("exams")
-// }
+  @@map("exams")
+}
 
 // model ExamTime {
 //   id String @id @default(uuid()) @db.Uuid
@@ -132,31 +136,6 @@ model Timetable{
 //   @@map("examTimes")
 // }
 
-
-
-
-// model ClassSessions{
-//   id String @id @default(uuid()) @db.Uuid
-
-//   classId String @db.Uuid
-//   class Classroom @relation(fields: [classId], references: [id], onDelete: Cascade)
-
-
-//   title String @db.VarChar(255)
-//   description String? @db.Text
-//   day DayOfWeek
-//   startTime DateTime @db.Time
-//   endTime DateTime @db.Time
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-
-//   teacherId String @db.Uuid
-//   teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-
-
-//   @@map("classSessions")
-// }
 
 
 

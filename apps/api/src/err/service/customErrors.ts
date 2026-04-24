@@ -9,7 +9,7 @@ interface IAppError {
   clientMessage?: string;
   message?: string;
   internalLog?: string | object;
-  cause?: Error;
+  cause?: unknown;
 }
 
 export class AppError extends Error {
@@ -17,7 +17,7 @@ export class AppError extends Error {
   name: ErrNames;
   clientMessage?: string;
   internalLog?: string | object;
-  cause?: Error;
+  cause?: unknown;
 
   constructor({ errorObject, clientMessage, message, internalLog, cause }: IAppError) {
     super(message || errorObject.message, { cause });
@@ -50,7 +50,7 @@ export class AppError extends Error {
 
 type CusmtomErrorPayload =
   | string
-  | { message: string; clientMessage?: string; internalLog?: string | object; stack?: string; cause?: Error };
+  | { message: string; clientMessage?: string; internalLog?: string | object; stack?: string; cause?: unknown };
 
 export class BadRequestError extends AppError {
   constructor(payload: CusmtomErrorPayload) {

@@ -10,5 +10,5 @@ export const AssignmentModule = () => {
   const assignmentService = new AssignmentService(assignmentRepo);
   const assignmentController = new AssignmentController(assignmentService);
   const assignmentRouter = createRouter(assignmentController);
-  return { assignmentService, assignmentInternal };
+  return { assignmentService, assignmentInternal, assignmentRouter };
 };

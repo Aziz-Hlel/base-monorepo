@@ -3,9 +3,11 @@ import { CreateManySubjectRequest } from '@repo/contracts/schemas/subject/create
 import { CreateSubjectRequest } from '@repo/contracts/schemas/subject/createSubjectRequest';
 import { UpdateSubjectRequest } from '@repo/contracts/schemas/subject/updateSubjectRequest';
 import { SubjectMapper } from './subject.mapper';
-import { ConflictError, NotFoundError } from '@/err/service/customErrors';
+import { ConflictError, DatabaseError, NotFoundError } from '@/err/service/customErrors';
 import { Prisma } from '@/generated/prisma/client';
 import { PrismaErrorCode } from '@/err/repo/PrismaErrorCode';
+import { CreateManyWithExamsRequest } from '@repo/contracts/schemas/subject/createManyWithExamsRequest';
+import { prisma } from '@/bootstrap/db.init';
 
 export class SubjectService {
   constructor(private readonly subjectRepo: SubjectRepo) {}
@@ -68,6 +70,32 @@ export class SubjectService {
     } catch (error) {
       throw error;
     }
+  };
+
+  createWithExams = async (params: { schoolId: string; input: CreateManyWithExamsRequest }) => {
+    const { input, schoolId } = params;
+    const { grade } = input;
+
+    const isSubjectsCreated = await this.subjectRepo.findByGrade({ schoolId, grade });
+    if (isSubjectsCreated.length > 0) {
+      throw new ConflictError({
+        message: 'Subjects already exist for this grade',
+        internalLog:
+          'trying to create subjects with exams when there s already records of subjects in the DB for this grade',
+      });
+    }
+
+    await prisma.$transaction(async (tx) => {
+      const queries = input.subjects.map(async (subject) => {
+        try {
+          const createdSubject = await this.subjectRepo.createWithExams({ schoolId, grade, input: subject }, tx);
+          return createdSubject;
+        } catch (error) {
+          throw new DatabaseError({ message: 'Failed to create subject', cause: error });
+        }
+      });
+      await Promise.all(queries);
+    });
   };
 
   update = async (params: { schoolId: string; subjectId: string; input: UpdateSubjectRequest }) => {

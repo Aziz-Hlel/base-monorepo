@@ -78,14 +78,14 @@ const { studentRouter } = StudentModule({
 // * STUDENT PROFILE
 const { studentProfileRouter } = StudentProfileModule();
 
-// * ASSIGNMENT
-const { assignmentInternal, assignmentService } = AssignmentModule();
-
-// * CLASS
-const { classRouter } = ClassroomModule();
-
 // * SUBJECT
-const { subjectRouter } = SubjectModule();
+const { subjectRouter, subjectInternal } = SubjectModule();
+
+// * ASSIGNMENT
+const { assignmentInternal, assignmentRouter } = AssignmentModule();
+
+// * CLASSROOM
+const { classroomRouter } = ClassroomModule({ assignmentInternal, subjectInternal });
 
 // *
 // * AUTH
@@ -130,11 +130,12 @@ export const container: { router: Router; resource: string }[] = [
   { router: schoolRouter, resource: 'schools' },
   { router: staffRouter, resource: 'schools/:schoolId/staff' },
   { router: teacherRouter, resource: 'schools/:schoolId/teachers' },
-  { router: classRouter, resource: 'schools/:schoolId/classrooms' },
   { router: studentRouter, resource: 'schools/:schoolId/students' },
   { router: studentProfileRouter, resource: 'schools/:schoolId/students/:studentId/profiles' },
   { router: parentStudentRouter, resource: 'schools/:schoolId/students/:studentId/parents/:parentId' },
   { router: subjectRouter, resource: 'schools/:schoolId/subjects' },
+  { router: assignmentRouter, resource: 'schools/:schoolId/classrooms/:classroomId/assignments' },
+  { router: classroomRouter, resource: 'schools/:schoolId/classrooms' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
   { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },

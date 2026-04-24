@@ -1,6 +1,8 @@
 import { prisma } from '@/bootstrap/db.init';
 import { RepoError_V2 } from '@/err/repo/DbError.v2';
+import { ClassGrade } from '@/generated/prisma/enums';
 import { TX } from '@/types/prisma/PrismaTransaction';
+import { CreateManyWithExamsRequest } from '@repo/contracts/schemas/subject/createManyWithExamsRequest';
 import { CreateSubjectRequest } from '@repo/contracts/schemas/subject/createSubjectRequest';
 import { UpdateSubjectRequest } from '@repo/contracts/schemas/subject/updateSubjectRequest';
 
@@ -39,7 +41,6 @@ export class SubjectRepo {
           name_en: subject.name.en,
           name_fr: subject.name.fr,
           name_ar: subject.name.ar,
-          grade: subject.grade,
           hoursPerWeek: subject.hoursPerWeek,
           domain: subject.domain,
         },
@@ -79,5 +80,55 @@ export class SubjectRepo {
     } catch (error) {
       throw RepoError_V2.handleRepoError(error);
     }
+  };
+
+  findByGrade = async (params: { schoolId: string; grade: ClassGrade }, tx?: TX) => {
+    const { schoolId, grade } = params;
+    const client = tx ?? prisma;
+    try {
+      const subjects = await client.subject.findMany({
+        where: {
+          schoolId,
+          grade,
+        },
+        select: { id: true },
+      });
+      return subjects;
+    } catch (error) {
+      throw RepoError_V2.handleRepoError(error);
+    }
+  };
+
+  createWithExams = async (
+    params: { schoolId: string; input: CreateManyWithExamsRequest['subjects'][number]; grade: ClassGrade },
+    tx?: TX,
+  ) => {
+    const { input, schoolId, grade } = params;
+    const client = tx ?? prisma;
+
+    return await client.subject.create({
+      data: {
+        name_en: input.name.en,
+        name_fr: input.name.fr,
+        name_ar: input.name.ar,
+        grade: grade,
+        hoursPerWeek: input.hoursPerWeek,
+        domain: input.domain,
+        schoolId,
+        exams: {
+          createMany: {
+            data: input.exams.map((exam) => {
+              return {
+                name_en: exam.name.en,
+                name_fr: exam.name.fr,
+                name_ar: exam.name.ar,
+                durationInMin: exam.durationInMin,
+                schoolId,
+              };
+            }),
+          },
+        },
+      },
+    });
   };
 }

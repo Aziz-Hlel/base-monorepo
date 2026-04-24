@@ -110,7 +110,7 @@ model School {
   students Student[]
   classes Classroom[]
   studentFees Fees[]
-  // exams Exam[]
+  exams Exam[]
   subjects Subject[]
 
   // RLS Related Models

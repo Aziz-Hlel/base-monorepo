@@ -8,12 +8,21 @@ import { UserRole } from '@/generated/prisma/enums';
 export const createRouter = (assignmentController: AssignmentController) => {
   const router = Router({ mergeParams: true });
 
-  router.post(
-    '/sync',
+  // router.post(
+  //   '/sync',
+  //   requireAuth,
+  //   requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
+  //   asyncHandler(assignmentController.syncMany),
+  // );
+
+  router.patch(
+    '/:assignmentId/teacher',
     requireAuth,
     requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
-    asyncHandler(assignmentController.syncMany),
+    asyncHandler(assignmentController.assignTeacher),
   );
+
+  router.get('/timetable', requireAuth, asyncHandler(assignmentController.getClassroomTimeTable));
 
   return router;
 };

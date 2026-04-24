@@ -7,18 +7,25 @@ import { UserRole } from '@/generated/prisma/enums';
 
 export const createRouter = (subjectController: SubjectController) => {
   const router = Router({ mergeParams: true });
-  router.post(
-    '/',
-    requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
-    asyncHandler(subjectController.create),
-  );
+  // router.post(
+  //   '/',
+  //   requireAuth,
+  //   requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
+  //   asyncHandler(subjectController.create),
+  // );
+
+  // router.post(
+  //   '/bulk',
+  //   requireAuth,
+  //   requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
+  //   asyncHandler(subjectController.createMany),
+  // );
 
   router.post(
     '/bulk',
     requireAuth,
     requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
-    asyncHandler(subjectController.createMany),
+    asyncHandler(subjectController.createWithExams),
   );
 
   router.put(

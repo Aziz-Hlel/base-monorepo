@@ -4,6 +4,7 @@ import { createSubjectRequestSchema } from '@repo/contracts/schemas/subject/crea
 import { updateSubjectRequestSchema } from '@repo/contracts/schemas/subject/updateSubjectRequest';
 import { Request, Response } from 'express';
 import { SubjectService } from './subject.service';
+import { createManyWithExamsRequestSchema } from '@repo/contracts/schemas/subject/createManyWithExamsRequest';
 
 export class SubjectController {
   constructor(private readonly subjectService: SubjectService) {}
@@ -40,6 +41,15 @@ export class SubjectController {
         successCount: result.successCount,
         failed: result.failedSubjects,
       },
+    });
+  };
+
+  createWithExams = async (req: Request, res: Response) => {
+    const input = createManyWithExamsRequestSchema.parse(req.body);
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    await this.subjectService.createWithExams({ schoolId, input });
+    res.status(201).json({
+      message: 'Subjects created successfully',
     });
   };
 

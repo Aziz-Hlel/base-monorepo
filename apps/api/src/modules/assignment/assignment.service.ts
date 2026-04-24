@@ -1,13 +1,16 @@
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { AssignmentRepo } from './assignment.repo';
 import { prisma } from '@/bootstrap/db.init';
-import { RepoError_V2 } from '@/err/repo/DbError.v2';
 import { Prisma } from '@/generated/prisma/client';
 import { PrismaErrorCode } from '@/err/repo/PrismaErrorCode';
+import { AssignTeacherRequestInput } from '@repo/contracts/schemas/assignment/assignTeacherRequest';
+import { NotFoundError } from '@/err/service/customErrors';
+import { AssignemntMapper } from './assignment.mapper';
 
 export class AssignmentService {
   constructor(private readonly repo: AssignmentRepo) {}
 
+  /** @deprecated */
   syncMany = async (
     params: {
       input: { subjectId: string; teacherId: string | null }[];
@@ -59,31 +62,48 @@ export class AssignmentService {
     }
   };
 
-  findOrCreate = async (params: { schoolId: string; classroomId: string; subjectId: string }, tx?: TX) => {
-    const { schoolId, classroomId, subjectId } = params;
+  assignTeacher = async (
+    params: { schoolId: string; assignmentId: string; input: AssignTeacherRequestInput },
+    tx?: TX,
+  ) => {
+    const { schoolId, assignmentId, input } = params;
+    const teacherId = input.teacherId;
     const client = tx ?? prisma;
     try {
-      const assignment = await this.repo.find({ schoolId, classroomId, subjectId }, client);
-      if (!assignment) {
-        return await this.repo.create({ schoolId, classroomId, subjectId }, client);
-      }
+      const assignment = await this.repo.updateTeacher({ schoolId, assignmentId, teacherId }, client);
       return assignment;
     } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === PrismaErrorCode.NOT_FOUND) {
+        throw new NotFoundError({
+          message: 'Failed to assign teacher',
+          clientMessage: 'Failed to assign teacher',
+          internalLog: `Assignment with id ${assignmentId} or teacher with id ${teacherId} could not be found`,
+          cause: error,
+        });
+      }
       throw error;
     }
   };
 
-  assignTeacher = async (
-    params: { schoolId: string; classroomId: string; subjectId: string; teacherId: string | null },
-    tx?: TX,
-  ) => {
-    const { schoolId, classroomId, subjectId, teacherId } = params;
+  getClassroomTimeTable = async (params: { schoolId: string; classroomId: string }, tx?: TX) => {
+    const { schoolId, classroomId } = params;
     const client = tx ?? prisma;
-    try {
-      const assignment = await this.repo.upsert({ schoolId, classroomId, subjectId, teacherId }, client);
-      return assignment;
-    } catch (error) {
-      throw error;
-    }
+    const classroom = await client.assignment.findMany({
+      where: {
+        schoolId,
+        classroomId,
+      },
+      select: {
+        subject: { select: { id: true, name_en: true, name_fr: true, name_ar: true } },
+        teacher: { select: { id: true, user: { select: { firstName: true, lastName: true, gender: true } } } },
+        timetable: {
+          select: { day: true, startTime: true, endTime: true },
+          orderBy: { startTime: 'asc' },
+        },
+      },
+    });
+
+    const timeTableResponse = AssignemntMapper.toClassroomTimeTable(classroom);
+    return timeTableResponse;
   };
 }

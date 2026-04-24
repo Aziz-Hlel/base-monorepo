@@ -6,5 +6,5 @@ export type ApiError = {
   timestamp: Date;
   stack?: string;
   internalLog?: string | object;
-  cause?: Error;
+  cause?: unknown;
 };
