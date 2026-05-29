@@ -1,22 +1,21 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Home from './pages/Home';
-import SignUp from './pages/SignUp';
-import NotFound from './pages/NotFound';
-import AuthenticatedRoutes from './guard/AuthenticatedRoutes';
-import Profile from './pages/Profile';
-import { AuthProvider } from './context/AuthContext';
-import SignIn from './components/SignIn/SignIn';
-import NetworkStatusGuard from './guard/NetworkStatusGuard';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import Sidebar from './pages/Sidebar';
+import SignIn from './components/SignIn/SignIn';
+import { AuthProvider } from './context/AuthContext';
 import { UserSessionProvider } from './context/UserContext';
+import AuthenticatedRoutes from './guard/AuthenticatedRoutes';
+import NetworkStatusGuard from './guard/NetworkStatusGuard';
+import Home from './pages/Home';
+import NotFound from './pages/NotFound';
+import Profile from './pages/Profile';
+import Sidebar from './pages/Sidebar';
+import SignUp from './pages/SignUp';
 import UserPage from './pages/User';
-import ProductPage from './pages/Products';
-import { ThemeProvider } from './utils/theme-provider';
+// import ProductPage from './pages/Products';
 import { ScrollToTop } from './components/helpers/ScrollToTop';
-import NotificationPage from './pages/Notification';
-import Product2Page from './pages/Products2';
+import { ThemeProvider } from './utils/theme-provider';
+// import Product2Page from './pages/Products2';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,9 +50,9 @@ function App() {
                         <Route path="/" element={<Home />} />
                         <Route index path="/profile" element={<Profile />} />
                         <Route path="users/" element={<UserPage />} />
-                        <Route path="products/" element={<ProductPage />} />
-                        <Route path="products2/" element={<Product2Page />} />
-                        <Route path="notification/" element={<NotificationPage />} />
+                        {/* <Route path="products/" element={<ProductPage />} /> */}
+                        {/* <Route path="products2/" element={<Product2Page />} /> */}
+                        {/* <Route path="notification/" element={<NotificationPage />} /> */}
                       </Route>
                     </Route>
                   </Route>

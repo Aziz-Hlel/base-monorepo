@@ -7,6 +7,7 @@ import { AssignElectiveExamToClassUseCase } from './use-case/assignElectiveExamT
 import { AssignOrchestrator } from './orchestrator/assign.orchestrator';
 import { AssignExamToClassesUseCase } from './use-case/assignExamToClasses';
 import { ClassRepo } from '../class/class.repo';
+import { ExamSessionService } from './examSession.service';
 
 export const ExamSessionModule = ({ examRepo, classRepo }: { examRepo: ExamRepo; classRepo: ClassRepo }) => {
   const examSessionRepo = new ExamSessionRepo();
@@ -20,7 +21,9 @@ export const ExamSessionModule = ({ examRepo, classRepo }: { examRepo: ExamRepo;
   );
   const examSessionController = new ExamSessionController(assignOrchestrator);
   const examSessionRouter = createRoute(examSessionController);
+  const examSessionService = new ExamSessionService(examSessionRepo);
   return {
     examSessionRouter,
+    examSessionService,
   };
 };

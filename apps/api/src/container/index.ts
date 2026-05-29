@@ -7,6 +7,7 @@ import { ClassModule } from '@/modules/class/class.module';
 import { createMajorModule } from '@/modules/major/major.module';
 import { createRootModule } from '@/modules/root';
 import { createSchoolModule } from '@/modules/school/school.module';
+import { SchoolCapacityStatModule } from '@/modules/schoolCapacityStat/schoolCapacityStat.module';
 import { createTeacherModule } from '@/modules/teacher/teacher.module';
 import { SeedDevService } from '@/seeds/dev/seedDev.service';
 import { ExamSeedService } from '@/seeds/fakes/exam.seed.service';
@@ -42,7 +43,10 @@ const { teacherRouter, teacherService } = createTeacherModule({ schoolService })
 const { classRouter, classRepo } = ClassModule();
 
 // * EXAM SESSION
-const { examSessionRouter } = ExamSessionModule({ examRepo, classRepo });
+const { examSessionRouter, examSessionService } = ExamSessionModule({ examRepo, classRepo });
+
+// * SCHOOL CAPACITY STATS
+const { schoolCapacityStatRoute } = SchoolCapacityStatModule({ examSessionService, examService });
 
 // * SEED
 const majorSeed = new MajorSeedService(majorService);
@@ -60,7 +64,8 @@ export const container: { router: Router; resource: string }[] = [
   { router: majorRouter, resource: 'majors' },
   { router: examRouter, resource: 'exams' },
   { router: schoolRouter, resource: 'schools' },
+  { router: schoolCapacityStatRoute, resource: 'schools/:schoolId/capacity-stats' },
   { router: teacherRouter, resource: 'schools/:schoolId/teachers' },
   { router: classRouter, resource: 'schools/:schoolId/classes' },
-  { router: examSessionRouter, resource: 'exam-sessions' },
+  { router: examSessionRouter, resource: 'schools/:schoolId/exam-sessions' },
 ];

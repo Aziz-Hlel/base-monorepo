@@ -4,7 +4,7 @@ import { asyncHandler } from '@/core/async-handler';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
 
 export const createRoute = (examSessionContoller: ExamSessionController) => {
-  const router = Router();
+  const router = Router({ mergeParams: true });
 
   // ! need a middleware to see if the classId belongs to the actor or is SUPER_ADMIN
   router.put('/', requireAuth, asyncHandler(examSessionContoller.assign));

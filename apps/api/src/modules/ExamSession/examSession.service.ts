@@ -3,5 +3,9 @@ import { ExamSessionRepo } from './examSession.repo';
 export class ExamSessionService {
   constructor(private readonly examSessionRepo: ExamSessionRepo) {}
 
-  assignMajorExamToClass = async (params: { majorId: string; classId: string }) => {};
+  unassignByExamIds = async (params: { schoolId: string; examIds: string[] }) => {
+    const { schoolId, examIds } = params;
+
+    return await this.examSessionRepo.deleteManyByExamIds({ schoolId, examIds });
+  };
 }

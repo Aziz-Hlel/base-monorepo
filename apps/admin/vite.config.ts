@@ -1,8 +1,7 @@
-import { defineConfig, loadEnv } from 'vite';
-import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-import { visualizer } from 'rollup-plugin-visualizer';
+import react from '@vitejs/plugin-react';
 import path from 'path';
+import { defineConfig, loadEnv } from 'vite';
 
 function getPort(mode: string): number | undefined {
   const env = loadEnv(mode, process.cwd());
@@ -11,7 +10,7 @@ function getPort(mode: string): number | undefined {
   if (!NODE_ENV) throw new Error(`❌ Missing required environment variable: VITE_NODE_ENV`);
 
   if (!['dev', 'build', 'stage', 'prod'].includes(NODE_ENV))
-    throw new Error(`❌ Invalid NODE_ENV: "${NODE_ENV}". Must be one of "dev", "build", "stage", "prod"`);
+    throw new Error(`❌ Invalid VITE_NODE_ENV: "${NODE_ENV}". Must be one of "dev", "build", "stage", "prod"`);
 
   const value = env.VITE_ADMIN_PORT;
 

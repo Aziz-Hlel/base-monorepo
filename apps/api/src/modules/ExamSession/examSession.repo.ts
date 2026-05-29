@@ -136,4 +136,26 @@ export class ExamSessionRepo {
     });
     return examSession;
   };
+
+  deleteManyByExamIds = async (params: { schoolId: string; examIds: string[] }, tx?: TX) => {
+    const client = tx ?? prisma;
+    const { schoolId, examIds } = params;
+    if (!examIds.length) return 0;
+    const uniqueExamIds = [...new Set(examIds)];
+
+    const examSessions = await client.examSession.deleteMany({
+      where: {
+        examId: {
+          in: uniqueExamIds,
+        },
+        class: {
+          schoolId,
+        },
+        exam: {
+          term: getCurrentTerm(),
+        },
+      },
+    });
+    return examSessions.count;
+  };
 }

@@ -95,6 +95,13 @@ export const CityEnum = {
 
 export type CityEnum = (typeof CityEnum)[keyof typeof CityEnum];
 
+export const CapacityTypeEnum = {
+  MAJOR: 'MAJOR',
+  ELECTIVE: 'ELECTIVE',
+} as const;
+
+export type CapacityTypeEnum = (typeof CapacityTypeEnum)[keyof typeof CapacityTypeEnum];
+
 export const Role = {
   SUPER_ADMIN: 'SUPER_ADMIN',
   ADMIN: 'ADMIN',
@@ -121,9 +128,9 @@ export const MediaStatus = {
 export type MediaStatus = (typeof MediaStatus)[keyof typeof MediaStatus];
 
 export const ProductStatus = {
-  AVAILABLE: 'AVAILABLE',
-  OUT_OF_STOCK: 'OUT_OF_STOCK',
-  DISCONTINUED: 'DISCONTINUED',
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  DELETED: 'DELETED',
 } as const;
 
 export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus];
